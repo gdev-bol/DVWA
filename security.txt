@@ -1,1 +1,1 @@
-La pista está en su nombre, DVWA contiene vulnerabilidades tanto intencionales como no intencionales, ese es el punto, no intente informarlas.
+La pista está en su nombre, DVWA contiene vulnerabilidades tanto intencionales como no intencionales, ese es el punto, no intente nunca informarlas.
