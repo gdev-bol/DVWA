@@ -7,7 +7,7 @@ on:
 jobs:
   njsscan:
     runs-on: ubuntu-latest
-    name: njsscan check
+    name: NodeJsScan SAST
     steps:
       - name: Checkout the code
         uses: actions/checkout@v2
