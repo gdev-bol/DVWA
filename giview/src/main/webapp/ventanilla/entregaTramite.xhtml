@@ -1,0 +1,612 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <body>
+        <ui:composition template="#{entregaTramiteBean.template}">
+            <ui:define name="content">
+                <h:form id="frmEntrega" style="width: 97%; padding-left: 1%; vertical-align: top">   
+                    <p:growl id="msg"  showDetail="true"/>
+                    <p:panelGrid style="width: 100%;" >
+                        <p:panelGrid style="width: 100%;" >
+                            <p:row>
+                                <p:column style="width: 100%;" colspan="2">
+                                    <p:outputPanel style="padding-bottom: 0px; padding-top: 0px; padding-left:10px; padding-right: 10px;">
+                                        <table>
+                                            <tr valign="middle">
+                                                <td><p:graphicImage library="images" name="flechaTituloAzul.png" width="20" height="17"></p:graphicImage></td>
+                                                <td><p:outputLabel value="Entrega tramites" styleClass="tituloPrincipalFuente"></p:outputLabel></td>
+                                            </tr>
+                                        </table>                    
+                                        <p:separator id="sepTitulo" style="border: 1px #045491 inset;"></p:separator>                    
+                                    </p:outputPanel> 
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>                 
+                        <p:panelGrid  style="width: 100%;" >
+                            <p:row style="vertical-align: central; padding-left: 6%">
+                                <p:column style="width: 10%; text-align: right; ">
+                                    <p:selectOneMenu value="#{entregaTramiteBean.filtroArea}" style="width: 80%" autoWidth="false"
+                                                     disabled="#{entregaTramiteBean.filtroAreaDisabled}">                                        
+                                        <f:selectItem itemLabel="Trámite(SM/SR/MOD)" itemValue="SIG" />
+                                        <f:selectItem itemLabel="Solicitante/Apoderado" itemValue="SOL" />  
+                                        <f:selectItem itemLabel="Numero Registro" itemValue="NREG" />
+                                        <f:selectItem itemLabel="Numero Publicacion" itemValue="NPUB" />
+                                        <f:selectItem itemLabel="Otros" itemValue="OTR" />
+                                        <p:ajax event="change" listener="#{entregaTramiteBean.activaCambios()}" update=":frmEntrega:pnlOpciones  "/>
+                                    </p:selectOneMenu>
+                                </p:column>
+                                <p:column style="width: 72%; vertical-align: top" >
+                                    <h:panelGrid columns="1" id="pnlOpciones" styleClass="quitarBordes" style="width: 100%">
+                                        <!-- PAra SM/SR/MOD -->
+                                        <p:panelGrid  style="padding-left: 5%" styleClass="quitarBordes"
+                                                      rendered="#{entregaTramiteBean.buscadorSignosRender}">
+
+                                            <p:row>
+                                                <p:column>
+                                                    <p:selectOneRadio style="text-align: left;display: block;width: 100px" value="#{entregaTramiteBean.filtroSolicitud}" 
+                                                                      layout="grid" columns="1">
+                                                        <f:selectItem itemValue="SM" itemLabel="SM"/>                                                        
+                                                        <f:selectItem itemValue="SR" itemLabel="SR"/>
+                                                        <f:selectItem itemValue="MOD" itemLabel="MOD"/>
+                                                        <p:ajax event="change" listener="#{entregaTramiteBean.activaCambiosBuscadorSolicitud()}" update="pnlSignos"/>
+                                                    </p:selectOneRadio>
+                                                </p:column>
+                                                <p:column>
+                                                    <h:panelGrid columns="1" style="width: 60%; text-align: center" id="pnlSignos" styleClass="quitarBordes" >
+                                                        <h:panelGrid columns="3" rendered="#{entregaTramiteBean.buscadorSigSMRender}" styleClass="quitarBordes" >
+                                                            <p:inputText value="#{entregaTramiteBean.numeroSolicitud}" size="8" style="text-align: center" styleClass="tituloMarca" onkeyup="return ValNumero(this);"/>
+                                                            <p:inputText value="#{entregaTramiteBean.gestionSolicitud}" size="8" style="text-align: center" styleClass="tituloMarca" onkeyup="return ValNumero(this);"/>
+                                                            <p:inputText value="#{entregaTramiteBean.extensionExpediente}" size="2" style="text-align: center" styleClass="tituloMarca"/>
+                                                            <p:outputLabel value="Número"/>
+                                                            <p:outputLabel value="Gestión"/>
+                                                            <p:outputLabel value="Extesión"/>
+                                                        </h:panelGrid>
+
+
+                                                        <h:panelGrid columns="2" rendered="#{entregaTramiteBean.buscadorRenRender}" styleClass="quitarBordes" >
+                                                            <p:inputText value="#{entregaTramiteBean.numeroSolicitud}" size="8" style="text-align: center" styleClass="tituloMarca" onkeyup="return ValNumero(this);"/>
+                                                            <p:inputText value="#{entregaTramiteBean.gestionSolicitud}" size="2" style="text-align: center" styleClass="tituloMarca" onkeyup="return ValNumero(this);"/>
+                                                            <p:outputLabel value="Número"/>
+                                                            <p:outputLabel value="Gestión"/> 
+                                                        </h:panelGrid>
+
+
+                                                        <h:panelGrid columns="3" rendered="#{entregaTramiteBean.buscadorModRender}" styleClass="quitarBordes" >
+                                                            <p:selectOneMenu value="#{entregaTramiteBean.valorTipoModificacion}" autoWidth="false" style="width: 120px">                                        
+                                                                <f:selectItem itemLabel="Cambio de nombre" itemValue="CANO" />
+                                                                <f:selectItem itemLabel="Cambio de domicilio" itemValue="CADO" />
+                                                                <f:selectItem itemLabel="Transferencia" itemValue="CATR" />
+                                                                <f:selectItem itemLabel="Fusión" itemValue="CAFU" />
+                                                                <f:selectItem itemLabel="Licencia de uso" itemValue="CALU" />     
+
+                                                            </p:selectOneMenu>
+
+                                                            <p:inputText value="#{entregaTramiteBean.numeroSolicitud}" size="8" style="text-align: center" styleClass="tituloMarca" onkeyup="return ValNumero(this);"/>
+                                                            <p:inputText value="#{entregaTramiteBean.gestionSolicitud}" size="8" style="text-align: center" styleClass="tituloMarca" onkeyup="return ValNumero(this);"/>
+
+                                                            <p:spacer width="100" height="10" />
+
+                                                            <p:outputLabel value="Número"/>
+                                                            <p:outputLabel value="Gestión"/>
+                                                        </h:panelGrid>
+
+
+                                                    </h:panelGrid>    
+                                                </p:column>
+                                                <p:column>
+                                                    <h:panelGrid columns="1" style="padding-left: 15%">
+                                                        <p:commandButton value="Buscar" icon="ui-icon-search" style="height: 40px;width: 95%"   >                                                            
+                                                            <p:ajax event="click" listener="#{entregaTramiteBean.buscaSeguimientoSignos()}" 
+                                                                    update="@form" process="@form"/>
+                                                        </p:commandButton>  
+                                                    </h:panelGrid>
+                                                </p:column>
+
+                                            </p:row>
+
+
+
+
+
+                                        </p:panelGrid>
+
+
+
+                                        <!-- PAra solicitante y apoderado-->
+                                        <h:panelGrid 
+                                            rendered="#{entregaTramiteBean.buscadorSolicitanteApoderado}">
+                                            <p:panelGrid>
+                                                <p:row style="width: 100%">
+                                                    <p:column>
+                                                        <p:selectOneMenu value="#{entregaTramiteBean.valorTipoSolApod}" autoWidth="false" style="width: 100px">                                        
+                                                            <f:selectItem itemLabel="Apoderado" itemValue="APOD" />
+                                                            <f:selectItem itemLabel="Solicitante" itemValue="SOLI" />
+
+                                                        </p:selectOneMenu>
+                                                    </p:column>
+                                                    <p:column>
+                                                        <p:inputText value="#{entregaTramiteBean.soliciApod}" style="text-align: center; width: 100%" styleClass="tituloMarca"/>
+                                                    </p:column>
+                                                    <p:column>
+                                                        <h:panelGrid columns="1" style="padding-left: 15%">
+                                                            <p:commandButton value="Buscar" icon="ui-icon-search" style="height: 40px;width: 95%"
+                                                                             >                                                            
+                                                                <p:ajax event="click" listener="#{entregaTramiteBean.buscaSeguimientoSignos()}" 
+                                                                        update="@form" process="@form"/>
+                                                            </p:commandButton>  
+                                                        </h:panelGrid>
+                                                    </p:column>
+                                                </p:row>
+                                            </p:panelGrid>
+
+                                        </h:panelGrid>
+
+
+                                        <!-- PAra Número de Registro-->
+                                        <h:panelGrid  style="padding-left: 1%" styleClass="quitarBordes"
+                                                      rendered="#{entregaTramiteBean.buscadorRegistro}">
+                                            <p:panelGrid>
+                                                <p:row>
+                                                    <p:column>
+                                                        <p:inputText value="#{entregaTramiteBean.registro}"  style="text-align: center" styleClass="tituloMarca" onkeyup="return ValNumero(this);"/>
+                                                    </p:column>
+                                                    <p:column>
+                                                        <p:selectOneMenu value="#{entregaTramiteBean.valorSerieRegistro}" autoWidth="false" style="width: 20px">                                        
+                                                            <f:selectItem itemLabel="A" itemValue="A" />
+                                                            <f:selectItem itemLabel="C" itemValue="C" />
+
+                                                        </p:selectOneMenu>
+                                                    </p:column>
+                                                    <p:column>
+                                                        <h:panelGrid columns="1" style="padding-left: 1%">
+                                                            <p:commandButton value="Buscar" icon="ui-icon-search" style="height: 40px;width: 95%" 
+                                                                             >                                                            
+                                                                <p:ajax event="click" listener="#{entregaTramiteBean.buscaSeguimientoSignos()}" 
+                                                                        update="@form" process="@form"/>
+                                                            </p:commandButton>  
+                                                        </h:panelGrid>
+                                                    </p:column>
+                                                </p:row>
+                                            </p:panelGrid>
+
+
+
+
+
+
+                                        </h:panelGrid>
+
+                                        <!-- PAra Número de Publicacion-->
+                                        <h:panelGrid columns="2" style="padding-left: 1%" styleClass="quitarBordes"
+                                                     rendered="#{entregaTramiteBean.buscadorPublicacion}">
+
+                                            <p:panelGrid>
+                                                <p:row>
+                                                    <p:column>
+                                                        <p:inputText value="#{entregaTramiteBean.publicacion}"  style="text-align: center" styleClass="tituloMarca" onkeyup="return ValNumero(this);"/>
+                                                    </p:column>
+                                                    <p:column>
+                                                        <h:panelGrid  style="padding-left: 1%">
+                                                            <p:commandButton value="Buscar" icon="ui-icon-search" style="height: 40px;width: 95%"   >                                                            
+                                                                <p:ajax event="click" listener="#{entregaTramiteBean.buscaSeguimientoSignos()}" 
+                                                                        update="@form" process="@form"/>
+                                                            </p:commandButton>  
+                                                        </h:panelGrid>
+                                                    </p:column>
+                                                </p:row>
+
+
+                                            </p:panelGrid>
+                                        </h:panelGrid>
+
+                                        <!-- PAra otros-->
+                                        <h:panelGrid   style="width: 90%"
+                                            rendered="#{entregaTramiteBean.buscadorOtros}" id="camposTramiteOtros">
+                                            <p:panelGrid style="width: 100%">
+                                                <p:row >
+                                                    <p:column style="width: 15%">
+                                                        <p:inputText value="#{entregaTramiteBean.numeroExpediente}" onkeyup="return ValNumero(this);" style="width: 90%"></p:inputText>
+                                                    </p:column>
+                                                    <p:column style="width: 15%">
+                                                        <p:inputText  value="#{entregaTramiteBean.gestionTramite}"  onkeyup="return ValNumero(this);" style="width: 90%"></p:inputText>
+                                                    </p:column>
+                                                    <p:column style="width: 8%">
+                                                        <p:selectOneMenu id="tipoTramiteRecaudaciones" value="#{entregaTramiteBean.tipoTramiteCombo}"  >
+                                                            <f:selectItems value="#{entregaTramiteBean.lstTipoTramiteRecibo}" var="r" itemLabel="#{r.codigo}" itemValue="#{r.codigo}"/>
+                                                        </p:selectOneMenu>
+                                                    </p:column>
+                                                    
+                                                    <p:column style="width: 50%">
+                                                          <p:inputTextarea rows="2" value="#{entregaTramiteBean.marca}"   style="width: 96%"
+                                                                     styleClass="tituloMarca"/>
+                                                    </p:column>
+                                                    
+                                                    <p:column style="width: 8%">
+                                                        <p:inputText value="#{entregaTramiteBean.numeroClaseNiza}" size="2" onkeyup="return ValNumero(this);"></p:inputText>
+                                                    </p:column>
+                                                    
+                                                    <p:column style="width: 10%">
+                                                        <h:panelGrid columns="1" style="padding-left: 15%">
+                                                            <p:commandButton value="Adicionar" 
+                                                                             actionListener="#{entregaTramiteBean.AdicionarListaDerecha}"
+                                                                             update=":frmEntrega:pnlTablas :frmEntrega:camposTramiteOtros :frmEntrega:msg "
+                                                                             icon="ui-icon-search" style="height: 40px;width: 95%"
+                                                                             >                                                            
+                                                            </p:commandButton>  
+                                                        </h:panelGrid>
+
+                                                    </p:column>
+                                                </p:row>
+                                                <p:row style="text-align: center">
+                                                    <p:column>
+                                                        <p:outputLabel value="N° Exp." style="font-weight: bold"  ></p:outputLabel>
+                                                    </p:column>
+                                                    <p:column>
+                                                        <p:outputLabel value="Gestión" style="font-weight: bold"></p:outputLabel>
+                                                    </p:column>
+                                                    <p:column>
+                                                        <p:outputLabel value="Tipo Tramite" style="font-weight: bold"></p:outputLabel>
+                                                    </p:column>
+                                                    <p:column>
+                                                        <p:outputLabel value="Marca" style="font-weight: bold"></p:outputLabel>
+                                                    </p:column>
+                                                    <p:column>
+                                                        <p:outputLabel value="Clase" style="font-weight: bold"></p:outputLabel>
+                                                    </p:column>
+                                                    <p:column>
+
+                                                    </p:column>
+                                                </p:row>
+                                            </p:panelGrid>
+
+                                        </h:panelGrid>
+                                    </h:panelGrid>
+                                </p:column >
+                                <p:column style="width: 18%; text-align: right" >
+                                    <p:panelGrid id="pnlBloque" style="width:  90%" columns="2" styleClass="quitarBordes">
+                                        <p:outputLabel   value="N° Entrega:" id="lblNBloque"  style="color: #045491; font-weight: bold; font-size: 13px !important" rendered="#{entregaTramiteBean.muestraBloque}" />
+                                        <p:outputLabel   value="#{entregaTramiteBean.bloqueResult}" id="lblBloque"  style="color:darkgreen ; font-weight: bold ; font-size: 17px !important; " rendered="#{entregaTramiteBean.muestraBloque}" />
+                                    </p:panelGrid> 
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                        <!-- Muestro el bloque-->
+
+
+                        <!-- Dibujo las tablas-->
+                        <p:panelGrid style="width:  100%" styleClass="quitarBordes" id="pnlTablas">
+                            <p:row>
+                                <p:column style="width: 45%; vertical-align: top">
+                                    <fieldset>
+                                        <legend>Buzón de trámites</legend>
+                                        <p:dataTable style="border-style: groove"
+                                                     scrollable="true" 
+                                                     value="#{entregaTramiteBean.tramitesIzq}" 
+                                                     var="tra"
+                                                     selectionMode="multiple" 
+                                                     rowKey="#{tra}" 
+                                                     selection="#{entregaTramiteBean.tramitesIzqAgarrados}"
+                                                     id="tablaPeti"
+                                                     widgetVar="wdgList"
+                                                     scrollHeight="390"
+                                                     scrollWidth="520"
+                                                     rowIndexVar="index"
+                                                     liveScroll="true" 
+                                                     scrollRows="30" emptyMessage="Datos no encontrados"
+                                                     >
+                                            <p:column headerText="#" width="1" style="background: #dddddd">
+                                                <h:outputText value="#{index+1}" />
+                                            </p:column>
+                                            <p:column headerText="Sig." width="8"  >
+                                                <h:outputText value="#{tra.sigla}" />
+                                            </p:column>
+                                            <p:column headerText="N°" width="13"> 
+                                                <h:outputText value="#{tra.numerotramite}" />
+                                            </p:column>   
+                                            <p:column headerText="Ges." width="10">
+                                                <h:outputText value="#{tra.gestion}" />
+                                            </p:column>   
+                                            <p:column headerText="Reg SM/SR" width="52">
+                                                <h:outputText value="#{entregaTramiteBean.convierteStr(tra)}" />
+                                            </p:column>   
+                                            <p:column headerText="Marca" width="132">
+                                                <h:outputText value="#{tra.marca}" />
+                                            </p:column>   
+
+                                            <p:column headerText="Clase" width="18">
+                                                <h:outputText value="#{tra.clase_niza}" />
+                                            </p:column>   
+                                        </p:dataTable>
+
+
+                                    </fieldset>
+
+
+                                </p:column>
+                                <p:column style="width: 10%">
+
+                                    <p:panelGrid  style="width: 100%" styleClass="quitarBordes">
+                                        <p:row>
+                                            <p:column style="text-align: center">
+                                                <p:commandButton  value="Agregar" icon="ui-icon-play"
+                                                                  actionListener="#{entregaTramiteBean.agarraValores()}" 
+                                                                  update="tablaPeti,tablaRecibido" style="height: 40px; width: 90%" >
+                                                </p:commandButton><br/><br/><br/>
+                                                <p:commandButton  value="Agregar Todos" icon="ui-icon-seek-next"
+                                                                  actionListener="#{entregaTramiteBean.agarraValoreTodos()}" 
+                                                                  update="tablaPeti,tablaRecibido" style="height: 40px; width: 90%" >
+                                                </p:commandButton><br/><br/><br/>
+                                                <p:commandButton value="Devolver" icon="ui-icon-triangle-1-w" 
+                                                                 actionListener="#{entregaTramiteBean.devuelveValores()}" 
+                                                                 update="tablaPeti,tablaRecibido" style="height: 40px;width: 90%" 
+                                                                 >
+                                                </p:commandButton><br/><br/><br/>
+
+                                                <p:commandButton value="Devolver Todo" icon="ui-icon-document"
+                                                                 actionListener="#{entregaTramiteBean.devuelveValoresTodos()}"
+                                                                 update="tablaPeti,tablaRecibido" style="height: 40px; width: 90%" /><br/><br/><br/>
+                                            </p:column> 
+                                        </p:row>
+                                    </p:panelGrid>
+                                </p:column>
+                                <p:column style="width: 45%; vertical-align: top">
+                                    <fieldset>
+                                        <legend>Buzón de entregados</legend>
+                                        <p:dataTable style="border-style: groove" scrollable="true" 
+                                                     value="#{entregaTramiteBean.tramitesDer}" 
+                                                     var="recib"
+                                                     selectionMode="multiple" 
+                                                     id="tablaRecibido"
+                                                     selection="#{entregaTramiteBean.tramitesDerAgarrados}"
+                                                     rowKey="#{recib}" 
+                                                     widgetVar="wdgList2"
+                                                     scrollHeight="390"
+                                                     scrollWidth="520"
+                                                     rowIndexVar="index1"
+                                                     scrollRows="30"
+                                                     emptyMessage="Buzón de entregas vacio">
+                                           <p:column headerText="#" width="1" style="background: #dddddd">
+                                               <h:outputText value="#{entregaTramiteBean.devuelveNumero(index1)}" />
+                                            </p:column>
+                                            <p:column headerText="Sig." width="8"  >
+                                                <h:outputText value="#{recib.sigla}" />
+                                            </p:column>
+                                            <p:column headerText="N°" width="13"> 
+                                                <h:outputText value="#{recib.numerotramite}" />
+                                            </p:column>   
+                                            <p:column headerText="Ges." width="10">
+                                                <h:outputText value="#{recib.gestion}" />
+                                            </p:column>   
+
+                                            <p:column headerText="Reg SM/SR" width="52">
+                                                <h:outputText value="#{entregaTramiteBean.convierteStr(recib)}" />
+                                            </p:column>   
+                                            <p:column headerText="Marca" width="132">
+                                                <h:outputText value="#{recib.marca}" />
+                                            </p:column>   
+
+                                            <p:column headerText="Clase" width="18">
+                                                <h:outputText value="#{recib.clase_niza}" />
+                                            </p:column>  
+                                        </p:dataTable>
+                                    </fieldset>
+                                </p:column>
+                            </p:row> 
+                        </p:panelGrid> 
+                        <p:panelGrid id="pnlTotalBuzon" style="width:  100%" styleClass="quitarBordes">
+                            <p:row>
+                                <p:column style="width: 45%; vertical-align: top">
+                                    <p:outputLabel   value=" Total tramites: #{entregaTramiteBean.totalBuzon}" id="lblTotalBu"  style="padding-left: 1%"  styleClass="textoImportante"/>
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid> 
+
+                        <fieldset>
+                            <legend>Datos procurador</legend>
+                            <p:panelGrid  style="width: 100%" styleClass="quitarBordes">
+                                <p:row style="width: 100%">
+                                    <p:column style="width: 8%">
+                                        <p:outputLabel value="Tipo Persona" style="font-weight: bold;"></p:outputLabel>
+                                    </p:column>
+                                    <p:column style="width: 8%">
+                                        <p:selectOneMenu  value="#{entregaTramiteBean.procuTipoTitular}" autoWidth="false">
+                                            <f:selectItems value="#{entregaTramiteBean.listTipoTitular}" 
+                                                           var="tipo"
+                                                           itemLabel="#{tipo.nombre}" 
+                                                           itemValue="#{tipo.codigo}" />
+
+                                        </p:selectOneMenu>
+                                    </p:column>
+                                    <p:column style="width: 12%">
+                                        <p:outputLabel value="Nombre/Razon social" style="font-weight: bold;"></p:outputLabel>
+                                    </p:column>
+                                    <p:column style="width: 16%">
+                                        <p:inputText value="#{entregaTramiteBean.procuNombre}" style="width: 95%" ></p:inputText>
+                                    </p:column>
+                                    <p:column style="width: 10%">
+                                        <p:outputLabel value="Apellido Paterno" style="font-weight: bold;"></p:outputLabel>
+                                    </p:column>
+                                    <p:column style="width: 18%">
+                                        <p:inputText value="#{entregaTramiteBean.procuPrimerApe}" style="width: 95%"></p:inputText>
+                                    </p:column>
+                                    <p:column style="width: 10%">
+                                        <p:outputLabel value="Apellido Materno" style="font-weight: bold;"></p:outputLabel>
+                                    </p:column>
+                                    <p:column style="width: 15%">
+                                        <p:inputText value="#{entregaTramiteBean.procuSegundoApe}" style="width: 95%" ></p:inputText>                                                   
+                                    </p:column>
+
+                                </p:row>
+                            </p:panelGrid>
+                            <p:panelGrid styleClass="quitarBordes">
+                                <p:row>
+                                    <p:column style="width: 8%">
+                                        <p:outputLabel value="Tipo Doc." style="font-weight: bold;"></p:outputLabel>
+                                    </p:column>
+                                    <p:column style="width: 15%">
+                                        <p:selectOneMenu style="width:125px" value="#{entregaTramiteBean.procuTipoDocumento}" autoWidth="false">
+                                            <f:selectItems value="#{entregaTramiteBean.listTipoDocumento}" 
+                                                           var="tipo"
+                                                           itemLabel="#{tipo.nombre}" 
+                                                           itemValue="#{tipo.codigo}" />
+
+                                        </p:selectOneMenu>
+                                    </p:column>
+                                    <p:column style="width: 9%">
+                                        <p:outputLabel value="Número Doc." style="font-weight: bold;"></p:outputLabel>
+                                    </p:column>
+                                    <p:column style="width: 14%">
+                                        <p:inputText value="#{entregaTramiteBean.procuNumeroDocumento}" style="width: 90%"></p:inputText>
+                                    </p:column>
+                                    <p:column style="width: 12%">
+                                        <p:outputLabel value="Lugar de expedición" style="font-weight: bold;"></p:outputLabel>
+                                    </p:column>
+                                    <p:column style="width: 11%">
+                                        <p:selectOneMenu style="width:90px" value="#{entregaTramiteBean.procuLugarExpedicion}" autoWidth="false">
+                                            <f:selectItems value="#{entregaTramiteBean.listDepartamento}" 
+                                                           var="tipo"
+                                                           itemLabel="#{tipo.nombre}" 
+                                                           itemValue="#{tipo.codigo}" />
+
+                                        </p:selectOneMenu>
+                                    </p:column>
+                                    <p:column style="width: 5%">
+                                        <p:outputLabel value="Telefono" style="font-weight: bold;"></p:outputLabel>
+                                    </p:column>
+                                    <p:column style="width: 11%">
+                                        <p:inputText value="#{entregaTramiteBean.procuTelefono}" style="width: 90%" ></p:inputText>
+                                    </p:column>
+                                    <p:column style="width: 5%">
+                                        <p:outputLabel value="Celular" style="font-weight: bold;"></p:outputLabel>
+                                    </p:column>
+                                    <p:column style="width: 11%">
+                                        <p:inputText value="#{entregaTramiteBean.procuCelular}" style="width: 90%"></p:inputText>
+                                    </p:column>
+                                </p:row>
+                            </p:panelGrid>
+
+                            <p:panelGrid  styleClass="quitarBordes" style="width: 70%" >
+                                <p:row>
+                                    <p:column style="width: 15%">
+                                        <p:outputLabel value="Tipo Doc. Autorización" style="font-weight: bold;"></p:outputLabel>
+                                    </p:column>
+                                    <p:column style="width: 20%">
+                                        <p:selectOneMenu style="width:150px" value="#{entregaTramiteBean.procuTipoDocAuto}" autoWidth="false">
+                                            <f:selectItem itemValue="null" itemLabel=""/>     
+                                            <f:selectItems value="#{entregaTramiteBean.listTipoDocuAutoriza}" 
+                                                           var="tipo"
+                                                           itemLabel="#{tipo.nombre}" 
+                                                           itemValue="#{tipo.codigo}" />
+
+                                        </p:selectOneMenu>
+                                    </p:column>
+                                    <p:column style="width: 18%">
+                                        <p:outputLabel value="Número Doc. Autorización" style="font-weight: bold;"></p:outputLabel>
+                                    </p:column>
+                                    <p:column style="width: 20%">
+                                        <p:inputText value="#{entregaTramiteBean.procuDescDocuAuto}" style="width: 90%"></p:inputText>
+                                    </p:column>
+                                </p:row>
+                            </p:panelGrid>
+                            
+                        </fieldset>
+
+
+
+
+
+
+
+
+
+
+                        <!--                        <p:panelGrid  columns="8" styleClass="quitarBordes" id="pnlConteos">
+                                                </p:panelGrid>-->
+
+                        <p:panelGrid style="width: 100%" styleClass="quitarBordes" >
+                            <p:row >
+                                <p:column>
+                                    <p:panelGrid>
+                                        <div style="text-align: center;">
+                                            <p:growl id="message" showDetail="true" />
+                                            <p:commandButton value="Entregar"  icon="ui-icon-disk"
+                                                             styleClass="botonGrande" 
+                                                             actionListener="#{entregaTramiteBean.insertaEntrega()}"
+                                                             update="message,btnImpr,:frmEntrega:pnlBloque, @this"
+                                                             disabled="#{entregaTramiteBean.muestraAceptar}"
+                                                             >
+                                                <p:confirm header="Confirmación" message="¿Está seguro(a) de guardar los cambios?" icon="ui-icon-alert" />
+
+                                            </p:commandButton> 
+
+
+                                        </div>
+
+
+                                    </p:panelGrid>
+                                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                        <div align="center">
+                                            <p:panelGrid columns="3"  styleClass="quitarBordes">
+                                                <p:commandButton value="Aceptar" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                                <p:spacer width="1"/>
+                                                <p:commandButton value="Cancelar" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                            </p:panelGrid>
+                                        </div>
+
+                                    </p:confirmDialog>
+                                </p:column>
+                                <p:column>
+                                    <p:panelGrid>
+                                        <div style="text-align: center;">
+
+                                            <p:commandButton 
+                                                id="btnImpr"
+                                                value="Imprimir" 
+                                                icon="ui-icon-print" 
+                                                ajax="false"
+                                                action="#{entregaTramiteBean.Imprimir()}"
+                                                disabled="#{entregaTramiteBean.muestraImprime}"
+                                                />
+
+                                        </div>
+
+
+                                    </p:panelGrid>
+                                </p:column>
+                                <p:column>
+                                    <p:panelGrid>
+                                        <div style="text-align: center;">
+
+
+                                            <p:commandButton 
+                                                value="Nueva entrega" 
+                                                icon="ui-icon-document" 
+                                                actionListener="#{entregaTramiteBean.generaNuevaEntrega()}"
+                                                update="@form"
+                                                />
+                                        </div>
+
+
+                                    </p:panelGrid>
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+
+
+
+                    </p:panelGrid>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+        <p:ajaxStatus  style="display:block;margin-bottom:2em;height:24px;" 
+                       onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+        <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+            <p:graphicImage value="/resources/images/ajaxloadingbar.gif"/>
+        </p:dialog>
+    </body>
+</html>

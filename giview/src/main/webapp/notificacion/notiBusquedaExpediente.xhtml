@@ -1,0 +1,237 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <body>
+        <ui:composition template="./../WEB-INF/facelets/templates/Template.xhtml">
+            <ui:define name="content"> 
+        <f:metadata>
+            <f:event type="preRenderView" listener="#{verificaSesion.verifica()}"/>
+        </f:metadata>
+        <h:form id="formHistoEx" style="width: 100%">
+            <p:panelGrid style="width: 100%;" styleClass="quitarBordes">
+                <p:row>
+                    <p:column style="width: 100%;" colspan="2">
+                        <p:outputPanel style="padding-bottom: 0px; padding-top: 0px; padding-left:10px; padding-right: 10px;">
+                            <table>
+                                <tr valign="middle">
+                                    <td><p:graphicImage library="images" name="flechaTituloAzul.png" width="24" height="24"></p:graphicImage></td>
+                                    <td><p:outputLabel value="Busquedas" styleClass="tituloPrincipalFuente"></p:outputLabel></td>
+                                </tr>
+                            </table>                    
+                            <p:separator id="sepTitulo" style="border: 1px #045491 inset;"></p:separator>                    
+                        </p:outputPanel>                                
+                    </p:column>
+                </p:row>
+            </p:panelGrid>
+
+
+            <p:panelGrid style="width: 100%" styleClass="quitarBordes">
+
+                <p:row style="width: 100%">
+                    <p:column style="width: 100%">
+                        <fieldset>
+
+                            <p:panelGrid style="width: 40%" styleClass="quitarBordes">
+                                <p:row>
+                                    <p:column style="width: 12%">
+                                        <p:outputLabel value="Campo"/>
+
+                                    </p:column>
+                                    <p:column >
+                                        <p:selectOneMenu autoWidth="false" style="width: 85%" value="#{notiNotiBusquedaExpediente.opcion}">
+                                            <p:ajax process="@form" event="change" listener="#{notiNotiBusquedaExpediente.actualiza()}" 
+                                                    update="panelPrima,panelSegundo,tblTramites" />
+                                            <f:selectItem itemLabel="Trámite" itemValue="1" />
+                                            <f:selectItem itemLabel="Demandante/Demandado" itemValue="2" />
+                                            <f:selectItem itemLabel="Operador" itemValue="3" />
+
+                                        </p:selectOneMenu> 
+
+                                    </p:column>
+                                </p:row>
+                            </p:panelGrid>
+                            <p:outputPanel id="panelPrima" styleClass="quitarBordes">
+                                <p:panelGrid style="width: 100%" rendered="#{!notiNotiBusquedaExpediente.pintaOpcion}" id="pnlDatosTramite">
+                                    <p:row>
+                                        <p:column style="width: 5%">
+                                            <p:outputLabel value="Expediente"/>
+                                        </p:column>
+                                        <p:column style="width: 20%">                            
+                                            <p:selectOneMenu autoWidth="false" style="width: 90%" value="#{notiNotiBusquedaExpediente.comboExpe}">
+                                                <f:selectItems value="#{notiNotiBusquedaExpediente.listTipoNotifi}" 
+                                                               var="tipo"
+                                                               itemLabel="#{tipo.nombre}" 
+                                                               itemValue="#{tipo.nombre}" />
+
+                                            </p:selectOneMenu>
+                                            <p:outputLabel value="Trámite"/>                            
+                                        </p:column>
+                                        <p:column style="width: 15%">
+                                            <p:panelGrid columns="1">
+                                                <p:inputText value="#{notiNotiBusquedaExpediente.numBusque}" styleClass="textoImportante"/>
+                                                <p:outputLabel value="Número"/>
+                                            </p:panelGrid>
+                                        </p:column>
+                                        <p:column style="width: 20%">
+                                            <p:panelGrid columns="1">
+
+                                                <p:inputText value="#{notiNotiBusquedaExpediente.gestionBusque}" styleClass="textoImportante"/>
+                                                <p:outputLabel value="Gestión"/>
+                                            </p:panelGrid>
+                                        </p:column>
+                                        <p:column style="vertical-align: top;width: 10%">
+                                            <p:commandButton value="Buscar" icon="ui-icon-search" style="height: 80%"
+                                                             actionListener="#{notiNotiBusquedaExpediente.buscarXTramite()}"
+                                                             update="tblTramites"/>
+                                        </p:column>
+                                        <p:column style="vertical-align: top">
+                                            <p:commandButton value="Limpiar" icon="ui-icon-document" style="height: 80%"
+                                                             actionListener="#{notiNotiBusquedaExpediente.limpiar()}"
+                                                             update=":formHistoEx:pnlDatosTramite, :formHistoEx:pnlDatosDanteDado, tblTramites" />
+                                        </p:column>
+
+                                    </p:row>
+                                </p:panelGrid>
+                            </p:outputPanel>
+                            <p:outputPanel id="panelSegundo" styleClass="quitarBordes">
+                                <p:panelGrid style="width: 100%" rendered="#{notiNotiBusquedaExpediente.pintaOpcion}" id="pnlDatosDanteDado">
+                                    <p:row>
+
+                                        <p:column style="width: 5%">
+                                            <p:outputLabel value="Expediente"/>
+
+                                        </p:column >
+                                        <p:column style="width: 70%">
+                                            <p:inputText style="width: 80%" value="#{notiNotiBusquedaExpediente.campoBusque}" styleClass="textoImportante"/>
+                                        </p:column>
+                                        <p:column style="vertical-align: top;width: 10%">
+                                            <p:commandButton value="Buscar" icon="ui-icon-search" actionListener="#{notiNotiBusquedaExpediente.buscarXDandedadoOperador()}"
+                                                             update="tblTramites"/>
+                                        </p:column>
+                                        <p:column style="vertical-align: top">
+                                            <p:commandButton value="Limpiar" icon="ui-icon-circle-close" actionListener="#{notiNotiBusquedaExpediente.limpiar()}"
+                                                             update=":formHistoEx:pnlDatosTramite, :formHistoEx:pnlDatosDanteDado, tblTramites" />
+                                        </p:column>
+                                    </p:row>
+                                </p:panelGrid>
+                            </p:outputPanel>
+                        </fieldset>
+                        <p:spacer height="6"/>
+
+                        <fieldset>
+                            <p:row>
+                                <p:column>
+                                    
+                                        <p:dataTable  style="margin:0;width: 100%"
+                                                      scrollable="true" 
+                                                      scrollWidth="1230"
+                                                      scrollHeight="500"
+                                                      value="#{notiNotiBusquedaExpediente.listNotifiBus}" 
+                                                      var="tra"
+                                                      id="tblTramites"
+                                                      scrollRows="30"
+                                                      liveScroll="true" 
+                                                      rowIndexVar="index"
+                                                      >
+                                            <p:column headerText="#" width="30">
+                                                <h:outputText value="#{index+1}" />
+                                            </p:column>
+                                            <p:column headerText="Nro" width="30">
+                                                <h:outputText value="#{tra.nro_exped}" />
+                                            </p:column>
+                                            <p:column headerText="Bloque" width="50">
+                                                <h:outputText value="#{tra.bloque}" />
+                                            </p:column>        
+                                            <p:column headerText="Tramite" width="100">
+                                                <h:outputText value="#{tra.tipo_tramite_notificacion}" />
+                                            </p:column>    
+                                            <p:column headerText="Nro" width="70">
+                                                <h:outputText value="#{tra.expediente}" />
+                                            </p:column>    
+                                            <p:column headerText="Gestión" width="70">
+                                                <h:outputText value="#{tra.gestion}" />
+                                            </p:column>    
+
+                                            <p:column headerText="Ext" width="50">
+                                                <h:outputText value="#{tra.extension}" />
+                                            </p:column>    
+                                            <p:column headerText="Demandante" width="180">
+                                                <h:outputText value="#{tra.demandante}" />
+                                            </p:column>    
+                                            <p:column headerText="Demandado" width="180">
+                                                <h:outputText value="#{tra.demandado}" />
+                                            </p:column>    
+                                            <p:column headerText="Tipo" width="100">
+                                                <h:outputText value="#{tra.demandante_con}" />
+                                            </p:column>
+                                            <p:column headerText="Fecha Ing" width="100">
+                                                <h:outputText value="#{tra.fecha_ingreso}" >
+                                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                                </h:outputText>
+                                            </p:column>
+                                            <p:column headerText="Observación" width="110">
+                                                <h:outputText value="#{tra.obs}" />
+                                            </p:column>
+                                            <p:column headerText="Estado" width="100">
+                                                <h:outputText value="#{tra.estado}" />
+                                            </p:column>
+                                            <p:column headerText="Técnico" width="130">
+                                                <h:outputText value="#{tra.nombre_solicitante}" />
+                                            </p:column>
+                                            <p:column headerText="Técnico Notificaciones" width="120">
+                                                <h:outputText value="#{tra.nombre_notificador}" />
+                                            </p:column>
+                                            <p:column headerText="Fecha Recibido" width="100">
+                                                <h:outputText value="#{tra.fecha_recep}" >
+                                                    <f:convertDateTime pattern="dd/MM/yyyy"  />
+                                                </h:outputText>
+                                            </p:column>
+                                            <p:column headerText="Fecha Notificado Demandante" width="100">
+                                                <h:outputText value="#{tra.demandante_fecha_noti}">
+                                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+                                                </h:outputText>
+                                            </p:column>
+                                            <p:column headerText="Fecha Devuelto Demandante" width="100">
+                                                <h:outputText value="#{tra.demandante_fecha_devol}">
+
+                                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss"  />
+                                                </h:outputText>
+                                            </p:column>
+                                            <p:column headerText="Fecha Notificado Demandado" width="100">
+                                                <h:outputText value="#{tra.demandado_fecha_noti}">
+                                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+                                                </h:outputText>
+                                            </p:column>
+                                            <p:column headerText="Fecha Devuelto Demandado" width="100">
+                                                <h:outputText value="#{tra.demandado_fecha_devol}">
+
+                                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss"  />
+                                                </h:outputText>
+                                            </p:column>
+                                            <p:column headerText="Observación Notificación" width="100">
+                                                <h:outputText value="#{tra.obs_notifi}" />
+                                            </p:column>
+                                        </p:dataTable>
+                                    
+                                </p:column>
+                            </p:row>
+                        </fieldset>
+                    </p:column>
+                </p:row>
+            </p:panelGrid>
+        </h:form>
+     </ui:define>
+        </ui:composition>
+<p:ajaxStatus  style="display:block;margin-bottom:2em;height:24px;" 
+                       onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+        <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+            <p:graphicImage value="/resources/images/ajaxloadingbar.gif"/>
+        </p:dialog>
+    </body>
+
+</html>

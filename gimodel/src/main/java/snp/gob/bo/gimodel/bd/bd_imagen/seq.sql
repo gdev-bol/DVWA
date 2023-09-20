@@ -1,0 +1,8 @@
+CREATE SEQUENCE sec_modarchivodig INCREMENT 1 MINVALUE 1 START 1 CACHE 1; ALTER TABLE modarchivodig ALTER COLUMN idarchivodig SET DEFAULT NEXTVAL ('sec_modarchivodig');
+CREATE SEQUENCE sec_moddocumento INCREMENT 1 MINVALUE 1 START 1 CACHE 1; ALTER TABLE moddocumento ALTER COLUMN iddocumento SET DEFAULT NEXTVAL ('sec_moddocumento');
+CREATE SEQUENCE sec_renarchivodig INCREMENT 1 MINVALUE 1 START 1 CACHE 1; ALTER TABLE renarchivodig ALTER COLUMN idarchivodig SET DEFAULT NEXTVAL ('sec_renarchivodig');
+CREATE SEQUENCE sec_rendocumento INCREMENT 1 MINVALUE 1 START 1 CACHE 1; ALTER TABLE rendocumento ALTER COLUMN iddocumento SET DEFAULT NEXTVAL ('sec_rendocumento');
+CREATE SEQUENCE sec_sigarchivodig INCREMENT 1 MINVALUE 1 START 1 CACHE 1; ALTER TABLE sigarchivodig ALTER COLUMN idarchivodig SET DEFAULT NEXTVAL ('sec_sigarchivodig');
+CREATE SEQUENCE sec_sigdocumento INCREMENT 1 MINVALUE 1 START 1 CACHE 1; ALTER TABLE sigdocumento ALTER COLUMN iddocumento SET DEFAULT NEXTVAL ('sec_sigdocumento');
+CREATE SEQUENCE sec_sigimagen INCREMENT 1 MINVALUE 1 START 1 CACHE 1; ALTER TABLE sigimagen ALTER COLUMN idimagen SET DEFAULT NEXTVAL ('sec_sigimagen');
+CREATE SEQUENCE sec_siglogotipo INCREMENT 1 MINVALUE 1 START 1 CACHE 1; ALTER TABLE siglogotipo ALTER COLUMN idlogotipo SET DEFAULT NEXTVAL ('sec_siglogotipo');

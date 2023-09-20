@@ -1,0 +1,149 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <body>
+        <ui:composition template="./../WEB-INF/facelets/templates/DialogTemplate.xhtml">
+            <ui:define name="content">
+
+                <h:form id="formuseg" style="border-style: hidden; width: 95%">
+                    <p:outputPanel style="padding-bottom: 1px; padding-top: 1px; padding-left:10px; padding-right: 10px;">
+                        <table>
+                            <tr valign="middle">
+                                <td><p:graphicImage library="images" name="flechaTituloAzul.png" width="24" height="24"></p:graphicImage></td>
+                                <td><p:outputLabel value="Historial" styleClass="tituloPrincipalFuente"></p:outputLabel></td>
+                            </tr>
+                        </table>                    
+                        <p:separator id="sepTitulo" style="border: 1px #045491 inset;"></p:separator>                    
+                    </p:outputPanel> 
+                    <fieldset style="width: 100%">
+                        <legend>
+                            <p:outputLabel value="Signos distintivos" styleClass="labelImportante"/> 
+                        </legend>
+                        <p:panelGrid styleClass="quitarBordes" style="width: 90%">
+
+                            <p:row>
+                                <p:column><p:outputLabel value="Expediente"/></p:column>
+                                <p:column><p:inputText value="#{historialOpoBean.numeropublihis}" size="20"/></p:column>
+                                <p:column colspan="3"></p:column>
+
+                                <p:column><p:outputLabel value="Orden"/></p:column>
+                                <p:column><p:inputText value="#{historialOpoBean.ordenopohis}" size="16"/></p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column colspan="7"><p:inputText value="#{historialOpoBean.marcasvs}" size="94" style="text-align: center"/></p:column>
+
+                            </p:row>
+                        </p:panelGrid>            
+                        <p:panelGrid styleClass="quitarBordes" style="width: 90%">
+                            <p:row>
+                                <p:column><p:outputLabel value="Estado" style="font-size: small"/></p:column>
+                                <p:column><p:inputText value="#{historialOpoBean.estadohis}" size="26"/></p:column>
+                                <p:column><p:outputLabel value="Ubicacion"/></p:column>
+                                <p:column colspan="4"><p:inputText value="#{historialOpoBean.ubicacionhist}" size="30"/></p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column><p:outputLabel value="Fecha limite"/></p:column>
+                                <p:column colspan="6"><p:inputText value="#{historialOpoBean.fechalimhist}"  size="32"/></p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column><p:outputLabel value="Apoderado"/></p:column>
+                                <p:column colspan="6"><p:inputText value="#{historialOpoBean.apoderadodmdohis}" size="32"/></p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column><p:outputLabel value="Observacion"/></p:column>
+                                <p:column colspan="6"><p:inputTextarea  value="#{historialOpoBean.observacionhis}" rows="3" cols="91" /></p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column><p:outputLabel value="Operacion"/></p:column>
+                                <p:column colspan="4"><p:inputText value="#{historialOpoBean.operacionhist}" size="32"/></p:column>
+                                <p:column><p:outputLabel value="Fecha y hora"/></p:column>
+                                <p:column><p:calendar pattern="dd-MM-yyyy HH-mm-ss" mask="true" value="#{historialOpoBean.horaoperahist}" size="15"/></p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column><p:outputLabel value="Usuario"/></p:column>
+                                <p:column colspan="5"><p:inputText value="#{historialOpoBean.usuariohist}"  size="32"/></p:column>
+
+                                <p:column>
+                                    <p:commandButton value="Cerrar"  icon="ui-icon-circle-close" >
+                                        <p:ajax listener="#{historialOpoBean.cerrarDialogo()}" />
+                                    </p:commandButton>
+                                </p:column>
+
+                            </p:row>
+                        </p:panelGrid>                            
+
+                    </fieldset>
+                    <p:spacer width="1"/>
+                    <fieldset style="width: 100%">
+                        <legend>
+                            <p:outputLabel value="Lista de modificaciones" styleClass="labelImportante"/> 
+                        </legend>
+
+                        <p:dataTable var="histovar" value="#{historialOpoBean.listahistorial}" id="tabladeoposicion"
+                                     selectionMode="single" selection="#{historialOpoBean.selectedOpoHisto}" rowKey="#{histovar.idhistorial}" 
+                                     style="width: 100%"
+                                     scrollHeight="200"
+                                     scrollWidth="1050" 
+                                     scrollable="true">
+                            <p:ajax event="rowSelect" listener="#{historialOpoBean.onRowSelectOposicion}" update=":formuseg"/>
+                            <p:ajax event="rowUnselect" listener="#{historialOpoBean.onRowUnselectOposicion}" update=":formuseg" />
+
+
+                            <p:column headerText="No." width="15">
+                                <p:outputLabel value="#{histovar.idoposicion}"/>
+                            </p:column>
+                            <p:column headerText="Estado" width="80">
+                                <p:outputLabel value="#{histovar.estado}"/>
+                            </p:column>
+                            <p:column headerText="Fecha Limite" width="80">
+                                <p:outputLabel value="#{histovar.fecha_lim}">
+                                    <f:convertDateTime type="date" pattern="dd-MM-yyyy"/>
+                                </p:outputLabel>
+                            </p:column>
+                            <p:column headerText="Observacion" width="100">
+                                <p:outputLabel value="#{histovar.observacion}"/>
+                            </p:column>
+
+                            <p:column headerText="Ubicacion" width="80">
+                                <p:outputLabel value="#{histovar.ubicacion}"/>
+                            </p:column>
+                            <p:column headerText="Apoderado" width="80">
+                                <p:outputLabel value="#{histovar.apoderado}"/>
+                            </p:column>
+                            <p:column headerText="Operacion" width="80">
+                                <p:outputLabel value="#{histovar.operacion}"/>
+                            </p:column>
+                            <p:column headerText="Fecha Operacion" width="80">
+                                <p:outputLabel value="#{histovar.fecha_operacion}">
+                                    <f:convertDateTime type="date" pattern="dd-MM-yyyy"/>
+                                </p:outputLabel>
+                            </p:column>
+                            <p:column headerText="Hora de Operacion" width="80">
+                                <p:outputLabel value="#{histovar.fecha_operacion}">
+                                    <f:convertDateTime pattern="HH:mm:ss" />
+                                </p:outputLabel>
+                            </p:column>
+                            <p:column headerText="Usuario" width="80">
+                                <p:outputLabel value="#{historialOpoBean.comvertiriduserxname(histovar.id_usuario)}"/>
+                            </p:column>
+                        </p:dataTable>
+
+                    </fieldset>
+
+
+
+
+
+                </h:form>
+
+            </ui:define>     
+        </ui:composition>
+    </body>
+
+
+
+</html>

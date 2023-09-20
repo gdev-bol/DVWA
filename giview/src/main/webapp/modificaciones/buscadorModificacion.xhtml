@@ -1,0 +1,224 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <h:outputStylesheet name="./css/default.css"/>
+        <h:outputStylesheet name="./css/cssLayout.css"/>
+        <h:outputScript library="js" name="spanishLocale.js"/>
+
+    </h:head>
+    <body>
+        <ui:composition template="#{buscadorModificacionBean.template}">
+            <ui:define name="content">
+                <h:form id="form" style="width: 98%; padding-left: 1%">
+                    <p:growl id="msg" />
+                    <p:panelGrid style="width: 98%;" styleClass="quitarBordes">
+                        <p:row>
+                            <p:column style="width: 100%;" colspan="2">
+                                <p:outputPanel style="padding-bottom: 0px; padding-top: 0px; padding-left:10px; padding-right: 10px;">
+                                    <table>
+                                        <tr valign="middle">
+                                            <td><p:graphicImage library="images" name="flechaTituloAzul.png" width="24" height="24"></p:graphicImage></td>
+                                            <td><p:outputLabel value="Busqueda modificación" styleClass="tituloPrincipalFuente"></p:outputLabel></td>
+                                        </tr>
+                                    </table>                    
+                                    <p:separator id="sepTitulo" style="border: 1px #045491 inset;"></p:separator>       
+
+                                </p:outputPanel>                                
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                    <p:outputPanel style="padding-bottom: 1px; padding-top: 1px; padding-left:20px; padding-right: 10px; width: 98%">
+                        <p:panelGrid style="width: 80%;">
+                            <p:selectOneRadio  value="#{buscadorModificacionBean.valorRadio}" >
+                                <f:selectItem itemValue="BA" itemLabel="Busqueda Avanzada &nbsp; &nbsp;"/> 
+                                <f:selectItem itemValue="BS" itemLabel="Simple" />                                                      
+                                <p:ajax listener="#{buscadorModificacionBean.activaCambios()}"
+                                        event="change" update="panelBuscador tblListaModificacion pnTotal"></p:ajax>
+                            </p:selectOneRadio> 
+                        </p:panelGrid>
+                    </p:outputPanel>
+
+                    <p:panelGrid styleClass="quitarBordes" style="width: 98%;">
+
+                        <p:panelGrid id="panelBuscador" columns="2"  style="width: 80%;" styleClass="quitarBordes">
+                            <p:panelGrid columns="4" rendered="#{buscadorModificacionBean.buscadorRender}">
+
+                                <p:outputLabel value="Campo de Busqueda:" />
+                                <p:selectOneMenu value="#{buscadorModificacionBean.filtroSimple}" style="width:60px;">                                        
+                                    <f:selectItem itemLabel="Nombre del Solicitante" itemValue="SOLI" />
+                                    <f:selectItem itemLabel="Apoderado" itemValue="APOD" />  
+                                    <f:selectItem itemLabel="Nombre del Signo" itemValue="SIGN" />
+                                    <p:ajax event="change" listener="#{buscadorModificacionBean.borrarTexto()}" update="panelBuscador"/>
+                                </p:selectOneMenu>
+                                <p:inputText value="#{buscadorModificacionBean.textoBusquedaSimple}"  size="20"/>
+                                <p:panelGrid >
+                                    <p:commandButton icon="ui-icon-search"  value="Buscar" style="height: 40px;" update="tblListaModificacion msg pnTotal"
+                                                     actionListener="#{buscadorModificacionBean.accionBuscarSimple()}"/>
+                                </p:panelGrid>
+                            </p:panelGrid>                           
+                            <p:panelGrid columns="14"  rendered="#{!buscadorModificacionBean.buscadorRender}" style="width: 100%">
+
+                                <p:outputLabel value="Tipo Modificacion:" style="display: block; width: 110px"/>
+                                <p:selectOneMenu value="#{buscadorModificacionBean.tipoModificacion}" style="width:120px;" autoWidth="false">
+                                    <!--                                    <f:selectItem itemLabel="Todo" itemValue="" />-->
+                                    <f:selectItems value="#{buscadorModificacionBean.lstTipoModificacion}" 
+                                                   var="tipoModi" itemLabel="#{tipoModi.nombre}" itemValue="#{tipoModi.codigo}" /> 
+                                </p:selectOneMenu>
+                                <p:spacer width="1"/>
+                                <p:outputLabel value="Regional:" style="display: block; width: 60px"/>
+                                <p:selectOneMenu value="#{buscadorModificacionBean.regional}"  autoWidth="false" style="width: 90px" >
+                                    <f:selectItems value="#{buscadorModificacionBean.lstOficina}"
+                                                   var="oficina"
+                                                   itemValue="#{oficina.codigo}"
+                                                   itemLabel="#{oficina.nombre}"  /> 
+                                    <f:selectItem itemLabel="Todo" itemValue="" />
+                                </p:selectOneMenu>
+                                <p:spacer width="1"/>
+                                <p:outputLabel value="Estado:" />
+                                <p:selectOneMenu id="cboSituacionActual" value="#{buscadorModificacionBean.estadoModificacion}" 
+                                                 autoWidth="false" style="width: 80%" >
+                                    <f:selectItem itemLabel="Elegir"  itemValue="" />
+                                    <f:selectItems value="#{buscadorModificacionBean.lstSituacionActual}" var="estado" itemLabel="#{estado.nombre}"  itemValue="#{estado.codigo}" />                                                        
+                                </p:selectOneMenu>
+                                <p:spacer width="1"/>
+                                <p:outputLabel value="Desde:" />
+                                <p:calendar pattern="dd/MM/yyyy" mask="true" size="9" value="#{buscadorModificacionBean.fechaInicio}"/>  
+                                <p:outputLabel value="Hasta:" />
+                                <p:calendar pattern="dd/MM/yyyy" mask="true" size="9" value="#{buscadorModificacionBean.fechaFin}"/> 
+                                <h:panelGrid >
+                                    <p:commandButton icon="ui-icon-search"  value="Buscar" style="height: 40px;" update="tblListaModificacion msg pnTotal"
+                                                     actionListener="#{buscadorModificacionBean.accionBuscar()}"/>
+                                </h:panelGrid>
+                            </p:panelGrid>
+
+                            <p:spacer height="5" />
+
+                        </p:panelGrid>
+                        <p:spacer height="5"/>
+
+                        <p:dataTable value="#{buscadorModificacionBean.listaBusquedaModificacionResultado}" id="tblListaModificacion"
+                                     var="modificacion" scrollHeight="260" liveScroll="true" scrollRows="50"
+                                     scrollWidth="1030"  rowIndexVar="index"
+                                     scrollable="true" style="width: 98%;"
+                                     >
+                            <p:column headerText="N°" width="20" style="background: #f4f4f4 !important">
+                                <h:outputText value="#{index+1}" />
+                            </p:column>
+                            <p:column headerText="Sigla" width="50" style="text-align: center">
+                                <h:outputText value="#{modificacion.sigla}" 
+                                 />
+                            </p:column>
+                            <p:column headerText="N° Tramite" width="75" style="text-align: center">
+                                <p:commandLink value="#{modificacion.numero}"  rendered="#{buscadorModificacionBean.muestraLink}"
+                                               actionListener="#{buscadorModificacionBean.accionNavegarExpedienteModificacion(modificacion.idmodificacion)}"/>
+                                <h:outputText value="#{modificacion.numero}" 
+                                              rendered="#{!buscadorModificacionBean.muestraLink}"/>
+                            </p:column>
+                            <p:column headerText="Gestion" width="55" style="text-align: center" sortBy="#{modificacion.gestion}">
+                                <p:commandLink value="#{modificacion.gestion}" rendered="#{buscadorModificacionBean.muestraLink}"
+                                               actionListener="#{buscadorModificacionBean.accionNavegarExpedienteModificacion(modificacion.idmodificacion)}"/>
+                                <h:outputText value="#{modificacion.gestion}" 
+                                              rendered="#{!buscadorModificacionBean.muestraLink}"/>
+                            </p:column>
+                            <p:column headerText="Marca" width="300">
+                                <h:outputText value="#{modificacion.signo_registrado}" />
+                            </p:column>
+                            <p:column headerText="Clase"  width="30" style="text-align: center">
+                                <h:outputText value="#{modificacion.idclase_registrado}" />
+                            </p:column>                            
+                            <p:column headerText="Fecha Ingreso" width="150" style="text-align: center">
+                                <h:outputText value="#{modificacion.fecha_ingreso}" >
+                                    <f:convertDateTime pattern="#{sessionState.formatoFechaHora}"/>    
+                                </h:outputText>
+                            </p:column>                              
+                            <p:column headerText="Resolución" width="65" style="text-align: center" sortBy="#{modificacion.numero_resolucion}">
+                                <h:outputText value="#{modificacion.numero_resolucion}" />
+                            </p:column>
+                            <p:column headerText="Gestion" width="50" style="text-align: center">
+                                <h:outputText value="#{modificacion.gestion_resolucion}" />
+                            </p:column>
+                            <p:column headerText="Fecha resol." width="150" style="text-align: center">
+                                <h:outputText value="#{modificacion.fecha_resolucion}" >
+                                    <f:convertDateTime pattern="#{sessionState.formatoFechaHora}"/>    
+                                </h:outputText>
+                            </p:column> 
+                            <p:column headerText="Estado" width="150" style="text-align: center">
+                                <h:outputText value="#{modificacion.estado_modificacion}" />
+                            </p:column>                           
+                            <p:column headerText="Registro" width="100" style="text-align: center">
+                                <h:outputText value="#{buscadorModificacionBean.devuelveNumeroRegistro(modificacion.numero_registro,modificacion.serie_registro)}" />
+                            </p:column>
+                            <p:column headerText="N° Publicacion" width="100" style="text-align: center">
+                                <h:outputText value="#{modificacion.numero_publicacion}" />
+                            </p:column>
+                            <p:column headerText="Solicitante" width="260">
+                                <h:outputText value="#{modificacion.solicitante}" />
+                            </p:column>
+                            <p:column headerText="Apoderado" width="240">
+                                <h:outputText value="#{modificacion.apoderado}" />
+                            </p:column> 
+                            <p:column headerText="Titular registrado" width="250">
+                                <h:outputText value="#{modificacion.titular_registrado}" />
+                            </p:column> 
+                            <p:column headerText="Domicilio registrado" width="250">
+                                <h:outputText value="#{modificacion.direccion_registrado}" />
+                            </p:column> 
+                            <p:column headerText="Titular nuevo" width="250">
+                                <h:outputText value="#{modificacion.nuevo_titular}" />
+                            </p:column> 
+                            <p:column headerText="Domicilio nuevo" width="250">
+                                <h:outputText value="#{modificacion.direccion_titular}" />
+                            </p:column> 
+                        </p:dataTable>
+
+                        <p:spacer height="1"/>
+                        <div align="left">
+                            <p:panelGrid columns="2" style="quitarBordes" id="pnTotal">
+                                <p:outputLabel value="Total registrados encontrados:" ></p:outputLabel>
+                                <p:outputLabel value="#{buscadorModificacionBean.total}" 
+                                               styleClass="tituloPrincipalFuente"></p:outputLabel>
+                            </p:panelGrid>
+                        </div>
+                        <p:spacer height="5"/>
+                        <p:panelGrid style="width: 85%; text-align: center;" styleClass="quitarBordes">
+                            <p:row>
+                                <p:column style="width: 10%;text-align: center">
+                                    <p:commandButton icon="ui-icon-print"  value="Imprimir" style=" height: 40px;" 
+                                                     ajax="false" actionListener="#{buscadorModificacionBean.imprimir()}"/>
+                                </p:column>
+                                <p:column style="width: 10%;text-align: center">
+                                    <p:commandButton value="Excel" icon="ui-icon-contact" ajax="false" style="height: 40px">
+                                        <p:dataExporter type="xls" target="tblListaModificacion" fileName="BusquedaAvanzada" 
+                                                        postProcessor="#{buscadorModificacionBean.postProcessXLS}" />
+                                    </p:commandButton>
+                                </p:column>
+                                <p:column style="width: 60%;text-align: right">
+                                    <p:commandButton value="Cerrar" action="#{buscadorModificacionBean.cerrarDialogo()}" 
+                                                     icon="ui-icon-close"  style="height: 40px;" ajax="false">
+                                    </p:commandButton>
+                                </p:column>
+                                <p:column style="width: 3%;text-align: right">
+
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                    </p:panelGrid>        
+
+
+                </h:form> 
+                <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+                <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                    <p:graphicImage name="/images/cargando.gif" />
+                </p:dialog>
+            </ui:define>
+        </ui:composition>
+
+        <h:outputScript library="js" name="spanishLocale.js"/>
+    </body>
+</html>

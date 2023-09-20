@@ -1,0 +1,166 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      >
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <h:outputStylesheet name="./css/default.css"/>
+        <h:outputStylesheet name="./css/cssLayout.css"/>
+
+    </h:head>
+
+    <h:body>
+
+        <ui:composition template="#{plantillaTramiteIngresadoBean.template}">
+
+            <ui:define name="content">
+                <h:form>
+                    <div align="center">
+                        <p:panelGrid style="width: 60%;">
+                            <p:row>
+                                <p:column style="width: 100%;">
+
+                                    <p:dataTable value="#{plantillaTramiteIngresadoBean.plantillaVentanilla}"
+                                                 var="itemplantilla">
+
+                                        <p:column rendered="#{itemplantilla.tipoElemento == 'TEH8'}"
+                                                  style="width: 30%"
+                                                  >
+                                            <p:outputLabel value="#{itemplantilla.nombreElemento}" style="font-weight: bold" />
+                                        </p:column>
+
+
+                                        <!-- Para los padres que son checks-->
+                                        <p:column rendered="#{itemplantilla.idpadre == 0  and itemplantilla.tipoElemento== 'TEH7'}"
+                                                  style="width: 10%">
+                                            <p:outputLabel value="#{itemplantilla.nombreElemento}" />
+                                        </p:column>
+
+                                        <p:column rendered="#{itemplantilla.idpadre == 0 and itemplantilla.tipoElemento== 'TEH7'}"
+                                                  style="width: 5%">
+                                        </p:column>
+                                        <p:column rendered="#{itemplantilla.idpadre == 0  and itemplantilla.tipoElemento== 'TEH7'}" >
+                                            <p:selectBooleanCheckbox value="#{itemplantilla.opcionRespuesta}" />
+                                        </p:column>
+
+                                        <!-- Para los padres que son inputtext-->
+                                        <p:column rendered="#{itemplantilla.idpadre == 0  and itemplantilla.tipoElemento== 'TEH1'}"
+                                                  style="width: 10%">
+                                            <p:outputLabel value="#{itemplantilla.nombreElemento}" />
+                                        </p:column>
+
+                                        <p:column colspan="2" rendered="#{itemplantilla.idpadre == 0 and itemplantilla.tipoElemento== 'TEH1'}"
+                                                  style="width: 5%">
+                                            <p:inputText value="#{itemplantilla.respuesta}" />
+                                        </p:column>
+                                        
+                                        <p:column rendered="#{itemplantilla.idpadre == 0  and itemplantilla.tipoElemento== 'TEH3'}"
+                                                  style="width: 10%">
+                                            <p:outputLabel value="#{itemplantilla.nombreElemento}" />
+                                        </p:column>
+
+                                        
+                                        <p:column colspan="2" rendered="#{itemplantilla.idpadre == 0 and itemplantilla.tipoElemento== 'TEH3'}"
+                                                  style="width: 5%">
+                                            <p:inputTextarea value="#{itemplantilla.respuesta}"  style="width: 95%; background: #F0F8FF" scrollHeight="5" rows="5">
+                                            </p:inputTextarea>
+                                        </p:column>
+
+
+                                        <!-- Para los padres que son label-->
+                                        <p:column rendered="#{itemplantilla.idpadre == 0  and itemplantilla.tipoElemento== 'TEH2'}"
+                                                  style="width: 10%" colspan="3">
+                                            <p:outputLabel value="#{itemplantilla.nombreElemento}" />
+                                        </p:column>
+
+                                        <!--                                        <p:column colspan="2" rendered="# {itemplantilla.idpadre == 0 and itemplantilla.tipoElemento== 'TEH2'}"
+                                                                                          style="width: 5%">
+                                                                                                                                <p:inputText value="# {itemplantilla.respuesta}" />
+                                                                                </p:column>-->
+
+
+
+
+
+
+                                        <!--                                        <p:column rendered="# itemplantilla.idpadre == 0  and itemplantilla.tipoElemento== 'TEH1'}" >
+                                                                                    
+                                                                                </p:column>-->
+
+
+                                        <!--Para los hijos-->
+                                        <p:column rendered="#{itemplantilla.idpadre != 0}" style="width: 30%">
+
+                                        </p:column>
+                                        <p:column rendered="#{itemplantilla.idpadre != 0}" style="width: 10%">
+
+                                            <p:outputLabel value="#{itemplantilla.nombreElemento}" />
+                                        </p:column>
+                                        <p:column rendered="#{itemplantilla.idpadre != 0}" style="width: 5%">
+                                            <p:selectBooleanCheckbox value="#{itemplantilla.opcionRespuesta}" />
+
+                                        </p:column>
+
+
+
+
+                                        <!--                                        <p:column rendered="# {itemplantilla.idpadre == 0  and itemplantilla.tipoElemento== 'TEH1'}" >
+                                                                                    <p:inputText value="# {itemplantilla.respuesta}" />
+                                                                                </p:column>-->
+
+
+
+
+                                    </p:dataTable>
+                                </p:column>
+
+
+
+                            </p:row>
+
+                        </p:panelGrid>
+                    </div>
+                    
+                    <p:panelGrid style="width: 70%">
+                        <br />
+                        <fieldset>
+                            <legend>Observacion ventanilla</legend>
+                            <p:inputTextarea value="#{plantillaTramiteIngresadoBean.observacionTramite.descripcion}"
+                                             style="width: 98%; background: #F0F8FF" scrollHeight="5" rows="3">
+                            </p:inputTextarea>
+                        </fieldset>
+                    </p:panelGrid>
+
+
+                    <p:panelGrid style="width: 100%" styleClass="quitarBordes" id="pnlAccciones">
+                        <p:row>
+                            <p:column style="border: 1px solid">
+                                <div align="center">
+                                    <p:panelGrid columns="3">
+                                        <p:commandButton value="Atras" action="#{plantillaTramiteIngresadoBean.retornarPagina()}" 
+                                                         icon="ui-icon-arrowreturnthick-1-w" style="height: 30px"/>
+                                        <p:commandButton value="Guardar formulario" update="@form"
+                                                         actionListener="#{plantillaTramiteIngresadoBean.accionGuardarFormularioIngreso()}" 
+                                                         icon="ui-icon-disk" style="height: 30px"/>
+                                        <p:commandButton value="Impresion" icon="ui-icon-print" ajax="false" 
+                                                         action="#{plantillaTramiteIngresadoBean.accionImprimir()}" 
+                                                         style="height: 30px" disabled="#{plantillaTramiteIngresadoBean.imprimirDisabled}"/>
+                                    </p:panelGrid>
+                                </div>
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+
+                </h:form>
+            </ui:define>
+        </ui:composition>
+
+
+
+    </h:body>
+</html>

@@ -1,0 +1,228 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <body>
+        <ui:composition template="./../WEB-INF/facelets/templates/Template.xhtml">
+            <ui:define name="content">  
+
+                <h:form id="frmBusqueda">
+                    <p:panelGrid style="width: 100%;" styleClass="quitarBordes">
+                        <p:row>
+                            <p:column style="width: 100%;" colspan="2">
+                                <p:outputPanel style="padding-bottom: 1px; padding-top: 1px; padding-left:1px; padding-right: 1px;">
+                                    <table>
+                                        <tr valign="middle">
+                                            <td><p:graphicImage library="images" name="flechaTituloAzul.png" width="24" height="24"></p:graphicImage></td>
+                                            <td><p:outputLabel value="Búsqueda de parecidos" styleClass="tituloPrincipalFuente"></p:outputLabel></td>
+                                        </tr>
+                                    </table>                    
+                                    <p:separator id="sepTitulo" style="border: 1px #045491 inset;"></p:separator>                    
+                                </p:outputPanel>               
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                    <fieldset style="width: 98%">
+                        <legend>Búsqueda de signos</legend>
+                        <p:panelGrid style="width: 98%" styleClass="quitarBordes">
+                            <p:row>
+                                <p:column rowspan="2"><p:outputLabel value="Búsqueda" style="font-size: 15px; width: 10%"/></p:column>
+                                <p:column rowspan="2" style="width: 20%">
+                                    <p:selectOneRadio id="valorRadio" value="#{busquedaSignosBean.valorRadio}"  layout="grid" columns="1">
+                                        <f:selectItem itemValue="CS" itemLabel="Por comparacion de sílabas" />
+                                        <!--<f:selectItem itemValue="CF" itemLabel="Por comparacion Fonetica" />-->
+                                        <p:ajax listener="#{busquedaSignosBean.activaCambios()}"
+                                                event="change" update=":frmBusqueda:opciones" ></p:ajax>
+                                    </p:selectOneRadio>
+                                </p:column>
+                                <p:column colspan="1" style="text-align: left; width: 30%"><p:outputLabel value="Campo"/></p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column colspan="1" style="width: 50%">
+                                    <p:selectOneMenu id="console" value="#{busquedaSignosBean.seleccionComboBusqueda}" style="width:60px;">
+                                        <f:selectItem itemLabel="Nombre de Marca (ó Signo) y clase" itemValue="SIGN" />
+                                        <f:selectItem itemLabel="Nombre del Solicitante" itemValue="SOLI" />
+                                        <f:selectItem itemLabel="Nombre del Apoderado" itemValue="APOD" />
+                                        <p:ajax listener="#{busquedaSignosBean.accionSeleccionComboBusqueda()}"
+                                                event="change">
+                                        </p:ajax>
+                                    </p:selectOneMenu>
+                                </p:column>
+
+                            </p:row>
+                        </p:panelGrid>
+                    </fieldset>
+                    <fieldset style="width: 98%">
+                        <p:panelGrid  id="opciones" styleClass="quitarBordes">
+                            <p:row>
+                                <p:column style="width: 5%">
+                                    <p:outputLabel value="Frase" style="font-weight: bold"/>
+                                </p:column>
+                                <p:column style="width: 55%">
+                                    <p:inputText value="#{busquedaSignosBean.fraseBusqueda}" style="width: 95%">
+                                        <p:ajax event="blur" update="criterio" listener="#{busquedaSignosBean.criterio()}"/>
+                                    </p:inputText>
+                                </p:column>
+                                <p:column style="width: 5%">
+                                    <p:outputLabel value="Clase" style="font-weight: bold"/>
+                                </p:column>
+                                <p:column style="width: 10%">
+                                    <p:inputText value="#{busquedaSignosBean.valorClaseNiza}" style="width: 14%"/>
+                                </p:column>
+                                <p:column style="width: 8%" rowspan="3">
+                                    <p:commandButton value="Buscar"
+                                                     icon="ui-icon-search"
+                                                     style="height: 40px"
+                                                     actionListener="#{busquedaSignosBean.accionRealizarBusquedaMarca()}"
+                                                     update=":frmBusqueda:tblBusquedaSignos
+                                                     :frmBusqueda:lblBusqueda
+                                                     :frmBusqueda:oplResultadoRespuesta">
+                                    </p:commandButton>
+                                </p:column>
+                                <p:column style="width: 8%" rowspan="3">
+                                    <p:commandButton value="PDF" 
+                                                     icon="ui-icon-print" 
+                                                     ajax="false" 
+                                                     style="height: 40px"
+                                                     actionListener="#{busquedaSignosBean.imprimir()}">
+                                    </p:commandButton>
+                                </p:column>
+                                <p:column rowspan="3" style="width: 10%">
+                                    <p:commandButton value="Excel" icon="ui-icon-print" ajax="false" style="height: 40px">
+                                        <p:dataExporter type="xls" target="tblBusquedaSignos" fileName="Busqueda" 
+                                                        postProcessor="#{busquedaSignosBean.postProcessXLS}" />
+                                    </p:commandButton>
+                                </p:column>
+
+                                <p:outputLabel id="lblBusqueda" value="#{busquedaSignosBean.etiqueta}"/>
+
+                            </p:row>
+                            <p:row>
+                                <p:column style="width: 5%">
+                                    <p:outputLabel value="Criterio" style="font-weight: bold"
+                                                   rendered="#{busquedaSignosBean.criterioRendered}"/>
+                                </p:column>
+                                <p:column style="width: 55%">
+                                    <p:inputText id="criterio"
+                                                 value="#{busquedaSignosBean.criterioBusqueda}"
+                                                 style="width: 95%"
+                                                 rendered="#{busquedaSignosBean.criterioRendered}"/>
+                                </p:column>
+                                <p:column colspan="2" rowspan="2"></p:column>
+
+
+                            </p:row>
+
+                        </p:panelGrid>
+                    </fieldset>
+                    <p:panelGrid style="width: 100%">
+                        <p:row>
+                            <p:column>
+                                <div align="center">
+                                    <p:outputLabel id="oplResultadoRespuesta" 
+                                                   value="#{busquedaSignosBean.listaBusquedaMarcaResultado.size()} Marca(s) parecidas, recuperadas en #{busquedaSignosBean.tiempoEjecucion} segundos." ></p:outputLabel>
+                                </div>
+
+                                <p:dataTable id="tblBusquedaSignos"
+                                             var="busqueda"
+                                             value="#{busquedaSignosBean.listaBusquedaMarcaResultado}"
+                                             selection="#{busquedaSignosBean.busquedaMarcaResultado}"
+                                             rowKey="#{busqueda.idSignoMarca}"
+                                             selectionMode="single"
+                                             rows="50"
+                                             emptyMessage="No se encontraron parecidos."
+                                             paginator="true" 
+                                             rowsPerPageTemplate="50, 100, 150, 500, 1000, 2000"
+                                             scrollable="true"
+                                             scrollWidth="1250" 
+                                             liveScroll="true" 
+                                             scrollHeight="400"
+                                             >
+                                    <!--<p:column selectionMode="multiple" style="width:16px;text-align:center"/>-->
+
+                                    <p:column headerText="N°" width="20">
+                                        <p:outputLabel value="#{busquedaSignosBean.listaBusquedaMarcaResultado.indexOf(busqueda)+1}"/>
+                                    </p:column>
+
+                                    <p:column headerText="%Par" width="25" resizable="true" style="color:##{busqueda.parecido==100? 'FF0000':'33333F'}">
+                                        <p:outputLabel value="#{busqueda.parecido}"/>
+                                    </p:column>
+                                    <p:column headerText="SM" width="105" >
+                                        <p:commandButton value="#{busqueda.sm}" 
+                                                         onclick="#{busquedaSignosBean.urlInformacionSM(busqueda.idSignoMarca, sessionState.idUsuario)}"/>
+                                    </p:column>
+                                
+                                    <p:column headerText="Solicitud" width="65" >
+                                        <p:outputLabel value="#{busqueda.numero}-#{busqueda.gestion}"/>
+                                    </p:column>
+
+                                    <p:column headerText="Marca" width="195" resizable="true" style="background-color:##{busquedaSignosBean.seleccionComboBusqueda=='SIGN'? busquedaSignosBean.calcularColor(busqueda.parecido):'FFF'}; color:##{busqueda.parecido==100? 'FFF':'33333F'}">
+                                        <p:outputLabel value="#{busqueda.marca}" />
+                                    </p:column>
+                                    <p:column headerText="Clase" width="25" resizable="true">
+                                        <p:outputLabel value="#{busqueda.clase}"/>
+                                    </p:column>
+
+                                    <p:column headerText="Fecha Solicitud" width="70">
+                                        <p:outputLabel value="#{busqueda.fechaSolicitud}">
+                                            <f:convertDateTime pattern="#{sessionState.formatoFecha}" />
+                                        </p:outputLabel>
+                                    </p:column>
+                                    <p:column headerText="Solicitante" width="195" style="background-color:##{busquedaSignosBean.seleccionComboBusqueda=='SOLI'? busquedaSignosBean.calcularColor(busqueda.parecido):'FFF'}; ">
+                                        <p:outputLabel value="#{busqueda.solicitante}"/>
+                                    </p:column>
+                                    <p:column headerText="Apoderado" width="195" style="background-color:##{busquedaSignosBean.seleccionComboBusqueda=='APOD'? busquedaSignosBean.calcularColor(busqueda.parecido):'FFF'}; ">
+                                        <p:outputLabel value="#{busqueda.apoderado}"/>
+                                    </p:column>
+                                    <p:column headerText="N° Public." width="70">
+                                        <p:outputLabel value="#{busqueda.nroPublicacion}"/>
+                                    </p:column>
+                                    <p:column headerText="N° Registro" width="70">
+                                        <p:outputLabel value="#{busqueda.nroRegistro}-#{busqueda.serieRegistro}"/>
+                                    </p:column>
+
+                                    <p:column headerText="Estado" width="80">
+                                        <p:outputLabel value="#{busqueda.estado}"/>
+                                    </p:column>
+
+                                    <p:column headerText="Fecha Registro" width="70">
+                                        <p:outputLabel value="#{busqueda.fechaRegistro}">
+                                            <f:convertDateTime pattern="#{sessionState.formatoFecha}" />
+                                            <!--<f:convertDateTime pattern="# {sessionState.formatoFechaHora}" />-->
+                                        </p:outputLabel>
+                                    </p:column>
+                                    <p:column headerText="SR. Fecha Resolucion" width="70">
+                                        <p:outputLabel value="#{busqueda.fechaRegistro}">
+                                            <f:convertDateTime pattern="#{sessionState.formatoFecha}" />
+                                        </p:outputLabel>
+                                    </p:column>
+
+                                    <p:column headerText="SR Titular" width="170">
+                                        <p:outputLabel value="#{busqueda.srTitular}"/>
+                                    </p:column>
+                                    <p:column headerText="SR" width="50">
+                                        <p:outputLabel value="#{busqueda.sr}"/>
+                                    </p:column>
+                                    <p:column headerText="Gestion SR" width="70">
+                                        <p:outputLabel value="#{busqueda.gestionSr}"/>
+                                    </p:column>                                               
+                                </p:dataTable>
+
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                    <p:ajaxStatus  style="display:block;margin-bottom:2em;height:24px;" onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+                    <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                        <p:graphicImage value="/resources/images/ajaxloadingbar.gif"/>
+                    </p:dialog>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+
+    </body>
+
+</html>

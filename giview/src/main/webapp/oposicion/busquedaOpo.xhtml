@@ -1,0 +1,276 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <h:outputStylesheet name="./css/default.css"/>
+        <h:outputStylesheet name="./css/cssLayout.css"/>
+        <h:outputScript library="js" name="spanishLocale.js"/>
+    </h:head>
+    <body>
+        <ui:composition template="#{buscadorOposicionesBean.template}">
+            <ui:define name="content">
+
+                <h:form>
+                    <p:panelGrid style="width: 100%;" styleClass="quitarBordes">
+                        <p:row>
+                            <p:column style="width: 100%;" colspan="2">
+                                <p:outputPanel style="padding-bottom: 1px; padding-top: 1px; padding-left:10px; padding-right: 10px;">
+                                    <table>
+                                        <tr valign="middle">
+                                            <td><p:graphicImage library="images" name="flechaTituloAzul.png" width="24" height="24"></p:graphicImage></td>
+                                            <td><p:outputLabel value="Busqueda oposiciones" styleClass="tituloPrincipalFuente"></p:outputLabel></td>
+                                        </tr>
+                                    </table>                    
+                                    <p:separator id="sepTitulo" style="border: 1px #045491 inset;"></p:separator>                    
+                                </p:outputPanel>                                
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                    <fieldset>
+                        <!--                            <legend>
+                                                        <p:outputLabel value="Busqueda oposiciones" styleClass="labelImportante"/>
+                                                    </legend>-->
+                        <p:panel>
+                            <p:panelGrid styleClass="quitarBordes">
+                                <p:row>
+                                    <p:column></p:column>
+                                    <p:column> <p:outputLabel value="Area"/></p:column>
+                                    <p:column>    <p:panelGrid>
+
+                                            <p:selectOneMenu id="btnSelect" value="#{buscadorOposicionesBean.puntero}">
+                                                <f:selectItem itemValue="SD" itemLabel="SIGNOS DISTINTIVOS"/>  
+                                                <f:selectItem itemValue="SI" itemLabel="PATENTES DE INVENCION"/>  
+                                                <f:selectItem itemValue="GO" itemLabel="MODELOS DE UTILIDAD"/>  
+                                                <f:selectItem itemValue="TO" itemLabel="DISEÑOS INDUSTRIALES"/>
+                                                <f:selectItem itemValue="TO" itemLabel="CIRCUITOS INTEGRADOS"/>
+                                                <p:ajax listener="#{buscadorOposicionesBean.activaCambios2()}"
+                                                        event="change" update="speque speque1"></p:ajax>
+                                            </p:selectOneMenu>
+
+                                        </p:panelGrid></p:column>
+                                </p:row> 
+                                <p:row>
+                                    <p:column> <p:panelGrid  id="speque" style="margin-bottom:10px" styleClass="quitarBordes">
+                                            <p:row>
+                                                <p:column rowspan="7">
+                                                    <p:selectOneRadio id="valorRadio" value="#{buscadorOposicionesBean.nombre}"  layout="grid" columns="1" rendered="#{buscadorOposicionesBean.variacombo}">
+
+                                                        <f:selectItem itemValue="PB" itemLabel="Publicacion" />
+                                                        <f:selectItem itemValue="RE" itemLabel="Registro" />
+                                                        <f:selectItem itemValue="EX" itemLabel="Expediente SM" />
+                                                        <f:selectItem itemValue="MA" itemLabel="Marca" />
+
+                                                        <f:selectItem itemValue="DE" itemLabel="Demandante o Demandado" />
+                                                        <f:selectItem itemValue="AP" itemLabel="Apoderado" />
+                                                        <f:selectItem itemValue="FP" itemLabel="Fecha de Presentacion" />
+
+                                                        <p:ajax listener="#{buscadorOposicionesBean.activaCambios1()}"
+                                                                event="change" update="speque"></p:ajax>
+
+                                                    </p:selectOneRadio>
+                                                </p:column>    
+                                                <p:column>     <p:inputText  id="uno" rendered="#{buscadorOposicionesBean.valorPB}" value="#{buscadorOposicionesBean.txtpublicabusqueda}"/> </p:column>  
+
+                                            </p:row>
+                                            <p:row>
+
+                                                <p:column> 
+
+                                                    <p:inputText rendered="#{buscadorOposicionesBean.valorRE}" value="#{buscadorOposicionesBean.txtregistrobusqueda}" />
+
+                                                    <p:selectOneMenu id="serie" value="#{buscadorOposicionesBean.cmbregistrobusqueda}" style="width: 5px; font-size: small" rendered="#{buscadorOposicionesBean.valorRE}">
+                                                        <f:selectItem  itemLabel="Elegir" itemValue=""/> 
+                                                        <f:selectItems value="#{buscadorOposicionesBean.lstSerieRegistro}" var="r" itemLabel="#{r.nombre}" itemValue="#{r.codigo}"/>
+                                                    </p:selectOneMenu>
+
+                                                </p:column>                                                   
+
+
+                                            </p:row>
+                                            <p:row>
+
+                                                <p:column>   <p:inputText id="numerow" rendered="#{buscadorOposicionesBean.valorEX}" value="#{buscadorOposicionesBean.txtexpedientebusqueda}"/></p:column>
+                                                <p:column>     <p:inputText id="gestionw" rendered="#{buscadorOposicionesBean.valorEX}" value="#{buscadorOposicionesBean.txtexpedientebusquedagestion}"/></p:column>    
+
+                                                <p:watermark for="gestionw" value="gestion" />  
+                                                <p:watermark for="numerow" value="numero" />  
+                                            </p:row>
+                                            <p:row>
+
+                                                <p:column>   <p:inputText rendered="#{buscadorOposicionesBean.valorMA}" value="#{buscadorOposicionesBean.txtmarcabusqueda}"/></p:column>               
+                                            </p:row>
+
+                                            <p:row>
+
+                                                <p:column>  <p:inputText rendered="#{buscadorOposicionesBean.valorDE}" value="#{buscadorOposicionesBean.txtdemandantebusqueda}"/></p:column>               
+                                            </p:row>
+                                            <p:row>
+
+                                                <p:column>   <p:inputText rendered="#{buscadorOposicionesBean.valorAP}" value="#{buscadorOposicionesBean.txtapoderadobusqueda}"/></p:column> 
+
+
+                                            </p:row>
+
+                                            <p:row>
+
+                                                <p:column>  
+                                                    <p:calendar id="maskara" pattern="dd-MM-yyyy HH-mm-ss" value= "#{buscadorOposicionesBean.cldfecahpubbusqueda}" mask="true" size="20" rendered="#{buscadorOposicionesBean.valorFP}"/>
+                                                </p:column> 
+
+
+                                            </p:row>
+
+                                            <p:row>
+                                                <p:column>
+                                                    <p:selectOneMenu id="serie11" value="#{buscadorOposicionesBean.cmbtipodmdodmte}" style="width: 5px; font-size: small" rendered="#{buscadorOposicionesBean.valorCombo}">
+                                                        <f:selectItem  itemLabel="Elegir" itemValue=""/> 
+                                                        <f:selectItems value="#{buscadorOposicionesBean.lstDmteDmdo}" var="r" itemLabel="#{r.nombre}" itemValue="#{r.codigo}"/>
+                                                    </p:selectOneMenu>
+                                                </p:column>  
+                                            </p:row>
+                                        </p:panelGrid>
+                                        <p:panelGrid  id="speque1" style="margin-bottom:10px" styleClass="quitarBordes">
+                                            <p:row>
+                                                <p:column rowspan="7">
+                                                    <p:selectOneRadio id="valorRadio1" value="#{buscadorOposicionesBean.nombre}"  layout="grid" columns="1" rendered="#{buscadorOposicionesBean.variacombo2}">
+
+                                                        <f:selectItem itemValue="PB" itemLabel="Publicacion" />
+                                                        <f:selectItem itemValue="OT" itemLabel="Otorgacion" />
+                                                        <f:selectItem itemValue="EP" itemLabel="Expediente SP" />
+                                                        <f:selectItem itemValue="PT" itemLabel="Patente" />
+                                                        <f:selectItem itemValue="DO" itemLabel="Demandado" />
+                                                        <f:selectItem itemValue="DE" itemLabel="Demandante" />
+                                                        <f:selectItem itemValue="AP" itemLabel="Apoderado" />
+                                                        <f:selectItem itemValue="FP" itemLabel="Fecha Presentacion" /> 
+
+                                                        <p:ajax listener="#{buscadorOposicionesBean.activaCambios1()}"
+                                                                event="change" update="speque1"></p:ajax>
+
+                                                    </p:selectOneRadio>
+                                                </p:column>    
+                                                <p:column><p:inputText value="#{buscadorOposicionesBean.txtpublicabusqueda}" rendered="#{buscadorOposicionesBean.valorPB}"/></p:column>  
+
+                                            </p:row>
+                                            <p:row>
+
+                                                <p:column>    <p:inputText rendered="#{buscadorOposicionesBean.valorOT}" />
+
+                                                </p:column>   
+
+                                            </p:row>
+                                            <p:row>
+
+                                                <p:column>   <p:inputText rendered="#{buscadorOposicionesBean.valorEP}"/></p:column>               
+                                            </p:row>
+                                            <p:row>
+
+                                                <p:column>   <p:inputText rendered="#{buscadorOposicionesBean.valorPT}"/></p:column>               
+                                            </p:row>
+                                            <p:row>
+
+                                                <p:column>  <p:inputText rendered="#{buscadorOposicionesBean.valorDO}"/></p:column>               
+                                            </p:row>
+                                            <p:row>
+
+                                                <p:column>  <p:inputText rendered="#{buscadorOposicionesBean.valorDE}"/></p:column>               
+                                            </p:row>
+                                            <p:row>
+
+                                                <p:column>   <p:inputText rendered="#{buscadorOposicionesBean.valorAP}"/></p:column>               
+                                            </p:row>
+
+                                        </p:panelGrid>
+                                    </p:column>
+
+
+
+
+                                    <p:column>
+                                        <p:commandButton value="Buscar" icon="ui-icon-search" actionListener="#{buscadorOposicionesBean.muestraDato()}" 
+                                                         update="tablabus">
+                                        </p:commandButton>
+                                    </p:column>
+                                    <p:column>
+                                        <p:commandButton value="Cerrar" action="#{buscadorOposicionesBean.cerrarDialogo()}" 
+                                                         icon="ui-icon-close" ajax="false">
+                                        </p:commandButton>
+
+
+                                    </p:column>
+
+                                </p:row> 
+                            </p:panelGrid>                            
+                        </p:panel>
+                    </fieldset>
+                    <fieldset >
+                        <legend>
+                            <p:outputLabel value="Lista de resultados" styleClass="labelImportante"/>
+                        </legend>
+
+                        <h:panelGrid id="tablabus" >
+
+                            <p:dataTable   var="listresul" value="#{buscadorOposicionesBean.listaBusquedaOposicion}" id="tablacasosadjuntos2"
+                                           rowKey="#{listresul.publicacion}"   style="width: 100%" 
+                                           scrollHeight="200"
+                                           scrollWidth="1060" 
+                                           scrollable="true">
+
+
+
+                                <p:column headerText="Area" width="50">
+                                    <p:outputLabel value="1"/>
+                                </p:column>
+                                <p:column headerText="N° Caso" width="80">
+                                    <p:outputLabel value="#{listresul.publicacion}"/>
+                                </p:column>
+                                <p:column headerText="Fecha Presentacion" width="80">
+                                    <p:outputLabel value="#{listresul.fechapresentacion}"/>
+                                </p:column>
+                                <p:column headerText="Publicacion" width="80">
+                                    <p:outputLabel value="#{listresul.nrocasopubl}"/>
+                                </p:column>
+                                <p:column headerText="Registro" width="80">
+                                    <p:outputLabel value="#{listresul.registro}"/>
+                                </p:column>
+                                <p:column headerText="Serie" width="80">
+                                    <p:outputLabel value="#{listresul.serie}"/>
+                                </p:column>
+                                <p:column headerText="Expediente" width="80">
+                                    <p:outputLabel value="#{listresul.expdientesm}"/>
+                                </p:column>
+                                <p:column headerText="Caso" width="80">
+                                    <p:outputLabel value="#{listresul.marca}"/>
+                                </p:column>
+                                <p:column headerText="Firma" width="80">
+                                    <p:outputLabel value="#{listresul.apoderado}"/>
+                                </p:column>
+                                <p:column headerText="Apoderado" width="80">
+                                    <p:outputLabel value="Apoderado"/>
+                                </p:column>    
+                                <p:column headerText="Estado" width="80">
+                                    <p:outputLabel value="#{listresul.estado}"/>
+                                </p:column>
+                                <p:column headerText="Fecha Limite" width="80">
+                                    <p:outputLabel value="#{listresul.fechalim}"/>
+                                </p:column>
+                                <p:column headerText="Ubicacion" width="80">
+                                    <p:outputLabel value="#{listresul.ubicacion}"/>
+                                </p:column>
+                                <p:column headerText="Gaceta" width="80">
+                                    <p:outputLabel value="#{listresul.gaceta}"/>
+                                </p:column>
+                            </p:dataTable>
+
+                        </h:panelGrid>
+                    </fieldset>
+
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

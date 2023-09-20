@@ -1,0 +1,217 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:p="http://primefaces.org/ui"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 template="#{sessionState.pathTemplate}"
+                 xmlns:si.componentes="http://java.sun.com/jsf/composite/si.componentes"
+                 xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <ui:define name="content">
+        <h:form>
+            <p:panelGrid style="width: 100%" styleClass="quitarBordes">
+                <p:panelGrid style="width: 100%;" styleClass="quitarBordes">
+                    <p:row>
+                        <p:column style="width: 100%;" colspan="2">
+                            <p:outputPanel style="padding-bottom: 1px; padding-top: 1px; padding-left:1px; padding-right: 1px;">
+                                <table>
+                                    <tr valign="middle">
+                                        <td><p:graphicImage library="images" name="flechaTituloAzul.png" width="24" height="24"></p:graphicImage></td>
+                                        <td><p:outputLabel value="Examen de renovación" styleClass="tituloPrincipalFuente"></p:outputLabel></td>
+                                    </tr>
+                                </table>                    
+                                <p:separator id="sepTitulo" style="border: 1px #045491 inset;"></p:separator>                    
+                            </p:outputPanel>                                
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+
+                <p:panelGrid style="width: 100%" styleClass="quitarBordes">
+                    <p:row>
+
+                        <p:column style="width: 100%; border: 1px solid">
+                            <fieldset style="width: 100%; padding: 0px">
+                                <legend>Requisitos obligatorios</legend>
+
+                                <p:panelGrid style="width: 100%">
+
+                                    <p:row>
+                                        <p:column style="width: 5%">
+                                            <p:selectBooleanCheckbox value="FALSE" />    
+                                        </p:column>
+                                        <p:column style="width: 40%">
+                                            <p:outputLabel value="Escrito de solicitud de registro de renovación de signo distintivo" />
+                                        </p:column>
+                                        <p:column style="width: 55%">
+                                            <p:inputText style="width: 100%; padding: 0px"/>
+                                        </p:column>
+                                    </p:row>
+
+                                    <p:row>
+                                        <p:column style="width: 5%">
+                                            <p:selectBooleanCheckbox value="FALSE" />    
+                                        </p:column>
+                                        <p:column style="width: 40%">
+                                            <p:outputLabel value="Formulario de Solicitud de Renovación de Signo Distintivo" />
+                                        </p:column>
+                                        <p:column style="width: 55%">
+                                            <p:inputText style="width: 100%; padding: 0px"/>
+                                        </p:column>
+                                    </p:row>
+
+                                    <p:row>
+                                        <p:column style="width: 5%">
+                                            <p:selectBooleanCheckbox value="FALSE" />    
+                                        </p:column>
+                                        <p:column style="width: 40%">
+                                            <p:outputLabel value="Recibo Oficial SENAPI por concepto de Solicitud de Registro de Signo Distintivo" />
+                                        </p:column>
+                                        <p:column style="width: 55%">
+                                            <p:inputText style="width: 100%; padding: 0px"/>
+                                        </p:column>
+                                    </p:row>
+
+                                    <p:row>
+                                        <p:column style="width: 5%">
+                                            <p:selectBooleanCheckbox value="FALSE" />    
+                                        </p:column>
+                                        <p:column style="width: 40%">
+                                            <p:outputLabel value="Recibo Oficial SENAPI por concepto de Titulo  de Renovación de Signo Distintivo" />
+                                        </p:column>
+                                        <p:column style="width: 55%">
+                                            <p:inputText style="width: 100%; padding: 0px"/>
+                                        </p:column>
+                                    </p:row>
+
+
+                                    <p:row>
+                                        <p:column style="width: 5%">
+                                            <p:selectBooleanCheckbox value="FALSE" />    
+                                        </p:column>
+                                        <p:column style="width: 40%">
+                                            <p:outputLabel value="Titulo respectivo acorde a la nacionalidad del solicitante" />
+                                        </p:column>
+                                        <p:column style="width: 55%">
+                                            <p:inputText style="width: 100%; padding: 0px"/>
+                                        </p:column>
+                                    </p:row>
+
+
+                                    <p:row>
+                                        <p:column style="width: 5%">
+                                            <p:selectBooleanCheckbox value="FALSE" />    
+                                        </p:column>
+                                        <p:column style="width: 40%">
+                                            <p:outputLabel value="Testimonio de poder de representación" />
+                                        </p:column>
+                                        <p:column style="width: 55%">
+                                            <p:inputText style="width: 100%; padding: 0px"/>
+                                        </p:column>
+                                    </p:row>
+
+
+
+
+
+
+                                </p:panelGrid>
+
+
+
+                            </fieldset>
+
+
+                        </p:column>
+
+
+
+                    </p:row>
+                </p:panelGrid>
+
+                <p:panelGrid style="width: 100%" styleClass="quitarBordes">
+                    <p:row>
+
+                        <p:column style="width: 100%; border: 1px solid">
+                            <fieldset style="width: 100%; padding: 0px">
+                                <legend>Requisitos opcionales</legend>
+
+                                <p:panelGrid style="width: 100%">
+
+                                    <p:row>
+                                        <p:column style="width: 5%">
+                                            <p:selectBooleanCheckbox value="FALSE" />    
+                                        </p:column>
+                                        <p:column style="width: 40%">
+                                            <p:outputLabel value="Fotocopia del Numero de Identificación Tributaria" />
+                                        </p:column>
+                                        <p:column style="width: 55%">
+                                            <p:inputText style="width: 100%; padding: 0px"/>
+                                        </p:column>
+                                    </p:row>
+
+                                    <p:row>
+                                        <p:column style="width: 5%">
+                                            <p:selectBooleanCheckbox value="FALSE" />    
+                                        </p:column>
+                                        <p:column style="width: 40%">
+                                            <p:outputLabel value="Certificado de FUNDEMPRESA" />
+                                        </p:column>
+                                        <p:column style="width: 55%">
+                                            <p:inputText style="width: 100%; padding: 0px"/>
+                                        </p:column>
+                                    </p:row>
+
+                                    <p:row>
+                                        <p:column style="width: 5%">
+                                            <p:selectBooleanCheckbox value="FALSE" />    
+                                        </p:column>
+                                        <p:column style="width: 40%">
+                                            <p:outputLabel value="Testimonio de Constitución de la Empresa" />
+                                        </p:column>
+                                        <p:column style="width: 55%">
+                                            <p:inputText style="width: 100%; padding: 0px"/>
+                                        </p:column>
+                                    </p:row>
+
+                                </p:panelGrid>
+
+                            </fieldset>
+
+
+                        </p:column>
+
+
+
+                    </p:row>
+                </p:panelGrid>
+
+            </p:panelGrid>
+
+            <p:panelGrid style="width: 100%;" styleClass="quitarBordes">
+                <p:row>
+
+                    <p:column style="width: 100%; border: 1px solid">
+                        <div align="center">
+
+                            <p:panelGrid columns="2">
+                                <p:commandButton value="Imprimir plantilla" icon="ui-icon-print"/>
+                                <p:commandButton value="Atras" icon="ui-icon-arrowreturnthick-1-w" action="#{plantillaExamenFormaBean.retornarPagina()}"/>
+                            </p:panelGrid>
+                        </div>
+
+                    </p:column>
+
+
+                </p:row>
+            </p:panelGrid>
+
+        </h:form>
+    </ui:define>
+
+
+
+</ui:composition>
+
+
+

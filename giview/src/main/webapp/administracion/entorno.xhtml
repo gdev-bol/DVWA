@@ -1,0 +1,360 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      >
+    <h:head>
+
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <h:outputStylesheet name="./css/default.css"/>
+        <h:outputStylesheet name="./css/cssLayout.css"/>
+
+        <script type="text/javascript">
+            .red{
+            background - color:red;
+                    background - image:none;
+            }
+
+            .normal{
+            background - color:blue;
+                    background - image:none;
+            }
+        </script>
+    </h:head>
+
+    <body>
+
+        <ui:composition template="#{notiPeticionDialogController.template}">
+
+
+
+            <ui:define name="content">
+
+                <f:event type="preRenderView" listener="#{verificaSesion.verifica()}"/>
+
+                <h:form id="formAdmi">
+
+
+                    <p:growl id="growl" showDetail="true" sticky="true" />  
+                    <p:panelGrid style="width: 100%;" styleClass="quitarBordes">
+                        <p:row>
+                            <p:column style="width: 100%;" colspan="2">
+                                <p:outputPanel style="padding-bottom: 1px; padding-top: 1px; padding-left:10px; padding-right: 10px;">
+                                    <table>
+                                        <tr valign="middle">
+                                            <td><p:graphicImage library="images" name="flechaTituloAzul.png" width="24" height="24"></p:graphicImage></td>
+                                            <td><p:outputLabel value="Administración de Sistemas, Menú y Páginas" styleClass="tituloPrincipalFuente"></p:outputLabel></td>
+                                        </tr>
+                                    </table>                    
+                                    <p:separator id="sepTitulo" style="border: 1px #045491 inset;"></p:separator>                    
+                                </p:outputPanel>                                
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                    <fieldset>
+                    <legend>Administración de Sistemas</legend>
+                    <p:panelGrid  style="width: 100%">
+                        
+                                                                               
+                        <p:row>
+                            <p:column style="width: 30%;vertical-align: top">
+                                <p:panelGrid  style="width: 100%" columns="1">
+                                    Nuevo Sistema
+                                    <p:inputText value="#{entornoBean.nuevoSistema}" id="inputSistema" style="text-align: center; width: 80%"/>
+                                    <p:commandButton value="Adicionar"  icon="ui-icon-circle-arrow-e"
+                                                     actionListener="#{entornoBean.guardaSistema}"
+                                                     update="tblSistemas,growl,cmbSistemas,cmbSistemasPag,inputSistema"/>
+                                    
+                                </p:panelGrid>
+                                                
+                            </p:column>
+                            <p:column style="width: 70%;vertical-align: top">
+                                
+                                 <p:dataTable  style="width: 100%;" 
+                                                               value="#{entornoBean.listSistemaTodo}"        
+                                                                  var="sis"
+                                                                  scrollable="true" 
+                                                                  scrollHeight="110"
+                                                                  rowIndexVar="rowIndex"
+                                                                  id="tblSistemas"
+                                                                  >
+                                                        <p:column headerText="No" style="width: 5%;" >
+                                                            <h:outputText value="#{rowIndex+1}" />
+                                                        </p:column>
+                                                        <p:column headerText="Sistema" >
+                                                            <p:inplace id="basic">
+                                                                <p:inputText value="#{sis.descripcion}" />
+                                                            </p:inplace>
+                                                        </p:column>
+                                                        <p:column headerText="" >
+                                                            <p:commandLink actionListener="#{entornoBean.modificaSistema(sis)}" 
+                                                                           update="tblSistemas,:formAdmi:growl,:formAdmi:cmbSistemas,:formAdmi:cmbSistemasPag">
+                                                                 <h:outputText value="Modificacion" />
+                                                             </p:commandLink>
+                                                        </p:column>
+                                                        <p:column headerText="" >
+                                                                                                                        
+                                                             <p:commandLink   value="Eliminar"
+                                                                              action="#{entornoBean.eliminaSistema(sis)}"
+                                                                                                                                                        
+                                                                              update="tblSistemas,:formAdmi:growl,:formAdmi:cmbSistemas,:formAdmi:cmbSistemasPag
+                                                                                          ,:formAdmi:tblModulos,:formAdmi:tblPaginas"
+                                                                              >
+                                                                <p:confirm header="Confirmación" message="¿Está seguro(a) de realizar la eliminación?" icon="ui-icon-alert" />
+                                                             </p:commandLink>
+                                                               <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                                                <div align="center">
+                                                                    <p:panelGrid columns="3"  styleClass="quitarBordes">
+                                                                        <p:commandButton value="Aceptar" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                                                        <p:spacer width="1"/>
+                                                                        <p:commandButton value="Cancelar" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                                                    </p:panelGrid>
+                                                                </div>
+
+                                                            </p:confirmDialog>   
+         
+                                                           
+
+                                            
+                                                                
+
+                                                                                                                      
+                                                        </p:column>
+                                                      
+                                                        
+                                                    </p:dataTable> 
+                       
+                            </p:column>
+                       </p:row>                                            
+                                       
+                                            
+                    </p:panelGrid>
+                   </fieldset>    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+      <fieldset>
+                    <legend>Administración de Menús</legend>
+                    <p:panelGrid  style="width: 100%">
+                        
+                                                                               
+                        <p:row>
+                            <p:column style="width: 30%;vertical-align: top">
+                                <p:panelGrid  style="width: 100%" columns="1">
+                                    <p:panelGrid  style="width: 100%" columns="2">
+                                        Sistema:
+                                        <p:selectOneMenu id="cmbSistemas" value="#{entornoBean.idSistemaXModulo}" style="width:125px"
+                                                         >
+                                            <f:selectItems value="#{entornoBean.listSistemaTodo}" 
+                                                           
+                                                                                   var="sistema"
+                                                                                   itemLabel="#{sistema.descripcion}" 
+                                                                                   itemValue="#{sistema.idsistema}" />
+                                            <p:ajax event="change" listener="#{entornoBean.actualizaTablaModulos()}"  update="tblModulos"/>
+                                        </p:selectOneMenu>
+                                    </p:panelGrid>
+                                    
+                                    
+                                    
+                                    Nuevo Menu
+                                    <p:inputText value="#{entornoBean.nuevoModulo}" id="inputMenu" style="text-align: center; width: 80%"/>
+                                    <p:commandButton value="Adicionar"  icon="ui-icon-circle-arrow-e"
+                                                     actionListener="#{entornoBean.guardaMenu}"
+                                                     update="tblModulos,growl,:formAdmi:cmbMenus, inputMenu"/>
+                                    
+                                </p:panelGrid>
+                                                
+                            </p:column>
+                            <p:column style="width: 70%;vertical-align: top">
+                                
+                                 <p:dataTable  style="width: 100%;" 
+                                                               value="#{entornoBean.listMenuTodo}"        
+                                                                  var="modu"
+                                                                  scrollable="true" 
+                                                                  scrollHeight="110"
+                                                                  rowIndexVar="rowIndex"
+                                                                  id="tblModulos"
+                                                                  >
+                                                        <p:column headerText="No"  style="width: 5%;">
+                                                            <h:outputText value="#{rowIndex+1}"/>
+                                                        </p:column>
+                                                        <p:column headerText="Menú" >
+                                                            <p:inplace id="basic">
+                                                                <p:inputText value="#{modu.descripcion}" />
+                                                            </p:inplace>
+                                                        </p:column>
+                                                        <p:column headerText="" >
+                                                            
+                                                            <p:commandLink actionListener="#{entornoBean.modificaMenu(modu)}" 
+                                                                           update="tblModulos,:formAdmi:growl,:formAdmi:cmbMenus">
+                                                                 <h:outputText value="Modificacion" />
+                                                             </p:commandLink>
+                                                        </p:column>
+                                                        <p:column headerText="" >
+                                                                                                                        
+                                                             <p:commandLink   value="Eliminar"
+                                                                              action="#{entornoBean.eliminaMenu(modu)}"
+                                                                                                                                                        
+                                                                              update="tblModulos,:formAdmi:growl,:formAdmi:cmbMenus,:formAdmi:tblPaginas"
+                                                                              >
+                                                                <p:confirm header="Confirmación" message="¿Está seguro(a) de realizar la eliminación?" icon="ui-icon-alert" />
+                                                             </p:commandLink>
+                                                                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                                                <div align="center">
+                                                                    <p:panelGrid columns="3"  styleClass="quitarBordes">
+                                                                        <p:commandButton value="Aceptar" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                                                        <p:spacer width="1"/>
+                                                                        <p:commandButton value="Cancelar" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                                                    </p:panelGrid>
+                                                                </div>
+
+                                                            </p:confirmDialog>  
+         
+                                                           
+
+                                            
+                                                                
+
+                                                                                                                      
+                                                        </p:column>
+                                                      
+                                                        
+                                                    </p:dataTable> 
+                       
+                            </p:column>
+                       </p:row>                                            
+                                       
+                                            
+                    </p:panelGrid>
+                   </fieldset>    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                     <fieldset>
+                    <legend>Administración de Páginas</legend>
+                    <p:panelGrid  style="width: 100%">
+                        
+                                                                               
+                        <p:row>
+                            <p:column style="width: 30%;vertical-align: top">
+                                <p:panelGrid  style="width: 100%" columns="1">
+                                    <p:panelGrid  style="width: 100%" columns="2">
+                                        Sistema:
+                                        <p:selectOneMenu id="cmbSistemasPag" value="#{entornoBean.idSistemaXPagina}" style="width:125px"
+                                                         >
+                                            <f:selectItems value="#{entornoBean.listSistemaTodo}" 
+                                                           
+                                                                                   var="sistema"
+                                                                                   itemLabel="#{sistema.descripcion}" 
+                                                                                   itemValue="#{sistema.idsistema}" />
+                                            <p:ajax event="change" listener="#{entornoBean.actualizaComboMenuDePagina()}"  update="cmbMenus,tblPaginas"/>
+                                        </p:selectOneMenu>
+                                  
+                                       Menú:
+                                    <p:selectOneMenu id="cmbMenus" value="#{entornoBean.idModuloXPagina}" style="width:125px"
+                                                         >
+                                        <f:selectItems value="#{entornoBean.listMenuTodoParaPaginas}" 
+                                                           
+                                                                                   var="menu"
+                                                                                   itemLabel="#{menu.descripcion}" 
+                                                                                   itemValue="#{menu.idmenu}" />
+                                            <p:ajax event="change" listener="#{entornoBean.actualizaTablaPaginas()}"  update="tblPaginas"/>
+                                        </p:selectOneMenu>
+                                    
+                                      </p:panelGrid>
+                                    Nueva Página
+                                    <p:inputText value="#{entornoBean.nuevaPagina}" id="inputPagina" style="text-align: center; width: 80%"/>
+                                    URL
+                                    <p:inputText value="#{entornoBean.nuevoURL}" id="inputUrl" style="text-align: center; width: 80%"/>
+                                    <p:commandButton value="Adicionar"  icon="ui-icon-circle-arrow-e"
+                                                     actionListener="#{entornoBean.guardaPagina}"
+                                                     update="tblPaginas,growl,inputPagina,inputUrl"/>
+                                    
+                                </p:panelGrid>
+                                                
+                            </p:column>
+                            <p:column style="width: 70%;vertical-align: top">
+                                
+                                 <p:dataTable  style="width: 100%;" 
+                                                               value="#{entornoBean.listPaginaTodo}"        
+                                                                  var="pag"
+                                                                  scrollable="true" 
+                                                                  scrollHeight="200"
+                                                                  rowIndexVar="rowIndex"
+                                                                  id="tblPaginas"
+                                                                  >
+                                                        <p:column headerText="No" style="width: 5%;">
+                                                            <h:outputText value="#{rowIndex+1}"/>
+                                                        </p:column>
+                                                        <p:column headerText="Página" >
+                                                            <p:inplace id="basic">
+                                                                <p:inputText value="#{pag.descripcion}" />
+                                                            </p:inplace>
+                                                        </p:column>
+                                                       <p:column headerText="Url" >
+                                                            <p:inplace id="basic1">
+                                                                <p:inputText value="#{pag.url}" />
+                                                            </p:inplace>
+                                                        </p:column>
+                                                        <p:column headerText="" >
+                                                            
+                                                            <p:commandLink actionListener="#{entornoBean.modificaPagina(pag)}" 
+                                                                           update="tblPaginas,:formAdmi:growl">
+                                                                 <h:outputText value="Modificacion" />
+                                                             </p:commandLink>
+                                                        </p:column>
+                                                        <p:column headerText="" >
+                                                                                                                        
+                                                             <p:commandLink   value="Eliminar"
+                                                                              action="#{entornoBean.eliminaPagina(pag)}"
+                                                                                                         
+                                                                              update="tblPaginas,:formAdmi:growl"
+                                                                              >
+                                                                <p:confirm header="Confirmación" message="¿Está seguro(a) de realizar la eliminación?" icon="ui-icon-alert" />
+                                                             </p:commandLink>
+                                                            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                                                <div align="center">
+                                                                    <p:panelGrid columns="3"  styleClass="quitarBordes">
+                                                                        <p:commandButton value="Aceptar" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                                                        <p:spacer width="1"/>
+                                                                        <p:commandButton value="Cancelar" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                                                    </p:panelGrid>
+                                                                </div>
+
+                                                            </p:confirmDialog>                                               
+                                                        </p:column>
+                                                      
+                                                        
+                                                    </p:dataTable> 
+                       
+                            </p:column>
+                       </p:row>                                            
+                                       
+                                            
+                    </p:panelGrid>
+                   </fieldset>   
+               </h:form>
+              </ui:define>
+        </ui:composition>
+    </body>
+
+
+</html>

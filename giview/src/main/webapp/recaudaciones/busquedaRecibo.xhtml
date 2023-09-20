@@ -1,0 +1,513 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <body>
+        <ui:composition template="./../WEB-INF/facelets/templates/Template.xhtml">
+            <ui:define name="content">
+                <h:form id="form">
+                    <p:growl id="msg" />
+                    <p:panelGrid  style="width: 100%" styleClass="quitarBordes">
+                        <p:panelGrid style="width: 100%;" styleClass="quitarBordes">
+                            <p:row>
+                                <p:column style="width: 100%;" colspan="2">
+                                    <p:outputPanel style="padding-bottom: 1px; padding-top: 1px; padding-left:10px; padding-right: 10px;">
+                                        <table>
+                                            <tr valign="middle">
+                                                <td><p:graphicImage library="images" name="flechaTituloAzul.png" width="24" height="24"></p:graphicImage></td>
+                                                <td><p:outputLabel value="Buscar recibo" styleClass="tituloPrincipalFuente"></p:outputLabel></td>
+                                            </tr>
+                                        </table>                    
+                                        <p:separator id="sepTitulo" style="border: 1px #045491 inset;"></p:separator>                    
+                                    </p:outputPanel>                                
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                        <p:panelGrid style="width: 100%;" styleClass="quitarBordes">
+                            <p:row style="width: 100%">
+                                <p:column  style="width: 10%;">
+                                    <p:outputLabel value="Buscar recibo"  
+                                                   style=" height: 105%; vertical-align: central;text-align: center; font-weight: bold; color: seagreen"/> 
+                                    <p:spacer width="1"></p:spacer>
+                                </p:column>
+                                <p:column colspan="2" style="vertical-align: top; width: 30%; border-style: solid" >
+                                    <fieldset>
+                                        <legend>
+                                            <p:outputLabel value="Datos recibo" styleClass="labelImportante"/>
+                                        </legend>
+                                        <p:panelGrid columns="4">
+                                            <p:outputLabel value="N° de recibo"></p:outputLabel>
+                                            <p:inputText value="#{busquedaReciboBean.numeroReciboBuscar}" size="8" style="background: #dddddd !important; height: 105%; vertical-align: central"></p:inputText>
+                                            <p:inputText value="#{busquedaReciboBean.serieReciboBuscar}"  size="3" style="background: #dddddd !important; height: 105%; vertical-align: central"></p:inputText>
+                                            <p:commandButton
+                                                id="botonBuscarRecibo"
+                                                actionListener="#{busquedaReciboBean.busca()}"
+                                                update=":form"
+                                                icon="ui-icon-search"
+                                                value="Buscar"
+                                                >
+                                                <f:ajax execute="@this" event="click"/>
+                                            </p:commandButton>
+                                            <p:spacer width="1"></p:spacer>
+                                            <p:outputLabel value="Fecha del recibo."></p:outputLabel>
+                                            <p:calendar id="fechaSolicitud" 
+                                                        value="#{busquedaReciboBean.reciboBuscar.fechaEmisionRecibo}"
+                                                        locale="es" 
+                                                        navigator="true" 
+                                                        pattern="dd/MM/yyyy HH:mm:ss" 
+                                                        mask="true"
+                                                        size="18"  />
+                                            <p:spacer width="1"></p:spacer>
+                                            <p:outputLabel value="N°. Titilo"></p:outputLabel>
+                                            <p:inputText value="#{busquedaReciboBean.reciboBuscar.tituloIngresado}"  size="10" style="background: #dddddd !important; height: 105%; vertical-align: central"></p:inputText>
+                                            <p:inputText value="#{busquedaReciboBean.reciboBuscar.serieTituloIngresado}"  size="3" style="background: #dddddd !important; height: 105%; vertical-align: central"></p:inputText>
+
+
+
+                                        </p:panelGrid>
+                                    </fieldset>
+                                </p:column>
+                                <p:column colspan="1" style="width: 30%;vertical-align: middle; padding-left: 1%;">
+                                    <p:panelGrid columns="5" >
+<!--                                        <p:commandButton value="Anterior"  icon="  ui-icon-circle-triangle-w" 
+                                                         >
+                                        </p:commandButton>
+                                        <p:spacer height="1"/>
+                                        <p:commandButton value="Siguiente"  icon="ui-icon-circle-triangle-e" 
+                                                         >
+                                        </p:commandButton>
+                                        <p:spacer height="1"/>
+                                        <p:commandButton value="Ultimo" icon="ui-icon-circle-arrow-e">
+                                        </p:commandButton>-->
+                                    </p:panelGrid>
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                        <p:row>
+                            <p:column colspan="5">
+                                <fieldset>
+                                    <legend>
+                                        <p:outputLabel value="Datos tramite" styleClass="labelImportante"/>
+                                    </legend>
+                                    <p:panelGrid styleClass="quitarBordes">
+                                        <p:row>
+                                            <p:column   colspan="3">
+                                            </p:column>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column   colspan="3">
+                                                <p:panelGrid columns="8" >
+                                                    <p:outputLabel value="N° Exped., Pub, Reg :" style="font-weight: bold"  ></p:outputLabel>
+                                                    <p:inputText value="#{busquedaReciboBean.reciboBuscar.numeroTramiteIngresado}" size="20"></p:inputText>
+                                                    <p:outputLabel value="Gestión:" style="font-weight: bold"></p:outputLabel>
+                                                    <p:inputText value="#{busquedaReciboBean.reciboBuscar.gestionTramiteIngresado}" size="10"></p:inputText>
+
+                                                    <p:outputLabel value="Tipo Tramite" style="font-weight: bold"></p:outputLabel>
+                                                    <p:inputText value="#{busquedaReciboBean.reciboBuscar.tipoTramiteIngresado}" size="20"></p:inputText>
+                                                </p:panelGrid>
+                                            </p:column>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column  >
+                                                <p:panelGrid columns="2">
+                                                    <p:outputLabel value="Descripción" style="font-weight: bold"></p:outputLabel>
+                                                    <p:inputText value="#{busquedaReciboBean.reciboBuscar.descripcionMarca}" size="100"></p:inputText>
+                                                    <p:outputLabel value="Clase:" style="font-weight: bold"></p:outputLabel>
+                                                    <p:inputText value="#{busquedaReciboBean.reciboBuscar.claseTramite}" style="background: #dddddd !important; height: 105%; vertical-align: central;text-align: center; font-weight: bold; color: blue" size="10"></p:inputText>
+                                                </p:panelGrid>
+                                            </p:column>
+                                            <p:column  styleClass="ui-widget-header" >
+                                            </p:column>
+                                        </p:row>
+                                    </p:panelGrid>     
+                                </fieldset>
+                            </p:column>
+                        </p:row>
+                        <p:row style="width: 100%;">
+                            <p:column >
+                                <fieldset>
+                                    <legend>
+                                        <p:outputLabel value="Datos tasa" styleClass="labelImportante"/>
+                                    </legend>
+                                    <p:panelGrid styleClass="quitarBordes">
+                                        <p:row>
+                                            <p:column   colspan="4">
+                                                <p:panelGrid columns="6">
+                                                    <p:outputLabel value="Cantidad:" style="font-weight: bold"></p:outputLabel>
+                                                    <p:inputText value="#{busquedaReciboBean.cantidad}" size="3"  style="background: #dddddd !important; height: 105%; vertical-align: central;font-weight: bold; text-align: center;color: green"></p:inputText>
+                                                    <p:outputLabel value="Tasa:"  style="display: block; width: 25px"/>
+                                                    <p:selectOneMenu id="tasaRecaudaciones" value="#{busquedaReciboBean.tasa}" style="background: #dddddd !important; vertical-align: central">
+                                                        <f:selectItems value="#{busquedaReciboBean.lstTasa}" var="r" itemLabel="#{r.costo}.-(Bs.) / #{r.descripcion}" itemValue="#{r.idTasa}"/>
+                                                    </p:selectOneMenu>
+                                                </p:panelGrid>
+                                            </p:column>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column  >
+                                            </p:column>
+                                            <p:column >
+
+                                            </p:column>
+                                            <p:column >
+                                                <p:panelGrid columns="2">
+                                                </p:panelGrid>
+                                            </p:column>
+                                            <p:column >
+                                            </p:column>
+                                        </p:row>
+                                    </p:panelGrid>     
+                                </fieldset>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column colspan="5">
+                                <fieldset>
+                                    <legend>
+                                        <p:outputLabel value="Datos deposito" styleClass="labelImportante"/>
+                                    </legend>
+                                    <p:panel id="deposito" style="border-style: hidden">
+                                        <p:panelGrid styleClass="quitarBordes">  
+                                            <p:row >
+
+                                                <p:column colspan="3">
+                                                    <p:panelGrid columns="8" style="margin-bottom:10px">
+                                                        <p:outputLabel  value="Banco:" style="font-weight: bold" />
+                                                        <p:selectOneRadio  id="bancodeposito" layout="grid" columns="3" value="#{busquedaReciboBean.valorOpcionesRadioBanco}">
+                                                            <f:selectItem itemValue="BSOL" itemLabel="BANCO UNION" />
+                                                        </p:selectOneRadio>
+                                                        <p:outputLabel value="N° deposito:" style="font-weight: bold; display: block;width: 100px"/>  
+                                                        <p:inputText id="nro" value="#{busquedaReciboBean.depositoGuardar.numeroDeposito}" size="15" />
+                                                        <p:outputLabel value="Sucursal bancaria:" style="font-weight: bold; display: block;width: 120px"/>  
+
+                                                        <p:selectOneMenu id="tipoSucursalRecaudaciones" value="#{busquedaReciboBean.tipoSucursalCombo}" style="#{busquedaReciboBean.cambiaColormontoDeposito == true?'border-color: #C00':''}; background: #dddddd !important; height: 120%; vertical-align: central;font-weight: bold; text-align: center; font-family:Arial ;font-size: 12pt !important;color: green ">
+                                                            <f:selectItems value="#{busquedaReciboBean.lstSucursalBancaria}" var="r" itemLabel="#{r.nombre}-Cod(#{r.codigo})" itemValue="#{r.codigo}"/>
+                                                        </p:selectOneMenu>
+
+                                                    </p:panelGrid>
+                                                </p:column>
+                                            </p:row>
+                                            <p:row >
+
+                                                <p:column>
+                                                    <p:panelGrid columns="8">
+                                                        <p:outputLabel value="Depositante:" style="font-weight: bold"/>  
+                                                        <p:inputText id="personaDeposito" value="#{busquedaReciboBean.depositoGuardar.nombreDepositante}" size="80" />
+                                                        <p:outputLabel value="Fecha deposito:" style="font-weight: bold"/>  
+                                                        <p:calendar id="Dmaskdsad" 
+                                                                    value="#{busquedaReciboBean.depositoGuardar.fechaDeposito}"
+                                                                    locale="es" 
+                                                                    navigator="true" 
+                                                                    pattern="dd/MM/yyyy" 
+                                                                    mask="true"
+                                                                    size="8" 
+                                                                    style="#{busquedaReciboBean.cambiaColorFechaDeposito==true?'border-color: #C00':''}; width: 90%"/>
+                                                        <p:outputLabel value="Monto(Bs.):" style="font-weight: bold"/>  
+                                                        <p:inputText id="monto" disabled="true" value="#{busquedaReciboBean.depositoGuardar.monto}"  size="7"  style="background: #dddddd !important; height: 120%; vertical-align: central;font-weight: bold; text-align: center; font-family:Arial ;font-size: 16pt !important;color: green " />
+                                                        <p:commandButton
+                                                            id="adicionardeposito"
+                                                            value="Adicionar deposito"
+                                                            icon="ui-icon-plus" 
+                                                            actionListener="#{busquedaReciboBean.accion_adicionaDeposito()}"
+                                                            ajax="false"
+                                                            update=":form:depositoPU"
+                                                            > 
+                                                        </p:commandButton>
+                                                    </p:panelGrid>  
+                                                </p:column>
+                                            </p:row>
+                                            <p:row >
+                                                <p:column>
+                                                </p:column>
+                                            </p:row>
+                                            <p:row style="padding-left: 30%" >
+                                                <p:column colspan="4" style="padding-left: 42%">
+                                                    <p:panelGrid columns="3">
+
+                                                    </p:panelGrid>
+                                                </p:column>
+                                            </p:row>
+                                        </p:panelGrid>
+                                        <p:dataTable id="depositoPU" var="dep" value="#{busquedaReciboBean.lstDesposito}">
+                                            <f:facet name="header">
+                                                Depositos
+                                            </f:facet>
+                                            <p:column headerText="N° Deposito">
+                                                <h:outputText value="#{dep.numeroDeposito}" />
+                                            </p:column>
+                                            <p:column headerText="Sucursal">
+                                                <h:outputText value="#{dep.deposCodDep}" />
+                                            </p:column>
+                                            <p:column headerText="Despositante">
+                                                <h:outputText value="#{dep.nombreDepositante}" />
+                                            </p:column>
+                                            <p:column headerText="Fecha Dep.">
+                                                <h:outputText value="#{dep.fechaDeposito}" >
+                                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                                </h:outputText>
+                                            </p:column>
+                                            <p:column headerText="Monto(Bs)">
+                                                <h:outputText value="#{dep.monto}" />
+                                            </p:column>
+                                            <p:column headerText="Saldo(Bs)">
+                                                <h:outputText value="#{busquedaReciboBean.actulizaSaldoDeposito(dep)}" />
+                                            </p:column>
+
+                                            <p:column headerText="Ver Deposito">
+                                                <p:commandButton
+                                                    id="adicionsffdsfdsardeposito"
+                                                    value="Ver deposito"
+                                                    icon="ui-icon-search" 
+                                                    update=":form:formDDeposito"
+                                                    actionListener="#{busquedaReciboBean.cargaValoresDepositoListado(dep)}"
+                                                    onclick="PF('AdicionaDeposito').show()"
+                                                    > 
+                                                </p:commandButton>
+                                            </p:column>
+                                        </p:dataTable>
+                                    </p:panel>
+                                </fieldset>
+                            </p:column>
+                        </p:row>
+                        <p:row  >
+                            <p:column  >
+                                <div align="center">
+                                    <p:panelGrid>
+                                        <p:spacer width="20"></p:spacer>
+                                        <p:commandButton
+                                            style='width:200px; height:30px'
+                                            id="btnmodificar"
+                                            icon="ui-icon-calculator"
+                                            value="Modificar Recibo"
+                                            actionListener="#{busquedaReciboBean.modificaReciboDeposito()}"
+                                            update=":form"
+                                            >
+                                        </p:commandButton>
+                                        <p:spacer width="20"></p:spacer>
+                                        <p:spacer width="20"></p:spacer>
+                                    </p:panelGrid>
+                                </div>
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                    <p:dialog header="Recibos" modal="true"  resizable="false" closable="true" widgetVar="AdicionaDeposito" 
+                              height="400" width="1050">
+                        <p:panelGrid style="width: 100%" styleClass="quitarBordes">
+                            <p:row>
+                                <p:column>
+                                    <p:panel id="formDDeposito" style="border-style: hidden">
+                                        <p:panelGrid>  
+                                            <p:row >
+                                                <p:column colspan="4">
+
+                                                    <p:outputLabel value="Depositante:" style="font-weight: bold"/>  
+                                                    <p:inputText id="personaDepositoPanel" value="#{busquedaReciboBean.depositoModificar.nombreDepositante}" size="80" />
+                                                    <p:spacer height="10"></p:spacer>
+                                                    <p:panelGrid columns="8">
+
+                                                        <p:outputLabel value="N° deposito:"  style="font-weight: bold; width: 85px"/>  
+                                                        <p:inputText id="DnroDeposito" value="#{busquedaReciboBean.depositoModificar.numeroDeposito}" size="40" />
+                                                        <p:outputLabel value="Fecha:" style="font-weight: bold"/>  
+                                                        <p:calendar id="Dmask" 
+                                                                    locale="es" 
+                                                                    navigator="true" 
+                                                                    pattern="dd-MM-yyyy" 
+                                                                    mask="true"
+                                                                    size="8"
+                                                                    value="#{busquedaReciboBean.depositoModificar.fechaDeposito}"
+                                                                    style="#{busquedaReciboBean.cambiaColorFechaDeposito==true?'border-color: #C00':''}; width: 90%"/>
+                                                        <p:outputLabel value="Monto total(Bs.)" style="font-weight: bold; display: block; width: 100px"/>  
+                                                        <p:inputText id="Dmonto" value="#{busquedaReciboBean.depositoModificar.monto}" size="10" style="#{busquedaReciboBean.cambiaColormontoDeposito == true?'border-color: #C00':''}; width: 90%;text-align:right" />
+                                                        <p:outputLabel value="Saldo(Bs.)" style="font-weight: bold; display: block; width: 100px"/>  
+                                                        <p:inputText id="Dsaldo" value="#{busquedaReciboBean.depositoModificar.saldo}" size="10" style="#{busquedaReciboBean.cambiaColormontoDeposito == true?'border-color: #C00':''}; width: 90%;text-align:right" />
+                                                    </p:panelGrid>
+                                                </p:column>
+                                            </p:row>
+                                            <p:row >
+                                                <p:column colspan="4" >
+                                                    <p:panelGrid columns="8">
+                                                        <p:outputLabel value="Código de agencia:"  style="font-weight: bold; display: block; width: 120px"/>  
+                                                        <p:inputText id="codigoAgencia" value="#{busquedaReciboBean.depositoModificar.deposCodDep}" size="10" />
+
+                                                    </p:panelGrid>
+                                                </p:column>
+                                            </p:row>
+                                            <p:row>
+                                                <p:column colspan="4">
+                                                    <fieldset>
+                                                        <legend>
+                                                            <p:outputLabel value="Recibos por deposito(s)" styleClass="labelImportante"/>
+                                                        </legend>
+                                                        <p:dataTable var="recibo" value="#{busquedaReciboBean.listaReciboGenerado}">
+                                                            <p:column headerText="N°.">
+                                                                <h:outputText value="#{recibo.numeroRecibo}-#{recibo.serieRecibo}" />
+                                                            </p:column>
+
+                                                            <p:column headerText="Fecha recibo">
+                                                                <h:outputText value="#{recibo.fechaEmisionRecibo}" />
+                                                            </p:column>
+                                                            <p:column headerText="Tramite">
+                                                                <h:outputText value="#{busquedaReciboBean.muestraDescripcionTasa(recibo.idTasa)}" />
+                                                            </p:column>
+                                                            <p:column headerText="Monto">
+                                                                <h:outputText value="#{recibo.monto}" />
+                                                            </p:column>
+
+                                                        </p:dataTable>
+
+                                                    </fieldset>
+                                                </p:column>
+                                            </p:row> 
+                                        </p:panelGrid>
+                                        <p:row> 
+                                            <div align="center">
+
+                                                <p:commandButton value="Modificar Deposito"
+                                                                 actionListener="#{busquedaReciboBean.modificaDepositoOficial()}"
+                                                                 >
+                                                    <p:confirm header="Confirmation" message="Los datos del Deposito se modificaran en todos los recibos asociados a este. Desea Continuar?" icon="ui-icon-alert" />
+                                                </p:commandButton>
+                                                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                                    <p:commandButton value="Aceptar" 
+                                                                     type="button" 
+                                                                     styleClass="ui-confirmdialog-yes" 
+                                                                     update="form:formDDeposito"
+                                                                     icon="ui-icon-check" />
+                                                    <p:commandButton value="Cancelar" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                                </p:confirmDialog>
+
+                                                <p:commandButton id="cerrarVentana"  icon="ui-icon-print" 
+                                                                 update=":form"
+                                                                 value="Cerrar"
+                                                                 action="#{busquedaReciboBean.actualizaDepositosVista()}"
+                                                                 onclick="PF('AdicionaDeposito').hide()"
+                                                                 >
+                                                </p:commandButton>
+                                            </div>
+                                        </p:row>
+                                    </p:panel>
+
+                                </p:column>
+
+                            </p:row>
+                        </p:panelGrid>
+                    </p:dialog>
+                    <p:dialog  header="Adiciona depositos"  resizable="false" closable="true" widgetVar="AdicionaDepositos" 
+                               height="400" width="1100">
+                        <p:panelGrid id="depo" style="width: 80%" styleClass="quitarBordes">
+                            <p:row>
+                                <p:column>
+                                    <p:panel id="formDDdddepositos" style="border-style: hidden">
+                                        <p:panelGrid>  
+                                            <p:row >
+                                                <p:column>
+                                                </p:column>
+                                                <p:column colspan="3">
+                                                    <p:panelGrid columns="2" style="margin-bottom:10px">
+                                                        <p:outputLabel value="Banco:" style="font-weight: bold" />
+                                                        <p:selectOneRadio id="DbancoDeposito" value="#{busquedaReciboBean.codigoTramite}">
+                                                            <f:selectItem itemLabel="Banco union " itemValue="BANCO UNION" />
+                                                        </p:selectOneRadio>
+                                                    </p:panelGrid>
+                                                </p:column>
+                                            </p:row>
+                                            <p:row >
+                                                <p:column></p:column>
+                                                <p:column colspan="3">
+                                                    <p:outputLabel value="Depositante(s):" style="font-weight: bold"/>  
+                                                    <p:inputText id="DpersonaDepositoDOS" value="32" size="110" />
+                                                </p:column>
+                                            </p:row>
+                                            <p:row >
+                                                <p:column></p:column>
+                                                <p:column colspan="4">
+                                                    <p:panelGrid columns="8">
+                                                        <p:outputLabel value="Código depositante:"  style="font-weight: bold; display: block; width: 120px" />  
+                                                        <p:inputText  value="32" size="10" />
+                                                        <p:outputLabel value="N° deposito:"  style="font-weight: bold; display: block; width: 85px"/>  
+                                                        <p:inputText id="DnroDepositos" value="32" size="20" />
+                                                        <p:outputLabel value="Fecha:" style="font-weight: bold"/>  
+                                                        <p:calendar id="Depomask" 
+                                                                    locale="es" 
+                                                                    navigator="true" 
+                                                                    pattern="dd-MM-yyyy" 
+                                                                    mask="true"
+                                                                    size="8" 
+                                                                    style="#{busquedaReciboBean.cambiaColorFechaDeposito==true?'border-color: #C00':''}; width: 90%"/>
+                                                        <p:outputLabel value="Monto (Bs.)" style="font-weight: bold; display: block; width: 70px"/>  
+                                                        <p:inputText id="Depomonto" value="32" size="5" style="#{busquedaReciboBean.cambiaColormontoDeposito == true?'border-color: #C00':''}; width: 90%;text-align:right" />
+                                                    </p:panelGrid>
+                                                </p:column>
+                                            </p:row>
+                                            <p:row >
+                                                <p:column colspan="4" style="padding-left: 30%">
+                                                    <p:panelGrid columns="3"   style="text-align: center">
+                                                        <p:commandButton
+                                                            id="Depoadicionardeposito"
+                                                            icon="ui-icon-minusthick" 
+                                                            value="Adicionar deposito"
+                                                            onclick="PF('AdicionaDepositos').show()"
+                                                            > 
+                                                        </p:commandButton>
+                                                        <p:commandButton
+                                                            id="DepobotonDepositoModifica"
+                                                            value="Modificar deposito">
+
+                                                            <f:ajax execute="@this" event="click"/>
+                                                        </p:commandButton>
+                                                        <p:column colspan="2">
+                                                            <p:commandButton
+                                                                id="DepobotonDepositoCancela"
+                                                                value="Cancelar">
+                                                                <f:ajax execute="@this" event="click"/>
+                                                            </p:commandButton>
+                                                        </p:column>
+                                                    </p:panelGrid>
+                                                </p:column>
+                                            </p:row>
+                                            <p:row>
+                                                <p:column colspan="4">
+                                                    <fieldset>
+                                                        <legend>
+                                                            <p:outputLabel value="Deposito(s)" styleClass="labelImportante"/>
+                                                        </legend>
+                                                        <p:dataTable id="checkboxDepoT">
+                                                            <p:column headerText="N°">
+                                                                <h:outputText value="id" />
+                                                            </p:column>
+                                                            <p:column headerText="Depositante">
+                                                                <h:outputText value="car" />
+                                                            </p:column>
+                                                            <p:column headerText="Fecha">
+                                                                <h:outputText value="arand" />
+                                                            </p:column>
+                                                            <p:column headerText="Saldo">
+                                                                <h:outputText value="ca.colo" />
+                                                            </p:column>
+                                                            <p:column headerText="Modificar">
+                                                                <h:outputText value="ca.colo" />
+                                                            </p:column>
+                                                            <p:column headerText="Eliminar">
+                                                                <h:outputText value="ca.colo" />
+                                                            </p:column>
+                                                        </p:dataTable>
+                                                    </fieldset>
+                                                </p:column>
+                                            </p:row> 
+                                        </p:panelGrid>
+                                    </p:panel>
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                    </p:dialog>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>
+
+
+
+

@@ -1,0 +1,207 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <h:outputStylesheet name="./css/default.css"/>
+        <!--        <h:outputStylesheet name="./css/cssLayout.css"/>-->
+        <title></title>
+    </h:head>
+    <body>
+        <ui:composition template="#{busquedaRegistroBean.template}">
+            <ui:define name="content">       
+                <h:form id="form">
+                    <p:growl id="msg" />
+                    <p:panelGrid style="width: 100%;" styleClass="quitarBordes">
+                        <p:row>
+                            <p:column style="width: 100%;" colspan="2">
+                                <p:outputPanel style="padding-bottom: 1px; padding-top: 1px; padding-left:10px; padding-right: 10px;">
+                                    <table>
+                                        <tr valign="middle">
+                                            <td><p:graphicImage library="images" name="flechaTituloAzul.png" width="24" height="24"></p:graphicImage></td>
+                                            <td><p:outputLabel value="Lista y búsquedas de registros" styleClass="tituloPrincipalFuente"></p:outputLabel></td>
+                                        </tr>
+                                    </table>                    
+                                    <p:separator id="sepTitulo" style="border: 1px #045491 inset;"></p:separator>                    
+                                </p:outputPanel>                                
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                    <p:outputPanel style="padding-bottom: 1px; padding-top: 1px; padding-left:20px; padding-right: 10px;">
+
+                        <p:selectOneRadio  value="#{busquedaRegistroBean.valorTipoBusqueda}" >
+                            <f:selectItem itemValue="BA" itemLabel="Búsqueda Avanzada &nbsp; &nbsp;"/> 
+                            <f:selectItem itemValue="BS" itemLabel="Simple" />                                                      
+                            <p:ajax listener="#{busquedaRegistroBean.activaCambios()}"
+                                    event="change" update="panelBuscador"></p:ajax>
+                        </p:selectOneRadio> 
+
+                    </p:outputPanel>
+
+                    <h:panelGrid id="panelBuscador"> 
+                        <p:panelGrid rendered="#{busquedaRegistroBean.buscadorRender}">
+                            <h:panelGrid columns="3" style="text-align: left;padding-left: 10%" styleClass="quitarBordes">
+                                <p:selectOneRadio value="#{busquedaRegistroBean.valorRadio}" layout="grid" columns="1" id="valorRadio">
+                                    <f:selectItem itemValue="RD" itemLabel="Registros denegados" />
+                                    <f:selectItem itemValue="FR" itemLabel="Fecha de registro"/>
+                                    <f:selectItem itemValue="TM" itemLabel="Tipo signo"/>
+                                    <f:selectItem itemValue="TI" itemLabel="Titular"/>
+                                    <f:selectItem itemValue="SI" itemLabel="Signo distintivo"/>
+                                    <p:ajax listener="#{busquedaRegistroBean.activaCambiosLista()}"
+                                            event="change" update=":form:opciones :form:panelBuscador" process="valorRadio"></p:ajax>
+                                </p:selectOneRadio>   
+                                <h:panelGrid id="opciones">
+                                    <p:calendar pattern="dd/MM/yyyy" mask="true" value="#{busquedaRegistroBean.fechaBusqueda}" 
+                                                rendered="#{busquedaRegistroBean.calendarioDialogoRender}"/>
+                                    <p:selectOneMenu  value="#{busquedaRegistroBean.textoBusqueda}" style="width:60px;" 
+                                                      rendered="#{busquedaRegistroBean.tipoMarcaDialogoRender}">
+                                        <f:selectItems value="#{busquedaRegistroBean.listaTipoGenero}" var="tipoGenero" itemLabel="#{tipoGenero.nombre}" itemValue="#{tipoGenero.nombre}"/>                                
+                                    </p:selectOneMenu>
+
+                                    <p:inputText value="#{busquedaRegistroBean.textoBusqueda}" 
+                                                 rendered="#{busquedaRegistroBean.titularDialogoRender}"/>
+                                    <p:inputText size="20"   value="#{busquedaRegistroBean.textoBusqueda}" 
+                                                 rendered="#{busquedaRegistroBean.signoDialogoRender}"/>
+                                </h:panelGrid>
+                                <p:commandButton icon="ui-icon-search"  value="Buscar" style=" height: 40px;" update="tblRegistro pnTotal"
+                                                 actionListener="#{busquedaRegistroBean.accionBuscarRegistro()}"/>
+                            </h:panelGrid>
+                            <p:spacer height="1" />
+                            <div align="center">
+                                <p:dataTable var="item" value="#{busquedaRegistroBean.lstSigRegistro}" 
+                                             id="tblRegistro" style="width: 95%"
+                                             scrollable="true" scrollHeight="200"   
+                                             emptyMessage="No se encontraron registros."
+                                             liveScroll="true" scrollRows="20"  rowIndexVar="index">
+                                    <p:column headerText="N°" width="1" style="background: #f4f4f4 !important; text-align: center;">
+                                        <h:outputText value="#{index+1}" />
+                                    </p:column>
+                                    <p:column headerText="Signo"  width="50">
+                                        <h:outputText value="#{item.signo}" />
+                                    </p:column>
+                                    <p:column headerText="Titular" width="70">
+                                        <h:outputText value="#{item.titular}" />
+                                    </p:column>
+                                    <p:column headerText="SM" width="40">
+                                        <h:outputText value="#{item.smDescripcion}" />
+                                    </p:column>
+                                    <p:column headerText="Fecha Sol." width="45">                                
+                                        <h:outputText value="#{item.fechaIngreso}" >
+                                            <f:convertDateTime pattern="#{sessionState.formatoFecha}"/>    
+                                        </h:outputText>
+                                    </p:column>                                    
+                                    <p:column headerText="Registro" width="20">
+                                        <h:outputText value="#{item.numeroRegistro}" />
+                                    </p:column>
+                                    <p:column headerText="Serie" width="10">
+                                        <h:outputText value="#{item.serie}" />
+                                    </p:column>
+                                    <p:column headerText="Fecha Reg." width="45">
+                                        <h:outputText value="#{item.fechaRegistro}" >
+                                            <f:convertDateTime pattern="#{sessionState.formatoFecha}"/>    
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="Tipo Marca" width="50">
+                                        <h:outputText value="#{item.tipoGeneroDescripcion}" />
+                                    </p:column>
+                                    <p:column headerText="Estado" width="20">
+                                        <h:outputText value="#{busquedaRegistroBean.devuelveEstadoPublicacion(item.estadoRegistro)}" />
+                                    </p:column>
+                                </p:dataTable>
+                            </div>
+                            <p:spacer height="5" />
+                            <p:panelGrid columns="2" style="quitarBordes" id="pnTotal">
+                                <p:outputLabel value="Total registrados encontrados:" ></p:outputLabel>
+                                <p:outputLabel value="#{busquedaRegistroBean.lstSigRegistro.size()}" 
+                                               styleClass="tituloPrincipalFuente"></p:outputLabel>
+                            </p:panelGrid>
+                            <div align="center">
+                                <h:panelGrid columns="3">
+                                    <p:commandButton icon="ui-icon-print"  value="Imprimir" style=" height: 40px;" 
+                                                     ajax="false" actionListener="#{busquedaRegistroBean.imprimir()}"/>
+                                    <p:spacer width="1"/>
+                                    <p:commandButton value="Cerrar" action="#{busquedaRegistroBean.cerrarDialogo()}" 
+                                                     icon="ui-icon-close"  style=" height: 40px; width: 100%" ajax="false"/>
+                                </h:panelGrid>
+                            </div>
+                        </p:panelGrid>
+
+                        <p:panelGrid rendered="#{!busquedaRegistroBean.buscadorRender}">
+                            <p:panelGrid columns="8" styleClass="quitarBordes">
+                                <p:outputLabel value="Desde:" />
+                                <p:calendar pattern="dd/MM/yyyy" mask="true" size="10" value="#{busquedaRegistroBean.fechaInicio}"/>  
+                                <p:outputLabel value="Hasta:" />
+                                <p:calendar pattern="dd/MM/yyyy" mask="true" size="10" value="#{busquedaRegistroBean.fechaFin}"/>  
+                                <p:commandButton icon="ui-icon-search"  value="Buscar" style=" height: 40px;" update="pnTotalAvanzado tblBusquedaAvanzada"
+                                                 actionListener="#{busquedaRegistroBean.accionBusquedaAvanzadaRegistro()}"/>
+                            </p:panelGrid>
+                            <p:spacer height="5" />
+                            <div align="center">
+                                <p:dataTable var="item" value="#{busquedaRegistroBean.lstSigRegistroBusqueda}" 
+                                             style="width: 95%" id="tblBusquedaAvanzada"
+                                             scrollable="true" scrollHeight="250"   rowIndexVar="index"
+                                             emptyMessage="No se encontraron registros."
+                                             liveScroll="true" scrollRows="20">
+                                    <p:column headerText="N°"  width="4" style="background: #f4f4f4 !important; text-align: center;">
+                                        <h:outputText value="#{item.posicion}" />
+                                    </p:column>
+                                    <p:column headerText="Registro" width="20">
+                                        <h:outputText value="#{item.numero_registro}" />
+                                    </p:column>
+                                    <p:column headerText="Serie" width="10">
+                                        <h:outputText value="#{item.serie}" />
+                                    </p:column>
+                                    <p:column headerText="Resolución" width="30">
+                                        <h:outputText value="#{item.numero_resolucion}" />
+                                    </p:column>
+                                    <p:column headerText="SM" width="40">
+                                        <h:outputText value="#{item.sm_descripcion}" />
+                                    </p:column>
+                                    <p:column headerText="Signo" width="200">                                
+                                        <h:outputText value="#{item.signo}" >
+                                        </h:outputText>
+                                    </p:column>  
+                                    <p:column headerText="Clase" width="30">
+                                        <h:outputText value="#{item.clase}" >
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="Fecha Reg." width="45">                                
+                                        <h:outputText value="#{item.fecha_registro}" >
+                                            <f:convertDateTime pattern="#{sessionState.formatoFecha}"/>    
+                                        </h:outputText>
+                                    </p:column>   
+                                </p:dataTable>
+                            </div>
+                            <p:spacer height="5" />
+                            <p:panelGrid columns="2" style="quitarBordes" id="pnTotalAvanzado">
+                                <p:outputLabel value="Total registrados encontrados:" ></p:outputLabel>
+                                <p:outputLabel value="#{busquedaRegistroBean.lstSigRegistroBusqueda.size()}" 
+                                               styleClass="tituloPrincipalFuente"></p:outputLabel>
+                            </p:panelGrid>
+                            <div align="center">
+                                <h:panelGrid columns="3">
+                                    <p:commandButton icon="ui-icon-print"  value="Imprimir" style=" height: 40px;" 
+                                                     ajax="false" actionListener="#{busquedaRegistroBean.imprimirAvanzado()}"/>
+                                    <p:spacer width="1"/>
+                                    <p:commandButton value="Cerrar" action="#{busquedaRegistroBean.cerrarDialogo()}" 
+                                                     icon="ui-icon-close"  style=" height: 40px; width: 100%" ajax="false"/>
+
+                                </h:panelGrid>
+
+                            </div>
+                        </p:panelGrid>
+                    </h:panelGrid>
+                </h:form>                 
+            </ui:define>
+        </ui:composition>
+        <p:ajaxStatus  style="display:block;margin-bottom:2em;height:24px;" 
+                       onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+        <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+            <p:graphicImage value="/resources/images/ajaxloadingbar.gif"/>
+        </p:dialog>
+    </body>
+</html>

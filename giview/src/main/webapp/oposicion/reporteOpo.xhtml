@@ -1,0 +1,104 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      template="#{sessionState.pathTemplate}">
+
+    <body>
+        <ui:composition template="./../WEB-INF/facelets/templates/Template.xhtml">
+            <ui:define name="content">
+                <h:form id="form">
+                    <p:growl id="msg" />            
+                    <p:panelGrid style="width: 100%; height: 100%" styleClass="quitarBordes">
+                        <p:panelGrid style="width: 100%;" styleClass="quitarBordes">
+                            <p:row>
+                                <p:column style="width: 100%;" colspan="2">
+                                    <p:outputPanel style="padding-bottom: 1px; padding-top: 1px; padding-left:10px; padding-right: 10px;">
+                                        <table>
+                                            <tr valign="middle">
+                                                <td><p:graphicImage library="images" name="flechaTituloAzul.png" width="24" height="24"></p:graphicImage></td>
+                                                <td><p:outputLabel value="Reportes oposición" styleClass="tituloPrincipalFuente"></p:outputLabel></td>
+                                            </tr>
+                                        </table>                    
+                                        <p:separator id="sepTitulo" style="border: 1px #045491 inset;"></p:separator>                    
+                                    </p:outputPanel>                                
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                        
+                        <p:panelGrid>
+                            <p:spacer height="1"/>
+                        </p:panelGrid>
+
+                        <p:panelGrid style="width: 100%" id="panel" styleClass="quitarBordes">
+                            <p:row >
+                                <p:column style="width: 100%">
+                                    <p:panelGrid rendered="true" style="width: 100%">
+                                        <p:row>
+                                            <p:column style="width: 30%; vertical-align: top">
+                                                <fieldset>
+                                                    <legend>
+                                                        <p:outputLabel value="Filtro" styleClass="labelImportante"/>        
+                                                    </legend>
+                                                    <p:panelGrid columns="3">
+                                                        <p:outputLabel value="GACETA" style="font-weight: bold"/>  
+                                                        <p:spacer width="5"/>
+                                                        <p:inputText value="#{reporteOpoBean.numeroGaceta}" style="width: 100%; font-weight: bold; color: #045491; font-size: 18px; text-align: center" onkeyup="return ValNumero(this);"/>
+                                                    </p:panelGrid>
+                                                </fieldset>
+
+                                            </p:column>
+                                            <p:column style="width: 70%;text-align: center;vertical-align: middle">
+
+                                                <p:panelGrid style="width: 100%; text-align: center;">
+                                                    <p:row style="width: 100%;">
+                                                        <p:column style="width: 15%">
+
+                                                            <p:spacer width="10"/>
+                                                        </p:column>
+                                                        
+                                                        <p:column style="width: 15%">
+                                                            <p:commandButton ajax="false" value="Excel"  icon="ui-icon-document"  style=" height: 40px; width: 70%"
+                                                                             actionListener="#{reporteOpoBean.imprimir()}">
+                                                            </p:commandButton>
+                                                            <p:spacer width="10"/>
+                                                        </p:column>
+                                                        
+                                                        <p:column style="width: 15%">
+                                                            <p:commandButton value="Cerrar" action="abrirPrincipal" icon="ui-icon-close"  style=" height: 40px; width: 70%">
+                                                            </p:commandButton>
+                                                            <p:spacer width="10"/>
+                                                        </p:column>
+
+                                                    </p:row>
+
+                                                </p:panelGrid>
+                                            </p:column>
+                                        </p:row>
+
+<!--                                        <p:row>
+                                            <p:column  colspan="2" style="vertical-align: top; width: 100%">
+                                                <p:panelGrid>
+                                                    <p:spacer height="20"/>
+                                                    <h:panelGroup id="payment-amount-panel">
+                                                        <p:outputPanel  id="outReporteConciliacion" style="width: 100%; height: 885%;" rendered="# {buscadorPublicacionBean.reporteRecibo}">
+                                                            <pe:documentViewer height="500" value="# {sessionState.stream}" rendered="true"/>  
+                                                        </p:outputPanel>
+                                                    </h:panelGroup>
+                                                </p:panelGrid>
+                                            </p:column>
+                                        </p:row>-->
+                                    </p:panelGrid>
+                                </p:column>
+                            </p:row>                              
+                        </p:panelGrid>
+                    </p:panelGrid>            
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

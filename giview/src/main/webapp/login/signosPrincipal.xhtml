@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"      
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <body>
+
+        <ui:composition template="./../WEB-INF/facelets/templates/Template.xhtml">  
+            <ui:define name="content">
+                <f:view contentType="text/html" >
+
+                    <h:panelGrid columns="2" rendered="#{signosPrincipalBean.renderizaPantallaModuloSignos}" >
+                        <!--p:outputLabel value="BIENVENIDOS AL SISTEMA DE SIGNOS" /-->
+                       
+                          
+                             
+                                         <p:graphicImage id="img1" library="images" name="logofinal.png" width="1200" height="500">                                                        
+                                         </p:graphicImage>                                                    
+                                    <!--p:chart type="bar" model="# {signosPrincipalBean.barModel}" style="height: 300px; width: 400px;"/-->
+                  
+                              
+                 
+                    </h:panelGrid>                   
+                    
+                    <h:panelGrid columns="2" rendered="#{signosPrincipalBean.renderizaPantallaModuloRecaudaciones}">
+                     
+                        <!--p:outputLabel value="BIENVENIDOS AL MODULO DE RECAUDACIONES" /-->
+                          <p:graphicImage id="img1h" library="images" name="logofinal.png" width="1200" height="500">                                                        
+                                         </p:graphicImage>  
+                    </h:panelGrid>                                                 
+
+                </f:view>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

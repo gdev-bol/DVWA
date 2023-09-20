@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    </h:head>
+    <body>
+        <ui:composition template="#{enviarSubsanacionBean.template}">
+            <ui:define name="content">
+                <h:form id="frmObservacion" style="padding-left: 1%; width: 95%">
+                    <p:outputPanel style="padding-bottom: 1px; padding-top: 1px; padding-left:10px; padding-right: 10px;">
+                        <table>
+                            <tr valign="middle">
+                                <td><p:graphicImage library="images" name="flechaTituloAzul.png" width="24" height="24"></p:graphicImage></td>
+                                <td><p:outputLabel value="Elija secciones para subsanación" styleClass="tituloPrincipalFuente"></p:outputLabel></td>
+                            </tr>
+                        </table>                    
+                        <p:separator id="sepTitulo" style="border: 1px #045491 inset;"></p:separator>                    
+                    </p:outputPanel>
+                    <p:spacer height="10"/>
+                    <p:panelGrid columns="1" styleClass="quitarBordes">
+                        <p:row>
+                            <p:column style="text-align: center;">
+                                <fieldset>
+                                    <!--<legend>Elegir secciones para subsanación</legend>-->
+                                    <p:panelGrid columns="2" style="padding-left: 10%" styleClass="quitarBordes">
+                                        <p:row>
+                                            <p:column>
+                                                <p:outputLabel value="Nro Formulario: "/>                                                
+                                            </p:column>
+                                            <p:column>
+                                                <p:outputLabel value="#{enviarSubsanacionBean.numeroFormulario}"/>
+                                            </p:column>
+                                        </p:row>
+
+                                    </p:panelGrid>
+
+                                </fieldset>
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>                       
+                    <p:spacer height="10"/>
+                    <p:panelGrid columns="1" styleClass="quitarBordes">
+                        <p:row>
+                            <p:column style="text-align: center;">
+                                <fieldset>
+                                    <!--<legend>Elegir secciones para subsanación</legend>-->
+                                    <p:panelGrid columns="4" style="padding-left: 10%" styleClass="quitarBordes">
+
+                                        <p:selectManyCheckbox id="grid3" value="#{enviarSubsanacionBean.selectedCars}" layout="pageDirection" columns="1">
+                                            <f:selectItems value="#{enviarSubsanacionBean.cars}" var="car" itemLabel="#{car}" itemValue="#{car}" />
+                                        </p:selectManyCheckbox>
+
+                                    </p:panelGrid>
+
+                                </fieldset>
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>                 
+                    <p:spacer height="10"/>
+
+                    <p:panelGrid style="text-align: center; width: 100%" columns="1" styleClass="quitarBordes">
+                        <p:commandButton value="Enviar" icon="ui-icon-disk" style="height: 40px; width: 25%"
+                                         actionListener="#{enviarSubsanacionBean.habilitarSubsanacion()}"/>
+                        <p:spacer width="6"/>                        
+                        <!--<p:commandButton value="Cerrar" icon="ui-icon-close"  action="# {enviarSubsanacionBean.retornarPagina}"/>-->
+                    </p:panelGrid>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

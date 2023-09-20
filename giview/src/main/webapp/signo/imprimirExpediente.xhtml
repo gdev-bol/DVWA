@@ -1,0 +1,135 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions" 
+                template="#{sessionState.pathTemplate}">
+    <ui:define name="content">
+        <h:form id="form">
+            <p:growl id="msg" life="10000"/>         
+            <p:panelGrid style="width: 100%; height: 100%" styleClass="quitarBordes">
+                <p:panelGrid style="width: 100%;" styleClass="quitarBordes">
+                    <p:row>
+                        <p:column style="width: 100%;" colspan="2">
+                            <p:outputPanel style="padding-bottom: 1px; padding-top: 1px; padding-left:10px; padding-right: 10px;">
+                                <table>
+                                    <tr valign="middle">
+                                        <td><p:graphicImage library="images" name="flechaTituloAzul.png" width="24" height="24"></p:graphicImage></td>
+                                        <td><p:outputLabel value="Imprimir expediente" styleClass="tituloPrincipalFuente"></p:outputLabel></td>
+                                    </tr>
+                                </table>                    
+                                <p:separator id="sepTitulo" style="border: 1px #045491 inset;"></p:separator>                    
+                            </p:outputPanel>                                
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+                <p:panelGrid style="width: 100%" styleClass="quitarBordes">
+                    <p:row >                              
+                        <p:column colspan="2" style="width: 100%">
+                            <p:panelGrid columns="2">                               
+                                <p:selectOneRadio  id="valorCriterioBusqueda" columns="2" 
+                                                   value="#{imprimirExpedienteBean.valorRadioBuscador}" >
+                                    <f:selectItem itemValue="soma" itemLabel="Solicitud de marca"/>
+                                    <f:selectItem itemValue="nupu" itemLabel="N° publicación"/>
+                                    <f:selectItem itemValue="nure" itemLabel="N° registro"/>                                
+                                    <p:ajax listener="#{imprimirExpedienteBean.modificarCriterioBusqueda()}"
+                                                            event="change" update=":form:opciones :form:payment-amount-panel" process="valorCriterioBusqueda"></p:ajax>
+                                </p:selectOneRadio>                                                
+                            </p:panelGrid>                                
+                        </p:column>
+                    </p:row>                        
+                </p:panelGrid>
+                <p:panelGrid>
+                    <p:separator/>
+                </p:panelGrid>
+                <p:panelGrid style="width: 100%" id="panel" styleClass="quitarBordes">
+                    <p:row >
+                        <p:column style="width: 100%">
+                            <p:panelGrid  style="width: 100%">
+                                <p:row>
+                                    <p:column style="width: 50%; vertical-align: top">
+                                        <fieldset>
+                                            <legend>
+                                                <p:outputLabel value="Filtro" styleClass="labelImportante"/>         
+                                            </legend>
+
+                                            <p:outputLabel id="opciones">
+                                                <h:panelGrid columns="5" style="text-align: center">
+
+                                                    <p:panelGrid columns="1">
+                                                        <p:inputText id="txtnumero" style="width: 100%;text-align: center" value="#{imprimirExpedienteBean.numeroExpediente}"/>
+                                                        <p:outputLabel value="Número" />
+                                                    </p:panelGrid>
+                                                    <p:panelGrid columns="1"  rendered="#{imprimirExpedienteBean.buscarSMRendered}">
+                                                        <p:inputText id="txtgestion" style="width: 80%;text-align: center" value="#{imprimirExpedienteBean.gestionExpediente}" />
+                                                        <p:outputLabel value="Gestión"/>
+                                                    </p:panelGrid>
+                                                    <p:panelGrid columns="1"  rendered="#{imprimirExpedienteBean.buscarSMRendered || imprimirExpedienteBean.buscarRERendered}">
+                                                        <p:inputText id="txtextension" style="width: 30%;text-align: center" value="#{imprimirExpedienteBean.extensionExpediente}"/>
+                                                        <p:outputLabel value="Extensión"/>
+                                                    </p:panelGrid>
+                                                    <p:spacer width="1"/>
+                                                    <p:panelGrid columns="1">
+                                                        <p:outputLabel value=" Situacion Actual"></p:outputLabel>
+                                                        <p:inputTextarea rows="2" cols="40" style="text-align: center" value="#{imprimirExpedienteBean.vistaSituacionActual}" ></p:inputTextarea>
+                                                    </p:panelGrid>  
+                                                </h:panelGrid>
+                                            </p:outputLabel>
+                                        </fieldset>
+                                    </p:column>
+                                    <p:column style="width: 50%;text-align: center;vertical-align: middle">
+                                        <p:panelGrid style="width: 100%; text-align: center;">
+                                            <p:row style="width: 100%;">
+                                                <p:column style="width: 10%">
+                                                    <p:spacer width="5"/>
+                                                </p:column>
+                                                <p:column style="width: 10%">
+                                                    <p:commandButton value="Buscar"  icon="ui-icon-search"  style=" height: 40px; width: 70%"
+                                                                     update=":form:payment-amount-panel :form:opciones :form:msg"
+                                                                     actionListener="#{imprimirExpedienteBean.accionBuscarExpediente()}">
+                                                    </p:commandButton>
+                                                    <p:spacer width="10"/>
+                                                </p:column>
+                                                <p:column style="width: 10%">
+                                                    <p:commandButton value="Anterior"  icon="ui-icon-triangle-1-w"  style=" height: 40px; width: 70%"
+                                                                     update=":form:payment-amount-panel :form:opciones :form:msg"
+                                                                     actionListener="#{imprimirExpedienteBean.accionBuscarAnteriorExpediente()}">
+                                                    </p:commandButton>
+                                                    <p:spacer width="10"/>
+                                                </p:column>
+                                                <p:column style="width: 10%">
+                                                    <p:commandButton value="Siguiente" icon="ui-icon-triangle-1-e" style="height: 40px;width: 70%"
+                                                                     update=":form:payment-amount-panel :form:opciones :form:msg"
+                                                                     actionListener="#{imprimirExpedienteBean.accionBuscarSiguienteExpediente()}">
+                                                    </p:commandButton>
+                                                    <p:spacer width="10"/>
+                                                </p:column>
+                                            </p:row>
+                                        </p:panelGrid>
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column  colspan="2" style="vertical-align: top; width: 100%">
+                                        <p:panelGrid>
+                                            <p:spacer height="20"/>
+                                            <h:panelGroup id="payment-amount-panel">
+                                                <p:outputPanel  id="outReporteConciliacion" style="width: 100%; height: 885%;" rendered="#{imprimirExpedienteBean.reporteRecibo}">
+                                                    <pe:documentViewer height="500" value="#{sessionState.stream}" rendered="true"/>  
+                                                </p:outputPanel>
+                                            </h:panelGroup>
+                                        </p:panelGrid>
+                                    </p:column>
+                                </p:row>
+                            </p:panelGrid> 
+                        </p:column>
+                    </p:row>                              
+                </p:panelGrid>
+            </p:panelGrid>            
+        </h:form> 
+    </ui:define>        
+</ui:composition>
+

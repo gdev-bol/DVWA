@@ -1,0 +1,180 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <body>
+        <ui:composition template="./../WEB-INF/facelets/templates/Template.xhtml">
+            <ui:define name="content">   
+                <h:form enctype="multipart/form-data">
+                    <p:fileUpload fileUploadListener="#{buscadorModificacionBean.upload2}" auto="true" />
+                </h:form>
+                <p:separator/>
+                <h:form>
+                    <p:growl id="msg"></p:growl>
+                    <p:fileUpload fileUploadListener="#{buscadorModificacionBean.upload}"
+                                  allowTypes="/(\.|\/)(gif|jpe?g|png)$/" sizeLimit="10000000" update="msg"></p:fileUpload>
+                </h:form>
+                <p:separator/>
+                <h:form enctype="multipart/form-data">
+                    <p:fileUpload value="#{buscadorModificacionBean.file}" mode="simple" />
+                    <p:commandButton value="SIMPLE UNO" ajax="false" action="#{buscadorModificacionBean.metodo()}" update=":formulario:panelImagen"/>
+                </h:form>
+                <p:separator/>
+
+                <h:form enctype="multipart/form-data" id="formulario">
+                    <p:fileUpload value="#{buscadorModificacionBean.file}"  mode="simple"></p:fileUpload>
+                    <p:commandButton value="Dummy Action" ajax="false" action="#{buscadorModificacionBean.dummyAction}" update="@all"></p:commandButton>
+
+                    <br/>
+                    <h:panelGrid id="panelImagen">
+                        <p:galleria id="imagenCargadaGaleria" value="#{buscadorModificacionBean.listaDocumento}"
+                                    var="image" panelWidth="120" panelHeight="70"
+                                    showCaption="false"
+                                    >
+                            <p:graphicImage id="graphicImagnen" value="/temp/#{image.nombre_archivo}"
+                                            title="#{image.nombre_archivo}"
+                                            width="100%"/>
+                        </p:galleria>
+                    </h:panelGrid>
+
+                </h:form>
+
+                <h:form id="form">
+                    <p:growl id="msg" />
+
+                    <p:panelGrid style="width: 100%; height: 100%" >
+                        <p:panelGrid style="width: 100%;" styleClass="quitarBordes">
+                            <p:row>
+                                <p:column style="width: 100%;" colspan="2">
+                                    <p:outputPanel style="padding-bottom: 1px; padding-top: 1px; padding-left:10px; padding-right: 10px;">
+                                        <table>
+                                            <tr valign="middle">
+                                                <td><p:graphicImage library="images" name="flechaTituloAzul.png" width="24" height="24"></p:graphicImage></td>
+                                                <td><p:outputLabel value="Busqueda modificación" styleClass="tituloPrincipalFuente"></p:outputLabel></td>
+                                            </tr>
+                                        </table>                    
+                                        <p:separator id="sepTitulo" style="border: 1px #045491 inset;"></p:separator>                    
+                                    </p:outputPanel>                                
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid> 
+                        <p:selectOneRadio  value="#{buscadorModificacionBean.valorRadio}" >
+                            <f:selectItem itemValue="BA" itemLabel="Busqueda Avanzada"/> 
+                            <f:selectItem itemValue="BS" itemLabel="Simple" />                                                      
+                            <p:ajax listener="#{buscadorModificacionBean.activaCambios()}"
+                                    event="change" update="panelBuscador"></p:ajax>
+                        </p:selectOneRadio>    
+                        <h:panelGrid id="panelBuscador" columns="2" style="text-align: left" styleClass="quitarBordes">
+                            <h:panelGrid columns="3" cellpadding="2" rendered="#{buscadorModificacionBean.buscadorRender}">
+                                <p:outputLabel value="Campo de Busqueda:" />
+                                <p:selectOneMenu value="Todo" style="width:60px;">
+                                    <f:selectItem itemLabel="Todos" itemValue="" />
+                                    <f:selectItem itemLabel="Nombre del Titular" itemValue="Xbox One" />
+                                    <f:selectItem itemLabel="Apoderado" itemValue="PS4" />  
+                                    <f:selectItem itemLabel="Nombre del Signo" itemValue="PS4" />
+                                </p:selectOneMenu>
+                                <p:inputText value="PALABRAS"  size="20"/>
+                            </h:panelGrid>                           
+                            <h:panelGrid columns="10" cellpadding="2" rendered="#{!buscadorModificacionBean.buscadorRender}">
+                                <p:outputLabel value="Tipo Modificacion:" />
+                                <p:selectOneMenu value="CN" style="width:60px;">
+                                    <f:selectItem itemLabel="CN" itemValue="CN" />
+                                    <f:selectItem itemLabel="CD" itemValue="CD" />
+                                    <f:selectItem itemLabel="ST" itemValue="ST" />
+                                    <f:selectItem itemLabel="SF" itemValue="SF" />  
+                                    <f:selectItem itemLabel="LU" itemValue="LU" />
+                                </p:selectOneMenu>
+                                <p:spacer width="5"/>
+                                <p:outputLabel value="Estado:" />
+                                <p:selectOneMenu value="INGRESADA" >
+                                    <f:selectItem itemLabel="INGRESADA"  itemValue="INGRESADA" />
+                                    <f:selectItem itemLabel="ACEPTADA"   itemValue="INGRESO" />
+                                    <f:selectItem itemLabel="INGRESADA"  itemValue="ACEPTADA" />
+                                    <f:selectItem itemLabel="RETIRADA"   itemValue="RETIRADA" />
+                                    <f:selectItem itemLabel="RECHAZADA"  itemValue="RECHAZADA" />
+                                    <f:selectItem itemLabel="OBSERVADA"  itemValue="OBSERVADA" />
+                                    <f:selectItem itemLabel="DESISTIDA"  itemValue="DESISTIDA" />
+                                    <f:selectItem itemLabel="SUSPENDIDA" itemValue="SUSPENDIDA" />
+                                    <f:selectItem itemLabel="ARCHIVO DE OBRADOS"  itemValue="ARCHIVO" />
+                                </p:selectOneMenu>
+                                <p:spacer width="5"/>
+                                <p:outputLabel value="Desde:" />
+                                <p:calendar pattern="dd-MM-yyyy" mask="true" style="width: 50%"/>  
+                                <p:outputLabel value="Hasta:" />
+                                <p:calendar pattern="dd-MM-yyyy" mask="true" style="width: 50%"/>  
+                            </h:panelGrid>
+                            <h:panelGrid style="padding-left: 100%; width: 100%">
+
+                                <p:commandButton icon="ui-icon-search"  value="Buscar" style="height: 40px;"/>
+                            </h:panelGrid>
+                            <p:spacer height="5" />
+
+                        </h:panelGrid>
+                        <p:spacer height="5"/>
+                        <p:dataTable var="item" value="listado" scrollRows="1">
+                            <p:column headerText="N° Tramite" width="5" >
+                                <h:outputText value="CN-100000-2016" />
+                            </p:column>
+                            <p:column headerText="Marca" width="5">
+                                <h:outputText value="ECO IDEAS" />
+                            </p:column>
+                            <p:column headerText="Clase" width="1">
+                                <h:outputText value="30" />
+                            </p:column>                            
+                            <p:column headerText="Fecha Sol." width="7">
+                                <h:outputText value="28/07/2016 00:00:00" />
+                            </p:column>   
+                            <p:column headerText="Resolución" width="2">
+                                <h:outputText value="2828" />
+                            </p:column>
+                            <p:column headerText="Gestion" width="2">
+                                <h:outputText value="2016" />
+                            </p:column>
+                            <p:column headerText="Estado" width="4">
+                                <h:outputText value="ACEPTADA" />
+                            </p:column>
+                            <p:column headerText="N° Registro" width="2">
+                                <h:outputText value="5665-C" />
+                            </p:column> 
+                            <p:column headerText="Solicitante" width="5">
+                                <h:outputText value="Panasonic Corporation" />
+                            </p:column>
+                            <p:column headerText="Apoderado" width="5">
+                                <h:outputText value="Ximena Apaza Tola" />
+                            </p:column>                            
+                            <p:column headerText="Ver" width="1">
+                                <p:commandButton icon="ui-icon-transfer-e-w" action="examenModificacion" ajax="false"/>
+                            </p:column>
+                        </p:dataTable>
+                        <p:spacer height="5"/>
+                        <p:panelGrid style="width: 100%; text-align: center;" styleClass="quitarBordes">
+                            <p:row>
+                                <p:column style="width: 30%;text-align: center">
+                                    <p:commandButton value="Imprimir" icon="ui-icon-print"  style="width: 30%">
+
+                                    </p:commandButton>
+                                </p:column>
+                                <p:column style="width: 30%;text-align: center">
+<!--                                    <p:commandButton value="Atras" action="# {buscadorModificacionBean.navegaAtras()}" icon="ui-icon-arrowreturn-1-w"  
+                                                     style="width: 30%" rendered="# {buscadorModificacionBean.botonAtras}">
+
+                                    </p:commandButton>-->
+                                </p:column>
+                                <p:column style="width: 30%;text-align: center">
+                                    <p:commandButton value="Cerrar" action="abrirPrincipal" icon="ui-icon-close"  style="width: 30%">
+
+                                    </p:commandButton>
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                    </p:panelGrid>                    
+                </h:form> 
+            </ui:define>
+        </ui:composition>
+
+    </body>
+</html>

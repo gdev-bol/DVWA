@@ -1,0 +1,609 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <body>
+
+        <ui:composition template="#{expedienteSubsanacionBean.template}">
+            <ui:define name="content">   
+                <h:form id="frmIngresoSigno">
+                    <p:growl id="msg" life="10000"/>
+                    <p:panelGrid style="width: 100%; height: 100%;" styleClass="quitarBordes">  
+                        <p:panelGrid style="width: 100%;" styleClass="quitarBordes">
+                            <p:row>
+                                <p:column style="width: 100%;" colspan="2">
+                                    <p:outputPanel style="padding-bottom: 0px; padding-top: 0px; padding-left:10px; padding-right: 10px;">
+                                        <table>
+                                            <tr valign="middle">
+                                                <td><p:graphicImage library="images" name="flechaTituloAzul.png" width="24" height="24"></p:graphicImage></td>
+                                                <td><p:outputLabel value="Expediente para subsanacion" styleClass="tituloPrincipalFuente"></p:outputLabel></td>
+                                            </tr>
+                                        </table>                    
+                                        <p:separator id="sepTitulo" style="border: 1px #045491 inset;"></p:separator>                    
+                                    </p:outputPanel>                                
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+
+                        <!--DE LA PARTE DE ARRIBA-->
+                        <p:panelGrid  style="width: 100%;" >
+                            <p:row>
+
+                                <p:column style="width: 20%; text-align: right" colspan="2">
+                                    <p:outputLabel value="Nro. FORM" style="font-weight: bold" styleClass="textoImportante"/>
+                                </p:column>
+
+                                <p:column style="width: 20%; text-align: center">
+                                    <fieldset>
+
+                                        <p:panelGrid columns="1" style="width: 100%">
+                                            <p:inputText value="#{expedienteSubsanacionBean.numeroFormulario}" id="txtNumeroFormulario" 
+                                                         style="height: 20px;background: #add3d8 !important; vertical-align: central; text-align: center; width: 80%; font-weight: bold; font-size: 15px !important"/>
+                                        </p:panelGrid>
+                                    </fieldset>
+                                </p:column>
+                                <p:column style="width: 20%">
+                                    <p:commandButton value="Buscar" actionListener="#{expedienteSubsanacionBean.buscarFormularioExterno()}"
+                                                     icon="ui-icon-search"
+                                                     update=":frmIngresoSigno pnlExistente"
+                                                     style="height: 40px;"/>
+                                </p:column>
+
+                                <p:column style="width: 20%" >
+                                    <p:outputLabel id="pnlExistente">
+                                        <p:panelGrid columns="1" rendered="#{expedienteSubsanacionBean.panelNoEncontrado}">
+                                            <p:outputLabel value="#{expedienteSubsanacionBean.mensajeBusqueda}" style="font-weight: bold"/>
+
+                                        </p:panelGrid>
+                                    </p:outputLabel>
+
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+
+
+                        <!--PRIMER ROW-->
+                        <p:panelGrid style="width: 100%;"  id="pnlDatosMarca" styleClass="quitarBordes" >
+                            <p:row>
+                                <p:column style="vertical-align: top;width: 45%">
+
+                                    <fieldset style="width: 95%;">
+                                        <legend>
+                                            <p:outputLabel value="Datos del signo distintivo"/>
+                                        </legend>
+                                        <p:panelGrid style="width: 100%;" styleClass="quitarBordes">
+                                            <p:row>
+                                                <p:column style="width: 10%;">
+                                                    <p:outputLabel value="SM:" style="font-weight: bold"/>
+                                                </p:column>
+                                                <p:column style="width: 40%;">
+                                                    <p:outputLabel id="pnlDatosSM">
+                                                        <p:inputText value="#{expedienteSubsanacionBean.valorNumeroExpediente}" 
+                                                                     disabled="#{expedienteSubsanacionBean.btnAdicionarDisabled}"
+                                                                     style="width: 35%;font-weight: bold; color: #ffffff;text-align: center; font-size: 16px !important; background: #292929 !important"  /><p:spacer width="2"></p:spacer>
+                                                        <p:inputText value="#{expedienteSubsanacionBean.valorGestionExpediente}" 
+                                                                     disabled="#{expedienteSubsanacionBean.btnAdicionarDisabled}"
+                                                                     style="width: 25%;font-weight: bold; color: #ffffff;text-align: center;font-size: 16px  !important; background: #292929 !important" /><p:spacer width="2"></p:spacer>
+                                                        <p:inputText value="#{expedienteSubsanacionBean.valorExtensionExpediente}" 
+                                                                     disabled="#{expedienteSubsanacionBean.btnAdicionarDisabled}"
+                                                                     style="width: 10%; text-align: center;font-weight: bold; color: #ffffff;font-size: 16px  !important; background: #292929 !important"/>                                            
+                                                    </p:outputLabel>
+                                                </p:column>
+                                                <p:column style="width: 50%;" colspan="3">
+                                                    <p:panelGrid style="width: 100%;">
+                                                        <p:row>
+                                                            <p:column style="width: 100%;">
+                                                                <p:outputLabel value="N° recibo oficial:"></p:outputLabel>
+                                                            </p:column>
+                                                        </p:row>
+                                                        <p:row>
+                                                            <p:column style="width: 100%;">
+                                                                <p:panelGrid columns="3">
+                                                                    <p:selectBooleanCheckbox value="#{expedienteSubsanacionBean.valorOpcionRecibo}"></p:selectBooleanCheckbox>
+                                                                    <p:inputText value="#{expedienteSubsanacionBean.valorNumeroRecibo}" style="width: 50px;"></p:inputText>
+                                                                    <p:inputText value="#{expedienteSubsanacionBean.valorSerieRecibo}"  style="width: 50%;"></p:inputText>
+                                                                </p:panelGrid>
+
+
+                                                            </p:column>
+                                                        </p:row>
+                                                    </p:panelGrid>
+                                                </p:column>                              
+                                            </p:row>
+
+                                            <p:row>
+                                                <p:column style="width: 15%;">
+                                                    <p:outputLabel value="Marca:" style="font-weight: bold"/>
+                                                </p:column>
+                                                <p:column colspan="4" style="width: 85%;">
+                                                    <p:inputTextarea rows="2" value="#{expedienteSubsanacionBean.valorMarca}"  style="width: 98%"
+                                                                     styleClass="tituloMarca"/>
+                                                </p:column>
+                                            </p:row>
+
+                                            <p:row>
+                                                <p:column style="width: 15%;">
+                                                    <p:outputLabel value="Descripción:" style="font-weight: bold"/>
+                                                </p:column>
+                                                <p:column colspan="3" style="width: 65%;">
+                                                    <p:inputTextarea style="width: 98%;" rows="4" value="#{expedienteSubsanacionBean.valorDescripcionSigno}" autoResize="false"/>
+                                                </p:column>
+                                                <p:column style="width: 20%;">
+                                                    <p:panelGrid style="width: 100%;">
+                                                        <p:row>
+                                                            <p:column> 
+                                                                <p:outputLabel value="N° Titulo" style="font-weight: bold; display: block; width: 55px"/>
+                                                            </p:column>
+                                                        </p:row>
+                                                        <p:row>
+                                                            <p:column>
+                                                                <p:inputText value="#{expedienteSubsanacionBean.valorNumeroTitulo}" style="width: 90%"/>
+                                                            </p:column>                                            
+                                                        </p:row>
+                                                    </p:panelGrid>
+                                                </p:column>
+                                            </p:row>
+
+                                            <p:row>
+                                                <p:column style="width: 15%;">
+                                                    <p:outputLabel value="Género:" style="font-weight: bold"/>
+                                                </p:column>
+                                                <p:column style="width: 75%;">
+                                                    <p:selectOneMenu  value="#{expedienteSubsanacionBean.valorTipoGenero}" autoWidth="false" style="width: 150px">
+                                                        <f:selectItems value="#{expedienteSubsanacionBean.lstTipoGenero}" var="tipogenero"
+                                                                       itemLabel="#{tipogenero.nombre}" itemValue="#{tipogenero.codigo}"/>
+                                                    </p:selectOneMenu>
+                                                </p:column>
+                                                <p:column rowspan="2" >
+                                                    <p:outputPanel id="imgTodo">
+                                                        <p:galleria id="imagenCargadaGaleria" 
+                                                                    value="#{expedienteSubsanacionBean.formularioPI100.logotipos}"
+                                                                    var="image" panelWidth="170" panelHeight="170" 
+                                                                    showCaption="false" showFilmstrip="false"
+                                                                    >
+                                                            <p:graphicImage id="itemImagen" value="/temp/#{image.nombreArchivo}" 
+                                                                            title="imagen de la marca}" 
+                                                                            width="170"
+                                                                            height="170"
+                                                                            cache="false"
+                                                                            />
+                                                        </p:galleria>
+                                                    </p:outputPanel>
+                                                </p:column>
+                                                <p:column colspan="2"  style="vertical-align: top">
+                                                    <p:selectOneMenu  value="#{expedienteSubsanacionBean.valorSerieTitulo}" autoWidth="true">
+                                                        <f:selectItems value="#{expedienteSubsanacionBean.lstSerieTitulo}" var="serieTitulo"
+                                                                       itemLabel="#{serieTitulo.nombre}" itemValue="#{serieTitulo.codigo}" />
+                                                    </p:selectOneMenu>
+                                                    <br />  <br /> 
+
+                                                </p:column>
+                                            </p:row>
+
+                                            <p:row>
+                                                <p:column style="width: 15%;">
+                                                    <p:outputLabel value="Tipo Signo:" style="font-weight: bold"/>
+                                                </p:column>
+                                                <p:column>
+                                                    <h:panelGrid columns="1" cellpadding="5">
+                                                        <p:selectCheckboxMenu id="menuTipoSigno" value="#{expedienteSubsanacionBean.valorTipoSignoSeleccionado}"
+                                                                              label="#{expedienteSubsanacionBean.tipoSignoDescripcion}"
+                                                                              filter="true"
+                                                                              filterMatchMode="startsWith"
+                                                                              panelStyle="width:250px"  >
+                                                            <f:selectItems value="#{expedienteSubsanacionBean.lstTipoSigno}" 
+                                                                           var="tipoSigno"
+                                                                           itemLabel="#{tipoSigno.nombre}" itemValue="#{tipoSigno.codigo}"/>
+                                                            <p:ajax event="toggleSelect" listener="#{expedienteSubsanacionBean.muestraOtro()}"
+                                                                    update="display imgTodo "
+                                                                    />
+                                                            <p:ajax event="change" listener="#{expedienteSubsanacionBean.muestraOtro()}"
+                                                                    update="display imgTodo "
+
+                                                                    />
+                                                        </p:selectCheckboxMenu>
+                                                    </h:panelGrid>
+                                                    <p:outputPanel id="display" style="width:70px;padding-left:0px;margin-top:1px">
+                                                        <p:outputLabel value="Otro:"
+                                                                       style="display: block; width: 78px" rendered="#{expedienteSubsanacionBean.txtOtroRendered}" />
+
+                                                        <p:inputText value="#{expedienteSubsanacionBean.valorTipoSignoOtro}"
+                                                                     rendered="#{expedienteSubsanacionBean.txtOtroRendered}"
+                                                                     style="width: 200px"/>
+
+                                                    </p:outputPanel>
+
+                                                </p:column>
+                                                <p:column colspan="2">
+
+                                                </p:column>
+                                            </p:row>
+                                        </p:panelGrid>
+                                        <p:panelGrid style="width: 100%;" styleClass="quitarBordes">
+                                            <p:row>
+                                                <p:column style="width: 30%;" >
+                                                    <p:outputLabel value="Fecha de Ingreso:" style="font-weight: bold"/>
+                                                </p:column>
+
+                                                <p:column colspan="3" style="width: 70%;">
+
+                                                    <p:calendar pattern="#{sessionState.formatoFechaHora}" mask="true"
+                                                                value="#{expedienteSubsanacionBean.valorFechaIngreso}" style="width: 2%" 
+                                                                />
+                                                </p:column>
+                                            </p:row>
+
+                                            <p:row>
+                                                <p:column style="width: 35%;">
+                                                    <p:outputLabel value="Descripción de diseño:" style="font-weight: bold"/>
+                                                </p:column>                                       
+                                                <p:column colspan="4">
+                                                    <p:inputTextarea autoResize="false"
+                                                                     style="width: 98%;"
+                                                                     rows="2"
+                                                                     value="#{expedienteSubsanacionBean.valorDescripcionDisenio}">
+
+                                                    </p:inputTextarea>
+                                                </p:column>
+                                            </p:row>
+
+
+                                            <p:row>                                        
+                                                <p:column colspan="5" >
+                                                    <p:outputPanel id="pnlAdministracionClaseNiza">
+
+                                                        <fieldset>
+                                                            <legend>
+                                                                <p:outputLabel>Datos de la clase niza</p:outputLabel>
+                                                            </legend>
+
+                                                            <p:dataGrid var="niza" value="#{expedienteSubsanacionBean.listaSigSignoClaseNizaSipi}"
+                                                                        emptyMessage="No se tienen clases niza"
+                                                                        id="pnlDatosClaseNiza"
+                                                                        paginatorPosition="bottom"
+                                                                        style="width: 100%"
+                                                                        columns="1"
+                                                                        rows="1"
+                                                                        layout="grid"
+                                                                        paginator="true">
+                                                                <p:panelGrid style="width: 100%">
+                                                                    <p:row>
+                                                                        <p:column rowspan="2"><p:outputLabel value="Clase:  " style="font-weight: bold"/> #{niza.numeroClaseNiza} <br/><br/>
+                                                                            <p:outputLabel value="Versión:  " style="font-weight: bold"/> #{expedienteSubsanacionBean.devuelveVersion(niza)}
+                                                                        </p:column>
+                                                                    </p:row>
+                                                                    <p:row>
+                                                                        <p:column><p:inputTextarea  value="#{niza.listaProductos}" style="width: 98%" scrollHeight="5" rows="5"
+                                                                                                    autoResize="false"/></p:column>
+                                                                    </p:row>
+                                                                </p:panelGrid>
+
+                                                            </p:dataGrid>
+                                                        </fieldset>
+
+                                                    </p:outputPanel>
+                                                </p:column>
+                                            </p:row>
+                                        </p:panelGrid>
+                                    </fieldset> 
+                                </p:column>
+                                <p:column style="vertical-align: top;width: 60%">
+                                    <p:outputPanel id="pnlAdministracionSolicitante">
+                                        <fieldset style="width: 94%">
+                                            <legend>
+                                                <p:outputLabel value="Datos del solicitante o titular"/> 
+                                            </legend>
+
+                                            <p:dataGrid  var="per" value="#{expedienteSubsanacionBean.listaSolicitantesSipi}" 
+                                                         emptyMessage="No existen solicitantes" style="width: 100%;" id="pnlDatosSolicitante"
+                                                         columns="1" rows="1" layout="grid" paginator="true" paginatorPosition="bottom"
+                                                         >                                            
+                                                <p:panelGrid >
+                                                    <p:column  style="width: 10%;">
+                                                        <p:outputLabel value="Solicitante:" style="font-weight: bold;"></p:outputLabel>
+                                                    </p:column>
+                                                    <p:column colspan="3" style="width: 90%;"  >
+                                                        <p:outputLabel styleClass="fondoInput"
+                                                                       value="#{expedienteSubsanacionBean.devuelveNombreJuridicoONatural(per.nombreRazonSocial, per.primerApellido, per.segundoApellido)}"
+                                                                       >
+                                                        </p:outputLabel>
+                                                    </p:column>
+                                                    <p:row>
+                                                        <p:column style="width: 10%;"><p:outputLabel value="N° Doc." style="font-weight: bold"></p:outputLabel></p:column>
+                                                        <p:column style="width: 40%;"  styleClass="fondoInput"><p:outputLabel value="#{per.numeroDocumento}"></p:outputLabel></p:column>
+                                                        <p:column style="width: 10%;"><p:outputLabel value="Tipo Doc." style="display: block; width: 65px; font-weight: bold"></p:outputLabel></p:column>
+                                                        <p:column style="width: 40%;"  styleClass="fondoInput"><p:outputLabel value="#{expedienteSubsanacionBean.devuelveTipoDocumento(per.tipoDocumento)}" style="width: 100%"></p:outputLabel></p:column>                                                
+                                                    </p:row>
+                                                    <p:row rendered="#{per.tipoPersona=='NAT'}">
+                                                        <p:column style="width: 10%;"><p:outputLabel value="Genero:" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                        <p:column style="width: 40%;"  styleClass="fondoInput"><p:outputLabel value="#{expedienteSubsanacionBean.devuelveGenero(per.genero)}"></p:outputLabel></p:column>   
+                                                        <p:column style="width: 10%;"><p:outputLabel value="Lugar Exp." style="display: block;width: 70px; font-weight: bold;" rendered="#{per.tipoDocumento=='CI'}"></p:outputLabel></p:column>
+                                                        <p:column style="width: 40%;"  styleClass="fondoInput"><p:outputLabel value="#{expedienteSubsanacionBean.devuelveLugarExpedicion(per.lugarExpedicion)}" ></p:outputLabel></p:column> 
+                                                    </p:row>
+                                                    <p:row>
+                                                        <p:column style="width: 10%;"><p:outputLabel value="Pais:" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                        <p:column style="width: 40%;"  styleClass="fondoInput"><p:outputLabel value="#{expedienteSubsanacionBean.devuelvePais(per.pais)}"></p:outputLabel></p:column>
+                                                        <p:column style="width: 10%;"><p:outputLabel value="Departamento:" style="font-weight: bold;" rendered="#{per.pais=='BO'}"></p:outputLabel> </p:column>
+                                                        <p:column style="width: 40%;"  styleClass="fondoInput"><p:outputLabel value="#{expedienteSubsanacionBean.devuelveLugarExpedicion(per.departamentoSolicitud)}" ></p:outputLabel></p:column>                                                
+                                                    </p:row>
+                                                    <p:row>
+                                                        <p:column style="width: 10%;"><p:outputLabel value="Telefono:" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                        <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{per.telefono}" ></p:outputLabel></p:column>
+                                                        <p:column colspan="2">
+
+                                                        </p:column>
+                                                    </p:row>
+                                                    <p:row>
+                                                        <p:column style="width: 10%;"><p:outputLabel value="Celular:" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                        <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{per.celular}"></p:outputLabel></p:column>
+                                                        <p:column style="width: 10%;"><p:outputLabel value="Fax:" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                        <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="" ></p:outputLabel></p:column>                                                
+                                                    </p:row>
+                                                    <p:row>
+                                                        <p:column  style="width: 10%;"><p:outputLabel value="Dirección:" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                        <p:column colspan="3" style="width: 90%;" ><p:outputLabel value="#{per.domicilio}" style="width: 98%;" styleClass="fondoInput"></p:outputLabel></p:column>
+                                                    </p:row>
+
+                                                    <p:row>
+                                                        <p:column style="width: 10%;"><p:outputLabel value="E-mail:" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                        <p:column colspan="3" style="width: 90%;"><p:outputLabel value="#{per.correoElectronico}" style="width: 98%;" styleClass="fondoInput"></p:outputLabel></p:column>
+                                                    </p:row>
+                                                </p:panelGrid>                                                            
+                                            </p:dataGrid>                                                        
+                                        </fieldset>
+                                    </p:outputPanel>
+
+                                    <p:outputPanel id="pnlAdministracionApoderado">
+                                        <fieldset style="width: 94%">
+                                            <legend>
+                                                <p:outputLabel value="Datos del apoderado o representante legal"></p:outputLabel>
+                                            </legend>
+
+                                            <p:dataGrid var="per" value="#{expedienteSubsanacionBean.listaApoderadosSipi}"
+                                                        emptyMessage="No existen apoderados"
+                                                        paginatorPosition="bottom" style="width: 100%;" columns="1" rows="1" layout="grid" paginator="true">
+                                                <p:panelGrid >
+                                                    <p:row>
+                                                        <p:column  style="width: 10%;"><p:outputLabel value="Apoderado:" style="font-weight: bold"></p:outputLabel></p:column>
+                                                        <p:column colspan="3" >
+                                                            <p:outputLabel styleClass="fondoInput" value="#{expedienteSubsanacionBean.devuelveNombreJuridicoONatural(per.nombres, per.primerApellido, per.segundoApellido)}"
+                                                                           style="width: 50%">
+                                                            </p:outputLabel >
+                                                        </p:column>
+                                                    </p:row>        
+                                                    <p:row>
+                                                        <p:column style="width: 10%;"><p:outputLabel value="N° Doc." style="font-weight: bold"></p:outputLabel></p:column>
+                                                        <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{per.numeroDocumento}"></p:outputLabel></p:column>
+                                                        <p:column style="width: 10%;"><p:outputLabel value="Tipo Doc." style="display: block; width: 65px;font-weight: bold"></p:outputLabel></p:column>
+                                                        <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{expedienteSubsanacionBean.devuelveTipoDocumento(per.tipoDocumento)}" style="width: 100%"></p:outputLabel></p:column>
+                                                    </p:row>
+                                                    <p:row >
+                                                        <p:column style="width: 10%;"><p:outputLabel value="Genero:" style="font-weight: bold"></p:outputLabel></p:column>
+                                                        <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{expedienteSubsanacionBean.devuelveGenero(per.genero)}"></p:outputLabel></p:column>       
+                                                        <p:column style="width: 10%;"><p:outputLabel value="Lugar Exp." style="display: block;width: 68px; font-weight: bold" rendered="#{per.tipoDocumento=='CI'}"></p:outputLabel></p:column>
+                                                        <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{expedienteSubsanacionBean.devuelveLugarExpedicion(per.lugarExpedicion)}" rendered="#{per.tipoDocumento=='CI'}"></p:outputLabel></p:column>
+                                                    </p:row>
+
+                                                    <p:row>
+                                                        <p:column style="width: 10%;"><p:outputLabel value="Telefono:" style="font-weight: bold"></p:outputLabel></p:column>
+                                                        <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{per.telefono}" ></p:outputLabel></p:column>
+                                                        <p:column colspan="2">
+
+                                                        </p:column>
+                                                    </p:row>
+                                                    <p:row>
+                                                        <p:column style="width: 10%;"><p:outputLabel value="Celular:" style="font-weight: bold"></p:outputLabel></p:column>
+                                                        <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{per.celular}"></p:outputLabel></p:column>
+                                                        <p:column style="width: 10%;"><p:outputLabel value="Fax:" style="font-weight: bold"></p:outputLabel></p:column>
+                                                        <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="" ></p:outputLabel></p:column>
+                                                    </p:row>
+                                                    <p:row>
+                                                        <p:column  style="width: 5%;"><p:outputLabel value="Dirección:" style="font-weight: bold"></p:outputLabel></p:column>
+                                                        <p:column colspan="3" style="width: 90%;"><p:outputLabel styleClass="fondoInput" value="#{per.domicilio}" ></p:outputLabel></p:column>
+                                                    </p:row>
+                                                    <p:row>
+                                                        <p:column style="width: 10%;"><p:outputLabel value="E-mail:" style="font-weight: bold"></p:outputLabel></p:column>
+                                                        <p:column colspan="3" style="width: 90%;"><p:outputLabel  styleClass="fondoInput" value="#{per.correoElectronico}" style="width: 98%;"></p:outputLabel></p:column>
+                                                    </p:row>
+                                                    <p:row>
+                                                        <p:column style="width: 10%;"><p:outputLabel value="Poder:" style="font-weight: bold"></p:outputLabel></p:column>
+                                                        <p:column colspan="3" style="width: 90%;"> <p:outputLabel styleClass="fondoInput" value="#{per.numeroPoder}" style="color: #650e0b;font-weight: 800; font-size: 12px"/>
+
+                                                        </p:column>
+                                                    </p:row>
+
+                                                </p:panelGrid>                             
+                                            </p:dataGrid>
+                                        </fieldset>
+                                    </p:outputPanel>
+
+                                    <fieldset style="width: 93%">
+                                        <legend>
+                                            <p:outputLabel value="Dirección de notificación" /> 
+                                        </legend>
+                                        <p:panelGrid style="width: 100%; padding: 0px 0px 0px 0px">
+                                            <p:row >
+                                                <p:column style="width: 5%"> 
+                                                    <p:outputLabel value="Ciudad:" style="font-weight: bold"/></p:column>                    
+                                                <p:column colspan="3">                                                    
+                                                    <p:selectOneMenu id="cmbCiudadNotificacion" style="width: 80px !important"
+                                                                     value="#{expedienteSubsanacionBean.direccionNotificacionSipi.ciudadNotificacion}"
+                                                                     autoWidth="false"
+                                                                     title="OBLIGATORIO. Ciudad para notificacion">
+                                                        <f:selectItem itemLabel="Elegir" itemValue=""    /> 
+                                                        <f:selectItems  value="#{expedienteSubsanacionBean.lstOficina}"
+                                                                        var="ciudadNotificacion"
+                                                                        itemLabel="#{ciudadNotificacion.nombre}" itemValue="#{ciudadNotificacion.codigo}"/>
+                                                        <f:validateLength minimum="0" />
+                                                    </p:selectOneMenu>
+                                                </p:column>
+                                            </p:row>
+                                            <p:row>
+                                                <p:column style="width: 5%"> <p:outputLabel value="Barrio/Zona:" style="font-weight: bold"/></p:column>
+                                                <p:column colspan="3">
+                                                    <p:inputTextarea value="#{expedienteSubsanacionBean.direccionNotificacionSipi.zonaBarrio}" style="width: 95%" rows="2" autoResize="false"/>
+                                                </p:column>
+
+
+                                            </p:row>
+
+                                            <p:row >
+                                                <p:column><p:outputLabel value="Av/Calle:" style="font-weight: bold; "/></p:column>                    
+                                                <p:column colspan="2">
+                                                    <p:inputText value="#{expedienteSubsanacionBean.direccionNotificacionSipi.avenidaCalle}" style="width: 90%"/></p:column>
+                                                <p:column>
+                                                    <h:panelGrid columns="2">
+                                                        <p:outputLabel value="N°" style="font-weight: bold;display: block; width: 15px"/>
+                                                        <p:inputText value="#{expedienteSubsanacionBean.direccionNotificacionSipi.numeroDomicilio}" style="width: 90%"/>  
+                                                    </h:panelGrid>                                                               
+                                                </p:column>
+
+                                            </p:row>
+                                            <p:row>
+                                                <p:column><p:outputLabel value="Edificio:" style="font-weight: bold"/></p:column>                    
+                                                <p:column><p:inputText value="#{expedienteSubsanacionBean.direccionNotificacionSipi.nombreEdificio}"  style="width: 90%"/></p:column>
+                                                <p:column>
+                                                    <h:panelGrid columns="2">
+                                                        <p:outputLabel value="Piso:" style="font-weight: bold"/>
+                                                        <p:inputText value="#{expedienteSubsanacionBean.direccionNotificacionSipi.piso}" style="width: 80%"/>
+                                                    </h:panelGrid>
+                                                </p:column>
+                                                <p:column >
+                                                    <h:panelGrid columns="2">
+                                                        <p:outputLabel value="Dpto." style="font-weight: bold"/>
+                                                        <p:inputText value="#{expedienteSubsanacionBean.direccionNotificacionSipi.departamento}" style="width: 90%"/>
+                                                    </h:panelGrid>
+                                                </p:column>                    
+                                            </p:row>
+                                            <p:row>
+                                                <p:column>  <p:outputLabel value="Celular:" style="font-weight: bold"/></p:column>
+                                                <p:column><p:inputText value="#{expedienteSubsanacionBean.direccionNotificacionSipi.celular}" style="width: 90%"/></p:column>
+
+                                                <p:column colspan="2">
+                                                    <h:panelGrid columns="2">
+                                                        <p:outputLabel value="Teléfono:" style="font-weight: bold"/>
+                                                        <p:inputText value="#{expedienteSubsanacionBean.direccionNotificacionSipi.telefono}" style="width: 90%"/>
+                                                    </h:panelGrid>
+                                                </p:column>
+                                            </p:row>
+                                            <p:row>
+                                                <p:column colspan="1">
+                                                    <p:outputLabel value="E-mail:" style="font-weight: bold"/>
+                                                </p:column>
+                                                <p:column colspan="3">
+
+                                                    <p:inputText value="#{expedienteSubsanacionBean.direccionNotificacionSipi.correoelectronico}" style="width: 95%"/>
+                                                </p:column>
+                                            </p:row>
+                                            <p:row>
+                                                <p:column colspan="1">
+                                                    <p:outputLabel value="Referencia:" style="font-weight: bold"/>
+                                                </p:column>
+                                                <p:column colspan="3">
+
+                                                    <p:inputText value="#{expedienteSubsanacionBean.direccionNotificacionSipi.referencia}" style="width: 95%"/>
+                                                </p:column>
+                                            </p:row>
+                                        </p:panelGrid>
+                                    </fieldset> 
+                                </p:column>
+
+                            </p:row>
+                        </p:panelGrid>
+                        <p:panelGrid style="width: 100%;"  styleClass="quitarBordes" id="pnlPrioridades">
+                            <p:row>
+                                <p:column style="width: 20%; vertical-align: top">                                    
+                                    <fieldset>
+                                        <legend>
+                                            <p:outputLabel value="Prioridad extranjera"/>
+                                        </legend>
+                                        <p:panelGrid style="width: 90%; vertical-align: top" columns="6">
+
+                                            <p:outputLabel value="Prioridad:" style="font-weight: bold"/>    
+
+                                            <p:inputText value="#{expedienteSubsanacionBean.prioridadExtranjeraSipi.nombre}" size="8"/>
+
+                                            <p:outputLabel value="Fecha:" style="font-weight: bold"/>
+
+                                            <p:calendar pattern="#{sessionState.formatoFecha}" mask="true" size="8"
+                                                        value="#{expedienteSubsanacionBean.prioridadExtranjeraSipi.fecha}"/>
+                                            <p:outputLabel value="País:" style="font-weight: bold"/>
+
+                                            <p:selectOneMenu  value="#{expedienteSubsanacionBean.prioridadExtranjeraSipi.lugar}" autoWidth="false" style="width: 138px">
+                                                <f:selectItem itemLabel="Elegir" itemValue=""/>
+                                                <f:selectItems value="#{expedienteSubsanacionBean.lstPaises}" var="pais"
+                                                               itemLabel="#{pais.nombre}" itemValue="#{pais.codigo}"/>
+                                                <f:validateLength minimum="0" />
+                                            </p:selectOneMenu>
+                                        </p:panelGrid>
+                                    </fieldset>
+                                </p:column>
+                                <p:column style="vertical-align: top; width: 20%">                                    
+                                    <fieldset >
+                                        <legend>
+                                            <p:outputLabel value="Prioridad de exposición" />
+                                        </legend>
+                                        <p:panelGrid style="width: 90%;" columns="7">
+
+
+                                            <p:outputLabel value="Prioridad: " style="font-weight: bold"/>
+
+                                            <p:inputText value="#{expedienteSubsanacionBean.prioridadExposicionSipi.nombre}" size="10"/>
+
+                                            <p:outputLabel value="Lugar: " style="font-weight: bold"/>
+
+                                            <p:inputText value="#{expedienteSubsanacionBean.prioridadExposicionSipi.lugar}" size="10"/>
+
+                                            <p:outputLabel value="Fecha: " style="font-weight: bold"/>
+
+                                            <p:calendar pattern="#{sessionState.formatoFecha}" mask="true" size="10"
+                                                        value="#{expedienteSubsanacionBean.prioridadExposicionSipi.fecha}"/>
+
+                                        </p:panelGrid>
+                                    </fieldset>
+                                </p:column>
+                                <p:column style="width: 20%; vertical-align: top">
+                                    <fieldset>
+                                        <legend><p:outputLabel value="Interés Oposición Andina (Exp.)"/></legend>
+                                        <p:panelGrid style="width: 100%;">
+                                            <p:inputText value="#{expedienteSubsanacionBean.oposicionAndinaSipi.nombre}"
+                                                         style="width: 90%; background-color: #{expedienteSubsanacionBean.backgroundOPO} !important"/>
+                                        </p:panelGrid>
+                                    </fieldset>
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+
+                        <p:panelGrid style="width: 100%;" styleClass="quitarBordes" id="pnlbotonesinferiorPadre" >
+                            <p:row>
+                                <p:column style="width: 50%;">
+                                    <fieldset >                                        
+                                        <p:panelGrid style="width: 100%; text-align: center" id="pnlbotonesInferior">
+                                            <p:row style="width: 100%;text-align: center">
+
+                                                <p:column style="width: 10%">
+                                                    <p:commandButton value="Subsanar Registro" 
+                                                                     icon="ui-icon-pencil" style="height: 40px;width: 10%"
+                                                                     update=":frmIngresoSigno:msg"
+                                                                     actionListener="#{expedienteSubsanacionBean.subsanarExpedienteSignoMarca}"
+                                                                     >
+                                                    </p:commandButton>   
+                                                    <p:spacer width="10"/>
+                                                </p:column>
+
+                                            </p:row>
+                                        </p:panelGrid>
+                                    </fieldset>
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                    </p:panelGrid>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+
+    </body>   
+</html>

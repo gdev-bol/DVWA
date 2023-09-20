@@ -1,0 +1,213 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../WEB-INF/facelets/templates/Template.xhtml">
+
+
+
+            <ui:define name="content">
+                <f:metadata>
+                    <f:event type="preRenderView" listener="#{verificaSesion.verifica()}"/>
+                </f:metadata>
+                <h:form id="formVerifi">
+                    <p:growl id="growl" showDetail="true" sticky="true" /> 
+                    <p:panelGrid style="width: 100%;" styleClass="quitarBordes">
+                        <p:row>
+                            <p:column style="width: 100%;" colspan="2">
+                                <p:outputPanel style="padding-bottom: 0px; padding-top: 0px; padding-left:10px; padding-right: 10px;">
+                                    <table>
+                                        <tr valign="middle">
+                                            <td><p:graphicImage library="images" name="flechaTituloAzul.png" width="24" height="24"></p:graphicImage></td>
+                                            <td><p:outputLabel value="Entrada de notificaciones" styleClass="tituloPrincipalFuente"></p:outputLabel></td>
+                                        </tr>
+                                    </table>                    
+                                    <p:separator id="sepTitulo" style="border: 1px #045491 inset;"></p:separator>                    
+                                </p:outputPanel>                                
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                    <p:panelGrid style="width:  100%" styleClass="quitarBordes">
+                        <p:row>
+                            <p:column style="width: 45%; vertical-align: top">
+                                <fieldset>
+                                    <legend>Buzon de peticiones</legend>
+
+
+                                    <p:dataTable style="border-style: groove"
+                                                 scrollable="true" 
+                                                 value="#{notiVerificaController.tramites}" 
+                                                 var="tra"
+                                                 selectionMode="multiple" 
+                                                 rowKey="#{tra.idnotificacion}" 
+                                                 selection="#{notiVerificaController.tramitesAgarrados}"
+                                                 id="tablaPeti"
+                                                 widgetVar="wdgList"
+                                                 scrollHeight="390"
+                                                 scrollWidth="520"
+                                                 rowIndexVar="index"
+                                                 liveScroll="true" 
+                                                 scrollRows="30"
+                                                 >
+                                        <p:column headerText="#" width="10">
+                                            <h:outputText value="#{index+1}" />
+                                        </p:column>
+                                        <p:column headerText="Operador" width="150"  filterBy="#{tra.nombre}"  filterMatchMode="contains">
+                                            <h:outputText value="#{tra.nombre}" />
+                                        </p:column>
+                                        <p:column headerText="Bloque" width="50">
+                                            <h:outputText value="#{tra.bloque}" />
+                                        </p:column>
+                                        <p:column headerText="N°" width="25">
+                                            <h:outputText value="#{tra.nro_exped}" />
+                                        </p:column>   
+                                        <p:column headerText="Trámite" width="70">
+                                            <h:outputText value="#{tra.tipo_tramite_notificacion}" />
+                                        </p:column>   
+                                        <p:column headerText="N°" width="70">
+                                            <h:outputText value="#{tra.expediente}" />
+                                        </p:column>   
+                                        <p:column headerText="Gestión" width="70">
+                                            <h:outputText value="#{tra.gestion}" />
+                                        </p:column>   
+                                        <p:column headerText="Ext" width="30">
+                                            <h:outputText value="#{tra.extension}" />
+                                        </p:column>   
+                                    </p:dataTable>
+
+                                    <br/>
+
+
+                                </fieldset>
+
+
+                            </p:column>
+                            <p:column style="width: 10%">
+                                <p:panelGrid  style="width: 100%" styleClass="quitarBordes">
+                                    <p:row>
+                                        <p:column style="text-align: center">
+                                            <p:commandButton  value="Recibir" icon="ui-icon-arrowthick-1-e"
+                                                              actionListener="#{notiVerificaController.agarraValores()}" 
+                                                              update="tablaPeti,tablaRecibido">
+
+                                            </p:commandButton><br/><br/><br/>
+
+                                            <p:commandButton value="Devolver" icon="ui-icon-arrowthick-1-w" 
+                                                             actionListener="#{notiVerificaController.devuelveValores()}" 
+                                                             update="tablaPeti,tablaRecibido"
+                                                             >
+
+                                            </p:commandButton><br/><br/><br/>
+
+                                            <p:commandButton value="Recibir" icon="ui-icon-arrowthickstop-1-e" actionListener="#{notiVerificaController.agarraXFiltro()}"
+                                                             update="growl,tablaPeti,tablaRecibido"/><br/><br/><br/>
+
+                                        </p:column> 
+                                    </p:row>
+                                </p:panelGrid>
+                            </p:column>
+                            <p:column style="width: 45%; vertical-align: top">
+                                <fieldset>
+                                    <legend>Buzon de recibidos</legend>
+
+                                    <p:dataTable style="border-style: groove" scrollable="true" 
+                                                 value="#{notiVerificaController.tramiteATraspasar}" 
+                                                 var="recib"
+                                                 selectionMode="multiple" 
+                                                 id="tablaRecibido"
+                                                 selection="#{notiVerificaController.tramitesAgarrados2}"
+                                                 rowKey="#{recib.conteo}" 
+                                                 widgetVar="wdgList2"
+                                                 scrollHeight="430"
+                                                 scrollWidth="520"
+                                                 rowIndexVar="index1">
+
+                                        <p:column headerText="#" width="10">
+                                            <h:outputText value="#{index1+1}" />
+                                        </p:column>
+                                        <p:column headerText="Operador" width="150">
+                                            <h:outputText value="#{recib.nombre}" />
+                                        </p:column>
+                                        <p:column headerText="Bloque" width="45">
+                                            <h:outputText value="#{recib.bloque}" />
+                                        </p:column>
+                                        <p:column headerText="N°" width="25">
+                                            <h:outputText value="#{recib.nro_exped}" />
+                                        </p:column>   
+                                        <p:column headerText="Trámite" width="70">
+                                            <h:outputText value="#{recib.tipo_tramite_notificacion}" />
+                                        </p:column>   
+                                        <p:column headerText="Nro" width="70">
+                                            <h:outputText value="#{recib.expediente}" />
+                                        </p:column>  
+                                        <p:column headerText="Gestión" width="70">
+                                            <h:outputText value="#{recib.gestion}" />
+                                        </p:column>   
+                                        <p:column headerText="Ext" width="20">
+                                            <h:outputText value="#{recib.extension}" />
+                                        </p:column>   
+                                    </p:dataTable>
+
+                                </fieldset>
+
+                            </p:column>
+                        </p:row> 
+
+
+                    </p:panelGrid> 
+                    <p:panelGrid style="width: 50%" styleClass="quitarBordes">
+                        <p:row>
+                            <p:column style="width: 20%">
+                                <p:inputText value="#{notiVerificaController.bloque}"/>
+                            </p:column>
+                            <p:column >
+                                <p:selectOneMenu autoWidth="false" style="width: 90%" value="#{notiVerificaController.idoperador}">
+                                    <f:selectItems value="#{notiVerificaController.listUsuarioOpera}" 
+                                                   var="tipo"
+                                                   itemLabel="#{tipo.nombre.concat(' ').concat(tipo.primer_apellido)}" 
+                                                   itemValue="#{tipo.idusuario}" />
+
+                                </p:selectOneMenu>
+                            </p:column>
+                            <p:column style="width: 10%">     
+                                <p:inputText style="width: 80%" value="#{notiVerificaController.rango1}"/>
+                            </p:column>
+                            <p:column style="width: 5%">   
+                                <p:outputLabel value="A"/>
+                            </p:column>
+                            <p:column style="width: 10%">
+                                <p:inputText  style="width: 90%" value="#{notiVerificaController.rango2}"/>
+                            </p:column>   
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Número Bloque"/>
+                            </p:column>  
+                            <p:column>  
+                                <p:outputLabel value="Operador Dueño bloque"/>
+                            </p:column>  
+                            <p:column colspan="3"></p:column>
+
+                        </p:row>
+                    </p:panelGrid>
+                    <p:panelGrid style="width: 100%;text-align: right" columns="1" styleClass="quitarBordes">
+                        <p:commandButton value="Aceptar Cambios" icon="ui-icon-disk" actionListener="#{notiVerificaController.aceptaCambios()}"
+                                         update="growl,tablaRecibido"/>
+                    </p:panelGrid>
+
+
+                </h:form>
+
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

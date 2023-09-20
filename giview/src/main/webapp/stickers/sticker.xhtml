@@ -1,0 +1,108 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      template="#{sessionState.pathTemplate}">
+    <body>
+        <ui:composition template="./../WEB-INF/facelets/templates/Template.xhtml">
+            <ui:define name="content">
+                <h:form id="frmSticker">
+                    <p:panelGrid style="width: 100%;" styleClass="quitarBordes">
+                        <p:row>
+                            <p:column style="width: 100%;" colspan="2">
+                                <p:outputPanel style="padding-bottom: 1px; padding-top: 1px; padding-left:1px; padding-right: 1px;">
+                                    <table>
+                                        <tr valign="middle">
+                                            <td><p:graphicImage library="images" name="flechaTituloAzul.png" width="24" height="24"></p:graphicImage></td>
+                                            <td><p:outputLabel value="Generador de Stickers" styleClass="tituloPrincipalFuente"></p:outputLabel></td>
+                                        </tr>
+                                    </table>                    
+                                    <p:separator id="sepTitulo" style="border: 1px #045491 inset;"></p:separator>                    
+                                </p:outputPanel>                                
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+
+                    <fieldset>
+
+                        <legend><p:outputLabel>IMPRESION DE STICKER</p:outputLabel></legend>  
+
+                        <p:growl id="growl" showDetail="true" sticky="true" />  
+                        
+                        <h:panelGrid style="width: 100%" styleClass="quitarBordes">
+                            <p:row >                              
+                                <p:column colspan="3" style="width: 100%">
+                                    <p:selectOneRadio value="#{stickerBean.valorRadio}" id="valorRadio">
+                                        <f:selectItem itemValue="SIM" itemLabel="Simple" />
+                                        <f:selectItem itemValue="DOB" itemLabel="Doble"/>
+                                    </p:selectOneRadio>                                                
+                                </p:column>
+                            </p:row>                        
+                        </h:panelGrid>
+
+                        <h:panelGrid columns="4">
+                            <h:panelGrid columns="2">
+                                <p:outputLabel value="Seleccionar Fecha : "/>
+                                <p:calendar id="mask" pattern="dd/MM/yyyy" mask="true" value="#{stickerBean.fechaActual}" locale="es">
+                                    <p:ajax event="dateSelect" listener="#{stickerBean.limpia()}" update=":frmSticker"></p:ajax>
+                                </p:calendar>
+
+                                <p:outputLabel for="tipoTramite" value="Tipo Tramite : "/>
+                                <p:selectOneMenu id="tipoTramite" value="#{stickerBean.tipoTramite}">
+                                    <f:selectItem itemLabel="Elegir" itemValue="#{null}" noSelectionOption="true"/>
+                                    <f:selectItems value="#{stickerBean.listDominioTipoTramite}" var="tipo" itemLabel="#{tipo.codigo}" itemValue="#{tipo.codigo}" />  
+                                    <p:ajax listener="#{stickerBean.busqueda()}"
+                                            event="change" update=":frmSticker :frmSticker:growl"></p:ajax> 
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+
+                            <p:outputPanel id="busqueda">
+                                <h:panelGrid columns="2">
+                                    <p:outputLabel value="Gestion :"/>
+                                    <p:inputText value="#{stickerBean.gestion}" size="15" disabled="true"/>
+                                    <p:outputLabel value="N° Inicial :"/>
+                                    <p:inputText value="#{stickerBean.nroInicial}" size="15"/>
+                                    <p:outputLabel value="N° Final :"/>
+                                    <p:inputText value="#{stickerBean.nroFinal}" size="15"/>
+                                </h:panelGrid>
+                            </p:outputPanel>
+
+                            <h:panelGrid>
+                                <p:commandButton value="Ver Stickers"  icon="ui-icon-play" style="width: 100%; height: 25px"
+                                                 update=":frmSticker:payment-amount-panel :frmSticker:growl"
+                                                 actionListener="#{stickerBean.imprimir('PDF')}">
+                                </p:commandButton> 
+                            </h:panelGrid>
+                            
+                            <h:panelGrid>
+                                <p:commandButton ajax="false" value="Word"  icon="ui-icon-document"  style="width: 100%; height: 25px"
+                                                 actionListener="#{stickerBean.imprimir('WORD')}">
+                                </p:commandButton>
+                            </h:panelGrid>
+                            
+                        </h:panelGrid>
+
+                    </fieldset>
+
+                    <p:outputPanel>
+                        <p:spacer height="20"/>
+                        <h:panelGroup id="payment-amount-panel">
+                            <p:outputPanel  id="outReporteConciliacion" style="width: 100%; height: 885%;" rendered="#{stickerBean.reporteRecibo}">
+                                <pe:documentViewer height="500" value="#{sessionState.stream}" rendered="true"/>  
+                            </p:outputPanel>
+                        </h:panelGroup>
+                    </p:outputPanel>
+                </h:form>  
+                <h:outputScript library="js" name="spanishLocale.js"/>
+            </ui:define>
+        </ui:composition>
+        <p:ajaxStatus  style="display:block;margin-bottom:2em;height:24px;" onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()"/>
+        <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+            <p:graphicImage value="/resources/images/ajaxloadingbar.gif"/>
+        </p:dialog>
+    </body>
+</html>

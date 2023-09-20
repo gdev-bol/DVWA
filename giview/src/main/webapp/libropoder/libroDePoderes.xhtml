@@ -1,0 +1,265 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <h:outputStylesheet name="./css/default.css"/>
+    </h:head>
+    <body>
+        <ui:composition template="#{libroPoderController.template}">
+            <ui:define name="content">
+                <h:form id="frmPoder" style="width: 98%; padding-left: 1%">
+                    <p:growl id="growl" showDetail="true" sticky="true" />  
+
+
+
+                    <p:panelGrid style="width: 98%;" styleClass="quitarBordes">
+                        <p:row>
+                            <p:column style="width: 98%;" >
+                                <p:outputPanel style="padding-bottom: 0px; padding-top: 0px; padding-left:10px; padding-right: 10px;">
+                                    <table>
+                                        <tr valign="middle">
+                                            <td><p:graphicImage library="images" name="flechaTituloAzul.png" width="24" height="24"></p:graphicImage></td>
+                                            <td><p:outputLabel value="Libro de Poderes" styleClass="tituloPrincipalFuente"></p:outputLabel></td>
+                                        </tr>
+                                    </table>                    
+                                    <p:separator id="sepTitulo" style="border: 1px #045491 inset;"></p:separator>                    
+                                </p:outputPanel>                                
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+
+                    <p:panelGrid style="width: 100%;"  id="pnlDatosFilrosTodos" styleClass="quitarBordes"> 
+                        <p:row>   
+                            <p:column>
+                                <fieldset>
+                                    <legend>
+                                        <p:outputLabel value="Poder legalizado"/> 
+                                    </legend>
+                                    <p:panelGrid id="pnlDatosFiltros" style="width: 100%">
+                                        <p:row>
+                                            <p:column rowspan="4" style="width: 15%">
+                                                <p:panelGrid columns="1">
+                                                    <p:graphicImage url="/images/caratulanot.jpg" height="110" width="130"/>
+                                                    <p:commandButton value="Buscar" icon="ui-icon-search"
+                                                                     actionListener="#{libroPoderController.muestraBusquedaPoder}" >
+                                                    </p:commandButton>
+                                                </p:panelGrid>
+                                            </p:column>
+                                            <p:column style="width: 15%">
+                                                <p:outputLabel value="Tipo Tramite"/>
+                                            </p:column>
+                                            <p:column style="width: 25%">
+                                                <p:selectOneMenu id="slctTipoTramite" value="#{libroPoderController.comboTipoTramite}" >
+                                                    <f:selectItems value="#{libroPoderController.listaTipoTramite}" 
+                                                                   var="tipo"
+                                                                   itemLabel="#{tipo.nombre}" 
+                                                                   itemValue="#{tipo.nombre}" />
+                                                </p:selectOneMenu>
+                                            </p:column>
+                                            <p:column style="width: 20%">
+                                                <p:commandButton value="Busca Poder Depositado" icon="ui-icon-search" style="width: 88%"
+                                                                 actionListener="#{libroPoderController.busca()}"
+                                                                 update="tblPoderes" >
+                                                </p:commandButton>
+                                            </p:column>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column>
+                                                <p:outputLabel value="N° Tramite" style="height: 90%"/>
+                                            </p:column>
+                                            <p:column>
+                                                <p:inputText value="#{libroPoderController.numTramite}" style="width: 80%"/>
+                                            </p:column>
+                                            <p:column style="width: 20%">
+                                                <p:commandButton value="Adicionar Poder" icon="ui-icon-circle-plus" style="width: 88%"
+                                                                 actionListener="#{libroPoderController.adicionaPoder()}"
+                                                                 update="tblPoderes pnlDatosFiltros pnlDatosFilrosTodos">
+                                                </p:commandButton>
+                                            </p:column>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column>
+                                                <p:outputLabel value="Gestion"/>
+                                            </p:column>
+                                            <p:column>
+                                                <p:inputText value="#{libroPoderController.gestion}" style="width: 80%"/>
+                                            </p:column>
+                                            <p:column style="width: 20%">
+                                                <p:commandButton value="Limpiar Celdas" icon="ui-icon-document" style="width: 88%"
+                                                                 actionListener="#{libroPoderController.limpiaTodo()}"
+                                                                 update="tblPoderes pnlDatosFiltros pnlDatosFilrosTodos">
+                                                </p:commandButton>
+                                            </p:column>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column>
+                                                <p:outputLabel value="Tipo Deposito" style="display: block; width: 95px"/> 
+                                            </p:column>
+                                            <p:column>
+                                                <p:selectOneMenu id="slctTipoPoder" value="#{libroPoderController.comboTipoPoder}" autoWidth="false">
+                                                    <f:selectItems value="#{libroPoderController.listaTipoPoder}"  
+                                                                   var="tipo"
+                                                                   itemLabel="#{tipo.nombre}" 
+                                                                   itemValue="#{tipo.codigo}" />
+                                                    <p:ajax event="change" 
+                                                            update="pnlDatos"
+                                                            listener="#{libroPoderController.limpiaSegunCombo()}" /> 
+                                                </p:selectOneMenu>
+                                            </p:column>
+                                            <p:column>
+                                                <p:commandButton
+                                                    value="Cerrar"
+                                                    action="#{libroPoderController.accionCerrar}"
+                                                    icon="ui-icon-circle-close"/> 
+                                            </p:column>
+                                        </p:row>
+                                    </p:panelGrid> 
+                                    <p:panelGrid style="width: 100%" id="pnlDatos">
+                                        <p:row>
+
+                                            <p:column style="width: 15%"><p:outputLabel value="N° Testimonio"/></p:column>
+                                            <p:column ><p:inputText value="#{libroPoderController.nro_testimonio}" style="width: 98%"/></p:column>
+                                            <p:column >
+                                                <p:panelGrid columns="3">
+                                                    <p:spacer width="1"/>
+                                                    <p:outputLabel value="Fecha"/>
+                                                    <p:calendar pattern="#{sessionState.formatoFecha}" mask="true"  value="#{libroPoderController.fecha_testimonio}"/>
+                                                </p:panelGrid>
+                                            </p:column>
+                                        </p:row>
+
+                                        <p:row>
+
+                                            <p:column><p:outputLabel value="Notario"/></p:column>
+                                            <p:column colspan="2"><p:inputText value="#{libroPoderController.notario}" style="width: 98%"/></p:column>
+
+                                        </p:row>
+                                        <p:row>
+
+                                            <p:column><p:outputLabel value="Confiere poder"/></p:column>
+                                            <p:column colspan="2"><p:inputText value="#{libroPoderController.nom_confiere_poder}" style="width: 98%"/></p:column>
+
+                                        </p:row>
+                                        <p:row>
+
+                                            <p:column><p:outputLabel value="Domicilio"/></p:column>
+                                            <p:column colspan="2"><p:inputText value="#{libroPoderController.dom_confiere_poder}" style="width: 98%"/></p:column>
+
+                                        </p:row>
+                                        <p:row>
+
+                                            <p:column><p:outputLabel value="Apoderado"/></p:column>
+                                            <p:column colspan="2"><p:inputText value="#{libroPoderController.apoderado}" style="width: 98%"/></p:column>
+
+                                        </p:row>
+                                        <p:row>
+
+                                            <p:column><p:outputLabel value="Poder revocado"/></p:column>
+                                            <p:column > 
+                                                <p:selectOneMenu id="serie1" value="#{libroPoderController.comboPoderRevocado}" autoWidth="false" >
+                                                    <f:selectItem itemLabel="NO" itemValue="NO" />
+                                                    <f:selectItem itemLabel="SI" itemValue="SI" />                                                    
+                                                </p:selectOneMenu>
+                                            </p:column>
+                                            <p:column >
+                                                <p:panelGrid columns="2">
+                                                    <p:outputLabel value="Observacion"/>
+                                                    <p:inputTextarea  value="#{libroPoderController.obs}" rows="2" cols="40" style="width: 98%"/>
+                                                </p:panelGrid>
+                                            </p:column>
+
+                                        </p:row>
+                                        <!--                                        <p:row>
+                                                                                    
+                                                                                    <p:column><p:outputLabel value="Observacion"/></p:column>
+                                                                                    <p:column colspan="2"></p:column>
+                                        
+                                                                                </p:row>-->
+                                    </p:panelGrid>   
+
+
+                                </fieldset>
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+
+
+
+                    <p:panelGrid style="width: 100%;" styleClass="quitarBordes">
+                        <p:row>
+                            <p:column>
+                                <fieldset >
+                                    <legend><p:outputLabel value="Referencias"/>
+                                    </legend>
+
+                                    <p:dataTable 
+                                        style="text-align: left; width: 98%;text-align: center;"
+                                        scrollable="true" 
+                                        scrollWidth="100%" 
+                                        scrollHeight="95"
+                                        value="#{libroPoderController.listaPoderes}"        
+                                        var="tra"
+                                        id="tblPoderes"
+                                        rowIndexVar="index"
+                                        >
+                                        <p:column headerText="Tipo Deposito" width="97" >
+                                            <p:outputLabel value="#{libroPoderController.obtieneTipoPoder(tra.tipo_poder)}"/>
+                                        </p:column>
+                                        <p:column headerText="Nro.Testimonio" width="97">
+                                            <p:outputLabel value="#{tra.nro_testimonio}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Fecha" width="97">
+                                            <p:outputLabel value="#{tra.fecha_testimonio}">
+                                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                                            </p:outputLabel>
+                                        </p:column>
+
+                                        <p:column headerText="Notario" width="97">
+                                            <p:outputLabel value="#{tra.notario}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Confiere Poder" width="97">
+                                            <p:outputLabel value="#{tra.nom_confiere_poder}"/>
+                                        </p:column>
+                                        <p:column headerText="Domicilio" width="170">
+                                            <p:outputLabel value="#{tra.dom_confiere_poder}"/>
+                                        </p:column>
+                                        <p:column headerText="Apoderado" width="120">
+                                            <p:outputLabel value="#{tra.apoderado}"/>
+                                        </p:column>
+                                        <p:column headerText="Revocado" width="92">
+                                            <p:outputLabel value="#{tra.poder_revocado}"/>
+                                        </p:column>
+                                        <p:column headerText="Observacion" width="105">
+                                            <p:outputLabel value="#{tra.obs}"/>
+                                        </p:column>
+                                        <p:column headerText="Modificar" style="text-align: center" width="60">
+                                            <p:commandButton  icon="ui-icon-pencil" actionListener="#{libroPoderController.llenaCamposModifica(tra.idpoder,index)}"
+                                                              update=":frmPoder:pnlDatosFiltros :frmPoder:tblPoderes :frmPoder:pnlDatos "/>
+                                        </p:column>
+                                        <p:column headerText="Eliminar" style="text-align: center" width="60">
+                                            <p:commandButton  icon="ui-icon-trash" actionListener="#{libroPoderController.eliminaCampos(tra.idpoder,index)}"
+                                                              update=":frmPoder:pnlDatosFiltros,:frmPoder:tblPoderes"/>
+                                        </p:column>
+                                    </p:dataTable>
+
+
+                                </fieldset>
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+
+
+
+                </h:form>
+            </ui:define>
+        </ui:composition>
+
+    </body>
+</html>

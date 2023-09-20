@@ -1,0 +1,644 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:fn="http://xmlns.jcp.org/jsp/jstl/functions">
+
+    <body>
+        <ui:composition template="./../WEB-INF/facelets/templates/Template.xhtml" >
+            <ui:define name="content">
+                <f:metadata>
+                    <f:event type="preRenderView" listener="#{verificaSesion.verifica()}"/>
+                </f:metadata>
+                <h:form id="form">
+                    <p:growl id="growl" showDetail="true" sticky="true" />  
+                    <p:panelGrid style="width: 100%; "  styleClass="quitarBordes">
+                        <p:row>
+                            <p:column style="width: 100%;" colspan="2">
+                                <p:outputPanel style="padding-bottom: 0px; padding-top: 0px; padding-left:10px; padding-right: 10px;">
+                                    <table>
+                                        <tr valign="middle">
+                                            <td><p:graphicImage library="images" name="flechaTituloAzul.png" width="24" height="24"></p:graphicImage></td>
+                                            <td><p:outputLabel value="Notificaciones" styleClass="tituloPrincipalFuente"></p:outputLabel></td>
+                                        </tr>
+                                    </table>                    
+                                    <p:separator id="sepTitulo" style="border: 1px #045491 inset;"></p:separator>                    
+                                </p:outputPanel>                                
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+
+
+                    <p:panelGrid  style="width: 100%">
+                        <p:row>
+                            <p:column style="width: 33%">
+                                <p:fieldset > 
+                                    <p:panelGrid style="width: 100%" styleClass="ui-noborder">
+                                        <p:row>
+                                            <p:column style="width: 35%">
+                                                <p:inputText value="#{notiNotificaController.bloqueBuscar}" styleClass="textoImportante" style="width: 100%"/>
+                                            </p:column>  
+                                            <p:column style="width: 65%">
+                                                <p:selectOneMenu autoWidth="false" style="width: 190px" value="#{notiNotificaController.idoperador}"> 
+                                                    <f:selectItems value="#{notiNotificaController.listUsuarioOpera}" 
+                                                                   var="tipo"
+                                                                   itemLabel="#{tipo.nombre.concat(' ').concat(tipo.primer_apellido)}" 
+                                                                   itemValue="#{tipo.idusuario}" />
+
+                                                </p:selectOneMenu>
+                                            </p:column>  
+                                        </p:row>  
+                                        <p:row>
+                                            <p:column>
+                                                <p:outputLabel value="Número de Bloque"/>
+                                            </p:column>  
+                                            <p:column>
+                                                <p:outputLabel value="Operador"/>
+                                            </p:column>  
+                                        </p:row>  
+                                    </p:panelGrid>
+
+                                </p:fieldset>
+                            </p:column>
+                            <p:column style="width: 33%">
+                                <p:panelGrid styleClass="quitarBordes">
+                                    <p:row>
+                                        <p:column>
+                                            <p:commandButton value="Buscar" icon="ui-icon-search" 
+                                                             actionListener="#{notiNotificaController.busca()}"
+                                                             update="tablaNotifica"/>
+                                        </p:column>
+                                        <p:column>
+                                            <p:commandButton value="Anterior" icon="ui-icon-seek-prev" actionListener="#{notiNotificaController.anterior()}"
+                                                             update="tablaNotifica" ajax="false"/>
+                                        </p:column>
+                                        <p:column>
+                                            <p:commandButton value="Siguiente" icon="ui-icon-seek-next" actionListener="#{notiNotificaController.siguiente()}"
+                                                             update="tablaNotifica" ajax="false"/>
+                                        </p:column>
+                                        <p:column>
+                                            <p:commandButton value="Modificar" icon="ui-icon-pencil" 
+                                                             actionListener="#{notiNotificaController.modificar()}"
+                                                             update="tablaNotifica,growl"/>
+                                        </p:column>
+                                    </p:row>
+                                    <p:row>
+                                        <p:column>
+                                            <p:commandButton value="Imprimir" icon="ui-icon-print"
+                                                             ajax="false"
+                                                             actionListener="#{notiNotificaController.imprime()}"/>
+                                        </p:column>
+                                        <p:column colspan="2">
+                                            <p:commandButton value="Imprimir bloque" icon="ui-icon-print"
+                                                             ajax="false"
+                                                             actionListener="#{notiNotificaController.imprimeBloque()}"/>
+                                        </p:column>
+                                        
+                                        
+                                        
+                                        
+                                        
+                            <p:column style="text-align: right"> 
+                                <p:commandButton value="Aceptar" icon="ui-icon-disk" style="height: 115%"
+                                                 actionListener="#{notiNotificaController.modificaCambiosFinales()}" 
+                                                 update="pnlHistorial,tablaNotifica,:form:panelDatosGeneral1,:form:panelDatosGeneral2,:form:panelnormal,txtAreaObsSol
+                                                 :form:pnlOposicionesDatos">
+                                    <p:confirm header="Confirmación" message="Se Realizarán los Cambios Hechos" icon="ui-icon-alert" />
+                                </p:commandButton>
+                                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                    <p:commandButton value="Aceptar" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" 
+                                                     />
+                                    <p:commandButton value="Cancelar" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                </p:confirmDialog>
+                            </p:column>
+
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                    </p:row>
+                                </p:panelGrid>
+                            </p:column>    
+                            <p:column>
+                                <h:panelGrid columns="8" border="0">
+
+                                    <p:graphicImage value="/images/cuaazul.png" height="20px" width="20px" />  
+                                    <h:outputText value="Devuelto y Notificado" />
+
+                                    <p:graphicImage value="/images/cuanaranja.jpg" height="20px" width="20px" />
+                                    <h:outputText value="Observado" />
+
+                                    <p:graphicImage value="/images/cuaverdeoscuro.jpg" height="20px" width="20px" /> 
+                                    <h:outputText value="Recibido" />
+
+                                    <p:graphicImage value="/images/cuamarron.jpg" height="20px" width="20px" /> 
+                                    <h:outputText value="Enviado" />
+
+                                    <p:graphicImage value="/images/cuaverde.jpg" height="20px" width="20px" /> 
+                                    <h:outputText value="Devuelto Sin Notificar" />
+                                    
+                                    
+                                    <p:graphicImage value="/images/cualila1.jpg" height="20px" width="20px" /> 
+                                    <h:outputText value="En Distrital" />
+
+                                    <p:graphicImage value="/images/cuaamarillo.jpg" height="20px" width="20px" /> 
+                                    <h:outputText value="Prestado" />
+                                </h:panelGrid>
+                            </p:column>     
+                        </p:row>
+                    </p:panelGrid>
+
+
+
+                    <p:panelGrid style="width: 100%" styleClass="quitarBordes">
+                        <p:row>
+                            <p:column  style="width: 45%">
+                                <fieldset >
+                                    <legend>Datos de la petición</legend>
+                                    <p:panelGrid style="width: 90%;" id="panelDatosGeneral1" styleClass="quitarBordes">
+                                        <p:row>
+                                            <p:column style="width: 13%">
+                                                <p:outputLabel value="Bloque" />
+                                            </p:column>
+                                            <p:column style="width: 20%">
+                                                <p:inputText value="#{notiNotificaController.bloque}" readonly="true" style="width: 90%"/>
+                                            </p:column>
+                                            <p:column colspan="2" style="width: 60%">
+                                                <p:panelGrid columns="2">
+                                                    <p:outputLabel value="N°" />
+                                                    <p:inputText value="#{notiNotificaController.numCorrela}" readonly="true" style="width: 30%"/>
+                                                </p:panelGrid>
+                                            </p:column>                                            
+                                        </p:row>
+                                        <p:row>
+                                            <p:column>
+                                                <p:outputLabel value="Expediente" />
+                                            </p:column>
+                                            <p:column style="width: 23%">
+                                                <p:inputText value="#{notiNotificaController.tramite}" readonly="true" style="width: 90%"/>
+                                            </p:column>
+                                            <p:column style="width: 23%">
+                                                <p:inputText value="#{notiNotificaController.numero}" readonly="true" style="width: 90%"/>
+                                            </p:column>
+                                            <p:column style="width: 23%">
+                                                <p:inputText value="#{notiNotificaController.gestion}" readonly="true" style="width: 90%"/>
+                                            </p:column>
+                                        </p:row>
+                                        <p:row style="text-align: center">
+                                            <p:column>
+                                                <p:outputLabel value="" />
+                                            </p:column>
+                                            <p:column>
+                                                <p:outputLabel value="Trámite" />
+                                            </p:column>
+                                            <p:column>
+                                                <p:outputLabel value="Número" />
+                                            </p:column>
+                                            <p:column>
+                                                <p:outputLabel value="Gestión" />
+                                            </p:column>
+                                        </p:row>
+
+                                    </p:panelGrid>
+                                    <!--                                    <h:panelGrid columns="4" id="panelDatosGeneral1">   
+                                      <p:spacer width="5"/><p:spacer width="5"/><p:spacer width="5"/><p:spacer width="5"/>
+                                                                        </h:panelGrid>-->
+                                    <h:panelGrid id="panelnormal" style="width: 90%;">
+                                        <h:panelGrid  rendered="#{!notiNotificaController.pintaOposicion}">
+                                            <p:panelGrid>
+                                                <p:row >
+                                                    <p:column>
+                                                        <p:outputLabel  value="Fecha de notificación" />
+                                                    </p:column>
+                                                    <p:column>
+                                                        <p:calendar pattern="dd-MM-yyyy HH:mm:ss" value="#{notiNotificaController.fechaNotificacion}" size="12" 
+                                                                    disabled="#{notiNotificaController.activaFecha}" />
+                                                    </p:column>
+                                                    <p:column>
+                                                        <p:outputLabel  value="Fecha de devolución" />
+                                                    </p:column>
+                                                    <p:column>
+                                                        <p:calendar pattern="dd-MM-yyyy HH:mm:ss" value="#{notiNotificaController.fechaDevolucion}" size="12" 
+                                                                    disabled="#{notiNotificaController.activaFecha}" />
+                                                    </p:column>
+                                                </p:row>
+                                                <p:row >
+                                                    <p:column>
+                                                        <p:outputLabel  value="Estado" />
+                                                    </p:column>
+                                                    <p:column>
+                                                        <p:selectOneMenu autoWidth="false" value="#{notiNotificaController.comboEstado}" style="width: 70%">
+                                                            <f:selectItem itemLabel="Devuelto y Notificado" itemValue="DEV" />
+                                                            <f:selectItem itemLabel="Devuelto SIN Notificar" itemValue="NOT" />
+                                                            <f:selectItem itemLabel="Enviado" itemValue="ENV" />
+                                                            <f:selectItem itemLabel="Observado" itemValue="OBS" />
+                                                            <f:selectItem itemLabel="En Distrital SCZ" itemValue="DSC" />
+                                                            <f:selectItem itemLabel="En Distrital CBBA" itemValue="DCB" />
+                                                            <f:selectItem itemLabel="En Distrital SCR" itemValue="DSUC" />
+                                                            <f:selectItem itemLabel="En Distrital ElAlto" itemValue="DEA" />
+                                                            <f:selectItem itemLabel="En Distrital ORU" itemValue="DORU" />
+                                                            <f:selectItem itemLabel="En Distrital TRJ" itemValue="DTRJ" />
+                                                            <f:selectItem itemLabel="Recibido" itemValue="REC" />
+                                                            <f:selectItem itemLabel="Prestado" itemValue="PRE" />
+                                                        </p:selectOneMenu>
+                                                    </p:column>
+                                                    <p:column style="width: 30%">
+                                                        <p:outputLabel value="Notificado en" style="display: block; width: 100px"/>
+                                                    </p:column>
+                                                    <p:column>
+                                                        <p:selectOneMenu autoWidth="false" value="#{notiNotificaController.comboNotificadoEn}" style="width: 70%">
+                                                            <f:selectItem itemLabel="Su domicilio señalado" itemValue="DS" />
+                                                            <f:selectItem itemLabel="En secretaria" itemValue="SE" />
+                                                        </p:selectOneMenu>
+                                                    </p:column>
+                                                </p:row>
+                                                <p:row >
+                                                    <p:column>
+                                                        <p:outputLabel  value="Ciudad" />
+                                                    </p:column>
+                                                    <p:column>
+                                                        <p:selectOneMenu style="width: 70%" value="#{notiNotificaController.comboCiudadNotifi}">
+                                                            <f:selectItem itemLabel="La Paz" itemValue="LPZ" />
+                                                            <f:selectItem itemLabel="El Alto" itemValue="ALT" />
+                                                            <f:selectItem itemLabel="Santa Cruz" itemValue="SCZ" />
+                                                            <f:selectItem itemLabel="Cochabamba" itemValue="CBA" />
+                                                            <f:selectItem itemLabel="Tarija" itemValue="TJA" />
+                                                            <f:selectItem itemLabel="Chuquisaca" itemValue="CHQ" />
+                                                            <f:selectItem itemLabel="Oruro" itemValue="ORU" />
+                                                        </p:selectOneMenu>
+                                                    </p:column>
+                                                    <p:column>
+                                                        <p:outputLabel  value="Fecha ingreso" />
+                                                    </p:column>
+                                                    <p:column>
+                                                        <p:calendar value="#{notiNotificaController.fechaIngreso}" pattern="dd-MM-yyyy HH:mm:ss" disabled="true" size="12"/>
+                                                    </p:column>
+                                                </p:row>
+                                                <p:row >
+                                                    <p:column>
+                                                        <p:outputLabel value="Fecha de recepcion" />
+                                                    </p:column>
+                                                    <p:column>
+                                                        <p:calendar value="#{notiNotificaController.fechaRecepcion}" pattern="dd-MM-yyyy HH:mm:ss" disabled="true" size="12"/>
+                                                    </p:column>
+                                                    <p:column>
+                                                        <p:outputLabel value="Observación notificador" />
+                                                    </p:column>
+                                                    <p:column>
+                                                        <p:inputTextarea  value="#{notiNotificaController.obsNotificador}" />
+                                                    </p:column>
+                                                </p:row>
+                                            </p:panelGrid>
+
+                                            <h:panelGrid columns="4"  id="panelDatosGeneral2" >                                       
+                                            </h:panelGrid>
+                                            <p:outputLabel value="Datos de la notificación" escape="false"  styleClass="tituloPrincipalFuente" /> 
+
+                                            <h:panelGrid columns="1" style="width: 100%" id="panelSigno">
+                                                <p:outputLabel value="Descripcion" />
+                                                <p:inputTextarea style="width: 97%" value="#{notiNotificaController.descripcion}" readonly="true" rows="2"/>
+                                                <p:outputLabel value="Solicitante" />
+                                                <p:inputText  style="width: 97%" value="#{notiNotificaController.solicitante}"  readonly="true"/>  
+                                                <p:outputLabel value="Apoderado" />
+                                                <p:inputText  style="width: 97%" value="#{notiNotificaController.apoderado}"  readonly="true"/>  
+                                                <p:outputLabel value="Cursante a Fojas" />
+                                                <p:inputText  style="width: 97%" value="#{notiNotificaController.fojas}"  readonly="true"/>  
+                                                <p:outputLabel value="Notifica con" />
+                                                <p:inputText  style="width: 97%" value="#{notiNotificaController.notificaCon}"  readonly="true"/> 
+                                                <p:outputLabel value="Celular para notificar" />
+                                                <p:inputText  style="width: 97%" value="#{notiNotificaController.celular}"  readonly="true"/> 
+                                                <p:outputLabel value="Domicilio para notificar" />
+                                                <p:inputText  style="width: 97%" value="#{notiNotificaController.domicilio}"  readonly="true"/> 
+                                            </h:panelGrid>
+                                        </h:panelGrid>
+                                    </h:panelGrid>
+
+
+                                    <h:panelGrid  id="panelopo" style="width: 100%;" styleClass="quitarBordes">
+                                        <p:panelGrid id="pnlOposicionesDatos"  rendered="#{notiNotificaController.pintaOposicion}" style="width: 100%;" styleClass="quitarBordes">
+
+                                            <p:row >
+                                                <p:column >
+                                                    <p:outputLabel value="Fecha ingreso"/>
+                                                </p:column>
+                                                <p:column >
+                                                    <p:calendar value="#{notiNotificaController.fechaIngreso}" pattern="dd-MM-yyyy" size="12"/>
+                                                </p:column>
+                                                <p:column >
+                                                    <p:outputLabel value="Fecha de recepcion" />
+                                                </p:column>
+                                                <p:column >
+                                                    <p:calendar value="#{notiNotificaController.fechaRecepcion}" pattern="dd-MM-yyyy" size="12"/>
+                                                </p:column>
+                                            </p:row>
+
+
+                                            <p:row>
+                                                <p:column colspan="2" style="width: 50%;">
+                                                    <fieldset>
+                                                        <legend>Demandante</legend>
+                                                        <p:panelGrid columns="1" style="width: 100%">
+                                                            <p:outputLabel value="Fecha de notificación" />
+                                                            <p:calendar pattern="dd-MM-yyyy" value="#{notiNotificaController.fechaNotificacionDante}" size="12"
+                                                                        disabled="#{notiNotificaController.activaFechasDeman}"/>
+                                                            <p:outputLabel value="Fecha de devolución" />
+                                                            <p:calendar pattern="dd-MM-yyyy" value="#{notiNotificaController.fechaDevolucionDante}" disabled="#{notiNotificaController.activaFechasDeman}" size="12"/>
+                                                           <p:outputLabel value="Estado" />
+                                                            <p:selectOneMenu style="width: 50%"  value="#{notiNotificaController.comboEstadoDante}">
+                                                                <f:selectItem itemLabel="Devuelto y Notificado" itemValue="DEV" />
+                                                                <f:selectItem itemLabel="Devuelto SIN Notificar" itemValue="NOT" />
+                                                                <f:selectItem itemLabel="Enviado" itemValue="ENV" />
+                                                                <f:selectItem itemLabel="Observado" itemValue="OBS" />
+                                                                <f:selectItem itemLabel="En Distrital SCZ" itemValue="DSC" />
+                                                                <f:selectItem itemLabel="En Distrital CBBA" itemValue="DCB" />
+                                                                <f:selectItem itemLabel="En Distrital SCR" itemValue="DSUC" />
+                                                                <f:selectItem itemLabel="En Distrital ORU" itemValue="DORU" />
+                                                                <f:selectItem itemLabel="En Distrital TRJ" itemValue="DTRJ" />
+                                                                <f:selectItem itemLabel="Recibido" itemValue="REC" />
+                                                                <f:selectItem itemLabel="Prestado" itemValue="PRE" />
+
+                                                            </p:selectOneMenu>
+                                                            <p:outputLabel value="Notificado en" />
+                                                            <p:selectOneMenu style="width: 50%" value="#{notiNotificaController.comboNotificadoEnDante}">
+                                                                <f:selectItem itemLabel="Su domicilio señalado" itemValue="DS" />
+                                                                <f:selectItem itemLabel="En secretaria" itemValue="SE" />
+                                                            </p:selectOneMenu>
+                                                            <p:outputLabel value="Ciudad"/>
+                                                            <p:selectOneMenu style="width: 50%"  value="#{notiNotificaController.comboCiudadNotifiDante}">
+                                                                <f:selectItem itemLabel="La Paz" itemValue="LPZ" />
+                                                                <f:selectItem itemLabel="Santa Cruz" itemValue="SCZ" />
+                                                                <f:selectItem itemLabel="Cochabamba" itemValue="CBA" />
+                                                                <f:selectItem itemLabel="Tarija" itemValue="TJA" />
+                                                                <f:selectItem itemLabel="Chuquisaca" itemValue="CHQ" />
+                                                                <f:selectItem itemLabel="El Alto" itemValue="ALT" />
+                                                                <f:selectItem itemLabel="Oruro" itemValue="ORU" />
+                                                            </p:selectOneMenu>
+                                                            <p:outputLabel value="Marca" />
+                                                            <p:inputTextarea style="width: 100%" value="#{notiNotificaController.descripcionDante}" readonly="true" rows="2" autoResize="false"/>
+                                                            <p:outputLabel value="Solicitante" />
+                                                            <p:inputText  style="width: 100%" value="#{notiNotificaController.solicitanteDante}" readonly="true"/>  
+                                                            <p:outputLabel value="Apoderado" />
+                                                            <p:inputText  style="width: 100%" value="#{notiNotificaController.apoderadoDante}" readonly="true"/>  
+                                                            <p:outputLabel value="Cursante a Fojas" />
+                                                            <p:inputText  style="width: 100%" value="#{notiNotificaController.fojasDante}" readonly="true"/>  
+                                                            <p:outputLabel value="Notifica con" />
+                                                            <p:inputText  style="width: 100%" value="#{notiNotificaController.notificaConDante}" readonly="true"/> 
+                                                            <p:outputLabel value="Celular para notificar" />
+                                                            <p:inputText  style="width: 100%" value="#{notiNotificaController.celularDante}" readonly="true"/> 
+                                                            <p:outputLabel value="Domicilio para notificar" />
+                                                            <p:inputText  style="width: 100%" value="#{notiNotificaController.domicilioDante}" readonly="false"/> 
+                                                        </p:panelGrid>
+
+                                                    </fieldset>
+                                                </p:column>
+                                                <p:column colspan="2">
+                                                    <fieldset>
+                                                        <legend>Demandado</legend>
+                                                        <p:panelGrid columns="1" style="width: 100%">
+                                                            <p:outputLabel value="Fecha de notificación" />
+                                                            <p:calendar pattern="dd-MM-yyyy" value="#{notiNotificaController.fechaNotificacionDado}" disabled="#{notiNotificaController.activaFechasDado}" size="12"/>
+                                                            <h:outputText value="Fecha de devolución" />
+                                                            <p:calendar pattern="dd-MM-yyyy" value="#{notiNotificaController.fechaDevolucionDado}" disabled="#{notiNotificaController.activaFechasDado}" size="12"/>
+                                                            <p:outputLabel value="Estado" />
+                                                            <p:selectOneMenu style="width: 50%" value="#{notiNotificaController.comboEstadoDado}">
+                                                                <f:selectItem itemLabel="Devuelto y Notificado" itemValue="DEV" />
+                                                                <f:selectItem itemLabel="Devuelto SIN Notificar" itemValue="NOT" />
+                                                                <f:selectItem itemLabel="Enviado" itemValue="ENV" />
+                                                                <f:selectItem itemLabel="Observado" itemValue="OBS" />
+                                                                <f:selectItem itemLabel="En Distrital SCZ" itemValue="DSC" />
+                                                                <f:selectItem itemLabel="En Distrital CBBA" itemValue="DCB" />
+                                                                <f:selectItem itemLabel="En Distrital SCR" itemValue="DSUC" />
+                                                                <f:selectItem itemLabel="En Distrital ORU" itemValue="DORU" />
+                                                                <f:selectItem itemLabel="En Distrital TRJ" itemValue="DTRJ" />
+                                                                <f:selectItem itemLabel="Recibido" itemValue="REC" />
+                                                                <f:selectItem itemLabel="Prestado" itemValue="PRE" />
+
+                                                            </p:selectOneMenu>
+                                                            <p:outputLabel value="Notificado en"  />
+                                                            <p:selectOneMenu style="width: 50%" value="#{notiNotificaController.comboNotificadoEnDado}">
+                                                                <f:selectItem itemLabel="Su domicilio señalado" itemValue="DS" />
+                                                                <f:selectItem itemLabel="En secretaria" itemValue="SE" />
+                                                            </p:selectOneMenu>
+                                                            <p:outputLabel value="Ciudad" />
+                                                            <p:selectOneMenu style="width: 50%" value="#{notiNotificaController.comboCiudadNotifiDado}">
+                                                                <f:selectItem itemLabel="La Paz" itemValue="LPZ" />
+                                                                <f:selectItem itemLabel="Santa Cruz" itemValue="SCZ" />
+                                                                <f:selectItem itemLabel="Cochabamba" itemValue="CBA" />
+                                                                <f:selectItem itemLabel="Tarija" itemValue="TJA" />
+                                                                <f:selectItem itemLabel="Chuquisaca" itemValue="CHQ" />
+                                                                <f:selectItem itemLabel="El Alto" itemValue="ALT" />
+                                                                <f:selectItem itemLabel="Oruro" itemValue="ORU" />
+                                                            </p:selectOneMenu>
+                                                            <p:outputLabel value="Marca" />
+                                                            <p:inputTextarea style="width: 100%" value="#{notiNotificaController.descripcionDado}" readonly="true" rows="2" autoResize="false"/>
+                                                            <p:outputLabel value="Solicitante" />
+                                                            <p:inputText  style="width: 100%" value="#{notiNotificaController.solicitanteDado}" readonly="true"/>  
+                                                            <p:outputLabel value="Apoderado" />
+                                                            <p:inputText  style="width: 100%" value="#{notiNotificaController.apoderadoDado}" readonly="true"/>  
+                                                            <p:outputLabel value="Cursante a Fojas" />
+                                                            <p:inputText  style="width: 100%" value="#{notiNotificaController.fojasDado}" readonly="true"/>  
+                                                            <p:outputLabel value="Notifica con" />
+                                                            <p:inputText  style="width: 100%" value="#{notiNotificaController.notificaConDado}" readonly="true"/> 
+                                                            <p:outputLabel value="Celular para notificar" />
+                                                            <p:inputText  style="width: 100%" value="#{notiNotificaController.celularDado}" readonly="true"/> 
+                                                            <p:outputLabel value="Domicilio para notificar" />
+                                                            <p:inputText  style="width: 100%" value="#{notiNotificaController.domicilioDado}" readonly="false"/> 
+                                                        </p:panelGrid>
+
+
+
+
+                                                    </fieldset> 
+                                                </p:column>
+
+                                                
+
+                                            </p:row>
+                                            <!--                                            <p:panelGrid style="width: 100%" id="pnlOposicionesDatos">
+                                                                                        </p:panelGrid>-->
+                                        </p:panelGrid>  
+                                    </h:panelGrid>
+                                </fieldset> 
+                            </p:column>
+                            <p:column style="width: 50%;vertical-align: top">
+                                <fieldset >
+                                    <legend>Tramites</legend>
+                                    <p:dataTable  style="margin:0;width: 100%"
+                                                  selectionMode="multiple"
+                                                  value="#{notiNotificaController.tramites}" 
+                                                  var="tra"
+                                                  selection="#{notiNotificaController.tramitesAgarrados}"
+                                                  rowKey="#{tra.nro_exped}" 
+                                                  id="tablaNotifica"
+                                                  scrollable="true" 
+                                                  scrollWidth="600" 
+                                                  scrollHeight="550"
+                                                  rowIndexVar="index"
+                                                  >
+                                        <p:ajax process="@form" event="rowDblselect" listener="#{notiNotificaController.actualiza()}" 
+                                                update=":form:panelopo,:form:panelnormal,:form:panelSigno,:form:panelDatosGeneral1,:form:panelDatosGeneral2
+                                                :form:pnlHistorial,:form:txtAreaObsSol,:form:pnlOposicionesDatos, :form:pnlHIstorial"/>
+
+
+                                        <p:column headerText="N°" width="20">
+                                            <h:outputText value="#{index+1}" />
+                                        </p:column>
+
+                                        <p:column headerText="Expediente" width="90" >
+                                            <c:set var="guion" value="#{tra.gestion}" />
+                                            <h:outputText value="#{tra.tipo_tramite_notificacion.concat('-').concat( tra.expediente ).concat(tra.gestion == 0? '' : '-'.concat(tra.gestion) ).concat(tra.extension == 'C'? '-C' : '')}" />
+                                        </p:column>
+                                        <p:column headerText="Descripcion (Demandante)" width="100" style="font-weight: bold;background-color: #{tra.demandante_cod_estado=='ENV'? '#b32d00':''}
+                                                  #{tra.demandante_cod_estado==' '? '#ffffff':''}
+                                                  #{tra.demandante_cod_estado=='PREE'? '#ffffff':''}
+                                                  #{tra.demandante_cod_estado=='DEV'? '#1a75ff':''}
+                                                  #{tra.demandante_cod_estado=='NOT'? '#1affa3':''}
+                                                  #{tra.demandante_cod_estado=='OBS'? '#ff8000':''}
+                                                  #{tra.demandante_cod_estado=='DSC'? '#fcb0b3':''}
+                                                  #{tra.demandante_cod_estado=='DCB'? '#fcb0b3':''}
+                                                  #{tra.demandante_cod_estado=='DEA'? '#fcb0b3':''}
+                                                  #{tra.demandante_cod_estado=='DSUC'? '#fcb0b3':''}
+                                                  #{tra.demandante_cod_estado=='DORU'? '#fcb0b3':''}
+                                                  #{tra.demandante_cod_estado=='DTRJ'? '#fcb0b3':''}
+                                                  #{tra.demandante_cod_estado=='REC'? '#009900':''}
+                                                  #{tra.demandante_cod_estado=='PRE'? '#ffff4d':''}">
+                                            <h:outputText value="#{tra.demandante}" style="color: #ffffff"/>
+                                        </p:column>
+                                        <p:column headerText="Con Demandante"  width="100" >
+                                            <h:outputText value="#{tra.demandante_con}" />
+                                        </p:column>                                                                            
+                                        <p:column headerText="Fojas Demandante" width="100" >
+                                            <h:outputText value="#{tra.demandante_fojas}" />
+                                        </p:column>     
+                                        <p:column headerText="Demandado" width="100" 
+                                                  style="font-weight: bold;background-color: #{tra.demandado_cod_estado=='ENV'? '#b32d00':''}
+                                                  #{tra.demandado_cod_estado==' '? '#ffffff':''}
+                                                  #{tra.demandado_cod_estado=='PREE'? '#ffffff':''}
+                                                  #{tra.demandado_cod_estado=='DEV'? '#1a75ff':''}
+                                                  #{tra.demandado_cod_estado=='NOT'? '#1affa3':''}
+                                                  #{tra.demandado_cod_estado=='OBS'? '#ff8000':''}
+                                                  #{tra.demandado_cod_estado=='DSC'? '#fcb0b3':''}
+                                                  #{tra.demandado_cod_estado=='DCB'? '#fcb0b3':''}
+                                                  #{tra.demandado_cod_estado=='DEA'? '#fcb0b3':''}
+                                                  #{tra.demandado_cod_estado=='DSUC'? '#fcb0b3':''}
+                                                  #{tra.demandado_cod_estado=='DORU'? '#fcb0b3':''}
+                                                  #{tra.demandado_cod_estado=='DTRJ'? '#fcb0b3':''}
+                                                  #{tra.demandado_cod_estado=='REC'? '#009900':''}
+                                                  #{tra.demandado_cod_estado=='PRE'? '#ffff4d':''}"
+                                                  >
+                                            <h:outputText value="#{tra.demandado}" style="color: #ffffff"/>
+                                        </p:column>  
+                                        <p:column headerText="Con Demandado" width="100" >
+                                            <h:outputText value="#{tra.demandado_con}" />
+                                        </p:column> 
+                                        <p:column headerText="Fojas Demandado" width="100" >
+                                            <h:outputText value="#{tra.demandado_fojas}" />
+                                        </p:column>  
+                                    </p:dataTable>
+                                </fieldset>  
+                            </p:column>
+                        </p:row>
+
+
+                    </p:panelGrid>
+
+
+
+
+
+
+
+
+                    <p:panelGrid style="width: 100%" styleClass="quitarBordes">
+                        <p:row>
+                            <p:column style="width: 50%; vertical-align: top">
+                                <fieldset>
+                                    <p:panelGrid  style="width: 100%" id="pnlHistorial">
+                                        <p:row>
+                                            <p:column style="vertical-align: top;">
+                                                <h:panelGrid columns="1"  style="width: 100%"  >
+                                                    <p:outputLabel value="Observación" escape="false" styleClass="labelImportante"/> 
+                                                    <p:inputTextarea style="width: 90%" rows="2"
+                                                                     value="#{notiNotificaController.obsSolicitante}" readonly="true" id="txtAreaObsSol"/>
+                                                </h:panelGrid>
+                                            </p:column> 
+                                            <p:column style="width: 50%; vertical-align: top">
+                                                <h:panelGrid columns="1" style="width: 100%">
+                                                    <p:outputLabel value="Operador Solicitante" />
+                                                    <p:inputText style="width: 80%;" value="#{notiNotificaController.operadorSolicitante}"/>  
+                                                </h:panelGrid>
+                                            </p:column>   
+
+                                        </p:row>
+                                    </p:panelGrid>
+                                </fieldset>
+                            </p:column> 
+                            <p:column style="vertical-align: top">
+                                <fieldset>
+                                    <legend>
+                                        <p:outputLabel value="Historial" escape="false" /> 
+                                    </legend>
+                                    <p:panelGrid columns="1" style="width: 100%;" id="pnlHIstorial">
+                                       <p:dataTable  style="width: 100%;" scrollHeight="50"
+                                                     value="#{notiNotificaController.listHistPo}" 
+                                                     var="hist">
+                                           <p:column headerText="N°" width="20">
+                                               <h:outputText value="#{hist.num}"/>
+                                           </p:column>
+                                           <p:column headerText="Historial" width="100">
+                                               <h:outputText value="#{hist.historial}" />
+                                           </p:column>
+                                           <p:column headerText="Fecha Hora"  width="100">
+                                                <h:outputText value="#{hist.fecha}" />
+                                           </p:column>
+
+                                        </p:dataTable>
+                                    </p:panelGrid>
+
+                                </fieldset>
+                            </p:column>
+                        </p:row>
+
+                    </p:panelGrid>
+                    <p:panelGrid style="width: 100%" styleClass="quitarBordes">
+
+                        <p:row>
+                            <p:column style="text-align: left"> 
+                                <p:commandButton value="Cancelar" icon="ui-icon-closethick" style="height: 115%"
+                                                 action="/login/signosPrincipal.xhtml" />
+                            </p:column>
+                            <p:column style="text-align: right"> 
+                                <p:commandButton value="Aceptar" icon="ui-icon-disk" style="height: 115%"
+                                                 actionListener="#{notiNotificaController.modificaCambiosFinales()}" 
+                                                 update="pnlHistorial,tablaNotifica,:form:panelDatosGeneral1,:form:panelDatosGeneral2,:form:panelnormal,txtAreaObsSol
+                                                 :form:pnlOposicionesDatos">
+                                    <p:confirm header="Confirmación" message="Se Realizarán los Cambios Hechos" icon="ui-icon-alert" />
+                                </p:commandButton>
+                                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                    <p:commandButton value="Aceptar" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" 
+                                                     />
+                                    <p:commandButton value="Cancelar" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                </p:confirmDialog>
+                            </p:column>
+                        </p:row>
+
+                    </p:panelGrid> 
+                </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+        
+        <p:ajaxStatus  style="display:block;margin-bottom:2em;height:24px;" 
+                       onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+        <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+            <p:graphicImage value="/resources/images/ajaxloadingbar.gif"/>
+        </p:dialog>
+    </body>
+</html>

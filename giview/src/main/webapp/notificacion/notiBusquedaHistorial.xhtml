@@ -1,0 +1,122 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="./../WEB-INF/facelets/templates/Template.xhtml">
+
+    <ui:define name="content" >
+        <h:form id="formHisto">
+            <p:panelGrid style="width: 100%;" styleClass="quitarBordes">
+                            <p:row>
+                                <p:column style="width: 100%;" colspan="2">
+                                    <p:outputPanel style="padding-bottom: 1px; padding-top: 1px; padding-left:10px; padding-right: 10px;">
+                                        <table>
+                                            <tr valign="middle">
+                                                <td><p:graphicImage library="images" name="flechaTituloAzul.png" width="24" height="24"></p:graphicImage></td>
+                                                <td><p:outputLabel value="Historial" styleClass="tituloPrincipalFuente"></p:outputLabel></td>
+                                            </tr>
+                                        </table>                    
+                                        <p:separator id="sepTitulo" style="border: 1px #045491 inset;"></p:separator>                    
+                                    </p:outputPanel>                                
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+            <fieldset>
+                <legend>BUSQUEDA DE HISTORIAL DE EXPEDIENTES        
+                </legend>
+                
+                            <p:panelGrid style="width: 100%" styleClass="quitarBordes">
+                                
+                                <p:row>
+                                    
+                                    <p:column>
+                                        <h:outputLabel value="Expediente"/>
+                                    </p:column>
+                                    <p:column>
+                                        <p:panelGrid columns="1" style="width: 100%">
+                                            <p:selectOneMenu style="width: 90%">
+                                                <f:selectItem itemLabel="SM" itemValue="" />
+                                                <f:selectItem itemLabel="CN" itemValue="" />
+                                                <f:selectItem itemLabel="CD" itemValue="" />
+                                                <f:selectItem itemLabel="FU" itemValue="" />
+                                                <f:selectItem itemLabel="LU" itemValue="" />
+
+                                            </p:selectOneMenu>
+                                            <h:outputLabel value="Trámite"/>
+                                        </p:panelGrid>
+                                    </p:column>
+                                    <p:column>
+                                        <p:panelGrid columns="1">
+                                            <h:inputText/>
+                                            <h:outputLabel value="Número"/>
+                                        </p:panelGrid>
+                                    </p:column>
+                                    <p:column>
+                                        <p:panelGrid columns="1">
+
+                                            <h:inputText/>
+                                            <h:outputLabel value="Gestión"/>
+                                        </p:panelGrid>
+                                    </p:column>
+                                    <p:column style="vertical-align: top">
+                                        <p:button value="Buscar" icon="ui-icon-search"/>
+                                    </p:column>
+                                    <p:column style="vertical-align: top">
+                                        <p:button value="Cerrar" icon="ui-icon-circle-close"/>
+                                    </p:column>
+                                 
+                                </p:row>
+                                    
+                                <p:row>
+                                    <p:column>
+                                        <br/><br/>
+                                    </p:column>
+                                </p:row>
+                                <p:row >
+                                    <p:column colspan="6">
+                                        <p:dataTable  style="margin:0"
+                                                      scrollable="true" 
+                                                       >
+                                           <p:column headerText="#" >
+                                                <h:outputText value="" />
+                                            </p:column>
+                                            <p:column headerText="Trámite" >
+                                                <h:outputText value="" />
+                                            </p:column>
+                                            <p:column headerText="Nro" >
+                                                <h:outputText value="" />
+                                            </p:column>
+                                            <p:column headerText="Gestión" >
+                                                <h:outputText value="" />
+                                            </p:column>        
+                                            <p:column headerText="Ext" >
+                                                <h:outputText value="" />
+                                            </p:column>    
+                                            <p:column headerText="Historia" >
+                                                <h:outputText value="" />
+                                            </p:column>    
+                                            <p:column headerText="Fecha-Hora" >
+                                                <h:outputText value="" />
+                                            </p:column>    
+                                                                                        
+                                        </p:dataTable>
+                                    </p:column>
+                                </p:row>
+
+
+
+
+                            </p:panelGrid>
+
+
+
+            </fieldset>  
+        </h:form>
+
+
+    </ui:define>
+
+</ui:composition>

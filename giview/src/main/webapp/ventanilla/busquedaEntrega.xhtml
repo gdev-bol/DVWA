@@ -1,0 +1,305 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <body>
+        <ui:composition template="#{entregaTramiteBean.template}">
+            <ui:define name="content">
+                <h:form id="frmEntrega" style="width: 97%; padding-left: 1%; vertical-align: top">
+
+                    <p:panelGrid  style="width: 100%;" styleClass="quitarBordes" >
+                        <p:row>
+                            <p:column style="width: 100%;" colspan="2">
+                                <p:outputPanel style="padding-bottom: 0px; padding-top: 0px; padding-left:10px; padding-right: 10px;">
+                                    <table>
+                                        <tr valign="middle">
+                                            <td><p:graphicImage library="images" name="flechaTituloAzul.png" width="20" height="17"></p:graphicImage></td>
+                                            <td><p:outputLabel value="Búsqueda de Entregas" styleClass="tituloPrincipalFuente"></p:outputLabel></td>
+                                        </tr>
+                                    </table>                    
+                                    <p:separator id="sepTitulo" style="border: 1px #045491 inset;"></p:separator>                    
+                                </p:outputPanel> 
+                            </p:column>
+                        </p:row>
+                        <p:row  >
+                            <div style="text-align: center;">
+                                <p:column style="width: 100%;text-align: center" >
+
+                                    <h:panelGrid columns="3" id="pnlOpciones" styleClass="quitarBordes"  style="margin: 0 auto;">
+
+                                        <h:panelGrid columns="3" style="width: 100%; " >
+
+                                            <p:inputText value="#{busquedaEntregaBean.numeroBloque}" size="8" style="text-align: center" styleClass="tituloMarca"/>
+                                            <p:selectOneMenu value="#{busquedaEntregaBean.valorSerie}" 
+                                                             autoWidth="false" 
+                                                             style="width: 80px">    
+                                                <f:selectItem itemLabel="" itemValue="1" />
+                                                <f:selectItem itemLabel="E" itemValue="2" />
+                                                <f:selectItem itemLabel="S" itemValue="4" />
+                                                <f:selectItem itemLabel="H" itemValue="6" />
+                                                <f:selectItem itemLabel="C" itemValue="3" />     
+                                                <f:selectItem itemLabel="T" itemValue="5" />     
+                                                <f:selectItem itemLabel="O" itemValue="7" />     
+
+                                            </p:selectOneMenu> 
+
+                                            <p:inputText value="#{busquedaEntregaBean.gestionBloque}" size="8" style="text-align: center" styleClass="tituloMarca"/>
+
+
+                                            <p:outputLabel value="N° Entrega"/>
+                                            <p:outputLabel value="Serie"/>
+                                            <p:outputLabel value="Gestión"/>   
+
+
+                                        </h:panelGrid>
+
+                                        <h:panelGrid columns="1" style="padding-left: 15%">
+                                            <p:commandButton value="Buscar" icon="ui-icon-search" style="height: 40px;width: 95%"   >                                                            
+                                                <p:ajax event="click" listener="#{busquedaEntregaBean.buscaBloque()}" 
+                                                        update="@form" process="@form"/>
+                                            </p:commandButton>  
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="1" style="padding-left: 15%">
+                                            <p:commandButton value="Imprimir" icon="ui-icon-search" style="height: 40px;width: 95%"   >                                                            
+                                                <p:ajax event="click" listener="#{busquedaEntregaBean.imprimeBloque()}" 
+                                                        update="@form" process="@form"/>
+                                            </p:commandButton>  
+                                        </h:panelGrid>
+
+
+                                    </h:panelGrid>
+
+                                </p:column>
+                            </div>
+
+                        </p:row>
+                    </p:panelGrid>
+                    <!-- Dibujo las tablas-->
+                    <p:panelGrid style="width:  100%" styleClass="quitarBordes" id="pnlTablas">
+                        <p:row>
+                            <p:column style="width: 15%; text-align: center">
+                                <p:commandButton value="Quitar Seleccionados" icon="ui-icon-circle-minus" style="height: 40px" 
+                                                 actionListener="#{busquedaEntregaBean.devuelveValores()}" 
+                                                 update="tablaRecibido message"
+                                                 />
+
+                            </p:column>
+                            <p:column style="width: 85%">
+                                <fieldset>
+                                    <legend>Buzon de entregados</legend>
+                                    <p:dataTable style="border-style: groove" scrollable="true" 
+                                                 value="#{busquedaEntregaBean.tramitesDer}" 
+                                                 var="recib"
+                                                 selectionMode="multiple" 
+                                                 id="tablaRecibido"
+                                                 selection="#{busquedaEntregaBean.tramitesDerAgarrados}"
+                                                 rowKey="#{recib}" 
+                                                 widgetVar="wdgList2"
+                                                 scrollHeight="390"
+                                                 scrollWidth="1010"
+                                                 rowIndexVar="index1"
+                                                 scrollRows="30"
+                                                 emptyMessage="Buzón de entregas vacio"
+                                                 disabledSelection="#{busquedaEntregaBean.muestraModifica}">
+                                        <p:column headerText="#" width="2" style="background: #dddddd">
+                                            <h:outputText value="#{index1+1}" />
+                                        </p:column>
+                                        <p:column headerText="Sigla" width="4"  >
+                                            <h:outputText value="#{recib.sigla}" />
+                                        </p:column>
+                                        <p:column headerText="N°" width="4">
+                                            <h:outputText value="#{recib.numerotramite}" />
+                                        </p:column>   
+                                        <p:column headerText="Gestión" width="4">
+                                            <h:outputText value="#{recib.gestion}" />
+                                        </p:column>   
+
+                                        <p:column headerText="Reg. SM/SR" width="20">
+                                            <h:outputText value="#{(busquedaEntregaBean.convierteStr(recib))}" />
+                                        </p:column>   
+                                        <p:column headerText="Marca" width="240">
+                                            <h:outputText value="#{recib.marca}" />
+                                        </p:column>   
+
+                                        <p:column headerText="Clase" width="20">
+                                            <h:outputText value="#{busquedaEntregaBean.claseNiza(recib)}" />
+                                        </p:column>   
+                                    </p:dataTable>
+
+                                </fieldset>
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                    <p:spacer height="1"/>
+
+                    <fieldset>
+                        <legend>Datos procurador</legend>
+                        <p:panelGrid  style="width: 100%" styleClass="quitarBordes">
+                            <p:row style="width: 100%">
+                                <p:column style="width: 8%">
+                                    <p:outputLabel value="Tipo Persona" style="font-weight: bold;"></p:outputLabel>
+                                </p:column>
+                                <p:column style="width: 10%">
+                                    <p:selectOneMenu style="width:95px" value="#{busquedaEntregaBean.procuTipoTitular}" autoWidth="false">
+                                        <f:selectItems value="#{busquedaEntregaBean.listTipoTitular}" 
+                                                       var="tipo"
+                                                       itemLabel="#{tipo.nombre}" 
+                                                       itemValue="#{tipo.codigo}" />
+
+                                    </p:selectOneMenu>
+                                </p:column>
+                                <p:column style="width: 11%">
+                                    <p:outputLabel value="Nombre/Razon social" style="font-weight: bold;"></p:outputLabel>
+                                </p:column>
+                                <p:column style="width: 16%">
+                                    <p:inputText value="#{busquedaEntregaBean.procuNombre}" style="width: 95%" ></p:inputText>
+                                </p:column>
+                                <p:column style="width: 9%">
+                                    <p:outputLabel value="Apellido Paterno" style="font-weight: bold;"></p:outputLabel>
+                                </p:column>
+                                <p:column style="width: 14%">
+                                    <p:inputText value="#{busquedaEntregaBean.procuPrimerApe}" style="width: 95%"></p:inputText>
+                                </p:column>
+                                <p:column style="width: 9%">
+                                    <p:outputLabel value="Apellido Materno" style="font-weight: bold;"></p:outputLabel>
+                                </p:column>
+                                <p:column style="width: 14%">
+                                    <p:inputText value="#{busquedaEntregaBean.procuSegundoApe}" style="width: 95%" ></p:inputText>                                                   
+                                </p:column>
+
+                            </p:row>
+                        </p:panelGrid>
+                        <p:panelGrid style="width: 100%" styleClass="quitarBordes">
+                            <p:row>
+                                <p:column style="width: 8%">
+                                    <p:outputLabel value="Tipo Doc." style="font-weight: bold;"></p:outputLabel>
+                                </p:column>
+                                <p:column style="width: 15%">
+                                    <p:selectOneMenu style="width:125px" value="#{busquedaEntregaBean.procuTipoDocumento}" autoWidth="false">
+                                        <f:selectItems value="#{busquedaEntregaBean.listTipoDocumento}" 
+                                                       var="tipo"
+                                                       itemLabel="#{tipo.nombre}" 
+                                                       itemValue="#{tipo.codigo}" />
+
+                                    </p:selectOneMenu>
+                                </p:column>
+                                <p:column style="width: 9%">
+                                    <p:outputLabel value="Número Doc." style="font-weight: bold;"></p:outputLabel>
+                                </p:column>
+                                <p:column style="width: 14%">
+                                    <p:inputText value="#{busquedaEntregaBean.procuNumeroDocumento}" style="width: 90%"></p:inputText>
+                                </p:column>
+                                <p:column style="width: 12%">
+                                    <p:outputLabel value="Lugar de expedicion" style="font-weight: bold;"></p:outputLabel>
+                                </p:column>
+                                <p:column style="width: 11%">
+                                    <p:selectOneMenu style="width:90px" value="#{busquedaEntregaBean.procuLugarExpedicion}" autoWidth="false">
+                                        <f:selectItems value="#{busquedaEntregaBean.listDepartamento}" 
+                                                       var="tipo"
+                                                       itemLabel="#{tipo.nombre}" 
+                                                       itemValue="#{tipo.codigo}" />
+
+                                    </p:selectOneMenu>
+                                </p:column>
+                                <p:column style="width: 6%">
+                                    <p:outputLabel value="Telefono" style="font-weight: bold;"></p:outputLabel>
+                                </p:column>
+                                <p:column style="width: 11%">
+                                    <p:inputText value="#{busquedaEntregaBean.procuTelefono}" style="width: 90%" ></p:inputText>
+                                </p:column>
+                                <p:column style="width: 5%">
+                                    <p:outputLabel value="Celular" style="font-weight: bold;"></p:outputLabel>
+                                </p:column>
+                                <p:column style="width: 11%">
+                                    <p:inputText value="#{busquedaEntregaBean.procuCelular}" style="width: 95%"></p:inputText>
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+
+
+                        <p:panelGrid styleClass="quitarBordes" style="width: 70%" >
+                            <p:row>
+                                <p:column style="width: 15%">
+                                    <p:outputLabel value="Tipo Doc. Autorización" style="font-weight: bold;"></p:outputLabel>
+                                </p:column>
+                                <p:column style="width: 20%">
+                                    <p:selectOneMenu style="width:150px" value="#{busquedaEntregaBean.procuTipoDocAuto}" autoWidth="false">
+                                        <f:selectItem itemValue="null" itemLabel=""/>   
+                                        <f:selectItems value="#{busquedaEntregaBean.listTipoDocuAutoriza}" 
+                                                       var="tipo"
+                                                       itemLabel="#{tipo.nombre}" 
+                                                       itemValue="#{tipo.codigo}" />
+                                    </p:selectOneMenu>
+                                </p:column>
+                                <p:column style="width: 18%">
+                                    <p:outputLabel value="Número Doc. Autorización" style="font-weight: bold;"></p:outputLabel>
+                                </p:column>
+                                <p:column style="width: 20%">
+                                    <p:inputText value="#{busquedaEntregaBean.procuDescDocuAuto}" style="width: 90%"></p:inputText>
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                    </fieldset>
+
+                    <p:panelGrid style="width: 100%">
+                        <p:row >
+                            <p:column>
+                                <p:panelGrid>
+                                    <div style="text-align: center;">
+                                        <p:growl id="message" showDetail="true" />
+                                        <p:commandButton value="Modificar"  icon="ui-icon-pencil"
+                                                         styleClass="botonGrande" 
+                                                         actionListener="#{busquedaEntregaBean.modificaEntrega()}"
+                                                         update="message,btnImpr"
+                                                         disabled="#{busquedaEntregaBean.muestraModifica}"
+                                                         >
+                                            <p:confirm header="Confirmación" message="¿Está seguro(a) de guardar los cambios?" icon="ui-icon-alert" />
+
+                                        </p:commandButton> 
+
+                                        <p:spacer width="25"/>
+
+                                        <p:commandButton 
+                                            id="btnImpr"
+                                            value="Imprimir" 
+                                            icon="ui-icon-print" 
+                                            ajax="false"
+                                            action="#{busquedaEntregaBean.Imprimir()}"
+                                            disabled="#{busquedaEntregaBean.muestraImprime}"
+                                            />
+
+                                    </div>
+
+
+                                </p:panelGrid>
+                                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                    <div align="center">
+                                        <p:panelGrid columns="3"  styleClass="quitarBordes">
+                                            <p:commandButton value="Aceptar" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                            <p:spacer width="1"/>
+                                            <p:commandButton value="Cancelar" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                        </p:panelGrid>
+                                    </div>
+
+                                </p:confirmDialog>
+                            </p:column>
+
+                        </p:row>
+                    </p:panelGrid>
+
+
+                </h:form>  
+
+            </ui:define>
+        </ui:composition>
+        <p:ajaxStatus  style="display:block;margin-bottom:2em;height:24px;" 
+                       onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+        <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+            <p:graphicImage value="/resources/images/ajaxloadingbar.gif"/>
+        </p:dialog>
+    </body>
+</html>

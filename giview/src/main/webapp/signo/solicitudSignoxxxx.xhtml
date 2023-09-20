@@ -1,0 +1,652 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:p="http://primefaces.org/ui"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 template="#{sessionState.pathsipiTemplate}"
+                 xmlns:si.componentes="http://java.sun.com/jsf/composite/si.componentes"
+                 xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <ui:define name="content">
+        <p:panelGrid style="width: 100%; height: 100%">   
+            <!--DE LA PARTE DE ARRIBA-->
+            <p:row>
+                <p:column style="vertical-align: top">
+                    <p:panelGrid styleClass="quitarBordes">
+                        <p:row >
+                            <p:column style="vertical-align: top">
+                                <p:selectOneRadio  layout="grid" columns="1">
+                                    <f:selectItem itemValue="ADD" itemLabel="ADICIONAR" />
+                                    <f:selectItem itemValue="MOD" itemLabel="MODIFICAR"/>
+                                    <f:selectItem itemValue="CON" itemLabel="CONSULTAR"/>
+                                </p:selectOneRadio>
+                            </p:column>
+                            <p:column style="vertical-align: top">
+                                <p:selectOneRadio  layout="grid" columns="1">
+                                    <f:selectItem itemValue="CN" itemLabel="SOLICITUD DE MARCA" />
+                                    <f:selectItem itemValue="CD" itemLabel="No PUBLICACION"/>
+                                    <f:selectItem itemValue="Ca" itemLabel="No REGISTRO"/>
+
+                                </p:selectOneRadio>
+                            </p:column>
+                            <p:column style="vertical-align: middle">
+                                <p:panelGrid columns="2">
+                                    <p:inputText value="28/07/201" size="10"/>
+                                    <p:inputText value="28/07/201" size="10"/>
+                                </p:panelGrid>                                 
+                            </p:column>
+                        </p:row>
+
+
+                    </p:panelGrid>
+
+                </p:column>
+                <p:column style="vertical-align: top">
+                    <p:panelGrid>
+                        <p:row>
+                            <p:column style="vertical-align: top">
+                                <p:commandButton styleClass="botonGrande" value="Buscar">
+
+                                </p:commandButton>    
+                            </p:column>
+                            <p:column style="vertical-align: top">
+                                <p:commandButton styleClass="botonGrande"  value="Anterior">
+
+                                </p:commandButton>    
+                            </p:column>
+                            <p:column style="vertical-align: top; width: 10%">
+
+                            </p:column>
+                            <p:column style="vertical-align: top">
+                                <p:commandButton styleClass="botonGrande"  value="Limpiar">
+
+                                </p:commandButton>    
+                            </p:column>
+
+                            <p:column style="vertical-align: top">
+                                <p:commandButton styleClass="botonGrande"  value="Seguimiento">
+
+                                </p:commandButton>    
+                            </p:column>
+                            <p:column style="vertical-align: top; width: 10%">
+
+                            </p:column>
+
+                            <p:column style="vertical-align: top">
+                                <p:commandButton styleClass="botonGrande"  value="Historial"
+                                                 action="#{ingresoSolicitudBean.abrirHistorial()}">
+
+                                </p:commandButton>    
+                            </p:column>
+
+                        </p:row>
+                    </p:panelGrid>
+                </p:column>
+            </p:row>
+
+            <!--DE LA PEQUEÑA LABEL O FICINA Y FORM-->
+            <p:row>
+                <p:column style="width: 50%; vertical-align: top">
+                    <p:panelGrid columns="2">
+                        <p:outputLabel value="OFICINA:" />
+                        <p:selectOneMenu id="serie" value="VALOR"  >
+                            <f:selectItem itemLabel="LA PAZ" itemValue="LA PAZ"  />
+                            <f:selectItem itemLabel="COCHABAMBA" itemValue="COCHABAMBA"  />
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                </p:column>
+                <p:column style="width: 50%; text-align: right">
+                    <p:outputLabel value="FORM Nro: 201602025" />
+                </p:column>
+            </p:row>
+
+            <!--Datos de la marca-->
+            <p:row>
+                <p:column style="width: 50%; vertical-align: top">
+                    <fieldset>
+                        <legend>
+                            DATOS DEL SIGNO DISTINTIVO SOLICITADO                            
+                        </legend>
+                        <p:panelGrid>
+                            <p:row>
+                                <p:column>
+                                    <p:outputLabel value="SM:" />
+                                </p:column>
+                                <p:column>
+                                    <p:panelGrid columns="3">
+                                        <p:inputText value="28000" size="5"/>
+                                        <p:inputText value="2010" size="4"/>
+                                        <p:inputText value="00" size="2"/>
+                                    </p:panelGrid>
+                                </p:column>
+
+                                <p:column style="padding-left: 7px">
+                                    <p:panelGrid>
+                                        <p:row>
+                                            <p:column colspan="2"> 
+                                                <p:outputLabel value="N° Recibo Oficial" />
+                                            </p:column>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column>
+                                                <p:inputText value="2010" size="4"/>
+                                            </p:column>
+                                            <p:column>
+                                                <p:inputText value="2010" size="4"/>
+                                            </p:column>
+                                        </p:row>
+                                    </p:panelGrid>
+
+                                </p:column>                              
+                            </p:row>
+
+                            <p:row>
+                                <p:column>
+                                    <p:outputLabel value="Descricpion:" />
+                                </p:column>
+                                <p:column colspan="3">
+                                    <h:inputTextarea value="MARCA PATITO"  rows="2" cols="38"
+                                                     onkeyup="this.value = this.value.substring(0, 500);"
+                                                     >
+                                    </h:inputTextarea>
+                                </p:column>
+                                <p:column>
+                                    <p:panelGrid >
+                                        <p:row >
+                                            <p:column > 
+                                                <p:outputLabel value="N° Titulo" />
+                                            </p:column>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column>
+                                                <p:inputText value="2010" size="4"/>
+                                            </p:column>                                            
+                                        </p:row>
+                                    </p:panelGrid>
+                                </p:column>
+                            </p:row>
+
+                            <p:row>
+                                <p:column >
+                                    <p:outputLabel value="Clase" />
+                                </p:column>
+                                <p:column colspan="3">
+                                    <p:inputText value="2010" size="4"/>
+                                </p:column>
+                                <p:column colspan="3">
+                                    <p:selectOneMenu  value="VALOR" >
+                                        <f:selectItem itemLabel="A-01" itemValue="" />                                        
+                                    </p:selectOneMenu>
+                                </p:column>
+                            </p:row>
+
+                            <p:row>
+                                <p:column>
+                                    <p:outputLabel value="Genero:" />
+                                </p:column>
+                                <p:column>
+                                    <p:selectOneMenu  value="VALOR" >
+                                        <f:selectItem itemLabel="MARCA DE PRODUCTO" itemValue="" />                                        
+                                        <f:selectItem itemLabel="MARCA DE SERVICIO" itemValue="" />                                        
+                                    </p:selectOneMenu>
+                                </p:column>
+                                <p:column rowspan="2">
+                                    <p:galleria id="imagenCargadaGaleria2" 
+                                                value="#{ingresoSolicitudBean.images}"
+                                                var="image" panelWidth="120" panelHeight="70" 
+                                                >
+                                        <p:graphicImage id="graphicImagen2" value="/resources/images/5.jpg" 
+                                                        title="imagen de la marca" 
+                                                        width="100%"/>
+                                    </p:galleria>
+                                </p:column>
+                                <p:column></p:column>
+                            </p:row>
+
+                            <p:row>
+                                <p:column>
+                                    <p:outputLabel value="Tipo de Signo:" />
+                                </p:column>
+                                <p:column >
+                                    <p:selectOneMenu  value="VALOR" >
+                                        <f:selectItem itemLabel="MIXTA" itemValue="" />                                        
+                                        <f:selectItem itemLabel="DENOMINATIVO" itemValue="" />                                        
+                                    </p:selectOneMenu>
+                                </p:column>
+                                <p:column>
+
+                                </p:column>
+                                <p:column>
+                                    <p:commandButton value="Diseño"/>
+                                </p:column>
+                            </p:row>
+
+                            <p:row>
+                                <p:column>
+                                    <p:outputLabel value="Fecha y Hora:" />
+                                </p:column>
+                                <p:column >
+                                    <p:calendar pattern="dd-MM-yyyy" mask="true" size="9"/>
+                                </p:column>
+                                <p:column>
+
+                                </p:column>
+                                <p:column>
+
+                                </p:column>
+                                <p:column>
+                                    <p:commandButton value="Clasif."/>
+                                </p:column>
+                            </p:row>
+
+                            <p:row>
+                                <p:column>
+                                    <p:outputLabel value="Fecha derivación:" />
+                                </p:column>
+                                <p:column >
+                                    <p:calendar pattern="dd-MM-yyyy" mask="true" size="9"/>
+                                </p:column>
+                                <p:column  colspan="3">
+
+                                </p:column>
+                            </p:row>
+
+                            <p:row>
+                                <p:column>
+                                    <p:outputLabel value="Descripción del diseño:" />
+                                </p:column>
+
+                                <p:column colspan="4">
+                                    <h:inputTextarea value="MARCA PATITO"  rows="1" cols="50"
+                                                     onkeyup="this.value = this.value.substring(0, 500);"
+                                                     >
+                                    </h:inputTextarea>
+                                </p:column>
+                            </p:row>
+
+                            <p:row>
+                                <p:column colspan="5">
+                                    <fieldset>
+                                        <legend>
+                                            Productos
+                                        </legend>
+                                        <h:inputTextarea value="Ropa para practica de deportes"  rows="1" cols="58"
+                                                         onkeyup="this.value = this.value.substring(0, 500);"
+                                                         >
+                                        </h:inputTextarea>
+                                    </fieldset>
+                                </p:column>
+                            </p:row>
+
+                        </p:panelGrid>
+
+                    </fieldset>
+                </p:column>
+                <p:column style="width: 50%; vertical-align: top">
+                    <p:panelGrid>
+                        <p:row>
+                            <p:column colspan="5">
+                                <p:panelGrid style="text-align: left">
+                                    <p:outputLabel value="DATOS DEL SOLICITANTE O TITULAR" />
+                                </p:panelGrid>
+
+                            </p:column>
+                        </p:row>    
+                        <p:row>
+                            <p:column colspan="4">
+                                <p:dataTable var="item" value="listado" >
+                                    <p:column headerText="Solicitante">
+                                        <h:outputText value="NOMBRE APELLIDO APELLIDO SOLICITANTE SRL" />
+                                    </p:column>
+                                    <p:column headerText="Nacionalidad" >
+                                        <h:outputText value="Bolivia" />
+                                    </p:column>
+                                    <p:column headerText="Dpto." >
+                                        <h:outputText value="Santa Cruz" />
+                                    </p:column>
+                                    <p:column headerText="Datos Contacto" >
+                                        <h:outputText value="Direccion: DIRECCION CIUDAD AVENIDA CALLE NUMERO" />
+                                    </p:column>                                                                            
+                                </p:dataTable>
+
+
+
+                            </p:column>
+                            <p:column>
+                                <p:panelGrid>
+                                    <p:commandButton value="Cambio de Nombre">
+
+                                    </p:commandButton>
+                                    <p:commandButton value="Cambio de Domicilio">
+
+                                    </p:commandButton>
+                                </p:panelGrid>
+
+                            </p:column>
+
+
+                        </p:row>
+                        <p:row>
+                            <p:column colspan="5">
+                                <p:outputLabel value="APODERADO" />
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column colspan="4">
+                                <p:dataTable var="item" value="listado" >
+                                    <p:column headerText="Solicitante">
+                                        <h:outputText value="NOMBRE APELLIDO APELLIDO SOLICITANTE SRL" />
+                                    </p:column>
+                                    <p:column headerText="Nacionalidad" >
+                                        <h:outputText value="Bolivia" />
+                                    </p:column>
+                                    <p:column headerText="Dpto." >
+                                        <h:outputText value="Santa Cruz" />
+                                    </p:column>
+                                    <p:column headerText="Datos Contacto" >
+                                        <h:outputText value="Direccion: DIRECCION CIUDAD AVENIDA CALLE NUMERO" />
+                                    </p:column>                                                                            
+                                </p:dataTable>
+                            </p:column>
+                            <p:column>
+                                <p:panelGrid>
+                                    <p:commandButton value="Solicitud de Transferencia">
+
+                                    </p:commandButton>
+                                    <p:commandButton value="Solicitud de Fusión">
+
+                                    </p:commandButton>
+                                </p:panelGrid>
+
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Dir de Notificación" />
+                            </p:column>
+                            <p:column colspan="3">
+                                <p:inputText value="La Paz - zona: Calle 22 de Calacoto, Planta Baja, Of. 1 Avenida/ calle Esq. A." size="50"/>
+                            </p:column>
+                            <p:column>
+                                <p:commandButton value="Licencia de Uso">
+
+                                </p:commandButton>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Telefono Referencia" />
+                            </p:column>
+                            <p:column colspan="3">
+                                <p:inputText value="28596321 - 78896523" size="50"/>
+                            </p:column>
+                            <p:column>
+                                <p:commandButton value="Poder depositado original">
+
+                                </p:commandButton>
+                            </p:column>
+                        </p:row>
+
+                        <p:row>
+                            <p:column colspan="4">
+                                <fieldset>
+                                    <legend>PRIORIDAD EXTRANJERA</legend>
+                                    <p:panelGrid>
+
+                                        <p:row>
+                                            <p:column>
+                                                <p:outputLabel value="Prioridad" />
+                                            </p:column>
+                                            <p:column>
+                                                <p:inputText value="Nombre de la prioridad extranjera" />
+                                            </p:column>
+
+                                            <p:column style="vertical-align: top">
+                                                <p:panelGrid columns="2">
+                                                    <p:outputLabel value="Fecha" />    
+                                                    <p:calendar pattern="dd-MM-yyyy" mask="true" size="9"/>
+                                                </p:panelGrid>
+                                            </p:column>
+                                        </p:row>
+
+                                        <p:row>
+                                            <p:column>
+                                                <p:outputLabel value="Pais de Prioridad" />
+                                            </p:column>
+                                            <p:column>
+                                                <p:inputText value="Pais de Prioridad" />
+                                            </p:column>
+
+
+                                        </p:row>
+                                    </p:panelGrid>
+                                </fieldset>
+
+                            </p:column>
+
+                            <p:column colspan="1" style="vertical-align: top">
+                                <fieldset>
+                                    <legend>Interés Oposición Andina (Exp)</legend>
+                                    <p:row>
+                                        <p:column rowspan="2">
+                                            <p:inputText value="Valor Proceso Oposición Andina" style="width: 50px"/>
+                                        </p:column>
+                                    </p:row>
+                                </fieldset>
+                            </p:column>
+
+
+                        </p:row>
+                        <p:row>
+                            <p:column colspan="5">
+                                <fieldset>
+                                    <legend>
+                                        PRIORIDAD DE EXPOSICIÓN
+                                    </legend>
+                                    <p:panelGrid columns="6">
+
+                                        <p:outputLabel value="Prioridad" />
+                                        <p:inputText value="Micro-Empresa" size="20"/>
+                                        <p:outputLabel value="Lugar" />
+                                        <p:inputText value="Bolivia" size="20"/>
+                                        <p:outputLabel value="Fecha" />
+                                        <p:calendar pattern="dd-MM-yyyy" mask="true" size="9"/>
+                                    </p:panelGrid>
+                                </fieldset>
+
+                            </p:column>
+
+                        </p:row>
+
+
+
+                    </p:panelGrid>
+
+
+
+
+                </p:column>
+            </p:row>
+
+            <p:row>
+                <p:column>
+                    <fieldset>
+                        <legend>
+                            DATOS ADMINISTRATIVOS
+                        </legend>
+
+                        <p:panelGrid>
+                            <p:row>
+                                <p:column>
+                                    <p:outputLabel value="SITUACION ACTUAL" />
+                                    <p:selectOneMenu id="situacion" value="VALOR"  >
+                                        <f:selectItem itemLabel="OBSERVADA" itemValue="OBSERVADA"  />
+                                        <f:selectItem itemLabel="EXAMEN DE FORMA" itemValue="EXFM"  />
+                                    </p:selectOneMenu>
+                                </p:column>
+                                <p:column>
+                                    <p:outputLabel value="UBICACION" />
+
+                                    <p:selectOneMenu id="ubicacion" value="VALOR"  >
+                                        <f:selectItem itemLabel="PROPIEDAD INDUSTRIAL (EXAMEN DE FORMA)" itemValue="PI"  />
+                                    </p:selectOneMenu>
+                                </p:column>
+                            </p:row>
+
+                        </p:panelGrid>
+
+                    </fieldset>
+
+
+                </p:column>
+
+                <p:column style="width: 100%">
+                    <p:panelGrid columns="2">
+
+                        <p:inputTextarea value="juan perez: observacion valida (12/02/2015)"  rows="2" cols="60"
+                                         onkeyup="this.value = this.value.substring(0, 500);"
+                                         >
+                        </p:inputTextarea>
+                        
+                        <p:commandButton value="Detalles" />
+                    </p:panelGrid>
+
+                </p:column>
+
+
+
+            </p:row>
+
+            <p:row>
+
+                <p:column>
+                    <p:panelGrid>
+                        <p:row>
+                            <p:column style="vertical-align: top">
+                                <fieldset>
+                                    <legend>PUBLICACION</legend>
+
+                                    <p:panelGrid columns="2">
+                                        <p:panelGrid columns="2">
+                                            <p:outputLabel value="Nro."/>
+                                            <p:inputText value="" style="width: 50px"/>
+                                            <p:outputLabel value="Gaceta."/>
+                                            <p:inputText value="" style="width: 50px"/>
+                                            <p:outputLabel value="Fecha."/>
+                                            <p:calendar pattern="dd-MM-yyyy" mask="true" size="7"/>
+                                        </p:panelGrid>
+                                        <p:panelGrid>
+                                            <p:commandButton value="Historial de publicaciones"/>
+                                        </p:panelGrid>
+
+                                    </p:panelGrid>
+
+                                </fieldset>
+                            </p:column>
+
+                            <p:column>
+                                <fieldset>
+                                    <legend>REGISTRO</legend>
+                                    <p:panelGrid columns="2">
+                                        <p:panelGrid columns="2">
+                                            <p:outputLabel value="Nro."/>
+                                            <p:inputText value="" style="width: 50px"/>
+                                            <p:outputLabel value="Resolución."/>
+                                            <p:inputText value="" style="width: 50px"/>
+                                            <p:outputLabel value="Fecha."/>
+                                            <p:calendar pattern="dd-MM-yyyy" mask="true" size="7"/>
+                                        </p:panelGrid>
+                                        <p:panelGrid>
+                                            <p:selectOneMenu id="uno" value="VALOR"  >
+                                                <f:selectItem itemLabel="B-01" itemValue="B"  />
+                                                <f:selectItem itemLabel="A-01" itemValue="A"  />
+                                            </p:selectOneMenu>
+                                            <p:outputLabel value="SERIE"/>
+                                        </p:panelGrid>
+
+                                    </p:panelGrid>
+                                </fieldset>
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                </p:column>
+
+                <p:column>
+                    <p:panelGrid>
+                        <p:row>
+                            <p:column>
+                                <fieldset>
+                                    <legend>RENOVACION</legend>
+
+                                    <p:panelGrid columns="2">
+                                        <p:panelGrid columns="2">
+                                            <p:outputLabel value="Nro."/>
+                                            <p:inputText value="" style="width: 50px"/>
+                                            <p:outputLabel value="Resolución."/>
+                                            <p:inputText value="" style="width: 50px"/>
+                                            <p:outputLabel value="Fecha."/>
+                                            <p:calendar pattern="dd-MM-yyyy" mask="true" size="7"/>
+                                        </p:panelGrid>
+                                        <p:panelGrid>
+                                            <p:commandButton value="Historial de renovación"/>
+                                        </p:panelGrid>
+
+                                    </p:panelGrid>
+
+                                </fieldset>
+                            </p:column>
+                            <p:column>
+                                <p:commandButton value="Insertar">
+
+                                </p:commandButton>
+                                <p:commandButton  value="Modificar">
+
+                                </p:commandButton>
+                                <p:commandButton  value="Imprimir">
+
+                                </p:commandButton>
+                                <p:commandButton  value="Cerrar">
+
+                                </p:commandButton>
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                </p:column>
+            </p:row>
+            <p:row>
+                <p:column>
+
+                </p:column>
+                <p:column>
+                    <p:commandButton  value="Recepcionar">
+
+                    </p:commandButton>
+                    <p:commandButton  value="Derivar">
+
+                    </p:commandButton>
+                    <p:commandButton  value="Notificar">
+
+                    </p:commandButton>
+                </p:column>
+            </p:row>
+
+
+
+
+
+
+
+
+        </p:panelGrid>
+    </ui:define>
+
+
+
+
+
+
+
+
+
+</ui:composition>

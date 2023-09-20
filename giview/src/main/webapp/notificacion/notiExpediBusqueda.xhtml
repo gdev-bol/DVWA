@@ -1,0 +1,130 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <body>
+        <ui:composition template="./../WEB-INF/facelets/templates/Template.xhtml">
+            <ui:define name="content"> 
+        <f:metadata>
+            <f:event type="preRenderView" listener="#{verificaSesion.verifica()}"/>
+        </f:metadata>
+        <h:form id="formHisto">
+            <p:panelGrid style="width: 100%;" styleClass="quitarBordes">
+                <p:row>
+                    <p:column style="width: 100%;" colspan="2">
+                        <p:outputPanel style="padding-bottom: 1px; padding-top: 1px; padding-left:10px; padding-right: 10px;">
+                            <table>
+                                <tr valign="middle">
+                                    <td><p:graphicImage library="images" name="flechaTituloAzul.png" width="24" height="24"></p:graphicImage></td>
+                                    <td><p:outputLabel value="Historial" styleClass="tituloPrincipalFuente"></p:outputLabel></td>
+                                </tr>
+                            </table>                    
+                            <p:separator id="sepTitulo" style="border: 1px #045491 inset;"></p:separator>                    
+                        </p:outputPanel>                                
+                    </p:column>
+                </p:row>
+            </p:panelGrid>
+            <fieldset>
+                <legend>Búsqueda de historial de expedientes
+                </legend>
+                <p:panelGrid style="width: 100%" styleClass="quitarBordes">
+                    <p:row>
+                        <p:column style="width: 7%">
+                            <p:outputLabel value="Expediente"/>
+                        </p:column>
+                        <p:column style="width: 20%">
+                            <p:panelGrid columns="1" style="width: 100%">
+                                <p:selectOneMenu style="width:125px" value="#{notiBusqueHistorialController.comboExpe}">
+                                    <f:selectItems value="#{notiBusqueHistorialController.listTipoNotifi}" 
+                                                   var="tipo"
+                                                   itemLabel="#{tipo.nombre}" 
+                                                   itemValue="#{tipo.nombre}" />
+
+                                </p:selectOneMenu>
+                                <p:outputLabel value="Trámite"/>
+                            </p:panelGrid>
+                        </p:column>
+                        <p:column style="width: 15%">
+                            <p:panelGrid columns="1" id="pnlNumero">
+                                <p:inputText value="#{notiBusqueHistorialController.numeroBusca}" styleClass="textoImportante"/>
+                                <p:outputLabel value="Número"/>
+                            </p:panelGrid>
+                        </p:column >
+                        <p:column style="width: 15%">
+                            <p:panelGrid columns="1" id="pnlGestion">
+
+                                <p:inputText value="#{notiBusqueHistorialController.gestionBusca}" styleClass="textoImportante"/>
+                                <p:outputLabel value="Gestión"/>
+                            </p:panelGrid>
+                        </p:column>
+                        <p:column style="width: 10%">
+                            <p:commandButton value="Buscar" icon="ui-icon-search" actionListener="#{notiBusqueHistorialController.buscar()}"
+                                             update="tblNotificaciones" style="height: 70%"/>
+                        </p:column>
+                        <p:column style="width: 10%">
+                            <p:commandButton value="Limpiar" icon="ui-icon-circle-close" style="height: 70%"
+                                             actionListener="#{notiBusqueHistorialController.limpiar()}"
+                                             update=":formHisto:tblNotificaciones,pnlNumero,pnlGestion"
+                                             />
+                        </p:column>
+
+                    </p:row>
+
+                </p:panelGrid>
+
+
+
+            </fieldset>  
+            <fieldset>
+                <p:panelGrid styleClass="quitarBordes">
+                    <p:row >
+                        <p:column colspan="6">
+                            <p:dataTable  style="margin:0;width: 100%"
+
+                                          value="#{notiBusqueHistorialController.listaNotiHisto}" 
+                                          var="tra"
+                                          rowKey="#{tra.idnotificacion}" 
+                                          id="tblNotificaciones"
+                                          scrollable="true" 
+                                          scrollWidth="1210"
+                                          scrollHeight="500"
+                                          rowIndexVar="rowIndex"
+                                          >
+                                <p:column headerText="#" width="30">
+                                    <h:outputText value="#{rowIndex+1}" />
+                                </p:column>
+                                <p:column headerText="Trámite" width="80" style="text-align: center">
+                                    <h:outputText value="#{tra.tipo_tramite_notificacion}" />
+                                </p:column>
+                                <p:column headerText="Nro" width="80" style="text-align: center">
+                                    <h:outputText value="#{tra.expediente}" />
+                                </p:column>
+                                <p:column headerText="Gestión" width="80" style="text-align: center">
+                                    <h:outputText value="#{tra.gestion}" />
+                                </p:column>        
+                                <p:column headerText="Ext" width="50">
+                                    <h:outputText value="#{tra.extension}" />
+                                </p:column>    
+                                <p:column headerText="Historia" width="330">
+                                    <h:outputText value="#{tra.historial}" />
+                                </p:column>    
+                                <p:column headerText="Fecha Hora" width="150">
+                                    <h:outputText value="#{tra.fecha}" />
+                                </p:column>    
+
+                            </p:dataTable>
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+            </fieldset>
+        </h:form>
+ </ui:define>
+        </ui:composition>
+
+    </body>
+
+</html>

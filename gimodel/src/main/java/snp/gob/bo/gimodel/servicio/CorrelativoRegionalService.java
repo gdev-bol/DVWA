@@ -1,0 +1,59 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package snp.gob.bo.gimodel.servicio;
+
+import java.util.List;
+import javax.sql.DataSource;
+import snp.gob.bo.gimodel.entidad.CorrelativoRegional;
+
+/**
+ *
+ * @author Chano Rojas
+ * @see ReciboService
+ * @see  ReciboService
+ * @version 1.0, 05/06/2016
+ */
+
+    public interface CorrelativoRegionalService {
+    
+    /**
+     * Método que permite setear la conexion con dataSource
+     *
+     * @param dataSource
+     * @throws java.lang.Exception
+     */
+    public void setDataSource(DataSource dataSource) throws Exception;
+    
+  /**
+     * Método que permite setear la conexion con dataSource
+     *
+     * @param correlativoRegional
+     * @param parametro
+     * @return 
+     * @throws java.lang.Exception
+     */
+     CorrelativoRegional crudCorrelativoRegional(CorrelativoRegional correlativoRegional, int parametro) throws Exception ;
+  /**
+     * Método que permite setear la conexion con dataSource
+     *
+     * @param correlativoRegional
+     * @param parametro
+     * @return 
+     * @throws java.lang.Exception
+     */
+        CorrelativoRegional crud_CorrelativoRegional(CorrelativoRegional correlativoRegional, int parametro) throws Exception;
+  /**
+     * Método que permite lista de la tabla correlativo
+     *
+     * @param correlativoRegional
+     * @param parametro
+     * @return 
+     * @throws java.lang.Exception
+     */
+    List<CorrelativoRegional> listaCorrelativoRegional(CorrelativoRegional correlativoRegional, int parametro) throws Exception ;
+        
+}

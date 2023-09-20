@@ -1,0 +1,322 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <body>
+        <ui:composition template="#{digitalizacionBean.template}">
+            <ui:define name="content">
+                <h:form id="frmDigi" style="padding-left: 1%; width: 95%">
+                    <p:growl id="growl" showDetail="true" sticky="true" />  
+                    <p:panelGrid style="width: 100%;" styleClass="quitarBordes">
+                        <p:row>
+                            <p:column style="width: 100%;" colspan="2">
+                                <p:outputPanel style="padding-bottom: 0px; padding-top: 0px; padding-left:1px; padding-right: 1px;">
+                                    <table>
+                                        <tr valign="middle">
+                                            <td><p:graphicImage library="images" name="flechaTituloAzul.png" width="24" height="24"></p:graphicImage></td>
+                                            <td><p:outputLabel value="Digitalizar" styleClass="tituloPrincipalFuente"></p:outputLabel></td>
+                                        </tr>
+                                    </table>                    
+                                    <p:separator id="sepTitulo" style="border: 1px #045491 inset;"></p:separator>                    
+                                </p:outputPanel>                                
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+
+
+                    <p:panelGrid  style="width: 100%;" styleClass="quitarBordes">
+                        <p:row>
+                            <p:column style="width: 20%; text-align: right; padding-left: 10%">
+                                <p:selectOneMenu value="#{digitalizacionBean.filtroArea}" style="width:60px;"
+                                                 >                                        
+                                    <f:selectItem itemLabel="Solicitud de Marca" itemValue="SIG" />
+                                    <f:selectItem itemLabel="Modificacion de Registro" itemValue="MOD" />  
+                                    <f:selectItem itemLabel="Renovacion de Registro" itemValue="REN" />
+                                    <p:ajax event="change" listener="#{digitalizacionBean.activaCambios()}" update="pnlOpciones,tablaDocumentos"/>
+                                </p:selectOneMenu>
+                            </p:column>
+                            <p:column style="width: 80%; vertical-align: top" >
+                                <h:panelGrid columns="1" id="pnlOpciones" styleClass="quitarBordes">
+                                    <h:panelGrid columns="3" style="padding-left: 15%" styleClass="quitarBordes"
+                                                 rendered="#{digitalizacionBean.buscadorSignosRender}">
+                                        <p:selectOneRadio style="text-align: left;display: block;width: 150px" value="#{digitalizacionBean.filtroSolicitud}" 
+                                                          layout="grid" columns="1">
+                                            <f:selectItem itemValue="SM" itemLabel="SM"/>                                                        
+                                            <f:selectItem itemValue="REG" itemLabel="N° registro"/>
+                                            <f:selectItem itemValue="PUB" itemLabel="N° publicación"/>
+                                            <p:ajax event="change" listener="#{digitalizacionBean.activaCambiosBuscadorSolicitud()}" 
+                                                    update="pnlSignos,tablaDocumentos,txtNroFolio,txtDescrip"/>
+                                        </p:selectOneRadio>
+                                        <h:panelGrid columns="1" style="width: 60%; text-align: center" id="pnlSignos">
+                                            <h:panelGrid columns="3" rendered="#{digitalizacionBean.buscadorSigSMRender}">
+                                                <p:inputText value="#{digitalizacionBean.numeroSolicitud}" size="8" style="text-align: center"/>
+                                                <p:inputText value="#{digitalizacionBean.gestionSolicitud}" size="8" style="text-align: center"/>
+                                                <p:inputText value="#{digitalizacionBean.extensionExpediente}" size="2" style="text-align: center"/>
+                                                <p:outputLabel value="Número"/>
+                                                <p:outputLabel value="Gestión"/>
+                                                <p:outputLabel value="Extesion"/>
+                                            </h:panelGrid>
+                                            <h:panelGrid columns="2" rendered="#{digitalizacionBean.buscadorSigRegistroRender}">
+                                                <p:inputText value="#{digitalizacionBean.registroSolicitud}" size="8" style="text-align: center"/>
+                                                <p:inputText value="#{digitalizacionBean.serieRegistro}" size="2" style="text-align: center"/>
+                                                <p:outputLabel value="Número"/>
+                                                <p:outputLabel value="Serie"/> 
+                                            </h:panelGrid>
+                                            <h:panelGrid columns="1" rendered="#{digitalizacionBean.buscadorSigPublicacionRender}">
+                                                <p:inputText value="#{digitalizacionBean.numeroPublicacion}" size="8" style="text-align: center"/>
+                                                <p:outputLabel value="Número Publ."/>
+
+                                            </h:panelGrid>
+                                        </h:panelGrid>    
+                                        <p:panelGrid columns="1" style="padding-left: 15%">
+                                            <p:commandButton value="Buscar" icon="ui-icon-search" style="height: 40px;width: 95%" 
+                                                             update="growl,panelAdjuntarDocumentos,txtNroFolio,txtDescrip"
+                                                             actionListener="#{digitalizacionBean.buscaTramiteSigno}" 
+                                                             ajax="false"
+                                                             >                                                            
+
+                                            </p:commandButton>  
+                                        </p:panelGrid>
+                                    </h:panelGrid>
+                                    <h:panelGrid columns="2" style="padding-left: 15%" rendered="#{digitalizacionBean.buscadorModificacionesRender}">
+                                        <p:selectOneRadio style="text-align: left;display: block;width: 150px" value="#{digitalizacionBean.filtroSolicitud}" 
+                                                          layout="grid" columns="1" rendered="false">
+                                            <f:selectItem itemValue="MO"  itemLabel="N° Solicitud" />
+                                            <f:selectItem itemValue="REG" itemLabel="N° registro"/>
+                                            <f:selectItem itemValue="PUB" itemLabel="N° publicación"/>                                                        
+                                            <p:ajax event="change" listener="#{digitalizacionBean.activaCambiosBuscadorSolicitud()}" 
+                                                    update="pnlModificacion"/>
+                                        </p:selectOneRadio>
+                                        <h:panelGrid columns="1" style="width: 60%; text-align: center" id="pnlModificacion">
+                                            <br />
+                                            <h:panelGrid columns="3" rendered="#{digitalizacionBean.buscadorSigSMRender}">
+                                                <p:selectOneMenu value="#{digitalizacionBean.valorTipoModificacion}" autoWidth="false" style="width: 80%">                                        
+                                                    <f:selectItem itemLabel="Cambio de nombre" itemValue="CANO" />
+                                                    <f:selectItem itemLabel="Cambio de domicilio" itemValue="CADO" />
+                                                    <f:selectItem itemLabel="Transferencia" itemValue="CATR" />
+                                                    <f:selectItem itemLabel="Fusión" itemValue="CAFU" />
+                                                    <f:selectItem itemLabel="Licencia de uso" itemValue="CALU" />     
+
+                                                </p:selectOneMenu>
+                                                <p:inputText value="#{digitalizacionBean.numeroSolicitud}" size="8" style="text-align: center"/>
+                                                <p:inputText value="#{digitalizacionBean.gestionSolicitud}" size="8" style="text-align: center"/>
+                                                <p:spacer />
+                                                <p:outputLabel value="Número"/>
+                                                <p:outputLabel value="Gestión"/>
+
+                                            </h:panelGrid>
+                                            <!--                                                <h:panelGrid columns="2" rendered="# {controlPlazosBean.buscadorSigRegistroRender}">
+                                                                                                <p:inputText value="# {controlPlazosBean.registroSolicitud}" size="8"/>
+                                                                                                <p:inputText value="# {controlPlazosBean.serieRegistro}" size="2"/>
+                                                                                                <p:outputLabel value="Número"/>
+                                                                                                <p:outputLabel value="Serie"/> 
+                                                                                            </h:panelGrid>
+                                                                                            <h:panelGrid columns="1" rendered="# {controlPlazosBean.buscadorSigPublicacionRender}">
+                                                                                                <p:inputText value="# {controlPlazosBean.numeroPublicacion}" size="8"/>
+                                                                                                <p:outputLabel value="Número Publ."/>
+                                            
+                                                                                            </h:panelGrid>-->
+                                        </h:panelGrid>    
+                                        <h:panelGrid columns="1" style="padding-left: 15%">
+                                            <p:commandButton value="BuscarM" icon="ui-icon-search" style="height: 40px;width: 95%"
+                                                             update="growl,panelAdjuntarDocumentos,txtNroFolio,txtDescrip"
+
+                                                             actionListener="#{digitalizacionBean.buscaTramiteModi()}" 
+                                                             ajax="false">
+
+                                            </p:commandButton>  
+                                        </h:panelGrid>
+                                    </h:panelGrid>
+                                    <h:panelGrid columns="3" style="padding-left: 15%" rendered="#{digitalizacionBean.buscadorRenovacionesRender}">
+                                        <p:selectOneRadio style="text-align: left;display: block;width: 150px" value="#{digitalizacionBean.filtroSolicitud}" 
+                                                          layout="grid" columns="1" rendered="false">
+                                            <f:selectItem itemValue="SR" itemLabel="SR" />
+                                            <f:selectItem itemValue="REG" itemLabel="N° registro"/>
+                                            <f:selectItem itemValue="PUB" itemLabel="N° publicación"/>                                                        
+                                            <p:ajax event="change" listener="#{digitalizacionBean.activaCambiosBuscadorSolicitud()}" update="pnlRenovacion"/>
+                                        </p:selectOneRadio>
+                                        <h:panelGrid columns="1" style="width: 60%; text-align: center" id="pnlRenovacion">
+                                            <br />
+                                            <h:panelGrid columns="3" rendered="#{digitalizacionBean.buscadorSigSMRender}">
+                                                <p:outputLabel value="SR"  style="font-weight: bold"/>
+                                                <p:inputText value="#{digitalizacionBean.numSolRen}" size="8" style="text-align: center"/>
+                                                <p:inputText value="#{digitalizacionBean.gesSolRen}" size="8" style="text-align: center"/>    
+                                                <p:spacer />
+                                                <p:outputLabel value="Número"/>
+                                                <p:outputLabel value="Gestión"/>                                                            
+                                            </h:panelGrid>
+                                            <!--                                                <h:panelGrid columns="2" rendered="# {controlPlazosBean.buscadorSigRegistroRender}">
+                                                                                                <p:inputText value="# {controlPlazosBean.registroSolicitud}" size="8"/>
+                                                                                                <p:inputText value="# {controlPlazosBean.serieRegistro}" size="2"/>
+                                                                                                <p:outputLabel value="Número"/>
+                                                                                                <p:outputLabel value="Serie"/> 
+                                                                                            </h:panelGrid>
+                                                                                            <h:panelGrid columns="1" rendered="# {controlPlazosBean.buscadorSigPublicacionRender}">
+                                                                                                <p:inputText value="# {controlPlazosBean.numeroPublicacion}" size="8"/>
+                                                                                                <p:outputLabel value="Número Publ."/>
+                                                                                            </h:panelGrid>-->
+                                        </h:panelGrid>    
+                                        <h:panelGrid columns="1" style="padding-left: 15%">
+                                            <p:commandButton value="BuscarR" icon="ui-icon-search" style="height: 40px;width: 95%"
+                                                             update="growl,panelAdjuntarDocumentos,txtNroFolio,txtDescrip"
+
+                                                             actionListener="#{digitalizacionBean.buscaTramiteRen()}" 
+                                                             ajax="false"/> 
+
+                                        </h:panelGrid>
+                                    </h:panelGrid>
+                                </h:panelGrid>
+                            </p:column>                                        
+                        </p:row>
+                    </p:panelGrid> 
+
+
+
+                    <p:panelGrid id="panelAdjuntarDocumentos" rendered="#{digitalizacionBean.pintaDocumentos}" style="width: 100%;vertical-align: top " styleClass="quitarBordes">
+                        <p:row>
+                            <p:column style="width: 100%;vertical-align: top " >
+                                <fieldset>
+                                    <legend>
+                                        <p:outputLabel value="Adjuntar documentos"/> 
+                                    </legend>
+
+                                    <p:panelGrid style="width: 100%">
+
+                                        <p:row>
+                                            <p:column style="width: 40%">
+                                                <p:panelGrid>
+                                                    <p:row>
+                                                        <p:column colspan="2">
+                                                            <p:commandButton value="Solo puede adjuntar archivos de tipo GIF, JPG, JPEG, PNG y PDF" 
+                                                                             disabled="false" style="border-style: none" icon="ui-icon-info" >
+
+                                                            </p:commandButton>
+                                                        </p:column>
+
+                                                    </p:row>
+                                                    <p:row>
+                                                        <p:column><p:outputLabel value="Tipo documento" /></p:column>
+                                                        <p:column>
+                                                            <p:selectOneMenu  value="#{digitalizacionBean.tipo_documento}" autoWidth="false">
+                                                                <f:selectItems value="#{digitalizacionBean.listaTipoNotifi}" 
+                                                                               var="tipo"
+                                                                               itemLabel="#{tipo.nombre}" 
+                                                                               itemValue="#{tipo.codigo}" />
+                                                            </p:selectOneMenu>
+                                                        </p:column>
+                                                    </p:row>
+                                                    <p:row>
+                                                        <p:column><p:outputLabel value="Numero de folio" /></p:column>
+                                                        <p:column><p:inputText value="#{digitalizacionBean.nro_folios}" id="txtNroFolio" style="width: 95%" onkeyup="return ValNumero(this);"/></p:column>
+                                                    </p:row>
+                                                    <p:row>
+                                                        <p:column><p:outputLabel value="Descripción" /></p:column>
+                                                        <p:column><p:inputText value="#{digitalizacionBean.descripcion}" id="txtDescrip" style="width: 95%" /></p:column>
+                                                    </p:row>
+                                                </p:panelGrid>
+                                            </p:column>
+                                            <p:column style="vertical-align: top">
+                                                <p:panelGrid>
+                                                    <p:row>
+                                                        <p:column colspan="2" style="text-align: center; width: 80%">
+                                                            <p:fileUpload  label="Examinar" value="Examinar" mode="advanced" skinSimple="true" style="width: 95%"
+                                                                           multiple="false"
+                                                                           fileUploadListener="#{digitalizacionBean.accionCargarImagenProyecto}"
+                                                                           update="lblDocASubir"
+                                                                           />
+                                                        </p:column>
+                                                    </p:row>
+
+                                                    <p:row>
+                                                        <p:column style="text-align: center" colspan="2">
+                                                            <p:commandButton value="Adicionar" actionListener="#{digitalizacionBean.adicionarArchivo()}" icon="ui-icon-disk"
+                                                                             update="tablaDocumentos,lblDocASubir,txtNroFolio,txtDescrip"/>
+                                                        </p:column>
+
+                                                    </p:row>
+                                                    <p:row >
+                                                        <p:column colspan="2">
+                                                            <p:outputLabel value="#{digitalizacionBean.nombreArchivosubir}" id="lblDocASubir" style="width: 80%"/>
+
+                                                        </p:column>
+                                                    </p:row>
+                                                </p:panelGrid>
+                                            </p:column>
+                                        </p:row>
+                                    </p:panelGrid>
+
+
+                                </fieldset>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+
+
+                            <p:column style="width: 100%">
+
+
+                                <fieldset>
+                                    <legend>
+                                        <p:outputLabel value="Documentos existentes"/> 
+                                    </legend>
+                                    <p:dataTable value="#{digitalizacionBean.listaDatosMostrar}" 
+                                                 style="margin:0;width: 100%; text-align: center"
+                                                 var="tra"
+                                                 rowKey="#{tra.iddocumento}" 
+                                                 id="tablaDocumentos"
+                                                 scrollable="true" 
+                                                 scrollWidth="100%" 
+                                                 scrollHeight="200"
+                                                 rowIndexVar="index">
+                                        <p:column headerText="N°" width="20">
+                                            <p:outputLabel value="#{index+1}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Archivo" width="140">
+                                            <p:outputLabel value="#{tra.nombre_archivo}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Extension" width="60">
+                                            <p:outputLabel value="#{tra.extension_archivo}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Descripción" width="100">
+                                            <p:outputLabel value="#{tra.descripcion}"/>
+                                        </p:column>
+                                        <p:column headerText="N° de folios" width="50">
+                                            <p:outputLabel value="#{tra.nro_folios}"/>
+                                        </p:column>
+                                        <p:column headerText="Descargar" width="55">
+                                            <p:commandButton icon="ui-icon-circle-arrow-s"
+                                                             actionListener="#{digitalizacionBean.bajaArchivo(tra)}"
+                                                             ajax="false"
+                                                             >
+                                            </p:commandButton>
+                                        </p:column>
+                                        <p:column headerText="Eliminar" width="50">
+                                            <p:commandButton actionListener="#{digitalizacionBean.eliminaArchivo(tra)}"
+                                                             update="tablaDocumentos"
+                                                             icon="ui-icon-trash">
+                                            </p:commandButton>
+                                        </p:column>
+
+
+                                    </p:dataTable>                                  
+                                </fieldset>
+
+                            </p:column>
+
+                        </p:row>
+
+                    </p:panelGrid>
+
+                </h:form>
+            </ui:define>
+        </ui:composition>
+
+    </body>
+</html>

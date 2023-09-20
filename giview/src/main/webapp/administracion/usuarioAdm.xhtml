@@ -1,0 +1,457 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      >
+    <h:head>
+
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <h:outputStylesheet name="./css/default.css"/>
+        <h:outputStylesheet name="./css/cssLayout.css"/>
+
+        <script type="text/javascript">
+            .red{
+            background - color:red;
+                    background - image:none;
+            }
+
+            .normal{
+            background - color:blue;
+                    background - image:none;
+            }
+        </script>
+    </h:head>
+
+    <body>
+
+        <ui:composition template="#{usuarioAdmBean.template}">
+
+
+
+            <ui:define name="content">
+
+                <f:event type="preRenderView" listener="#{verificaSesion.verifica()}"/>
+
+                <h:form id="formAdmUs">
+
+
+                    <p:growl id="growl" showDetail="true" sticky="true" />  
+                    <p:panelGrid style="width: 100%;" styleClass="quitarBordes">
+                        <p:row>
+                            <p:column style="width: 100%;" colspan="2">
+                                <p:outputPanel style="padding-bottom: 1px; padding-top: 1px; padding-left:10px; padding-right: 10px;">
+                                    <table>
+                                        <tr valign="middle">
+                                            <td><p:graphicImage library="images" name="flechaTituloAzul.png" width="24" height="24"></p:graphicImage></td>
+                                            <td><p:outputLabel value="Administración de Usuario" styleClass="tituloPrincipalFuente"></p:outputLabel></td>
+                                        </tr>
+                                    </table>                    
+                                    <p:separator id="sepTitulo" style="border: 1px #045491 inset;"></p:separator>                    
+                                </p:outputPanel>                                
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                    <h:panelGrid style="width:  100%" styleClass="quitarBordes" columns="2" cellpadding="5"  border="1">
+                       
+
+
+                        <p:selectOneRadio id="cmc" value="#{usuarioAdmBean.slcPrincipales}">
+                                
+                                <f:selectItem itemLabel="Crear" itemValue="1" />
+                                <f:selectItem itemLabel="Modificar" itemValue="2" />
+                                <f:selectItem itemLabel="Eliminar" itemValue="3" />
+                                <f:selectItem itemLabel="Consultar" itemValue="4" />
+                                <p:ajax event="change" listener="#{usuarioAdmBean.cambiaPrincipal()}"   update="@form"/> 
+                            </p:selectOneRadio>
+                        
+                            <p:panelGrid style="width:  100%" columns="2" id="pnlUsuario"  rendered="#{usuarioAdmBean.dibujaUsuario}" >
+                                Usuario:
+                                <p:selectOneMenu autoWidth="false" style="width: 190px" value="#{usuarioAdmBean.idusuario}"> 
+                                    <f:selectItem itemLabel="Escoge Usuario" itemValue="" />
+                                    <f:selectItems value="#{usuarioAdmBean.listUsuario}" 
+                                                   var="tipo"
+                                                   itemLabel="#{tipo.nombre.concat(' ').concat(tipo.primer_apellido).concat(' ').concat(tipo.segundo_apellido)}" 
+                                                   itemValue="#{tipo.idusuario}" />
+                                    <p:ajax event="change" listener="#{usuarioAdmBean.llenaDatosUsuario()}"  update="pnlDatosBasicosUs,tblRecibido,dtgRoles"/> 
+                                </p:selectOneMenu>
+                            </p:panelGrid>
+                        
+                      
+                    </h:panelGrid>
+                    <p:panelGrid style="width:  100%" id="pnlDatosBasicosUs">
+                        <p:row>
+                            <p:column style="width: 25%;vertical-align: top">
+                                <p:panelGrid style="width:  100%"  styleClass="quitarBordes" columns="1">
+                                    Nombre:
+                                    <p:inputText value="#{usuarioAdmBean.nombre}" style="width:100%"/>
+                                </p:panelGrid>
+                            </p:column>
+                            <p:column style="width: 25%;vertical-align: top">
+                                <p:panelGrid style="width:  100%" styleClass="quitarBordes" columns="1">
+                                    Ap. Paterno:
+                                    <p:inputText value="#{usuarioAdmBean.apPaterno}" style="width:100%"/>
+                                </p:panelGrid>
+                            </p:column>
+                            <p:column style="width: 25%;vertical-align: top">
+                                <p:panelGrid style="width:  100%" styleClass="quitarBordes" columns="1">
+                                    Ap. Materno:
+                                    <p:inputText value="#{usuarioAdmBean.apMaterno}" style="width:100%"/>
+                                </p:panelGrid>
+                            </p:column>
+                            <p:column style="width: 25%;vertical-align: top">
+                                <p:panelGrid style="width:  100%" styleClass="quitarBordes" columns="1">
+                                    Cargo:
+                                    <p:inputText value="#{usuarioAdmBean.cargo}" style="width:100%"/>
+                                </p:panelGrid>
+                            </p:column>
+                        </p:row>  
+                        <p:row>
+                            <p:column style="width: 25%;vertical-align: top">
+                                <p:panelGrid style="width:  100%"  styleClass="quitarBordes" columns="1">
+                                    Número Documento:
+                                    <p:inputText value="#{usuarioAdmBean.numeroDoc}" style="width:100%"/>
+                                </p:panelGrid>
+                            </p:column>
+                            <p:column style="width: 25%;vertical-align: top">
+                                <p:panelGrid style="width:  100%" styleClass="quitarBordes" columns="1">
+                                    Tipo Documento:
+                                   <p:selectOneMenu autoWidth="false" style="width: 190px" value="#{usuarioAdmBean.tipoDoc}"> 
+                                      <f:selectItem itemLabel="Escoge Tipo Documento" itemValue="" />
+                                      <f:selectItems value="#{usuarioAdmBean.listTipoDocumento}" 
+                                                   var="tipoDoc"
+                                                   itemLabel="#{tipoDoc.nombre}" 
+                                                   itemValue="#{tipoDoc.codigo}" />
+                                   
+                                </p:selectOneMenu>
+                                    
+                                    
+                                    
+                                </p:panelGrid>
+                            </p:column>
+                            <p:column style="width: 25%;vertical-align: top">
+                                <p:panelGrid style="width:  100%" styleClass="quitarBordes" columns="1">
+                                    Lugar Expedición:
+                                     <p:selectOneMenu autoWidth="false" style="width: 190px" value="#{usuarioAdmBean.lugarExped}"> 
+                                       <f:selectItem itemLabel="Escoge Lugar Expedicion" itemValue="" />
+                                       <f:selectItems value="#{usuarioAdmBean.listlugarExpe}" 
+                                                   var="lugar"
+                                                   itemLabel="#{lugar.nombre}" 
+                                                   itemValue="#{lugar.codigo}" />
+                                   
+                                </p:selectOneMenu>
+                                    
+                                    
+                                    
+                                    
+                                   
+                                </p:panelGrid>
+                            </p:column>
+                            <p:column style="width: 25%;vertical-align: top">
+                                <p:panelGrid style="width:  100%" styleClass="quitarBordes" columns="1">
+                                    Correo electrónico:
+                                    <p:inputText value="#{usuarioAdmBean.correoElec}" style="width:100%"/>
+                                </p:panelGrid>
+                            </p:column>
+                        </p:row>  
+                        <p:row>
+                            <p:column style="width: 25%;vertical-align: top">
+                                <p:panelGrid style="width:  100%" styleClass="quitarBordes" columns="1">
+                                    Regional:
+                                    <p:selectOneMenu autoWidth="false" style="width: 190px" value="#{usuarioAdmBean.idregional}"> 
+                                        <f:selectItems value="#{usuarioAdmBean.listRegionalUsuaro}" 
+                                                       var="reg"
+                                                       itemLabel="#{reg.nombre}" 
+                                                       itemValue="#{reg.idRegional}" />
+                                    </p:selectOneMenu>
+                                </p:panelGrid>
+                            </p:column>
+                            <p:column style="width: 25%;vertical-align: top">
+                                 <p:panelGrid style="width:  100%" styleClass="quitarBordes" columns="1">
+                                    Login:
+                                    <p:inputText value="#{usuarioAdmBean.login}" style="width:100%"/>
+                                </p:panelGrid>
+                            </p:column>
+                            <p:column style="width: 25%;vertical-align: top">
+                                 <p:panelGrid style="width:  100%" styleClass="quitarBordes" columns="1">
+                                    Contraseña:
+                                    <p:inputText value="#{usuarioAdmBean.contrasenia}" style="width:100%"/>
+                                </p:panelGrid>
+                            </p:column>
+                            
+                        </p:row>             
+                        
+                        
+                    </p:panelGrid>
+                    <!-- DibujO EL PANEL GRID  DE ROL -->
+                    <p:fieldset>
+                        <legend>Administración Rol para el Usuario</legend>
+                        <p:panelGrid style="width:  100%" id="pnLRol">
+                            
+                            <p:row>
+                                 <p:column colspan="2" style="vertical-align: top; width: 40%">
+                                     <p:panelGrid columns="2" >
+
+                                         <p:selectOneMenu autoWidth="false" style="width: 190px" value="#{usuarioAdmBean.idetapa}" > 
+                                            <f:selectItems value="#{usuarioAdmBean.listEtapas}" 
+                                                       var="et"
+                                                       itemLabel="#{et.descripcion}" 
+                                                       itemValue="#{et.idEtapa}" />
+                                            
+                                        </p:selectOneMenu>
+                                         <p:commandButton  icon="ui-icon-arrowthick-1-e" actionListener="#{usuarioAdmBean.cargaRolUsuario}" update="dtgRoles">   
+                                             
+                                         </p:commandButton>
+
+
+                                     </p:panelGrid>    
+                                     
+                                 </p:column>
+                                <p:column colspan="2" style="vertical-align: top; width: 60%">
+                                     <p:dataGrid id="dtgRoles" var="etapa" value="#{usuarioAdmBean.listEtapaUsuario}" emptyMessage="No Tiene rol alguno." 
+                                                 paginatorPosition="bottom" style="width: 100%;" columns="1" rows="1" layout="grid" paginator="true">
+                                         <p:panelGrid style="width: 100%;" columns="3">
+                                             <p:outputLabel value="Rol"/>
+                                             <p:inputText value="#{etapa.descripcion}" style="width: 98%;"/>
+                                             <p:commandButton  icon="ui-icon-minusthick" actionListener="#{usuarioAdmBean.quitaRolUsuario(etapa)}" update="dtgRoles">   
+                                           
+                                            </p:commandButton>
+                                             
+                                             
+                                             
+                                             
+                                         </p:panelGrid>
+                                     
+                                     
+                                     </p:dataGrid>
+                                    
+                                    
+                                </p:column>
+                            </p:row>
+                            
+                            
+                        </p:panelGrid>
+                    </p:fieldset>
+                    
+                    
+                    
+                    
+                    <!-- Dibujo las tablas -->
+                    <p:fieldset>
+                        <legend>Administración de Menús y Páginas</legend>
+                           <p:panelGrid style="width:  100%" id="pnlTablas">
+                               <p:row>
+                                   <p:column>
+                                       
+                                       Sistemas:
+                                        <p:selectOneMenu autoWidth="false" style="width: 190px" value="#{usuarioAdmBean.idsistema}"> 
+                                            <f:selectItems value="#{usuarioAdmBean.listSistemas}" 
+                                                       var="sis"
+                                                       itemLabel="#{sis.descripcion}" 
+                                                       itemValue="#{sis.idsistema}" />
+                                             <p:ajax event="change" listener="#{usuarioAdmBean.actualizaTablaIzqDer()}"  update="tblModulos,tblRecibido"/>
+                                        </p:selectOneMenu>
+                                   </p:column>
+                               </p:row>                 
+                               
+                               
+                               
+                               
+                               
+                               
+                               
+                               
+                               
+                               
+                               <p:row>
+                                   <p:column>
+                                       <p:panelGrid style="width:  100%" styleClass="quitarBordes">
+                                           <p:row>
+                                               <p:column style="width: 45%; vertical-align: top">
+                                                   <fieldset>
+                                                       <legend>Listado Módulos</legend>
+
+
+                                                       <p:dataTable style="border-style: groove"
+                                                                    scrollable="true" 
+                                                                    value="#{usuarioAdmBean.listMenuPagIz}" 
+                                                                    var="tra"
+                                                                    selectionMode="multiple" 
+                                                                    rowKey="#{tra.idpagina}" 
+                                                                    selection="#{usuarioAdmBean.listMenuPagIzAgarra}"
+                                                                    id="tblModulos"
+                                                                    widgetVar="wdgList"
+                                                                    scrollHeight="390"
+                                                                    scrollWidth="520"
+                                                                    rowIndexVar="index"
+                                                                    liveScroll="true" 
+                                                                    scrollRows="30"
+                                                                    >
+                                                           <p:column headerText="#" width="10">
+                                                               <h:outputText value="#{index+1}" />
+                                                           </p:column>
+                                                           <p:column headerText="Menu" width="60" >
+                                                               <h:outputText value="#{tra.menu}" />
+                                                           </p:column>
+                                                           <p:column headerText="Página" width="120">
+                                                               <h:outputText value="#{tra.pagina}" />
+                                                           </p:column>
+                                                           
+                                                       </p:dataTable>
+
+                                                       <br/>
+
+
+                                                   </fieldset>
+
+
+                                               </p:column>
+                                               <p:column style="width: 10%">
+                                                   <p:panelGrid  style="width: 100%" styleClass="quitarBordes" >
+                                                       <p:row>
+                                                           <p:column style="text-align: center">
+                                                               <p:commandButton  value="Recibir" icon="ui-icon-arrowthick-1-e"
+                                                                                 actionListener="#{usuarioAdmBean.agarraValores()}" 
+                                                                                 id="btnRecibir"
+                                                                                 disabled="#{usuarioAdmBean.desactivaRecibe}"
+                                                                                 update="tblModulos,tblRecibido">
+
+                                                               </p:commandButton><br/><br/><br/>
+
+                                                               <p:commandButton value="Devolver" icon="ui-icon-arrowthick-1-w" 
+                                                                                actionListener="#{usuarioAdmBean.devuelveValores()}" 
+                                                                                id="btnDevolver"
+                                                                                 disabled="#{usuarioAdmBean.desactivaDevuelve}"
+                                                                                update="tblModulos,tblRecibido"
+                                                                                >
+                                                                    </p:commandButton>
+
+                                                              
+
+                                                           </p:column> 
+                                                       </p:row>
+                                                   </p:panelGrid>
+                                               </p:column>
+                                               <p:column style="width: 45%; vertical-align: top">
+                                                   <fieldset>
+                                                       <legend>Modulos/Páginas Activas</legend>
+
+                                                       <p:dataTable style="border-style: groove" scrollable="true" 
+                                                                    value="#{usuarioAdmBean.listMenuPagDer}" 
+                                                                    var="recib"
+                                                                    selectionMode="multiple" 
+                                                                    id="tblRecibido"
+                                                                    selection="#{usuarioAdmBean.listMenuPagDerAgarra}"
+                                                                    rowKey="#{recib.idpagina}" 
+                                                                    widgetVar="wdgList2"
+                                                                    scrollHeight="430"
+                                                                    scrollWidth="520"
+                                                                    rowIndexVar="index1">
+
+                                                           <p:column headerText="#" width="10">
+                                                               <h:outputText value="#{index1+1}" />
+                                                           </p:column>
+                                                           <p:column headerText="Sistema" width="50">
+                                                               <h:outputText value="#{recib.sistema}" />
+                                                           </p:column>
+                                                           <p:column headerText="Menu" width="60">
+                                                               <h:outputText value="#{recib.menu}" />
+                                                           </p:column>
+                                                           <p:column headerText="Pagina" width="120">
+                                                               <h:outputText value="#{recib.pagina}" />
+                                                           </p:column>
+                                                           <p:column headerText="Muestra" width="35">
+                                                               <p:selectOneMenu autoWidth="false" style="width: 40px" value="#{recib.muestra}"> 
+                                                                    <f:selectItem itemLabel="Si" itemValue="true" />
+                                                                    <f:selectItem itemLabel="No" itemValue="false" />
+                                                               </p:selectOneMenu>
+                                                               
+                                                           </p:column>   
+                                                           <p:column headerText="Habilitado" width="35">
+                                                               <p:selectOneMenu autoWidth="false" style="width: 40px" value="#{recib.estado}"> 
+                                                                    <f:selectItem itemLabel="Si" itemValue="AC" />
+                                                                    <f:selectItem itemLabel="No" itemValue="NA" />
+                                                               </p:selectOneMenu>
+                                                               
+                                                           </p:column>   
+                                                           
+                                                       </p:dataTable>
+
+                                                   </fieldset>
+
+                                               </p:column>
+                                           </p:row> 
+
+
+                                       </p:panelGrid> 
+
+
+
+
+
+                                   </p:column>             
+                               </p:row>       
+                          </p:panelGrid>              
+                        
+                                            
+                    </p:fieldset>
+                     <!-- Dibujo los bootnes de adicioan modificacion eliminacion -->
+                     <div align="center">
+                    <p:panelGrid style="width:  40%;" id="pnlBotones" columns="3" >
+                        <p:commandButton value="Crea" icon="ui-icon-arrowthick-1-w" 
+                                         actionListener="#{usuarioAdmBean.creaUsuario()}"
+                                         id="btnCrea"
+                                         disabled="#{usuarioAdmBean.desactivaCrea}"
+                                         update="@form"
+                                       
+                                         >
+                            <p:confirm header="Confirmación" message="¿Está seguro(a) de realizar la adición?" icon="ui-icon-alert" />
+                        </p:commandButton>
+                        <p:commandButton value="Modifica" icon="ui-icon-arrowthick-1-w" 
+                                         actionListener="#{usuarioAdmBean.modificaUsuario()}"
+                                         id="btnModifica"
+                                         disabled="#{usuarioAdmBean.desactivaModifica}"
+                                         update="@form"
+                                         >
+                                <p:confirm header="Confirmación" message="¿Está seguro(a) de realizar la modificacion?" icon="ui-icon-alert" />
+                        </p:commandButton>
+                        <p:commandButton value="Elimina" icon="ui-icon-arrowthick-1-w" 
+                                         actionListener="#{usuarioAdmBean.eliminaUsuario()}"
+                                         id="btnElimina"
+                                         disabled="#{usuarioAdmBean.desactivaElimina}"
+                                         update="@form"
+
+                                         >
+                            <p:confirm header="Confirmación" message="¿Está seguro(a) de realizar la eliminación?" icon="ui-icon-alert" />
+                        </p:commandButton>
+                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                    <div align="center">
+                                        <p:panelGrid columns="3"  styleClass="quitarBordes">
+                                            <p:commandButton value="Aceptar" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                            <p:spacer width="1"/>
+                                            <p:commandButton value="Cancelar" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                        </p:panelGrid>
+                                    </div>
+
+                                </p:confirmDialog>
+                    </p:panelGrid>
+                         </div>
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                </h:form>
+                </ui:define>
+        </ui:composition>
+    </body>
+
+
+</html>

@@ -1,0 +1,1443 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <body>
+
+        <ui:composition template="#{examenSignosBean.template}">
+            <ui:define name="content">   
+                <h:form id="frmIngresoSigno">
+                    <p:growl id="msg" life="10000"/>
+                    <p:panelGrid style="width: 100%; height: 100%;" styleClass="quitarBordes">  
+                        <p:panelGrid style="width: 100%;" styleClass="quitarBordes">
+                            <p:row>
+                                <p:column style="width: 100%;" colspan="2">
+                                    <p:outputPanel style="padding-bottom: 0px; padding-top: 0px; padding-left:10px; padding-right: 10px;">
+                                        <table>
+                                            <tr valign="middle">
+                                                <td><p:graphicImage library="images" name="flechaTituloAzul.png" width="24" height="24"></p:graphicImage></td>
+                                                <td><p:outputLabel value="Expediente signo distintivo" styleClass="tituloPrincipalFuente"></p:outputLabel></td>
+                                            </tr>
+                                        </table>                    
+                                        <p:separator id="sepTitulo" style="border: 1px #045491 inset;"></p:separator>                    
+                                    </p:outputPanel>                                
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                        <p:panelGrid style="width: 100%;" styleClass="quitarBordes">
+                            <!--DE LA PARTE DE ARRIBA-->
+                            <p:row>
+                                <p:column style="vertical-align: top; width: 50%;">
+                                    <h:panelGrid styleClass="quitarBordes" style="width: 100%;">
+                                        <p:row >
+                                            <p:column style="vertical-align: top; width: 10%;">
+                                                <p:selectOneRadio  layout="grid" columns="1"
+                                                                   id="valorOperacionFormulario"
+                                                                   value="#{examenSignosBean.valorRadioOperacionFormulario}">
+                                                    <f:selectItem itemValue="ADD" itemLabel="Adicionar" itemDisabled="#{examenSignosBean.pintaAdiciona}"/>
+                                                    <f:selectItem itemValue="MOD" itemLabel="Modificar" itemDisabled="#{examenSignosBean.pintaModifica}"/>
+                                                    <f:selectItem itemValue="CON" itemLabel="Consultar"/>
+                                                    <!--                                                    <p:ajax listener="# {examenSignosBean.cambiaOpcionesFormulario()}"
+                                                                                                                event="change" update="frmIngresoSigno" process="valorOperacionFormulario" />-->
+                                                    <p:ajax listener="#{examenSignosBean.cambiaOpcionesFormulario()}"
+                                                            event="change"
+                                                            update=":frmIngresoSigno:btnModificarRegistro :frmIngresoSigno:btnAdicionarRegistro :frmIngresoSigno:pnlDatosSM"
+                                                            process="valorOperacionFormulario" />
+                                                </p:selectOneRadio>
+                                            </p:column>
+                                            <p:column style="vertical-align: top; width: 20%;">
+                                                <p:selectOneRadio  id="valorCriterioBusqueda"
+                                                                   value="#{examenSignosBean.valorRadioBuscador}"
+                                                                   layout="grid" columns="1"
+                                                                   style="display: block; width: 145px"
+                                                                   required="true">
+                                                    <f:selectItem itemValue="soma" itemLabel="Solicitud de marca"/>
+                                                    <f:selectItem itemValue="nupu" itemLabel="N° publicación"/>
+                                                    <f:selectItem itemValue="nure" itemLabel="N° registro"/>
+                                                    <p:ajax listener="#{examenSignosBean.modificarCriterioBusqueda()}"
+                                                            event="change" update=":frmIngresoSigno:opciones" process="valorCriterioBusqueda"></p:ajax>
+                                                </p:selectOneRadio>
+                                            </p:column>
+                                            <p:column style="vertical-align: middle; width: 50%;">                                                      
+                                                <h:panelGrid columns="4" id="opciones">
+                                                    <p:panelGrid columns="1" style="text-align: center" id="pnlNumero">
+                                                         <p:focus context="pnlNumero"/>
+                                                        <p:inputText id="txtnumero"  value="#{examenSignosBean.numeroExpediente}" 
+                                                                     style="height: 20px;background: #add3d8 !important; vertical-align: central; text-align: center; width: 95%; font-weight: bold; font-size: large"/>
+                                                        <p:outputLabel value="Número" />
+                                                    </p:panelGrid>
+                                                    <p:panelGrid columns="1"  rendered="#{examenSignosBean.buscarSMRendered}" style="text-align: center">
+                                                        <p:inputText id="txtgestion"  value="#{examenSignosBean.gestionExpediente}" 
+                                                                     style="height: 20px;background: #add3d8  !important; vertical-align: central; text-align: center; width: 90%; font-weight: bold;font-size: large"/>
+                                                        <p:outputLabel value="Gestión"/>
+                                                    </p:panelGrid>
+                                                    <p:panelGrid columns="1"  style="text-align: center"
+                                                                 rendered="#{examenSignosBean.buscarSMRendered || examenSignosBean.buscarRERendered}">
+                                                        <p:inputText id="txtextension"  value="#{examenSignosBean.extensionExpediente}" 
+                                                                     style="height: 20px;background: #add3d8  !important; vertical-align: central; text-align: center; width: 50%; font-weight: bold;font-size: large"/>
+                                                        <p:outputLabel value="Extensión"/>
+                                                    </p:panelGrid>
+                                                    <p:panelGrid>
+                                                        <p:commandButton value="Buscar" style="height: 50px;"
+                                                                         icon="ui-icon-search"
+                                                                         actionListener="#{examenSignosBean.accionBuscarExpediente()}"
+                                                                         update=":frmIngresoSigno:pnlNumeroFormulario
+                                                                         :frmIngresoSigno:pnlDatosOficina :frmIngresoSigno:pnlDatosMarca
+                                                                         :frmIngresoSigno:msg :frmIngresoSigno:pnldatosAdministrativos
+                                                                         :frmIngresoSigno:pnlbotonesInferior :frmIngresoSigno:pnlDatosComplementariosMarca
+                                                                         :frmIngresoSigno:imgTodo :frmIngresoSigno:btnDiseño :frmIngresoSigno:btnDisenioEli
+                                                                         :frmIngresoSigno:pnlbotonesInferior :frmIngresoSigno:pnlDatosComplementariosMarca
+                                                                         :frmIngresoSigno:pnlPrioridades :frmIngresoSigno:pnlModificaciones"
+                                                                         >
+
+                                                        </p:commandButton>    
+                                                    </p:panelGrid>
+                                                </h:panelGrid> 
+
+                                                <p:panelGrid style="padding-left: 3%" id="pnlDatosOficina">
+                                                    <p:row>
+                                                        <p:column style="width: 15%;">
+
+                                                        </p:column>
+                                                        <p:column style="width: 10%;">
+                                                            <p:outputLabel value="Oficina:" />
+                                                        </p:column>
+                                                        <p:column style="width: 80%;">
+                                                            <p:selectOneMenu value="#{examenSignosBean.regional}" autoWidth="false" style="width: 80px">
+                                                                <f:selectItem itemLabel="Elegir" itemValue=""/>
+                                                                <f:selectItems value="#{examenSignosBean.lstOficina}" 
+                                                                               var="oficina"
+                                                                               itemLabel="#{oficina.nombre}"
+                                                                               itemValue="#{oficina.codigo}"/>
+                                                                <f:validateLength minimum="0"/>
+                                                            </p:selectOneMenu>
+                                                        </p:column>
+                                                    </p:row>                                
+                                                </p:panelGrid>
+                                            </p:column>
+                                        </p:row>
+                                    </h:panelGrid>
+                                </p:column>
+                                <p:column style="vertical-align: middle; width: 50%;">  
+                                    <p:panelGrid styleClass="quitarBordes" style="width: 100%;" id="pnl">
+                                        <p:row style="width: 100%;">
+                                            <p:column style="vertical-align: top;text-align: center; width: 60%">
+                                                <p:panelGrid columns="3">
+                                                    <p:commandButton value="Anterior" style="height: 50px;"
+                                                                     icon="ui-icon-triangle-1-w"
+                                                                     actionListener="#{examenSignosBean.accionBuscarAnteriorExpediente()}"
+                                                                     update=":frmIngresoSigno:txtnumero :frmIngresoSigno:txtgestion
+                                                                     :frmIngresoSigno:txtextension
+                                                                     :frmIngresoSigno:pnlDatosOficina :frmIngresoSigno:pnlDatosMarca
+                                                                     :frmIngresoSigno:msg :frmIngresoSigno:pnldatosAdministrativos
+                                                                     :frmIngresoSigno:pnlbotonesInferior :frmIngresoSigno:pnlDatosComplementariosMarca
+                                                                     :frmIngresoSigno:pnlNumeroFormulario frmIngresoSigno:pnlPrioridades">
+                                                    </p:commandButton>    
+
+
+                                                    <p:commandButton value="Siguiente"
+                                                                     style="height: 50px;"
+                                                                     icon="ui-icon-triangle-1-e"
+                                                                     actionListener="#{examenSignosBean.accionBuscarSiguienteExpediente()}"
+                                                                     update=":frmIngresoSigno:txtnumero :frmIngresoSigno:txtgestion
+                                                                     :frmIngresoSigno:txtextension
+                                                                     :frmIngresoSigno:pnlDatosOficina :frmIngresoSigno:pnlDatosMarca
+                                                                     :frmIngresoSigno:msg :frmIngresoSigno:pnldatosAdministrativos
+                                                                     :frmIngresoSigno:pnlbotonesInferior :frmIngresoSigno:pnlDatosComplementariosMarca
+                                                                     :frmIngresoSigno:pnlNumeroFormulario frmIngresoSigno:pnlPrioridades" 
+                                                                     >
+                                                    </p:commandButton>
+
+                                                    <p:commandButton  value="Limpiar" style="height: 50px;" icon="ui-icon-document"
+                                                                      actionListener="#{examenSignosBean.reset()}" update="@form">
+                                                    </p:commandButton>    
+                                                </p:panelGrid>
+
+
+                                            </p:column>
+                                            <p:column style="vertical-align: middle; ">
+                                                <p:panelGrid columns="2" >                                                   
+                                                    <p:commandButton value="Seguimiento"  style="height: 50px" icon="ui-icon-folder-open"
+                                                                     actionListener="#{examenSignosBean.abrirSeguimiento()}" update="msg">
+                                                        <p:ajax event="dialogReturn"  listener="#{examenSignosBean.terminaDialogoSeguimiento}" />
+                                                    </p:commandButton>  
+
+                                                    <p:commandButton value="Historial" style="height: 50px;" icon="ui-icon-script" update="msg"
+                                                                     actionListener="#{examenSignosBean.abrirHistorial()}">
+                                                    </p:commandButton>
+
+                                                </p:panelGrid>
+
+                                            </p:column>
+                                        </p:row>
+                                        <p:row>
+
+                                            <p:column style="text-align: right">
+
+                                            </p:column>
+                                            <p:column style="text-align: right">
+                                                <p:panelGrid id="pnlNumeroFormulario" columns="2" style="text-align: right">
+                                                    <p:outputLabel value="No. formulario:"/>
+                                                    <p:outputLabel value="#{examenSignosBean.numeroFormulario}" style="font-weight: bold;color: #650e0b;text-align: center; font-size: 14px !important"/>
+                                                </p:panelGrid>
+                                            </p:column>
+
+                                        </p:row>
+                                    </p:panelGrid>
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+
+
+                        <!--PRIMER ROW-->
+                        <p:panelGrid style="width: 100%;"  id="pnlDatosMarca" styleClass="quitarBordes" >
+                            <p:row>
+                                <p:column style="vertical-align: top;width: 45%">
+
+                                    <fieldset style="width: 95%;">
+                                        <legend>
+                                            <p:outputLabel value="Datos del signo distintivo solicitado"/>
+                                        </legend>
+                                        <p:panelGrid style="width: 100%;" styleClass="quitarBordes">
+                                            <p:row>
+                                                <p:column style="width: 10%;">
+                                                    <p:outputLabel value="SM:" style="font-weight: bold"/>
+                                                </p:column>
+                                                <p:column style="width: 40%;">
+                                                    <p:outputLabel id="pnlDatosSM">
+                                                        <p:inputText value="#{examenSignosBean.valorNumeroExpediente}" 
+                                                                     disabled="#{examenSignosBean.btnAdicionarDisabled}"
+                                                                     style="width: 35%;font-weight: bold; color: #ffffff;text-align: center; font-size: 16px !important; background: #292929 !important"  /><p:spacer width="2"></p:spacer>
+                                                        <p:inputText value="#{examenSignosBean.valorGestionExpediente}" 
+                                                                     disabled="#{examenSignosBean.btnAdicionarDisabled}"
+                                                                     style="width: 25%;font-weight: bold; color: #ffffff;text-align: center;font-size: 16px  !important; background: #292929 !important" /><p:spacer width="2"></p:spacer>
+                                                        <p:inputText value="#{examenSignosBean.valorExtensionExpediente}" 
+                                                                     disabled="#{examenSignosBean.btnAdicionarDisabled}"
+                                                                     style="width: 10%; text-align: center;font-weight: bold; color: #ffffff;font-size: 16px  !important; background: #292929 !important"/>                                            
+                                                    </p:outputLabel>
+                                                </p:column>
+                                                <p:column style="width: 50%;" colspan="3">
+                                                    <p:panelGrid style="width: 100%;">
+                                                        <p:row>
+                                                            <p:column style="width: 100%;">
+                                                                <p:outputLabel value="N° recibo oficial:"></p:outputLabel>
+                                                            </p:column>
+                                                        </p:row>
+                                                        <p:row>
+                                                            <p:column style="width: 100%;">
+                                                                <p:panelGrid columns="3">
+                                                                    <p:selectBooleanCheckbox value="#{examenSignosBean.valorOpcionRecibo}"></p:selectBooleanCheckbox>
+                                                                    <p:inputText value="#{examenSignosBean.valorNumeroRecibo}" style="width: 50px;"></p:inputText>
+                                                                    <p:inputText value="#{examenSignosBean.valorSerieRecibo}"  style="width: 50%;"></p:inputText>
+                                                                </p:panelGrid>
+
+
+                                                            </p:column>
+                                                        </p:row>
+                                                    </p:panelGrid>
+                                                </p:column>                              
+                                            </p:row>
+
+                                            <p:row>
+                                                <p:column style="width: 15%;">
+                                                    <p:outputLabel value="Marca:" style="font-weight: bold"/>
+                                                </p:column>
+                                                <p:column colspan="4" style="width: 85%;">
+                                                    <p:inputTextarea rows="2" value="#{examenSignosBean.valorMarca}"  style="width: 98%"
+                                                                     styleClass="tituloMarca"/>
+                                                </p:column>
+                                            </p:row>
+
+                                            <p:row>
+                                                <p:column style="width: 15%;">
+                                                    <p:outputLabel value="Descripción:" style="font-weight: bold"/>
+                                                </p:column>
+                                                <p:column colspan="3" style="width: 65%;">
+                                                    <p:inputTextarea style="width: 98%;" rows="4" value="#{examenSignosBean.valorDescripcionSigno}" autoResize="false"/>
+                                                </p:column>
+                                                <p:column style="width: 20%;">
+                                                    <p:panelGrid style="width: 100%;">
+                                                        <p:row>
+                                                            <p:column> 
+                                                                <p:outputLabel value="N° Titulo" style="font-weight: bold; display: block; width: 55px"/>
+                                                            </p:column>
+                                                        </p:row>
+                                                        <p:row>
+                                                            <p:column>
+                                                                <p:inputText value="#{examenSignosBean.valorNumeroTitulo}" style="width: 90%"/>
+                                                            </p:column>                                            
+                                                        </p:row>
+                                                    </p:panelGrid>
+                                                </p:column>
+                                            </p:row>
+
+                                            <p:row>
+                                                <p:column style="width: 15%;">
+                                                    <p:outputLabel value="Género:" style="font-weight: bold"/>
+                                                </p:column>
+                                                <p:column style="width: 75%;">
+                                                    <p:selectOneMenu  value="#{examenSignosBean.valorTipoGenero}" autoWidth="false" style="width: 150px">
+                                                        <f:selectItems value="#{examenSignosBean.lstTipoGenero}" var="tipogenero"
+                                                                       itemLabel="#{tipogenero.nombre}" itemValue="#{tipogenero.codigo}"/>
+                                                    </p:selectOneMenu>
+                                                </p:column>
+                                                <p:column rowspan="2" >
+                                                    <p:outputPanel id="imgTodo">
+                                                        <p:galleria id="imagenCargadaGaleria" 
+                                                                    value="#{examenSignosBean.lstImagenPojos}"
+                                                                    var="image" panelWidth="170" panelHeight="170" 
+                                                                    rendered="#{examenSignosBean.renderDenomina}"
+                                                                    showCaption="false" showFilmstrip="false"
+                                                                    >
+                                                            <p:graphicImage id="itemImagen" value="/temp/#{image.sigLogoTipo.nombreArchivo}" 
+                                                                            title="#{image.sigLogoTipo.nombreArchivo}" 
+                                                                            width="170"
+                                                                            height="170"
+                                                                            cache="false"
+                                                                            />
+                                                        </p:galleria>
+                                                    </p:outputPanel>
+                                                </p:column>
+                                                <p:column colspan="2"  style="vertical-align: top">
+                                                    <p:selectOneMenu  value="#{examenSignosBean.valorSerieTitulo}" autoWidth="true">
+                                                        <f:selectItems value="#{examenSignosBean.lstSerieTitulo}" var="serieTitulo"
+                                                                       itemLabel="#{serieTitulo.nombre}" itemValue="#{serieTitulo.codigo}" />
+                                                    </p:selectOneMenu>
+                                                    <br />  <br /> 
+                                                    <p:outputPanel id="btnDiseño">
+                                                        <p:commandButton value="Diseño"  icon="ui-icon-image"
+                                                                         style="width: 95%; height: 40px;"
+                                                                         actionListener="#{examenSignosBean.abrirDialogoAgregarModificarImagen}"
+                                                                         update=":frmIngresoSigno:msg"
+                                                                         rendered="#{examenSignosBean.renderDenomina}"
+                                                                         >
+                                                            <p:ajax event="dialogReturn"
+                                                                    listener="#{examenSignosBean.terminaDialogoImagen}"
+                                                                    update=":frmIngresoSigno:msg :frmIngresoSigno:imagenCargadaGaleria"
+                                                                    />
+                                                        </p:commandButton>
+                                                    </p:outputPanel>
+                                                </p:column>
+                                            </p:row>
+
+                                            <p:row>
+                                                <p:column style="width: 15%;">
+                                                    <p:outputLabel value="Tipo Signo:" style="font-weight: bold"/>
+                                                </p:column>
+                                                <p:column>
+                                                    <h:panelGrid columns="1" cellpadding="5">
+                                                        <p:selectCheckboxMenu id="menuTipoSigno" value="#{examenSignosBean.valorTipoSignoSeleccionado}"
+                                                                              label="#{examenSignosBean.tipoSignoDescripcion}"
+                                                                              filter="true"
+                                                                              filterMatchMode="startsWith"
+                                                                              panelStyle="width:250px"  >
+                                                            <f:selectItems value="#{examenSignosBean.lstTipoSigno}" 
+                                                                           var="tipoSigno"
+                                                                           itemLabel="#{tipoSigno.nombre}" itemValue="#{tipoSigno.codigo}"/>
+                                                            <p:ajax event="toggleSelect" listener="#{examenSignosBean.muestraOtro()}"
+                                                                    update="display imgTodo btnDiseño btnDisenioEli"
+
+                                                                    />
+                                                            <p:ajax event="change" listener="#{examenSignosBean.muestraOtro()}"
+                                                                    update="display imgTodo btnDiseño btnDisenioEli"
+
+                                                                    />
+                                                        </p:selectCheckboxMenu>
+                                                    </h:panelGrid>
+                                                    <p:outputPanel id="display" style="width:70px;padding-left:0px;margin-top:1px">
+                                                        <p:outputLabel value="Otro:"
+                                                                       style="display: block; width: 78px" rendered="#{examenSignosBean.txtOtroRendered}" />
+
+                                                        <p:inputText value="#{examenSignosBean.valorTipoSignoOtro}"
+                                                                     rendered="#{examenSignosBean.txtOtroRendered}"
+                                                                     style="width: 160px"/>
+
+                                                    </p:outputPanel>
+
+                                                </p:column>
+                                                <p:column colspan="2">
+                                                    <p:outputPanel id="btnDisenioEli">
+                                                        <p:commandButton actionListener="#{examenSignosBean.accionEliminarImagen()}"
+                                                                         value="Eliminar Diseño"
+                                                                         style="width:95%; height: 40px;"
+                                                                         update=":frmIngresoSigno:msg :frmIngresoSigno:imagenCargadaGaleria"
+                                                                         rendered="#{examenSignosBean.renderDenomina}"
+                                                                         />
+
+
+                                                    </p:outputPanel>
+                                                </p:column>
+                                            </p:row>
+                                        </p:panelGrid>
+                                        <p:panelGrid style="width: 100%;" styleClass="quitarBordes">
+                                            <p:row>
+                                                <p:column style="width: 30%;" >
+                                                    <p:outputLabel value="Fecha de Ingreso:" style="font-weight: bold"/>
+                                                </p:column>
+
+                                                <p:column colspan="3" style="width: 70%;">
+
+                                                    <p:calendar pattern="#{sessionState.formatoFechaHora}" mask="true"
+                                                                value="#{examenSignosBean.valorFechaIngreso}" style="width: 2%" 
+                                                                />
+                                                </p:column>
+                                            </p:row>
+
+                                            <p:row>
+                                                <p:column style="width: 35%;">
+                                                    <p:outputLabel value="Descripción de diseño:" style="font-weight: bold"/>
+                                                </p:column>                                       
+                                                <p:column colspan="4">
+                                                    <p:inputTextarea autoResize="false"
+                                                                     style="width: 98%;"
+                                                                     rows="2"
+                                                                     value="#{examenSignosBean.valorDescripcionDisenio}">
+
+                                                    </p:inputTextarea>
+                                                </p:column>
+                                            </p:row>
+
+
+                                            <p:row>                                        
+                                                <p:column colspan="5" >
+                                                    <p:outputPanel id="pnlAdministracionClaseNiza">
+
+                                                        <fieldset>
+                                                            <legend>
+                                                                <p:outputLabel>Datos de la clase</p:outputLabel>
+                                                            </legend>
+                                                            <div align="center">
+                                                                <p:commandButton value="Agregar clase niza"
+                                                                                 icon="ui-icon-circle-plus"
+                                                                                 actionListener="#{examenSignosBean.abrirDialogoListaClaseNiza()}"
+                                                                                 immediate="true"
+                                                                                 rendered="#{examenSignosBean.lstSigSignoClaseNiza.size()==0}"
+                                                                                 update=":frmIngresoSigno:pnlDatosClaseNiza"
+                                                                                 id="btnAdicionaClaseNiza"
+                                                                                 >
+                                                                    <p:ajax event="dialogReturn"
+                                                                            update=":frmIngresoSigno:msg :frmIngresoSigno:pnlDatosClaseNiza
+                                                                            :frmIngresoSigno:pnlAdministracionClaseNiza"
+                                                                            listener="#{examenSignosBean.terminaDialogoAgregarClaseNiza}"
+                                                                            />
+                                                                </p:commandButton>
+
+                                                            </div>
+
+                                                            <p:dataGrid var="niza" value="#{examenSignosBean.lstSigSignoClaseNiza}"
+                                                                        emptyMessage="No se tienen clases niza"
+                                                                        id="pnlDatosClaseNiza"
+                                                                        paginatorPosition="bottom"
+                                                                        style="width: 100%"
+                                                                        columns="1"
+                                                                        rows="1"
+                                                                        layout="grid"
+                                                                        paginator="true">
+                                                                <p:panelGrid style="width: 100%">
+                                                                    <p:row>
+                                                                        <p:column rowspan="2"><p:outputLabel value="Clase:  " style="font-weight: bold"/> #{niza.numeroClaseNiza}<br/><br/>
+                                                                            <p:outputLabel value="Clasificador:  " style="font-weight: bold"/> #{examenSignosBean.devuelveVersion(niza)}
+                                                                        </p:column>
+                                                                    </p:row>
+                                                                    <p:row>
+                                                                        <p:column><p:inputTextarea  value="#{niza.listaProducto}" style="width: 98%" scrollHeight="5" rows="5"
+                                                                                                    autoResize="false"/></p:column>
+                                                                    </p:row>
+
+                                                                    <p:row>
+                                                                        <p:column colspan="2" style="width: 100%; text-align: center">
+                                                                            <p:commandButton value="Agregar" 
+                                                                                             icon="ui-icon-circle-plus" 
+                                                                                             rendered="true" 
+                                                                                             actionListener="#{examenSignosBean.abrirDialogoListaClaseNiza()}" 
+                                                                                             update=":frmIngresoSigno:pnlDatosClaseNiza"
+                                                                                             immediate="true">
+                                                                                <p:ajax event="dialogReturn"
+                                                                                        listener="#{examenSignosBean.terminaDialogoAgregarClaseNiza}"
+                                                                                        update=":frmIngresoSigno:msg :frmIngresoSigno:pnlDatosClaseNiza
+                                                                                        :frmIngresoSigno:pnlAdministracionClaseNiza"/>
+                                                                            </p:commandButton>
+                                                                            <p:spacer width="10"/>
+                                                                            <p:commandButton value="Modificar" 
+                                                                                             icon="ui-icon-pencil" 
+                                                                                             rendered="true"
+                                                                                             actionListener="#{examenSignosBean.abrirDialogoModificarClaseNiza(niza)}" 
+                                                                                             update=":frmIngresoSigno:pnlDatosClaseNiza"
+                                                                                             immediate="true">
+
+                                                                                <p:ajax event="dialogReturn"  
+                                                                                        listener="#{examenSignosBean.finalizarDialogoModificarClaseNiza}"
+                                                                                        update=":frmIngresoSigno:msg :frmIngresoSigno:pnlDatosClaseNiza"/>
+                                                                            </p:commandButton>
+
+                                                                            <p:spacer width="10"/>
+                                                                            <p:commandButton value="Eliminar"
+                                                                                             icon="ui-icon-circle-minus"
+                                                                                             update=":frmIngresoSigno:pnlDatosClaseNiza
+                                                                                             :frmIngresoSigno:pnlAdministracionClaseNiza"
+                                                                                             immediate="true"
+                                                                                             actionListener="#{examenSignosBean.borrarSigSignoClaseNiza(niza)}"></p:commandButton>
+                                                                        </p:column>
+
+                                                                    </p:row>
+
+                                                                </p:panelGrid>
+
+
+
+                                                            </p:dataGrid>
+                                                        </fieldset>
+
+
+
+                                                    </p:outputPanel>
+                                                </p:column>
+                                            </p:row>
+                                        </p:panelGrid>
+                                    </fieldset> 
+                                </p:column>
+                                <p:column style="vertical-align: top;width: 60%">
+                                    <p:outputPanel id="pnlAdministracionSolicitante">
+                                        <fieldset style="width: 94%">
+                                            <legend>
+                                                <p:outputLabel value="Datos del solicitante o titular"/> 
+                                            </legend>
+
+                                            <div align="center">
+                                                <p:commandButton  
+                                                    value="Agregar" 
+                                                    icon="ui-icon-circle-plus" 
+                                                    actionListener="#{examenSignosBean.abrirDialogoSolicitantes()}"
+                                                    immediate="true"
+                                                    update=":frmIngresoSigno:msg"
+                                                    rendered="#{examenSignosBean.lstSolicitantes.size()==0}">
+                                                    <p:ajax event="dialogReturn"
+                                                            listener="#{examenSignosBean.terminaDialogoSolicitante}"
+                                                            update=":frmIngresoSigno:msg :frmIngresoSigno:pnlAdministracionSolicitante"/>
+                                                </p:commandButton>
+                                            </div>
+
+                                            <p:dataGrid  var="per" value="#{examenSignosBean.lstSolicitantes}" 
+                                                         emptyMessage="No existen solicitantes" style="width: 100%;" id="pnlDatosSolicitante"
+                                                         columns="1" rows="1" layout="grid" paginator="true" paginatorPosition="bottom"
+                                                         >                                            
+                                                <p:panelGrid >
+                                                    <p:column  style="width: 10%;">
+                                                        <p:outputLabel value="Solicitante:" style="font-weight: bold;"></p:outputLabel>
+                                                    </p:column>
+                                                    <p:column colspan="3" style="width: 90%;"  >
+                                                        <p:outputLabel styleClass="fondoInput"
+                                                                       value="#{examenSignosBean.devuelveNombreJuridicoONatural(per.nombreRazonSocial, per.primerApellido, per.segundoApellido)}"
+                                                                       >
+                                                        </p:outputLabel>
+                                                    </p:column>
+                                                    <p:row>
+                                                        <p:column style="width: 10%;"><p:outputLabel value="N° Doc." style="font-weight: bold"></p:outputLabel></p:column>
+                                                        <p:column style="width: 40%;"  styleClass="fondoInput"><p:outputLabel value="#{per.numeroDocumento}"></p:outputLabel></p:column>
+                                                        <p:column style="width: 10%;"><p:outputLabel value="Tipo Doc." style="display: block; width: 65px; font-weight: bold"></p:outputLabel></p:column>
+                                                        <p:column style="width: 40%;"  styleClass="fondoInput"><p:outputLabel value="#{examenSignosBean.devuelveTipoDocumento(per.tipoDocumento)}" style="width: 100%"></p:outputLabel></p:column>                                                
+                                                    </p:row>
+                                                    <p:row rendered="#{per.tipoTitular=='NAT'}">
+                                                        <p:column style="width: 10%;"><p:outputLabel value="Genero:" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                        <p:column style="width: 40%;"  styleClass="fondoInput"><p:outputLabel value="#{examenSignosBean.devuelveGenero(per.genero)}"></p:outputLabel></p:column>   
+                                                        <p:column style="width: 10%;"><p:outputLabel value="Lugar Exp." style="display: block;width: 70px; font-weight: bold;" rendered="#{per.tipoDocumento=='CI'}"></p:outputLabel></p:column>
+                                                        <p:column style="width: 40%;"  styleClass="fondoInput"><p:outputLabel value="#{examenSignosBean.devuelveLugarExpedicion(per.lugarExpedicion)}" ></p:outputLabel></p:column> 
+                                                    </p:row>
+                                                    <p:row>
+                                                        <p:column style="width: 10%;"><p:outputLabel value="Pais:" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                        <p:column style="width: 40%;"  styleClass="fondoInput"><p:outputLabel value="#{examenSignosBean.devuelvePais(per.pais)}"></p:outputLabel></p:column>
+                                                        <p:column style="width: 10%;"><p:outputLabel value="Departamento:" style="font-weight: bold;" rendered="#{per.pais=='BO'}"></p:outputLabel> </p:column>
+                                                        <p:column style="width: 40%;"  styleClass="fondoInput"><p:outputLabel value="#{examenSignosBean.devuelveLugarExpedicion(per.solicitudDepartamento)}" ></p:outputLabel></p:column>                                                
+                                                    </p:row>
+                                                    <p:row>
+                                                        <p:column style="width: 10%;"><p:outputLabel value="Telefono:" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                        <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{per.telefono}" ></p:outputLabel></p:column>
+                                                        <p:column colspan="2">
+
+                                                        </p:column>
+                                                    </p:row>
+                                                    <p:row>
+                                                        <p:column style="width: 10%;"><p:outputLabel value="Celular:" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                        <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{per.celular}"></p:outputLabel></p:column>
+                                                        <p:column style="width: 10%;"><p:outputLabel value="Fax:" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                        <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{per.fax}" ></p:outputLabel></p:column>                                                
+                                                    </p:row>
+                                                    <p:row>
+                                                        <p:column  style="width: 10%;"><p:outputLabel value="Dirección:" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                        <p:column colspan="3" style="width: 90%;" ><p:outputLabel value="#{per.direccion}" style="width: 98%;" styleClass="fondoInput"></p:outputLabel></p:column>
+                                                    </p:row>
+
+                                                    <p:row>
+                                                        <p:column style="width: 10%;"><p:outputLabel value="E-mail:" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                        <p:column colspan="3" style="width: 90%;"><p:outputLabel value="#{per.email}" style="width: 98%;" styleClass="fondoInput"></p:outputLabel></p:column>
+                                                    </p:row>
+                                                    <p:row>
+                                                        <p:column colspan="6" style="width: 100%; text-align: center">
+                                                            <p:commandButton rendered="true" value="Agregar" icon="ui-icon-circle-plus"
+                                                                             actionListener="#{examenSignosBean.abrirDialogoSolicitantes()}" 
+                                                                             update=":frmIngresoSigno:msg" immediate="true">
+                                                                <p:ajax event="dialogReturn"
+                                                                        listener="#{examenSignosBean.terminaDialogoSolicitante}"
+                                                                        update=":frmIngresoSigno:msg :frmIngresoSigno:pnlAdministracionSolicitante"/>
+                                                            </p:commandButton>
+                                                            <p:spacer width="10"/>
+                                                            <p:commandButton value="Modificar" icon="ui-icon-pencil" immediate="true"
+                                                                             actionListener="#{examenSignosBean.abrirDialogoModificarSolicitante(per)}" 
+                                                                             update=":frmIngresoSigno:msg"
+                                                                             rendered="true">
+                                                                <p:ajax event="dialogReturn"  listener="#{examenSignosBean.finalizarDialogoModificar}"
+                                                                        update=":frmIngresoSigno:msg :frmIngresoSigno:pnlAdministracionSolicitante"/>
+                                                            </p:commandButton>
+
+                                                            <p:spacer width="10"/>
+                                                            <p:commandButton value="Eliminar" icon="ui-icon-circle-minus"
+                                                                             update=":frmIngresoSigno:pnlAdministracionSolicitante"
+                                                                             immediate="true"
+                                                                             actionListener="#{examenSignosBean.borrarSolicitante(per)}"></p:commandButton>
+                                                        </p:column>
+
+                                                    </p:row>
+                                                </p:panelGrid>                                                            
+                                            </p:dataGrid>                                                        
+                                        </fieldset>
+                                    </p:outputPanel>
+
+                                    <p:outputPanel id="pnlAdministracionApoderado" style="padding-top: 1%">
+                                        <fieldset style="width: 94%">
+                                            <legend>
+                                                <p:outputLabel value="Datos del apoderado o representante legal"></p:outputLabel>
+                                            </legend>
+                                            <div align="center">
+                                                <p:commandButton  value="Agregar"
+                                                                  icon="ui-icon-circle-plus"
+                                                                  actionListener="#{examenSignosBean.abrirDialogoApoderado()}" 
+                                                                  rendered="#{examenSignosBean.lstApoderados.size()==0}" immediate="true">
+                                                    <p:ajax event="dialogReturn" 
+                                                            listener="#{examenSignosBean.terminaDialogoApoderado}"
+                                                            update=":frmIngresoSigno:msg :frmIngresoSigno:pnlAdministracionApoderado"/>
+                                                </p:commandButton>
+                                            </div>
+                                            <p:dataGrid var="per" value="#{examenSignosBean.lstApoderados}"
+                                                        emptyMessage="No existen apoderados"
+                                                        paginatorPosition="bottom" style="width: 100%;" columns="1" rows="1" layout="grid" paginator="true">
+                                                <p:panelGrid >
+                                                    <p:row>
+                                                        <p:column  style="width: 10%;"><p:outputLabel value="Apoderado:" style="font-weight: bold"></p:outputLabel></p:column>
+                                                        <p:column colspan="3" >
+                                                            <p:outputLabel styleClass="fondoInput" value="#{examenSignosBean.devuelveNombreJuridicoONatural(per.nombreRazonSocial, per.primerApellido, per.segundoApellido)}"
+                                                                           style="width: 50%">
+                                                            </p:outputLabel >
+                                                        </p:column>
+                                                    </p:row>        
+                                                    <p:row>
+                                                        <p:column style="width: 10%;"><p:outputLabel value="N° Doc." style="font-weight: bold"></p:outputLabel></p:column>
+                                                        <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{per.numeroDocumento}"></p:outputLabel></p:column>
+                                                        <p:column style="width: 10%;"><p:outputLabel value="Tipo Doc." style="display: block; width: 65px;font-weight: bold"></p:outputLabel></p:column>
+                                                        <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{examenSignosBean.devuelveTipoDocumento(per.tipoDocumento)}" style="width: 100%"></p:outputLabel></p:column>
+                                                    </p:row>
+                                                    <p:row >
+                                                        <p:column style="width: 10%;"><p:outputLabel value="Genero:" style="font-weight: bold"></p:outputLabel></p:column>
+                                                        <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{examenSignosBean.devuelveGenero(per.genero)}"></p:outputLabel></p:column>       
+                                                        <p:column style="width: 10%;"><p:outputLabel value="Lugar Exp." style="display: block;width: 68px; font-weight: bold" rendered="#{per.tipoDocumento=='CI'}"></p:outputLabel></p:column>
+                                                        <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{examenSignosBean.devuelveLugarExpedicion(per.lugarExpedicion)}" rendered="#{per.tipoDocumento=='CI'}"></p:outputLabel></p:column>
+                                                    </p:row>
+
+                                                    <p:row>
+                                                        <p:column style="width: 10%;"><p:outputLabel value="Telefono:" style="font-weight: bold"></p:outputLabel></p:column>
+                                                        <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{per.telefono}" ></p:outputLabel></p:column>
+                                                        <p:column colspan="2">
+
+                                                        </p:column>
+                                                    </p:row>
+                                                    <p:row>
+                                                        <p:column style="width: 10%;"><p:outputLabel value="Celular:" style="font-weight: bold"></p:outputLabel></p:column>
+                                                        <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{per.celular}"></p:outputLabel></p:column>
+                                                        <p:column style="width: 10%;"><p:outputLabel value="Fax:" style="font-weight: bold"></p:outputLabel></p:column>
+                                                        <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{per.fax}" ></p:outputLabel></p:column>
+                                                    </p:row>
+                                                    <p:row>
+                                                        <p:column  style="width: 5%;"><p:outputLabel value="Dirección:" style="font-weight: bold"></p:outputLabel></p:column>
+                                                        <p:column colspan="3" style="width: 90%;"><p:outputLabel styleClass="fondoInput" value="#{per.direccion}" ></p:outputLabel></p:column>
+                                                    </p:row>
+                                                    <p:row>
+                                                        <p:column style="width: 10%;"><p:outputLabel value="E-mail:" style="font-weight: bold"></p:outputLabel></p:column>
+                                                        <p:column colspan="3" style="width: 90%;"><p:outputLabel  styleClass="fondoInput" value="#{per.email}" style="width: 98%;"></p:outputLabel></p:column>
+                                                    </p:row>
+                                                    <p:row>
+                                                        <p:column style="width: 10%;"><p:outputLabel value="Poder:" style="font-weight: bold"></p:outputLabel></p:column>
+                                                        <p:column colspan="3" style="width: 90%;"> <p:outputLabel styleClass="fondoInput" value="#{per.poder}" style="color: #650e0b;font-weight: 800; font-size: 12px"/>
+                                                            <!--                                                        <h:panelGrid columns="3">                                                           
+                                                                                                                       
+                                                                                                                        <p:spacer width="3"/>
+                                                                                                                                                                                                <p:commandButton value="Libro de Poderes" icon="ui-icon-seek-next" 
+                                                                                                                                                                                                        action="# {examenModificacionBean.abrirPoderDepositado()}"/>
+                                                                                                                    </h:panelGrid>-->
+                                                        </p:column>
+                                                    </p:row>
+                                                    <p:row>
+                                                        <p:column colspan="4" style="width: 100%; text-align: center">
+                                                            <p:commandButton rendered="true" value="Agregar" icon="ui-icon-circle-plus"
+                                                                             actionListener="#{examenSignosBean.abrirDialogoApoderado()}"
+                                                                             immediate="true">
+                                                                <p:ajax event="dialogReturn"  listener="#{examenSignosBean.terminaDialogoApoderado}"
+                                                                        update=":frmIngresoSigno:msg :frmIngresoSigno:pnlAdministracionApoderado"/>
+                                                            </p:commandButton>
+                                                            <p:spacer width="10"/>
+                                                            <p:commandButton value="Modificar" icon="ui-icon-pencil" immediate="true"
+                                                                             actionListener="#{examenSignosBean.abrirDialogoModificarApoderado(per)}" >
+                                                                <p:ajax event="dialogReturn"
+                                                                        listener="#{examenSignosBean.terminaDialogoModificarApoderado}"
+                                                                        update=":frmIngresoSigno:msg :frmIngresoSigno:pnlAdministracionApoderado"/>
+                                                            </p:commandButton>
+
+                                                            <p:spacer width="10"/>
+                                                            <p:commandButton value="Eliminar" icon="ui-icon-circle-minus" 
+                                                                             update=":frmIngresoSigno:pnlAdministracionApoderado"
+                                                                             actionListener="#{examenSignosBean.borrarApoderado(per)}"
+                                                                             immediate="true"></p:commandButton>
+                                                        </p:column>
+
+                                                    </p:row>
+                                                </p:panelGrid>                             
+                                            </p:dataGrid>
+                                        </fieldset>
+                                    </p:outputPanel>
+                                    <p:outputPanel style="padding-top: 1%"    >
+                                             <fieldset style="width: 93%; ">
+                                        <legend>
+                                            <p:outputLabel value="Dirección de notificación" /> 
+                                        </legend>
+                                        <p:panelGrid style="width: 100%; padding: 0px 0px 0px 0px">
+                                            <p:row >
+                                                <p:column style="width: 5%"> 
+                                                    <p:outputLabel value="Ciudad:" style="font-weight: bold"/></p:column>                    
+                                                <p:column colspan="3">                                                    
+                                                    <p:selectOneMenu id="cmbCiudadNotificacion" style="width: 80px !important"
+                                                                     value="#{examenSignosBean.sigDireccionNotificacion.ciudadNotificacion}"
+                                                                     autoWidth="false"
+                                                                     title="OBLIGATORIO. Ciudad para notificacion">
+                                                        <f:selectItem itemLabel="Elegir" itemValue=""    /> 
+                                                        <f:selectItems  value="#{examenSignosBean.lstOficina}"
+                                                                        var="ciudadNotificacion"
+                                                                        itemLabel="#{ciudadNotificacion.nombre}" itemValue="#{ciudadNotificacion.codigo}"/>
+                                                        <f:validateLength minimum="0" />
+                                                    </p:selectOneMenu>
+                                                </p:column>
+
+
+
+                                            </p:row>
+                                            <p:row>
+                                                <p:column style="width: 5%"> <p:outputLabel value="Barrio/Zona:" style="font-weight: bold"/></p:column>
+                                                <p:column colspan="3">
+                                                    <p:inputTextarea value="#{examenSignosBean.sigDireccionNotificacion.zonaBarrio}" style="width: 95%" rows="2" autoResize="false"/>
+                                                </p:column>
+
+
+                                            </p:row>
+
+                                            <p:row >
+                                                <p:column><p:outputLabel value="Av/Calle:" style="font-weight: bold; "/></p:column>                    
+                                                <p:column colspan="2">
+                                                    <p:inputText value="#{examenSignosBean.sigDireccionNotificacion.avenidaCalle}" style="width: 90%"/></p:column>
+                                                <p:column>
+                                                    <h:panelGrid columns="2">
+                                                        <p:outputLabel value="N°" style="font-weight: bold;display: block; width: 15px"/>
+                                                        <p:inputText value="#{examenSignosBean.sigDireccionNotificacion.numero}" style="width: 90%"/>  
+                                                    </h:panelGrid>                                                               
+                                                </p:column>
+
+                                            </p:row>
+                                            <p:row>
+                                                <p:column><p:outputLabel value="Edificio:" style="font-weight: bold"/></p:column>                    
+                                                <p:column><p:inputText value="#{examenSignosBean.sigDireccionNotificacion.edificio}"  style="width: 90%"/></p:column>
+                                                <p:column>
+                                                    <h:panelGrid columns="2">
+                                                        <p:outputLabel value="Piso:" style="font-weight: bold"/>
+                                                        <p:inputText value="#{examenSignosBean.sigDireccionNotificacion.piso}" style="width: 80%"/>
+                                                    </h:panelGrid>
+                                                </p:column>
+                                                <p:column >
+                                                    <h:panelGrid columns="2">
+                                                        <p:outputLabel value="Dpto." style="font-weight: bold"/>
+                                                        <p:inputText value="#{examenSignosBean.sigDireccionNotificacion.departamento}" style="width: 90%"/>
+                                                    </h:panelGrid>
+                                                </p:column>                    
+                                            </p:row>
+                                            <p:row>
+                                                <p:column>  <p:outputLabel value="Celular:" style="font-weight: bold"/></p:column>
+                                                <p:column><p:inputText value="#{examenSignosBean.sigDireccionNotificacion.celular}" style="width: 90%"/></p:column>
+
+                                                <p:column colspan="2">
+                                                    <h:panelGrid columns="2">
+                                                        <p:outputLabel value="Teléfono:" style="font-weight: bold"/>
+                                                        <p:inputText value="#{examenSignosBean.sigDireccionNotificacion.telefono}" style="width: 90%"/>
+                                                    </h:panelGrid>
+                                                </p:column>
+                                            </p:row>
+                                            <p:row>
+                                                <p:column colspan="1">
+                                                    <p:outputLabel value="E-mail:" style="font-weight: bold"/>
+                                                </p:column>
+                                                <p:column colspan="3">
+
+                                                    <p:inputText value="#{examenSignosBean.sigDireccionNotificacion.correoElectronico}" style="width: 95%"/>
+                                                </p:column>
+                                            </p:row>
+                                            <p:row>
+                                                <p:column colspan="1">
+                                                    <p:outputLabel value="Referencia:" style="font-weight: bold"/>
+                                                </p:column>
+                                                <p:column colspan="3">
+
+                                                    <p:inputText value="#{examenSignosBean.sigDireccionNotificacion.referenciaDireccion}" style="width: 95%"/>
+                                                </p:column>
+                                            </p:row>
+
+                                        </p:panelGrid>
+                                    </fieldset>            
+                                    </p:outputPanel>
+                                   
+                                </p:column>
+                                <p:column style="vertical-align: top;width: 10%">
+                                    <p:panelGrid style="width: 70%;" id="pnlModificaciones">
+                                        <p:row>
+                                            <p:column>
+                                                <p:commandButton value="Recepcionar"  icon="ui-icon-circle-triangle-e" style=" height: 40px;background: #3a62f0 !important;color: white !important" styleClass="botonAzulClaro"
+                                                                 id="btnRecepcionarArriba"
+                                                                 update=":frmIngresoSigno:pnlbotonesInferior :frmIngresoSigno:pnlModificaciones @this msg" rendered="#{examenSignosBean.btnSeguimientoRecepcionarRendered}"
+                                                                 actionListener="#{examenSignosBean.guardarSeguimiento()}" 
+                                                                 disabled="#{examenSignosBean.botonRecepcionarDisabled}">                                                                               
+                                                </p:commandButton>   
+                                            </p:column>
+                                        </p:row>
+                                        <p:row>
+<!--                                            <p:column>
+                                                <p:spacer height="1"/>
+                                            </p:column>-->
+                                        </p:row>
+                                        <p:row>
+                                            <p:column>
+                                                <p:commandButton value="Cambio de nombre" style="height: 43px; background: #{examenSignosBean.backgroundCN} !important; color: #0d485e !important;" 
+                                                                 styleClass="tituloPequenioBoton"  disabled="#{examenSignosBean.botonCambioNombreDisabled}"
+                                                                 actionListener="#{examenSignosBean.abrirHistorialModificacion()}" >
+                                                    <p:ajax event="dialogReturn"  listener="#{examenSignosBean.terminaDialogoSeguimiento}" />
+                                                </p:commandButton>  
+                                            </p:column>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column>
+                                                <p:commandButton value="Cambio de domicilio" style="height: 43px;background: #{examenSignosBean.backgroundCD} !important; color: #0d485e !important;" 
+                                                                 styleClass="tituloPequenioBoton" disabled="#{examenSignosBean.botonCambioDomicilioDisabled}"
+                                                                 actionListener="#{examenSignosBean.abrirHistorialModificacion()}" > 
+                                                    <p:ajax event="dialogReturn"  listener="#{examenSignosBean.terminaDialogoSeguimiento}" />
+                                                </p:commandButton>
+                                            </p:column>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column>
+                                                <p:commandButton value="Solicitud de transferencia" style="height: 43px;background: #{examenSignosBean.backgroundST} !important; color: #0d485e !important;" 
+                                                                 styleClass="tituloPequenioBoton" disabled="#{examenSignosBean.botonTransferenciaDisabled}"
+                                                                 actionListener="#{examenSignosBean.abrirHistorialModificacion()}" >      
+                                                    <p:ajax event="dialogReturn"  listener="#{examenSignosBean.terminaDialogoSeguimiento}" />
+                                                </p:commandButton>
+                                            </p:column>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column>
+                                                <p:commandButton value="Solicitud de fusion" style="height: 43px;background: #{examenSignosBean.backgroundSF} !important; color: #0d485e !important;" 
+                                                                 styleClass="tituloPequenioBoton" disabled="#{examenSignosBean.botonFusionDisabled}"
+                                                                 actionListener="#{examenSignosBean.abrirHistorialModificacion()}" > 
+                                                    <p:ajax event="dialogReturn"  listener="#{examenSignosBean.terminaDialogoSeguimiento}" />
+                                                </p:commandButton>
+                                            </p:column>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column>
+                                                <p:commandButton value="Licencia de uso" style="height: 43px;background: #{examenSignosBean.backgroundLU} !important; color: #0d485e !important;" 
+                                                                 styleClass="tituloPequenioBoton" disabled="#{examenSignosBean.botonLicenciaDisabled}"
+                                                                 actionListener="#{examenSignosBean.abrirHistorialModificacion()}" > 
+                                                    <p:ajax event="dialogReturn"  listener="#{examenSignosBean.terminaDialogoSeguimiento}" />
+                                                </p:commandButton>
+                                            </p:column>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column>
+                                                <p:spacer height="1"/>
+                                            </p:column>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column>
+                                                <p:commandButton value="Poder depositado original" update="msg"
+                                                                 style="height: 53px;" styleClass="tituloPequenioBoton"
+                                                                 actionListener="#{examenSignosBean.abrirPoderDepositado()}">
+                                                </p:commandButton>
+                                            </p:column>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column>
+                                                <p:spacer height="20"/>
+                                            </p:column>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column>
+                                                <p:commandButton value="Examen de forma"
+                                                                 style="height: 43px;"
+                                                                 styleClass="tituloPequenioBoton" icon="ui-icon-calculator"
+                                                                 action="#{examenSignosBean.abrirPlantillaExamenForma}"
+                                                                 rendered="false"
+                                                                 >
+                                                </p:commandButton>
+                                            </p:column>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column>
+                                                <p:commandButton value="Examen de fondo"
+                                                                 style="width: 100%; height: 45px;"
+                                                                 styleClass="tituloPequenioBoton" icon="ui-icon-calculator"
+                                                                 action="#{examenSignosBean.abrirPlantillaExamenFondo()}"
+                                                                 disabled="true"
+                                                                 rendered="false"
+                                                                 >
+                                                </p:commandButton>
+                                            </p:column>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column>
+                                                <p:commandButton value="Notificar"
+                                                                 style="width: 100%; height: 45px;"
+                                                                 actionListener="#{examenSignosBean.accionSolicitarPeticionNotificacion}"
+                                                                 icon="ui-icon-contact"
+                                                                 update=":frmIngresoSigno:msg"
+                                                                 >
+                                                    <p:ajax event="dialogReturn"
+                                                            listener="#{examenSignosBean.terminaDialogoNotifica}"
+                                                            update=":frmIngresoSigno:pnldatosAdministrativos"
+                                                            />
+                                                </p:commandButton>
+                                            </p:column>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column>
+                                                <p:commandButton value="Digitalizar" style="width: 100%; height: 45px;"
+                                                                 styleClass="tituloPequenioBoton"
+                                                                 icon="ui-icon-image"
+                                                                 actionListener="#{examenSignosBean.abrirDigitalizacion()}"
+                                                                 update=":frmIngresoSigno:msg"
+
+                                                                 >
+                                                </p:commandButton>
+                                            </p:column>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column>
+                                                <p:commandButton value="Expediente digitalizado"
+                                                                 style="width: 100%; height: 45px;"
+                                                                 styleClass="tituloPequenioBoton"
+                                                                 icon="ui-icon-image"
+                                                                 actionListener="#{examenSignosBean.verPanelExpedienteDigital()}"
+                                                                 update=":frmIngresoSigno:msg"
+                                                                 rendered="false"
+                                                                 disabled="true"
+                                                                 >
+
+                                                </p:commandButton>
+                                            </p:column>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column>
+                                                <p:commandButton value="#{examenSignosBean.nombreBotonOpo}"
+                                                                 style="width: 100%; height: 50px; background: #{examenSignosBean.backgroundOPO} !important;"
+                                                                 styleClass="tituloPequenioBoton" icon="ui-icon-newwin"
+                                                                 disabled="#{examenSignosBean.botonOposicionDisabled}"
+                                                                 onclick="#{examenSignosBean.urlInformacionSM(examenSignosBean.valorNumeroPublicacion, sessionState.idUsuario)}">
+                                                </p:commandButton>
+                                            </p:column>
+                                        </p:row>
+                                        <!--<p:row>
+                                                <p:column style="width: 10%">
+                                                    <p:commandButton value="Subsanar" 
+                                                                     styleClass="tituloPequenioBoton" icon="ui-icon-pencil" 
+                                                                     disabled="# {examenSignosBean.btnSubsanacion}"
+                                                                     style="width: 100%; height: 45px;"
+                                                                     onclick="# {examenSignosBean.abrirSubsanacion(examenSignosBean.idSignoMarca,examenSignosBean.idUsuario)}"
+                                                                     >
+                                                    </p:commandButton>   
+                                                    <p:spacer width="10"/>
+                                                </p:column>                                            
+                                        </p:row>-->
+                                    </p:panelGrid>        
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                        <p:panelGrid style="width: 100%;"  styleClass="quitarBordes" id="pnlPrioridades">
+                            <p:row>
+                                <p:column style="width: 20%; vertical-align: top">                                    
+                                    <fieldset>
+                                        <legend>
+                                            <p:outputLabel value="Prioridad extranjera"/>
+                                        </legend>
+                                        <p:panelGrid style="width: 90%; vertical-align: top" columns="6">
+
+                                            <p:outputLabel value="Prioridad:" style="font-weight: bold"/>    
+
+                                            <p:inputText value="#{examenSignosBean.prioridadExtranjera.nombreNumero}" size="8"/>
+
+                                            <p:outputLabel value="Fecha:" style="font-weight: bold"/>
+
+                                            <p:calendar pattern="#{sessionState.formatoFecha}" mask="true" size="8"
+                                                        value="#{examenSignosBean.prioridadExtranjera.fecha}"/>
+                                            <p:outputLabel value="País:" style="font-weight: bold"/>
+
+                                            <p:selectOneMenu  value="#{examenSignosBean.prioridadExtranjera.lugar}" autoWidth="false" style="width: 138px">
+                                                <f:selectItem itemLabel="Elegir" itemValue=""/>
+                                                <f:selectItems value="#{examenSignosBean.lstPaises}" var="pais"
+                                                               itemLabel="#{pais.nombre}" itemValue="#{pais.codigo}"/>
+                                                <f:validateLength minimum="0" />
+                                            </p:selectOneMenu>
+                                        </p:panelGrid>
+                                    </fieldset>
+                                </p:column>
+                                <p:column style="vertical-align: top; width: 20%">                                    
+                                    <fieldset >
+                                        <legend>
+                                            <p:outputLabel value="Prioridad de exposición" />
+                                        </legend>
+                                        <p:panelGrid style="width: 90%;" columns="7">
+
+
+                                            <p:outputLabel value="Prioridad: " style="font-weight: bold"/>
+
+                                            <p:inputText value="#{examenSignosBean.prioridadExposicion.nombreNumero}" size="10"/>
+
+                                            <p:outputLabel value="Lugar: " style="font-weight: bold"/>
+
+                                            <p:inputText value="#{examenSignosBean.prioridadExposicion.lugar}" size="10"/>
+
+                                            <p:outputLabel value="Fecha: " style="font-weight: bold"/>
+
+                                            <p:calendar pattern="#{sessionState.formatoFecha}" mask="true" size="10"
+                                                        value="#{examenSignosBean.prioridadExposicion.fecha}"/>
+
+                                        </p:panelGrid>
+                                    </fieldset>
+                                </p:column>
+                                <p:column style="width: 20%; vertical-align: top">
+                                    <fieldset>
+                                        <legend><p:outputLabel value="Interés Oposición Andina (Exp.)"/></legend>
+                                        <p:panelGrid style="width: 100%;">
+                                            <p:inputText value="#{examenSignosBean.oposicionAndina.nombreNumero}"
+                                                         style="width: 90%; background-color: #{examenSignosBean.backgroundOPO} !important"/>
+                                        </p:panelGrid>
+                                    </fieldset>
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+
+                        <!--Datos de la prioridades-->
+
+                        <p:panelGrid style="width: 100%;"  id="pnldatosAdministrativos" styleClass="quitarBordes">
+                            <p:row>
+                                <p:column style="width: 43%; vertical-align: top;">
+                                    <fieldset>
+                                        <legend>
+                                            <p:outputLabel value="Datos administrativos"/>
+                                        </legend>
+                                        <p:panelGrid >
+                                            <p:row>
+                                                <p:column style="width: 90%;">
+                                                    <p:panelGrid columns="2" id="pnldatosAdmn">
+                                                        <p:outputLabel value="Situación actual:" style="display: block; width: 108px; font-weight: bold"/>
+                                                        <p:selectOneMenu id="situacion" value="#{examenSignosBean.valorEstadoMarca}" 
+                                                                         autoWidth="false" style="width: 100%">
+                                                            <f:selectItems value="#{examenSignosBean.lstSituacionActual}"
+                                                                           var="situacion"
+                                                                           itemValue="#{situacion.codigo}"
+                                                                           itemLabel="#{situacion.nombre}"  />
+                                                        </p:selectOneMenu>
+                                                        <p:outputLabel value="Ubicación: " style="font-weight: bold"/>
+                                                        <p:selectOneMenu id="ubicacion" value="#{examenSignosBean.valorUbicacion}" autoWidth="false" 
+                                                                         style="width: 100%">
+                                                            <f:selectItems value="#{examenSignosBean.lstUbicacion}"
+                                                                           var="ubicacion"
+                                                                           itemValue="#{ubicacion.codigo}"
+                                                                           itemLabel="#{ubicacion.nombre}"  />
+                                                        </p:selectOneMenu>
+                                                    </p:panelGrid>                                                    
+                                                </p:column>
+
+                                            </p:row>
+                                        </p:panelGrid>
+                                    </fieldset>
+                                </p:column>
+
+                                <p:column style="width: 50%; vertical-align: top;" colspan="2">
+                                    <p:panelGrid style="width: 100%">
+                                        <p:row>
+                                            <p:column style="width: 100%; vertical-align: top;">
+                                                <fieldset>
+                                                    <legend>
+                                                        <p:outputLabel value="Observaciones"/>
+                                                    </legend>
+                                                    <p:panelGrid style="width: 100%;" id="pnlObservacion">
+                                                        <p:row>
+                                                            <p:column style="width: 75%;">
+                                                                <p:inputTextarea value="#{examenSignosBean.observacionTramite.descripcion}"
+                                                                                 style="width: 98%; background: #F0F8FF" scrollHeight="5" rows="4"
+                                                                                 autoResize="false" >
+                                                                </p:inputTextarea>
+                                                            </p:column>
+                                                            <p:column style="width: 25%;">
+
+                                                                <p:commandButton value="Agregar" icon="ui-icon-circle-plus" style="height: 40%"
+                                                                                 actionListener="#{examenSignosBean.guardarObservacion()}"
+                                                                                 update="frmIngresoSigno:pnlObservacion :frmIngresoSigno:msg"
+                                                                                 >
+                                                                </p:commandButton> 
+
+                                                                <p:spacer height="8"/> <br/><br/>
+
+                                                                <p:commandButton value="Ver historial" 
+                                                                                 icon="ui-icon-seek-next" style="height: 40%" 
+                                                                                 actionListener="#{examenSignosBean.AccionAbrirObservacionTramiteSigno()}"
+                                                                                 update="frmIngresoSigno:pnlObservacion :frmIngresoSigno:msg"
+                                                                                 >
+                                                                    <p:ajax event="dialogReturn"
+                                                                            listener="#{examenSignosBean.terminaDialogoObservacion}"
+                                                                            update="pnlObservacion msg" />
+                                                                </p:commandButton>
+
+                                                            </p:column>
+                                                        </p:row>
+                                                    </p:panelGrid> 
+                                                </fieldset>
+                                            </p:column>                                    
+                                        </p:row>
+                                    </p:panelGrid>
+
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+
+
+                        <p:panelGrid style="width: 100%;"  id="pnlDatosComplementariosMarca" styleClass="quitarBordes">
+
+                            <p:row>
+                                <p:column style="width: 50%;">
+                                    <fieldset>
+                                        <legend>
+                                            <p:outputLabel value="Publicación"/>
+                                        </legend>
+                                        <p:panelGrid style="width: 100%" columns="2" styleClass="quitarBordes">
+                                            <p:panelGrid columns="1" style="width: 100%">
+
+                                                <p:panelGrid columns="2" style="width: 100%" styleClass="quitarBordes">
+                                                    <p:outputLabel value="N°:" style="display: block; width: 40px"/>
+                                                    <p:inputText value="#{examenSignosBean.valorNumeroPublicacion}"/>
+                                                </p:panelGrid>
+
+
+
+                                                <p:panelGrid columns="2" style="width: 100%" styleClass="quitarBordes">
+                                                    <p:outputLabel value="Gaceta:" style="display: block; width: 40px"/>
+                                                    <p:inputText value="#{examenSignosBean.valorNumeroGaceta}"/>
+                                                </p:panelGrid>
+
+
+                                                <p:panelGrid columns="2" style="width: 100%" >
+                                                    <p:outputLabel value="Fecha:" style="display: block; width: 40px"/>
+                                                    <p:calendar pattern="#{sessionState.formatoFecha}" mask="true"
+                                                                value="#{examenSignosBean.valorFechaPublicacion}" style="width: 1%" />
+
+
+                                                </p:panelGrid>
+
+                                            </p:panelGrid>                                                                                  
+                                            <p:commandButton value="Historial de publicaciones" 
+                                                             style="height: 45px;" rendered="false"
+                                                             styleClass="tituloPequenioBoton"
+                                                             actionListener="#{examenSignosBean.actionMostrarHistorialPublicacion()}"
+                                                             />
+                                        </p:panelGrid>
+
+                                    </fieldset>
+
+                                </p:column>
+                                <p:column style="width: 50%; vertical-align: top">
+                                    <fieldset>
+                                        <legend>
+                                            <p:outputLabel value="Registro"/>
+                                        </legend>
+                                        <p:panelGrid style="width: 100%" columns="1">
+                                            <p:panelGrid columns="4" style="width: 80%">
+                                                <p:outputLabel value="N°:" style="display: block; width: 25px"/>
+                                                <p:inputText value="#{examenSignosBean.valorNumeroRegistro}" size="8"/>
+                                                <p:outputLabel value="Serie" />
+                                                <p:selectOneMenu  value="#{examenSignosBean.valorSerieRegistro}" >
+                                                    <f:selectItems value="#{examenSignosBean.lstSerieRegistro}"
+                                                                   var="situacion"
+                                                                   itemValue="#{situacion.codigo}"
+                                                                   itemLabel="#{situacion.nombre}"  />
+                                                </p:selectOneMenu>
+                                            </p:panelGrid>
+                                            <p:panelGrid columns="2" style="width: 100%"> 
+                                                <p:outputLabel value="Resolución:" style="display: block; width: 55px"/>
+                                                <p:inputText value="#{examenSignosBean.valorResolucionRegistro}"/>
+                                            </p:panelGrid>
+                                            <p:panelGrid columns="2" style="width: 100%">
+
+                                                <p:outputLabel value="Fecha:" style="display: block; width: 55px"/>
+                                                <p:calendar pattern="#{sessionState.formatoFecha}" mask="true"
+                                                            value="#{examenSignosBean.valorFechaRegistro}" style="width: 1%" />
+                                            </p:panelGrid>                                                        
+                                        </p:panelGrid>
+
+                                    </fieldset>
+                                </p:column>
+                                <p:column style="width: 50%">
+                                    <fieldset>
+                                        <legend>
+                                            <p:outputLabel value="Renovación"/>
+                                        </legend>
+                                        <p:panelGrid style="width: 100%" columns="2">
+                                            <p:panelGrid columns="1" style="width: 100%">
+                                                <p:panelGrid columns="2" style="width: 100%">
+                                                    <p:outputLabel value="N°:" style="display: block; width: 65px"/>
+                                                    <p:inputText value="#{examenSignosBean.valorNumeroRenovacion}" style="width: 80%"/>
+                                                </p:panelGrid>
+                                                <p:panelGrid columns="2" style="width: 100%">
+                                                    <p:outputLabel value="Resolución:" style="display: block; width: 65px"/>
+                                                    <p:inputText value="#{examenSignosBean.valorResolucionRenovacion}" style="width: 80%"/>
+                                                </p:panelGrid>
+                                                <p:panelGrid columns="2" style="width: 100%">
+                                                    <p:outputLabel value="Fecha:" style="display: block; width: 65px"/>
+                                                    <p:calendar pattern="#{sessionState.formatoFecha}" mask="true"
+                                                                value="#{examenSignosBean.valorFechaRenovacion}" size="12" />
+                                                </p:panelGrid>
+                                            </p:panelGrid>                                                                                                                        
+                                            <p:commandButton 
+                                                value="Historial de renovaciones" 
+                                                actionListener="#{examenSignosBean.abrirHistorialRenovacion()}"
+                                                onclick="PF('historialRenovaciones').show();" update="tblHistorialRenovacion tblHistorialRenovacionSol"
+                                                />
+                                        </p:panelGrid>
+                                    </fieldset>
+                                </p:column>
+
+                            </p:row>  
+                        </p:panelGrid>
+
+
+                        <p:panelGrid style="width: 100%;" styleClass="quitarBordes" id="pnlbotonesinferiorPadre" >
+                            <p:row>
+                                <p:column style="width: 50%;">
+                                    <fieldset >                                        
+                                        <p:panelGrid style="width: 100%; text-align: center" id="pnlbotonesInferior">
+                                            <p:row style="width: 100%;text-align: center">
+
+                                                <p:column style="width: 10%">
+                                                    <p:commandButton value="Recepcionar"  icon="ui-icon-circle-triangle-e" style=" height: 40px;background: #3a62f0 !important;color: white !important" styleClass="botonAzulClaro"
+                                                                     update="pnlbotonesInferior msg" rendered="#{examenSignosBean.btnSeguimientoRecepcionarRendered}"
+                                                                     actionListener="#{examenSignosBean.guardarSeguimiento()}" 
+                                                                     disabled="#{examenSignosBean.botonRecepcionarDisabled}">                                                                               
+                                                    </p:commandButton>   
+                                                    <p:spacer width="10"/>
+                                                </p:column>
+                                                <p:column style="width: 10%">
+
+                                                    <p:spacer width="10"/>
+                                                </p:column>
+                                                <p:column style="width: 10%">
+
+                                                    <p:spacer width="10"/>
+                                                </p:column> 
+                                                <p:column style="width: 10%">
+                                                    <p:commandButton 
+                                                        id="btnAdicionarRegistro"
+                                                        value="Adicionar Registro"
+                                                        icon="ui-icon-circle-plus"
+                                                        style=" height: 40px;width: 95%"
+                                                        disabled="#{examenSignosBean.btnAdicionarDisabled}"
+                                                        update=":frmIngresoSigno:msg"
+                                                        actionListener="#{examenSignosBean.accionGuardarRegistroSigno()}"
+                                                        >
+
+                                                    </p:commandButton>
+                                                    <p:spacer width="10"/>                                                        
+                                                </p:column>
+                                                <p:column style="width: 10%">
+                                                    <p:commandButton 
+                                                        id="btnModificarRegistro"
+                                                        value="Modificar Registro"
+                                                        icon="ui-icon-pencil"
+                                                        style=" height: 40px;width: 95%"
+                                                        disabled="#{examenSignosBean.btnModificarDisabled}"
+                                                        update=":frmIngresoSigno:msg :frmIngresoSigno:pnlDatosMarca"
+                                                        actionListener="#{examenSignosBean.accionModificarRegistroExpediente}"
+                                                        >
+                                                    </p:commandButton>
+                                                    <p:spacer width="10"/>
+                                                </p:column>
+                                                <p:column style="width: 10%">
+                                                    <p:commandButton value="Subsanar Registro" 
+                                                                     disabled="# {examenSignosBean.btnSubsanacion}"
+                                                                     style="width: 100%; height: 45px;"
+                                                                     onclick="#{examenSignosBean.abrirSubsanacion(examenSignosBean.idSignoMarca,examenSignosBean.idUsuario)}"
+                                                                     >
+                                                    </p:commandButton>   
+                                                    <p:spacer width="10"/>
+                                                </p:column>
+                                                <p:column style="width: 10%">
+                                                    <p:commandButton value="Imprimir"  
+                                                                     icon="ui-icon-print"  
+                                                                     style=" height: 40px;width: 95%"
+                                                                     update=":frmIngresoSigno:msg" 
+                                                                     ajax="false"
+                                                                     actionListener="#{examenSignosBean.imprimir()}"
+                                                                     >
+                                                    </p:commandButton>
+                                                    <p:spacer width="10"/>
+                                                </p:column>
+
+                                                
+                                                <p:column style="width: 10%">
+
+                                                    <p:spacer width="10"/>                                            
+                                                </p:column>
+                                                <p:column style="width: 10%">
+
+                                                    <p:spacer width="10"/>                                            
+                                                </p:column>
+
+                                                <p:column style="width: 10%">
+                                                    <p:commandButton value="Finalizar"  icon="ui-icon-circle-check"  style=" height: 40px;width: 90%;background: #82b548 !important ;" styleClass="botonVerdeClaro"
+                                                                     action="#{examenSignosBean.abrirFinalizar()}" rendered="#{examenSignosBean.btnSeguimientoFinalizarRendered}"
+                                                                     disabled="#{examenSignosBean.botonFinalizarDisabled}" update="pnlbotonesInferior,btnRecepcionarArriba,pnldatosAdministrativos">
+                                                    </p:commandButton>
+                                                    <p:spacer width="10"/>
+                                                </p:column>
+                                            </p:row>
+                                        </p:panelGrid>
+                                    </fieldset>
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                    </p:panelGrid>
+                    <p:dialog  widgetVar="historialRenovaciones" minHeight="40" modal="true">
+                        <p:panelGrid style="width: 100%;" styleClass="quitarBordes">                            
+                            <p:row>
+                                <p:column style="width: 100%;" colspan="2">                                    
+                                    <table>
+                                        <tr valign="middle">
+                                            <td><p:graphicImage library="images" name="flechaTituloAzul.png" width="24" height="24"></p:graphicImage></td>
+                                            <td><p:outputLabel value="Historial de renovaciones" styleClass="tituloPrincipalFuente"></p:outputLabel></td>
+                                        </tr>
+                                    </table>                    
+                                    <p:separator  style="border: 1px #045491 inset;"></p:separator>                                                        
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                        <p:dataTable var="itemm" value="#{examenSignosBean.lstHistorialRenovacionModificacion}" 
+                                     scrollWidth="1100" 
+                                     id="tblHistorialRenovacion"
+                                     scrollable="true" scrollHeight="170"
+                                     emptyMessage="No se encontraron registros."
+                                     liveScroll="true" scrollRows="6" rowIndexVar="index" 
+                                     style="width: 100%;">
+                            <p:column headerText="N°" width="20" style="background: #f4f4f4 !important">
+                                <h:outputText value="#{index+1}" />
+                            </p:column>
+                            <p:column headerText="Resolución Modificación" width="80" >
+                                <h:outputText value="#{itemm.numero_resolucion}" />
+                            </p:column>
+                            <p:column headerText="Fecha Resolución Mod." width="120">
+                                <h:outputText value="#{itemm.fecha_resolucion}" />
+                            </p:column>
+                            <p:column headerText="Orden Modificación" width="110">                             
+                                <h:outputText value="#{examenSignosBean.ordenModificacionRenovacionLiteral(itemm.orden)}" />
+                            </p:column>  
+                            <p:column headerText="Renovación" width="60" style="background: #f4f4f4 !important">
+                                <h:outputText value="#{itemm.renovacion}" />
+                            </p:column>
+                            <p:column headerText="Resolución Renovación"  width="100">
+                                <h:outputText value="#{itemm.resolucion_renovacion}" />
+                            </p:column>
+
+                            <p:column headerText="Fecha Resolución Ren" width="120">
+                                <h:outputText value="#{itemm.fecha_resolucion_ren}" />
+                            </p:column>
+                            <p:column headerText="Orden Renovación" width="100">                             
+                                <h:outputText value="#{examenSignosBean.ordenModificacionRenovacionLiteral(itemm.orden_ren)}" />
+                            </p:column>  
+                            <p:column headerText="Fecha Inicio de Concesión Ren" width="125">                             
+                                <h:outputText value="#{itemm.inicio_concesion}" />
+                            </p:column>  
+                        </p:dataTable>
+
+
+                        <br /><br />
+
+                        <p:dataTable var="item" value="#{examenSignosBean.lstRenSolicititudRenovacionNoConc}" 
+                                     scrollWidth="1100" 
+                                     id="tblHistorialRenovacionSol"
+                                     scrollable="true" scrollHeight="170"
+                                     emptyMessage="No se encontraron registros."
+                                     liveScroll="true" scrollRows="6" rowIndexVar="index" 
+                                     style="width: 100%;">
+                            <f:facet name="header">
+                                     <p:outputLabel value="Solicitudes renovacion" styleClass="tituloPrincipalFuente"></p:outputLabel>
+                            </f:facet>
+                            <p:column headerText="N°" width="5" style="background: #f4f4f4 !important">
+                                <h:outputText value="#{index+1}" />
+                            </p:column>
+                            <p:column headerText="SR" width="8"  style="text-align: center">
+                                <h:outputText value="SR" />
+                            </p:column>
+                            <p:column headerText="Número" width="40" style="text-align: center">
+                                <h:outputText value="#{item.sr}" />
+                            </p:column>
+                            <p:column headerText="Gestión" width="40" style="text-align: center">                             
+                                <h:outputText value="#{item.gestion_sr}" />
+                            </p:column>  
+                            <p:column headerText="Fecha ingreso" width="90" style="text-align: center">
+                                <h:outputText value="#{item.fecha_ingreso}" />
+                            </p:column>
+
+                            <p:column headerText="Registro" width="40" style="background: #f4f4f4 !important">
+                                <h:outputText value="#{item.numero_registro_registrado}" />
+                            </p:column>
+                            <p:column headerText="Serie"  width="20" style="text-align: center">
+                                <h:outputText value="#{item.serie_registro_registrado}" />
+                            </p:column>
+
+                            <p:column headerText="Fecha registro" width="100" style="text-align: center">
+                                <h:outputText value="#{item.fecha_registro_registrado}" />
+                            </p:column>
+                            <p:column headerText="Clase" width="45" style="text-align: center">                             
+                                <h:outputText value="#{examenSignosBean.claseXid(item.idclase_niza_registrado)}" />
+                            </p:column>  
+                            <p:column headerText="Clase reclasificación" width="60" style="text-align: center">                             
+                                <h:outputText value="#{examenSignosBean.claseXid(item.idclase_niza_registrado)}" />
+                            </p:column>  
+                        </p:dataTable>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                    </p:dialog>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+        <!--        <p:ajaxStatus  style="display:block;margin-bottom:2em;height:24px;" 
+                               onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+                <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                    <p:graphicImage value="/resources/images/ajaxloadingbar.gif"/>
+                </p:dialog>-->
+    </body>   
+</html>

@@ -1,0 +1,1515 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <body>
+        <ui:composition template="#{examenModificacionBean.template}">
+            <ui:define name="content">      
+                <h:form id="formu" >                     
+                    <p:growl id="msg" life="10000"/>
+                    <p:panelGrid style="width: 100%; height: 100%;" > 
+                        <p:panelGrid style="width: 100%;" styleClass="quitarBordes">                            
+                            <p:row>
+                                <p:column style="width: 100%;" colspan="2">                                    
+                                    <table>
+                                        <tr valign="middle">
+                                            <td><p:graphicImage library="images" name="flechaTituloAzul.png" width="24" height="24"></p:graphicImage></td>
+                                            <td><p:outputLabel value="Expediente modificación" styleClass="tituloPrincipalFuente"></p:outputLabel></td>
+                                        </tr>
+                                    </table>                    
+                                    <p:separator id="sepTitulo" style="border: 1px #045491 inset;"></p:separator>                                                        
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>                        
+                        <p:panelGrid style="width: 100%" styleClass="quitarBordes" id="panelOficina">
+                            <p:row >
+                                <p:column colspan="1" style="width: 10%">   
+                                    <fieldset>
+                                        <p:selectOneRadio   value="#{examenModificacionBean.valorOpcionesRadio}">
+                                            <f:selectItem itemValue="ADD" itemLabel="Adicionar" />
+                                            <f:selectItem itemValue="MOD" itemLabel="Modificar"/>
+                                            <f:selectItem itemValue="CON" itemLabel="Consultar"/>
+                                            <p:ajax event="change" listener="#{examenModificacionBean.cambiaOpcionesFormulario()}" update="pnlbotonesInferior pnlObservacion btnRegistrar pnldatosAdministrativos panelSolicitud nombre"/>
+                                        </p:selectOneRadio>
+                                        <!--                                    layout="grid" columns="1"-->
+                                    </fieldset>
+                                </p:column>
+                                <p:column colspan="1" style="width: 13%; padding-left: 2%">
+                                    <p:panelGrid columns="2" >
+                                        <p:outputLabel value="Oficina:" style="font-weight: bold"/>
+                                        <p:selectOneMenu value="#{examenModificacionBean.regional}"  autoWidth="false"  >
+                                            <f:selectItems value="#{examenModificacionBean.lstOficina}"
+                                                           var="oficina"
+                                                           itemValue="#{oficina.codigo}"
+                                                           itemLabel="#{oficina.nombre}"  />
+                                            <p:ajax listener="#{examenModificacionBean.cambiarSigla()}"
+                                                    event="change" update=":formu:labelSigla :formu:panelSolicitud :formu:panelOficina"></p:ajax>
+                                        </p:selectOneMenu>
+                                    </p:panelGrid>                                         
+                                </p:column >    
+                                <p:column colspan="2" style="padding-left: 2%; width: 77%; text-align: right">
+                                    <fieldset>
+                                        <p:selectOneRadio id="console1" value="#{examenModificacionBean.valorRadio}"  style="display: block; width: 100%">
+                                            <f:selectItem itemValue="CN" itemLabel="Cambio de Nombre &nbsp; "  />
+                                            <f:selectItem itemValue="CD" itemLabel="Cambio de Domicilio &nbsp;"/>
+                                            <f:selectItem itemValue="ST" itemLabel="Transferencia  &nbsp;"/>
+                                            <f:selectItem itemValue="SF" itemLabel="Fusión &nbsp;"/>
+                                            <f:selectItem itemValue="LU" itemLabel="Licencia de Uso"/>
+                                            <p:ajax listener="#{examenModificacionBean.activaCambios()}"
+                                                    event="change" 
+                                                    update=":formu:nombre :formu:labelSigla :formu:datosNuevoTItular :formu:panelOficina :formu:pnlProductos :formu:pnlResolucion"></p:ajax>
+                                        </p:selectOneRadio>    
+                                    </fieldset>
+
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                        <p:panelGrid>
+                            <p:separator/>
+                        </p:panelGrid>            
+                        <p:panelGrid style="width: 100%" styleClass="quitarBordes">
+                            <p:row>
+                                <p:column colspan="1" style="width: 25%;vertical-align: top;">
+                                    <fieldset>
+                                        <legend>
+                                            <p:outputLabel value="Referencia solicitud" />
+                                        </legend>
+                                        <p:panelGrid columns="1"  id="pnlReferenciaSol" styleClass="quitarBordes">
+                                            <p:panelGrid columns="5">
+                                                <p:outputLabel value="#{examenModificacionBean.textoSM}" style="font-weight: bold"/>
+                                                <p:inputText value="#{examenModificacionBean.numeroSM}" style="width: 90%" maxlength="18"/>
+                                                <p:inputText value="#{examenModificacionBean.gestionSM}" style="width: 90%" maxlength="4"/>
+                                                <p:inputText value="#{examenModificacionBean.extensionSM}" style="width: 50%"/>
+                                                <p:commandButton   style="height: 20px;" icon="ui-icon-seek-next" styleClass="botonAzulClaro"
+                                                                   actionListener="#{examenModificacionBean.abrirExpedienteSignos()}" update=":formu:msg">
+                                                </p:commandButton>
+                                            </p:panelGrid>                                        
+                                            <p:panelGrid columns="3" >                                    
+                                                <p:outputLabel value="N° Registro:" style="display:block;width:94px"/>
+                                                <p:inputText value="#{examenModificacionBean.modificacion.numero_registro}" style="width: 90%" maxlength="18"
+                                                             onkeyup="return ValNumero(this);"/>
+                                                <p:selectOneMenu id="serie" value="#{examenModificacionBean.modificacion.serie_registro}"  autoWidth="false">
+                                                    <f:selectItem itemLabel="Elegir" itemValue="" /> 
+                                                    <f:selectItems value="#{examenModificacionBean.lstSerieRegistro}" var="r" itemLabel="#{r.nombre}" itemValue="#{r.codigo}"/>                                       
+                                                </p:selectOneMenu>
+                                            </p:panelGrid>
+                                            <p:panelGrid columns="3" >
+                                                <p:outputLabel value="N° Renovación:" style="display:block;width:95px"/>
+                                                <p:inputText value="#{examenModificacionBean.modificacion.numero_renovacion}" style="width: 90%" maxlength="18"
+                                                             onkeyup="return ValNumero(this);"/>
+                                                <p:selectOneMenu id="serieReno" value="#{examenModificacionBean.modificacion.serie_renovacion}" autoWidth="false" >
+                                                    <f:selectItem itemLabel="Elegir" itemValue="" /> 
+                                                    <f:selectItem itemLabel="A" itemValue="A" />                                        
+                                                </p:selectOneMenu>
+                                            </p:panelGrid>                                        
+                                            <p:panelGrid columns="2"  >
+                                                <p:outputLabel value="N° Publicación:" style="display:block;width:94px" />
+                                                <p:inputText value="#{examenModificacionBean.modificacion.numero_publicacion}" style="width: 90%" maxlength="18"
+                                                             onkeyup="return ValNumero(this);"/>
+                                            </p:panelGrid>
+                                        </p:panelGrid>
+                                    </fieldset>
+                                </p:column>
+                                <p:column colspan="1" style="width: 38%;vertical-align: top;">
+                                    <fieldset>
+                                        <legend>
+                                            <p:outputLabel value="Buscador" />
+                                        </legend>
+                                        <div align="center">
+                                            <p:panelGrid columns="2"   id="panelSolicitud">
+                                                <p:panelGrid columns="1" > 
+                                                    <p:outputLabel value="N° SOLICITUD:" style="font-weight: bold;text-align: center; display: block; width: 100px"/>
+                                                </p:panelGrid>
+
+                                                <p:panelGrid columns="5" style="width: 100%"  >   <p:focus context="panelSolicitud"/>
+                                                    <p:outputLabel id="labelSigla" value="#{examenModificacionBean.valorSigla} -" style="font-weight: bold; color: #650e0b;display: block; width: 42px"/>                                                    
+                                                    <p:inputText id="valorNumero" value="#{examenModificacionBean.numeroMod}"   maxlength="10"
+                                                                 style="background: #add3d8 !important; vertical-align: central; text-align: center; width: 90%; font-weight: bold"
+                                                                 onkeyup="return ValNumero(this);">
+
+                                                    </p:inputText>
+                                                    <p:inputText id="valorGestion" value="#{examenModificacionBean.gestionMod}" maxlength="10" onkeyup="return ValNumero(this);"
+                                                                 style="background: #add3d8 !important; vertical-align: central; text-align: center; width: 85%; font-weight: bold" />
+                                                    <p:commandButton actionListener="#{examenModificacionBean.buscadorGeneral()}" icon="ui-icon-search" style="height: 35px"
+                                                                     update="formu" value="Buscar" disabled="#{!examenModificacionBean.btnAdicionarDisabled}"/>                                                   
+                                                </p:panelGrid>                                
+                                            </p:panelGrid>
+                                            <!--                                            <p:spacer height="1"/>-->
+                                            <p:panelGrid columns="2"  style="width: 75%"   >
+                                                <p:outputLabel value="N° FORMULARIO:" style="font-weight: bold; text-align: center"/>
+                                                <p:inputText value="#{examenModificacionBean.modificacion.nro_formulario}" style="width: 95%" maxlength="20"/>
+                                            </p:panelGrid>
+                                            <p:panelGrid columns="2"   style="width: 85%"  >
+                                                <p:outputLabel value="FECHA DE SOLICITUD:" style="font-weight: bold"/>                                                
+                                                <p:calendar    value="#{examenModificacionBean.modificacion.fecha_ingreso}"                                                
+                                                               locale="es" 
+                                                               navigator="true" 
+                                                               pattern="dd/MM/yyyy HH:mm:ss" 
+                                                               mask="true"
+                                                               style="width: 70%">
+                                                </p:calendar>
+                                            </p:panelGrid>
+                                            <p:panelGrid columns="3"  style="width: 75%"  >                                                
+                                                <p:outputLabel value="N° RECIBO OFICIAL:" style="font-weight: bold; text-align: center; display: block; width: 140px"/>                                                                                        
+                                                <p:inputText value="#{examenModificacionBean.modificacion.nro_recibo}" style="width: 90%" maxlength="8"
+                                                             onkeyup="return ValNumero(this);"/>                                                                                                
+                                                <p:selectOneMenu id="cmbSerieRecibo" value="#{examenModificacionBean.modificacion.serie_recibo}" autoWidth="false">
+                                                    <f:selectItem itemLabel="Elegir" itemValue=""></f:selectItem>
+                                                    <f:selectItems value="#{examenModificacionBean.lstTipoRecibo}" var="r" itemLabel="#{r.nombre}" itemValue="#{r.codigo}"/>
+                                                </p:selectOneMenu>
+                                            </p:panelGrid>
+
+                                        </div>
+                                    </fieldset>
+                                </p:column>
+                                <p:column colspan="1" style="width: 27%;vertical-align: top;">
+                                    <fieldset >
+                                        <legend>
+                                            <p:outputLabel value="Referencia del expediente" />
+                                        </legend>
+                                        <p:panelGrid columns="1" >
+                                            <p:panelGrid columns="3" >
+                                                <p:outputLabel value="N° Registro:" style="display:block;width: 95px"/>
+                                                <p:inputText value="#{examenModificacionBean.registroExpediente}" style="width: 87%" onkeyup="return ValNumero(this);" id="txtRegistoExpediente">
+                                                    <p:ajax event="change" listener="#{examenModificacionBean.buscarXRegistro()}" 
+                                                            update=":formu:pnlReferenciaSol :formu:panelDatosRegistrados" />
+                                                </p:inputText>
+                                                <p:selectOneMenu id="serie2" value="#{examenModificacionBean.serieRegExpediente}" autoWidth="false">
+                                                    <f:selectItem  itemLabel="Elegir" itemValue=""/> 
+                                                    <f:selectItems value="#{examenModificacionBean.lstSerieRegistro}" var="r" itemLabel="#{r.nombre}" itemValue="#{r.codigo}"/> 
+                                                    <p:ajax event="change" listener="#{examenModificacionBean.buscarXRegistro()}" 
+                                                            update=":formu:pnlReferenciaSol :formu:panelDatosRegistrados :formu:nombre" />
+                                                </p:selectOneMenu>
+                                            </p:panelGrid>                                           
+                                            <p:panelGrid columns="3"  >
+                                                <p:outputLabel value="N° Renovación:" style="display:block;width: 95px"/>
+                                                <p:inputText value="#{examenModificacionBean.renovacionExpediente}" style="width: 87%" onkeyup="return ValNumero(this);">
+                                                    <p:ajax event="blur" listener="#{examenModificacionBean.buscarXRenovacion()}" 
+                                                            update="@form" />
+                                                </p:inputText>
+                                                <p:selectOneMenu id="serieReno2" value="#{examenModificacionBean.serieRenoExpediente}" autoWidth="false">
+                                                    <f:selectItem itemLabel="Elegir" itemValue="" /> 
+                                                    <f:selectItem itemLabel="A" itemValue="A" />                                        
+                                                </p:selectOneMenu>
+                                            </p:panelGrid>
+                                            <p:panelGrid columns="4"  >
+                                                <p:outputLabel value="Expediente SM:" style="display:block;width: 95px"/>
+                                                <p:inputText value="#{examenModificacionBean.smExpediente}" style="width: 85%" 
+                                                             id="txtsmExpediente" onkeyup="return ValNumero(this);">
+                                                    <p:ajax event="blur" listener="#{examenModificacionBean.buscarXSM()}"  update=":formu:pnlReferenciaSol :formu:panelDatosRegistrados :formu:nombre"/>
+                                                </p:inputText>
+                                                <p:inputText value="#{examenModificacionBean.gestionExpediente}" style="width: 85%"
+                                                             id="txtgestionExpediente" onkeyup="return ValNumero(this);"  >
+                                                    <p:ajax event="blur" listener="#{examenModificacionBean.buscarXSM()}" update=":formu:pnlReferenciaSol :formu:panelDatosRegistrados :formu:nombre" />
+                                                </p:inputText>
+                                                <p:inputText value="#{examenModificacionBean.extensionExpediente}" style="width: 40%"
+                                                             >
+                                                    <p:ajax event="blur" listener="#{examenModificacionBean.buscarXSM()}" update=":formu:pnlReferenciaSol :formu:panelDatosRegistrados :formu:nombre" />
+                                                </p:inputText>                                                
+                                            </p:panelGrid>
+                                            <p:panelGrid columns="2"  >
+                                                <p:outputLabel value="N° Publicación:" style="display:block;width: 95px"/>
+                                                <p:inputText value="#{examenModificacionBean.nroPublicacionExpediente}" style="width: 87%" onkeyup="return ValNumero(this);">                                                    
+                                                    <p:ajax event="blur" listener="#{examenModificacionBean.buscarXPublicacion()}" update=":formu:pnlReferenciaSol :formu:panelDatosRegistrados :formu:nombre" />
+                                                </p:inputText>
+                                            </p:panelGrid>
+                                        </p:panelGrid>
+                                    </fieldset>
+                                </p:column>
+                                <p:column colspan="1" style="width: 10%;vertical-align: middle; padding-left: 1%">
+                                    <h:panelGrid columns="1" >
+                                        <p:commandButton value="Seguimiento"  style="width: 100%; height: 40px" icon="ui-icon-folder-open" update="msg"
+                                                         actionListener="#{examenModificacionBean.abrirSeguimiento()}" >
+                                            <p:ajax event="dialogReturn"  listener="#{examenModificacionBean.terminaDialogoSeguimiento}" update=":formu:msg formu:pnlObservacion" />
+                                        </p:commandButton>                                          
+                                        <p:spacer height="1"/>
+                                        <p:commandButton value="Historial"  style="width: 100%; height: 40px" icon="ui-icon-script" update="msg"
+                                                         actionListener="#{examenModificacionBean.abrirPaginaHistorial()}">
+                                        </p:commandButton>
+                                    </h:panelGrid>
+                                </p:column>
+                            </p:row>
+
+
+                        </p:panelGrid>
+                        <p:panelGrid style="width: 100%; " styleClass="quitarBordes" id="panel">
+                            <p:row >
+                                <p:column colspan="2" style="vertical-align: top; width: 50%;">
+                                    <fieldset >
+                                        <legend>
+                                            <p:outputLabel value="Datos del solicitante" />
+                                        </legend>
+                                        <div align="center">
+                                            <p:commandButton  
+                                                value="Agregar" 
+                                                icon="ui-icon-circle-plus" 
+                                                actionListener="#{examenModificacionBean.cargaDialogo}" 
+                                                immediate="true"
+
+                                                rendered="#{examenModificacionBean.listaSolicitanteApoderado.size()==0}">
+                                                <p:ajax event="dialogReturn"  listener="#{examenModificacionBean.terminaDialogo}" update=":formu:msg :formu:datosSolicitante :formu:panel"/>
+                                            </p:commandButton>
+                                        </div>
+
+                                        <p:dataGrid 
+                                            var="per" value="#{examenModificacionBean.listaSolicitanteApoderado}" 
+                                            emptyMessage="No existen solicitantes" id="datosSolicitante"
+                                            style="width: 100%;" 
+                                            columns="1" rows="1" layout="grid" paginator="true" paginatorPosition="bottom">     
+                                            <p:panelGrid style="width: 100%;">
+                                                <p:row style="background-color: #ecebf3 ">
+                                                    <p:column  style="width: 10%;"><p:outputLabel value="Solicitante" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                    <p:column colspan="3" style="width: 90%;" >
+                                                        <p:outputLabel styleClass="fondoInput" id="texto" value="#{per.nombre_razonsocial}" style="width: 98%;" rendered="#{per.tipo_titular=='JUR'}">
+                                                        </p:outputLabel>
+                                                        <p:outputLabel styleClass="fondoInput" value="#{per.nombre_razonsocial}" style="width: 30%;" rendered="#{per.tipo_titular=='NAT'}">
+                                                        </p:outputLabel><p:spacer width="3"/>
+                                                        <p:outputLabel styleClass="fondoInput" value="#{per.primer_apellido}" style="width: 35%;" rendered="#{per.primer_apellido!=null}">
+                                                        </p:outputLabel><p:spacer width="3"/>
+                                                        <p:outputLabel styleClass="fondoInput" value="#{per.segundo_apellido}" style="width: 28%;" rendered="#{per.segundo_apellido!=null}">
+                                                        </p:outputLabel>
+                                                    </p:column>
+                                                </p:row>   
+                                                <p:row style="background-color: #ecebf3 ">
+                                                    <p:column style="width: 10%;"><p:outputLabel value="N° Doc." style="display: block; width: 85px; font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{per.numero_documento}"></p:outputLabel></p:column>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Tipo Doc." style="display: block; width: 105px; font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{examenModificacionBean.devuelveTipoDocumento(per.tipo_documento)}" style="display: block; width: 160px"></p:outputLabel></p:column>                                                
+                                                </p:row>
+                                                <p:row rendered="#{per.tipo_titular=='NAT'}" style="background-color: #ecebf3 ">
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Género" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{examenModificacionBean.devuelveGenero(per.genero)}"></p:outputLabel></p:column>   
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Lugar Exp." style="display: block;width: 105px; font-weight: bold;" rendered="#{per.tipo_documento=='CI'}"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{examenModificacionBean.devuelveLugarExpedicion(per.lugar_expedicion)}" ></p:outputLabel></p:column>                                                                                                 
+                                                </p:row>
+                                                <p:row style="background-color: #ecebf3 ">
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Pais" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{examenModificacionBean.devuelvePais(per.pais)}"></p:outputLabel></p:column>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Departamento" style="font-weight: bold;" rendered="#{per.pais=='BO'}"></p:outputLabel> </p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{examenModificacionBean.devuelveLugarExpedicion(per.solicitud_departamento)}" ></p:outputLabel></p:column>                                                
+                                                </p:row>
+                                                <p:row style="background-color: #ecebf3 ">
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Teléfono" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{per.telefono}" ></p:outputLabel></p:column>
+                                                    <p:column colspan="2">
+
+                                                    </p:column>
+                                                    <!--                                                    <p:column style="width: 10%;"><p:outputLabel value="Genero"></p:outputLabel></p:column>
+                                                                                                        <p:column style="width: 40%;"><p:inputText value="fax"></p:inputText></p:column>                                                -->
+                                                </p:row>
+                                                <p:row style="background-color: #ecebf3 ">
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Celular" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{per.celular}"></p:outputLabel></p:column>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Fax" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{per.fax}" ></p:outputLabel></p:column>                                                
+                                                </p:row>
+                                                <p:row style="background-color: #ecebf3 ">
+                                                    <p:column  style="width: 10%;"><p:outputLabel value="Dirección" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                    <p:column colspan="3" style="width: 90%;" ><p:outputLabel  styleClass="fondoInput" value="#{per.direccion}" style="width: 98%;"></p:outputLabel></p:column>
+                                                </p:row>
+
+                                                <p:row style="background-color: #ecebf3 ">
+                                                    <p:column style="width: 10%;"><p:outputLabel value="email" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                    <p:column colspan="3" style="width: 40%;" ><p:outputLabel styleClass="fondoInput" value="#{per.email}" style="width: 98%;"></p:outputLabel></p:column>
+                                                </p:row>
+                                                <p:row style="background-color: #ecebf3 ">
+                                                    <p:column colspan="6" style="width: 100%; text-align: center">
+                                                        <p:commandButton rendered="true" value="Agregar" icon="ui-icon-circle-plus" actionListener="#{examenModificacionBean.cargaDialogo}" 
+                                                                         update=":formu:msg :formu:datosSolicitante :formu:panel" immediate="true">
+                                                            <p:ajax event="dialogReturn"  listener="#{examenModificacionBean.terminaDialogo}" update=":formu:msg :formu:datosSolicitante :formu:panel"/>
+                                                        </p:commandButton>
+                                                        <p:spacer width="10"/>
+                                                        <p:commandButton value="Modificar" icon="ui-icon-pencil" immediate="true"
+                                                                         actionListener="#{examenModificacionBean.modificarPersona(per)}" >
+                                                            <p:ajax event="dialogReturn"  listener="#{examenModificacionBean.terminaDialogoModificar}" update=":formu:msg :formu:datosSolicitante"/>
+                                                        </p:commandButton>
+
+                                                        <p:spacer width="10"/>
+                                                        <p:commandButton value="Eliminar" icon="ui-icon-circle-minus" update=":formu:datosSolicitante :formu:panel" immediate="true"
+                                                                         actionListener="#{examenModificacionBean.borrarPersona(per)}"></p:commandButton>
+                                                    </p:column>
+
+                                                </p:row>
+                                            </p:panelGrid>  
+                                        </p:dataGrid>
+                                    </fieldset>
+                                </p:column>
+                                <p:column colspan="2" style="vertical-align: top;width: 50% ">
+                                    <fieldset>
+                                        <legend>
+                                            <p:outputLabel value="Datos del apoderado" />
+                                        </legend>
+                                        <div align="center">
+                                            <p:commandButton  value="Agregar" icon="ui-icon-circle-plus" actionListener="#{examenModificacionBean.cargaDialogoApoderado()}" 
+                                                              rendered="#{examenModificacionBean.listaApoderado.size()==0}" immediate="true">
+                                                <p:ajax event="dialogReturn"  listener="#{examenModificacionBean.terminaDialogoApoderado}" update=":formu:msg :formu:datosApoderado :formu:panel"/>
+                                            </p:commandButton>
+                                        </div>
+
+                                        <p:dataGrid var="per" value="#{examenModificacionBean.listaApoderado}" emptyMessage="No existen apoderados" id="datosApoderado"
+                                                    paginatorPosition="bottom" style="width: 100%;" columns="1" rows="1" layout="grid" paginator="true">                                            
+                                            <p:panelGrid style="width: 100%;">
+                                                <p:row style="background-color: #ecebf3">
+                                                    <p:column  style="width: 10%;"><p:outputLabel value="Apoderado" style="font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column colspan="3" style="width: 90%;">
+                                                        <p:outputLabel styleClass="fondoInput" value="#{examenModificacionBean.devuelveNombreJuridicoONatural(per.nombre_razonsocial,per.primer_apellido,per.segundo_apellido)}" style="width: 30%;" >
+                                                        </p:outputLabel>
+                                                        <!--                                                     <p:outputLabel  value="# {per.nombre_razonsocial}" style="width: 30%;" >
+                                                                                                                </p:outputLabel>    
+                                                                                                                <p:spacer width="2"/>
+                                                                                                                <p:outputLabel  value="# {per.primer_apellido}" style="width: 35%;" >
+                                                                                                                </p:outputLabel><p:spacer width="2"/>
+                                                                                                                <p:outputLabel  value="# {per.segundo_apellido}" style="width: 28%;">
+                                                                                                                </p:outputLabel>--> 
+                                                    </p:column>
+                                                </p:row>        
+                                                <p:row style="background-color: #ecebf3">
+                                                    <p:column style="width: 10%;"><p:outputLabel value="N° Doc." style="display: block; width: 85px; font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{per.numero_documento}"></p:outputLabel></p:column>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Tipo Doc." style="display: block; width: 100px; font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{examenModificacionBean.devuelveTipoDocumento(per.tipo_documento)}" style="display: block; width: 160px"></p:outputLabel></p:column>                                                
+                                                </p:row>
+                                                <p:row style="background-color: #ecebf3">
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Género" style="font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{examenModificacionBean.devuelveGenero(per.genero)}"></p:outputLabel></p:column>       
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Lugar Exp." style="display: block;width: 105px; font-weight: bold" rendered="#{per.tipo_documento=='CI'}"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{examenModificacionBean.devuelveLugarExpedicion(per.lugar_expedicion)}" rendered="#{per.tipo_documento=='CI'}"></p:outputLabel></p:column>                                                                                             
+                                                </p:row>
+                                                <!--                                                <p:row style="background-color: #ecebf3">
+                                                                                                    <p:column style="width: 10%;"><p:outputLabel value="Pais" style="font-weight: bold"></p:outputLabel></p:column>
+                                                                                                    <p:column style="width: 90%;"><p:outputLabel value="# {examenModificacionBean.devuelvePais(per.pais)}"></p:outputLabel></p:column>
+                                                                                                    <p:column style="width: 10%;"><p:outputLabel value="Departamento" rendered="# {per.pais=='BO'}" style="font-weight: bold"></p:outputLabel></p:column>
+                                                                                                    <p:column style="width: 90%;"><p:outputLabel value="# {examenModificacionBean.devuelveLugarExpedicion(per.solicitud_departamento)}" rendered="# {per.pais=='BO'}"></p:outputLabel></p:column>                                                
+                                                                                                </p:row>-->
+                                                <p:row style="background-color: #ecebf3">
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Teléfono" style="font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{per.telefono}" ></p:outputLabel></p:column>
+                                                    <p:column colspan="2">
+
+                                                    </p:column>
+                                                    <!--                                                    <p:column style="width: 10%;"><p:outputLabel value="Genero"></p:outputLabel></p:column>
+                                                                                                        <p:column style="width: 40%;"><p:inputText value="fax"></p:inputText></p:column>                                                -->
+                                                </p:row>
+                                                <p:row style="background-color: #ecebf3">
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Celular" style="font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{per.celular}"></p:outputLabel></p:column>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Fax" style="font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{per.fax}" ></p:outputLabel></p:column>                                                
+                                                </p:row>
+                                                <p:row style="background-color: #ecebf3">
+                                                    <p:column  style="width: 10%;"><p:outputLabel value="Dirección" style="font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column colspan="3" style="width: 90%;"><p:outputLabel styleClass="fondoInput" value="#{per.direccion}" style="width: 98%;"></p:outputLabel></p:column>
+                                                </p:row>
+                                                <p:row style="background-color: #ecebf3">
+                                                    <p:column style="width: 10%;"><p:outputLabel value="email"  style="font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column colspan="3" style="width: 40%;"><p:outputLabel value="#{per.email}" styleClass="fondoInput" style="width: 98%;"></p:outputLabel></p:column>
+                                                </p:row>
+                                                <p:row style="background-color: #ecebf3">
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Poder" style="font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column colspan="3" style="width: 40%;">
+                                                        <h:panelGrid columns="3">                                                           
+                                                            <p:outputLabel value="#{per.poder}" styleClass="fondoInput"/>
+                                                            <p:spacer width="3"/>
+                                                            <p:commandButton value="Libro de Poderes" icon="ui-icon-seek-next" 
+                                                                             action="#{examenModificacionBean.abrirPoderDepositado()}"/>
+                                                        </h:panelGrid>
+                                                    </p:column>
+                                                </p:row>
+                                                <p:row style="background-color: #ecebf3">
+                                                    <p:column colspan="6" style="width: 100%; text-align: center">
+                                                        <p:commandButton rendered="true" value="Agregar" icon="ui-icon-circle-plus" actionListener="#{examenModificacionBean.cargaDialogoApoderado()}" 
+                                                                         immediate="true">
+                                                            <p:ajax event="dialogReturn"  listener="#{examenModificacionBean.terminaDialogoApoderado}" update=":formu:msg :formu:datosApoderado :formu:panel"/>
+                                                        </p:commandButton>
+                                                        <p:spacer width="10"/>
+                                                        <p:commandButton value="Modificar" icon="ui-icon-pencil" immediate="true"
+                                                                         actionListener="#{examenModificacionBean.modificarApoderado(per)}" >
+                                                            <p:ajax event="dialogReturn"  listener="#{examenModificacionBean.terminaDialogoModificarPersona}" update=":formu:msg :formu:datosApoderado"/>
+                                                        </p:commandButton>
+
+                                                        <p:spacer width="10"/>
+                                                        <p:commandButton value="Eliminar" icon="ui-icon-circle-minus" update=":formu:datosApoderado :formu:panel"
+                                                                         actionListener="#{examenModificacionBean.borrarApoderado(per)}" immediate="true"></p:commandButton>
+                                                    </p:column>
+
+                                                </p:row>
+                                            </p:panelGrid>                             
+                                        </p:dataGrid>
+                                    </fieldset>
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                        <p:panelGrid style="width: 100%" styleClass="quitarBordes" id="panelNotificacion">
+                            <p:row >
+                                <p:column colspan="4">
+                                    <fieldset >
+                                        <legend>
+                                            <p:outputLabel value="Dirección de notificación" />
+                                        </legend>
+                                        <p:panelGrid style="width: 100%">
+                                            <p:row>
+                                                <p:column style="width: 10%"> <p:outputLabel value="Ciudad:" style="font-weight: bold;"/> 
+                                                </p:column>                    
+                                                <p:column  style="width: 40%">
+                                                    <p:selectOneMenu id="cmbCiudadNotificacion" style="width: 80px !important" value="#{examenModificacionBean.direccionNotificacion.ciudad_notificacion}" autoWidth="false"
+                                                                     title="OBLIGATORIO. Ciudad para notificacion"  >
+                                                        <f:selectItem itemLabel="Elegir" itemValue=""    /> 
+                                                        <f:selectItems  value="#{examenModificacionBean.lstCiudadNotificacion}" var="ciudadNotificacion" itemLabel="#{ciudadNotificacion.nombre}" itemValue="#{ciudadNotificacion.codigo}"    />                  
+                                                        <f:validateLength minimum="0" />
+                                                    </p:selectOneMenu>  
+                                                </p:column>
+
+                                                <p:column style="width: 10%"> <p:outputLabel value="Barrio/Zona:" style="font-weight: bold;"/></p:column>
+                                                <p:column  style="width: 40%"> <p:inputTextarea id="zonaBarrio" value="#{examenModificacionBean.direccionNotificacion.zona_barrio}" 
+                                                                                                rows="2" cols="110"  autoResize="false" maxlength="500">
+                                                    </p:inputTextarea></p:column>
+                                            </p:row>
+
+                                        </p:panelGrid>
+                                        <p:panelGrid style="width: 100%">
+                                            <p:row >
+                                                <p:column style="width: 70%">
+                                                    <p:panelGrid columns="2" style="width: 99%">
+                                                        <p:outputLabel value="Av/Calle:" style="font-weight: bold;"/>
+                                                        <p:inputText id="avenida" value="#{examenModificacionBean.direccionNotificacion.avenida_calle}" 
+                                                                     maxlength="100" style="width: 100%" size="50"></p:inputText> 
+                                                    </p:panelGrid>
+                                                </p:column>                    
+                                                <p:column  style="width: 10%">
+                                                    <p:panelGrid columns="2">
+                                                        <p:outputLabel value="N°:" style="display: block; width: 20px; font-weight: bold"/>
+                                                        <p:inputText id="numeroNoti" style="width: 80%" value="#{examenModificacionBean.direccionNotificacion.numero}" 
+                                                                     maxlength="20">
+                                                        </p:inputText>                  
+                                                    </p:panelGrid>
+                                                </p:column>
+                                                <p:column style="width: 10%"> 
+                                                    <p:panelGrid columns="2">
+                                                        <p:outputLabel value="Celular:" style="font-weight: bold;" />
+                                                        <p:inputText value="#{examenModificacionBean.direccionNotificacion.celular}"  maxlength="100"/> 
+                                                    </p:panelGrid>
+                                                </p:column>
+                                                <p:column  style="width:10%">
+                                                    <p:panelGrid columns="2">
+                                                        <p:outputLabel value="Teléfono:" style="font-weight: bold;"/>
+                                                        <p:inputText value="#{examenModificacionBean.direccionNotificacion.telefono}"  maxlength="100"/> 
+                                                    </p:panelGrid>
+                                                </p:column>
+                                            </p:row>
+
+                                        </p:panelGrid>
+
+                                        <p:panelGrid style="width: 100%">
+                                            <p:row>
+                                                <p:column style="width: 6%"><p:outputLabel value="Referencia:" style="font-weight: bold;"/> 
+                                                </p:column>                    
+                                                <p:column  style="width: 90%" colspan="3"> 
+                                                    <p:inputText value="#{examenModificacionBean.direccionNotificacion.referencia_direccion}" style="width: 99%"  maxlength="250"/>                   
+                                                </p:column>
+
+                                            </p:row>
+                                        </p:panelGrid>
+                                        <p:panelGrid style="width: 100%">
+                                            <p:row >
+                                                <p:column style="width: 40%">
+                                                    <p:panelGrid columns="2" style="width: 99%">
+                                                        <p:outputLabel  id="lblEdificio" value="Edificio:" style="font-weight: bold;"/>
+                                                        <p:inputText value="#{examenModificacionBean.direccionNotificacion.edificio}" style="width: 100%" size="33"  maxlength="100"/>
+                                                    </p:panelGrid>
+                                                </p:column>                    
+                                                <p:column  style="width: 10%">
+                                                    <p:panelGrid columns="2">
+                                                        <p:outputLabel value="Piso:" style="font-weight: bold;"/>
+                                                        <p:inputText value="#{examenModificacionBean.direccionNotificacion.piso}" style="width: 80%" maxlength="20"/>       
+                                                    </p:panelGrid>
+                                                </p:column>
+                                                <p:column style="width: 10%"> 
+                                                    <p:panelGrid columns="2">
+                                                        <p:outputLabel value="Departamento:"  style="font-weight: bold;"/>
+                                                        <p:inputText value="#{examenModificacionBean.direccionNotificacion.departamento}" size="13" maxlength="10"/>
+                                                    </p:panelGrid>
+                                                </p:column>
+                                                <p:column  style="width:35%">
+                                                    <p:panelGrid columns="2">
+                                                        <p:outputLabel value="E-mail:"  style="display: block; width: 50px; font-weight: bold"/>
+                                                        <p:inputText id="correoNoti" style="width: 100%" value="#{examenModificacionBean.direccionNotificacion.correo_electronico}" 
+                                                                     maxlength="100" size="39"
+                                                                     >
+                                                            <!--                                                <f:validateRegex
+                                                                                                                pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />-->
+                                                        </p:inputText>
+                                                        <p:watermark for="correoNoti" value="correo@dominio.ext" />
+                                                    </p:panelGrid>
+                                                </p:column>
+                                            </p:row>
+
+                                        </p:panelGrid>
+                                        <!--                                        <h:panelGrid columns="7" cellpadding="1" >
+                                                                                    <p:outputLabel value="Ciudad"  style="display: block; width: 70px"/>
+                                                                                    <p:selectOneMenu id="cmbCiudadNotificacion" style="width: 80px !important" value="# {examenModificacionBean.direccionNotificacion.ciudad_notificacion}" autoWidth="false"
+                                                                                                     title="OBLIGATORIO. Ciudad para notificacion"  >
+                                                                                        <f:selectItem itemLabel="Elegir" itemValue=""    /> 
+                                                                                        <f:selectItems  value="# {examenModificacionBean.lstCiudadNotificacion}" var="ciudadNotificacion" itemLabel="#{ciudadNotificacion.nombre}" itemValue="#{ciudadNotificacion.codigo}"    />                  
+                                                                                        <f:validateLength minimum="0" />
+                                                                                    </p:selectOneMenu> 
+                                                                                    <p:spacer width="1"/>
+                                        
+                                                                                    <p:outputLabel value="Barrio/Zona" />
+                                                                                    <p:inputTextarea id="zonaBarrio" value="# {examenModificacionBean.direccionNotificacion.zona_barrio}" 
+                                                                                                     rows="2" cols="110"  autoResize="false" maxlength="500">
+                                        
+                                                                                    </p:inputTextarea>
+                                                                                                                                <p:message for="cmbCiudadNotificacion" display="icon" rendered="# {examenModificacionBean.validadorCiudadNotificacion}"/>
+                                                                                </h:panelGrid>-->
+
+
+
+                                    </fieldset>
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                        <p:panelGrid style="width: 100%" styleClass="quitarBordes">
+                            <p:row >
+                                <p:column colspan="4">
+                                    <fieldset >
+                                        <legend>
+                                            <p:outputLabel value="Datos del signo registrado" />
+                                        </legend>
+                                        <p:panelGrid style="width: 100%" id="panelDatosRegistrados">
+                                            <p:row >
+                                                <p:column style="width: 65%; vertical-align: top; ">  
+                                                    <div align="center">
+                                                        <p:panelGrid id="botonAgregarT">
+                                                            <p:commandButton  
+                                                                value="Agregar" 
+                                                                icon="ui-icon-circle-plus" 
+                                                                actionListener="#{examenModificacionBean.cargaDialogoTitularRegistrado()}" 
+                                                                rendered="#{examenModificacionBean.listaTitularRegistrado.size()==0}" 
+                                                                immediate="true">
+                                                                <p:ajax event="dialogReturn"  listener="#{examenModificacionBean.terminaDialogoTitularRegistrado}" 
+                                                                        update=":formu:msg :formu:panelDatosRegistrados :formu:nombre"/>
+                                                            </p:commandButton>
+                                                        </p:panelGrid>
+                                                    </div>
+                                                    <p:dataGrid var="per" value="#{examenModificacionBean.listaTitularRegistrado}" emptyMessage="No existen Titulares" 
+                                                                paginatorPosition="bottom" style="width: 100%;" columns="1" rows="1" layout="grid" paginator="true">                                            
+                                                        <p:panelGrid style="width: 100%;">
+                                                            <p:row style="background-color: #ecebf3">
+                                                                <p:column  style="width: 10%;"><p:outputLabel value="Titular" style="font-weight: bold"></p:outputLabel></p:column>
+                                                                <p:column colspan="3" style="width: 90%;" styleClass="fondoInput">
+                                                                    <p:outputLabel value="#{examenModificacionBean.devuelveNombreJuridicoONatural(per.nombre_razonsocial, per.primer_apellido, per.segundo_apellido)}" style="width: 98%;">
+                                                                    </p:outputLabel>
+                                                                </p:column>
+                                                            </p:row>                                                                                        
+                                                            <p:row style="background-color: #ecebf3">
+                                                                <p:column  style="width: 10%;"><p:outputLabel value="Dirección" style="font-weight: bold"></p:outputLabel></p:column>
+                                                                <p:column colspan="3" style="width: 90%;" styleClass="fondoInput"><p:outputLabel value="#{per.direccion}" style="width: 98%;"></p:outputLabel></p:column>
+                                                            </p:row>  
+                                                            <p:row style="background-color: #ecebf3">
+                                                                <p:column colspan="4" style="width: 100%; text-align: center">
+                                                                    <p:commandButton  value="Agregar" icon="ui-icon-circle-plus" actionListener="#{examenModificacionBean.cargaDialogoTitularRegistrado()}" 
+                                                                                      immediate="true">
+                                                                        <p:ajax event="dialogReturn"  listener="#{examenModificacionBean.terminaDialogoTitularRegistrado}" update=":formu:msg :formu:panelDatosRegistrados :formu:nombre"/>
+                                                                    </p:commandButton>
+                                                                    <p:spacer width="10"/>
+                                                                    <p:commandButton value="Modificar" icon="ui-icon-pencil" immediate="true"
+                                                                                     actionListener="#{examenModificacionBean.modificarTitularRegistrado(per)}" >
+                                                                        <p:ajax event="dialogReturn"  listener="#{examenModificacionBean.terminaModificarRegistrado}" update=":formu:msg :formu:panelDatosRegistrados :formu:nombre" />
+                                                                    </p:commandButton>
+                                                                    <p:spacer width="10"/>
+                                                                    <p:commandButton value="Eliminar" icon="ui-icon-circle-minus" update=":formu:msg :formu:panelDatosRegistrados :formu:nombre" immediate="true"
+                                                                                     actionListener="#{examenModificacionBean.borrartTitularRegistrado(per)}" ></p:commandButton>
+                                                                </p:column>
+
+                                                            </p:row>
+                                                        </p:panelGrid>                             
+
+                                                    </p:dataGrid>        
+                                                    <p:spacer height="1"/>
+                                                    <h:panelGrid columns="2" style="width: 100%"> 
+                                                        <p:panelGrid style="width: 100%">
+                                                            <p:row style="width: 100%">
+                                                                <p:column style="width: 10%; text-align: center" colspan="1">
+                                                                    <p:outputLabel value="Signo Distintivo"  style="display: block; width: 100px;font-weight: bold" />
+                                                                </p:column>
+                                                                <p:column style="width: 90%; text-align: center" colspan="3">
+                                                                    <p:inputTextarea value="#{examenModificacionBean.modificacion.signo_registrado}"  rows="2" cols="50" autoResize="false"
+                                                                                     onkeyup="this.value = this.value.substring(0, 1000);" maxlength="1000" id="txtSigno" 
+                                                                                     style="width: 100%" styleClass="tituloMarca">
+                                                                    </p:inputTextarea> 
+                                                                </p:column>
+                                                            </p:row>
+                                                            <p:row style="width: 100%">
+                                                                <p:column style="width: 10%;">
+                                                                    <h:outputLabel value="Clasificador: " style="display: block; width: 100px;font-weight: bold"/>
+                                                                </p:column>
+                                                                <p:column style="width: 40%;">
+                                                                    <p:selectOneMenu   value="#{examenModificacionBean.version}"
+                                                                                      id="cmbVersioClaseNiza"
+                                                                                      title="Seleccione la version a usar"
+                                                                                      autoWidth="false">
+                                                                        <f:selectItem   itemLabel="Elegir" itemValue="#{null}" />                                 
+                                                                        <f:selectItems value="#{examenModificacionBean.lstClaseNizaVersion}" 
+                                                                                       var="datoVersion"  itemLabel="#{datoVersion}" itemValue="#{datoVersion}" />
+                                                                        <p:ajax event="change" listener="#{examenModificacionBean.cambiaListaClase()}" update="cmbClaseNiza"/>
+                                                                    </p:selectOneMenu>
+                                                                </p:column>
+                                                                <p:column style="width: 10%; text-align: center">                                                                    
+                                                                    <p:outputLabel value="Clase:" style="font-weight: bold"/>
+                                                                </p:column>
+                                                                <p:column style="width: 40%;">
+                                                                    <p:selectOneMenu id="cmbClaseNiza" value="#{examenModificacionBean.modificacion.idclase_registrado}" autoWidth="false">
+                                                                        <f:selectItem itemLabel="Elegir" itemValue=""></f:selectItem>
+                                                                        <f:selectItems value="#{examenModificacionBean.lstClaseNiza}" var="r" itemLabel="#{r.numeroClaseNiza}" itemValue="#{r.idClaseNiza}"/>
+                                                                    </p:selectOneMenu>
+                                                                </p:column>
+                                                            </p:row>                                                          
+
+                                                            <!--                                                            <p:inputText id="txtClase" value="# {examenModificacionBean.modificacion.clase_registrado}" size="10" maxlength="8" onkeyup="return ValNumero(this);">
+                                                            
+                                                                                                                        </p:inputText>-->                                                            
+                                                        </p:panelGrid>  
+                                                        <p:panelGrid columns="2" id="pnlProductos">
+                                                            <p:outputLabel value="Productos:"  rendered="#{examenModificacionBean.productosRendered}" style="font-weight: bold"/>
+                                                            <p:inputTextarea value="#{examenModificacionBean.modificacion.lista_producto}"  rows="6" cols="30" autoResize="false"
+                                                                             onkeyup="this.value = this.value.substring(0, 5000);" rendered="#{examenModificacionBean.productosRendered}">
+                                                            </p:inputTextarea>
+                                                        </p:panelGrid>
+                                                    </h:panelGrid>
+                                                </p:column>
+                                                <p:column style="vertical-align: top;">                                            
+                                                    <p:panelGrid columns="3" >
+                                                        <p:outputLabel value="Tipo género" style="display:block;width:83px;font-weight: bold" />
+                                                        <p:selectOneMenu  value="#{examenModificacionBean.tipoMarca}" id="cboTipoMarca" >
+                                                            <f:selectItem itemLabel="Elegir" itemValue="" />
+                                                            <f:selectItems value="#{examenModificacionBean.listaTipoGenero}" var="tipoGenero" itemLabel="#{tipoGenero.nombre}" itemValue="#{tipoGenero.codigo}"/>
+                                                            <p:ajax listener="#{examenModificacionBean.activaPanelLema()}"
+                                                                    event="change" update=":formu:panelLema"></p:ajax>
+
+                                                        </p:selectOneMenu>                                                       
+                                                    </p:panelGrid>
+
+                                                    <h:panelGrid id="panelLema" >
+                                                        <h:panelGrid  columns="2" cellspacing="1" rendered="#{examenModificacionBean.panelLema}">
+                                                            <p:outputLabel value="Acompaña a la" />
+                                                            <p:inputTextarea value="#{examenModificacionBean.modificacion.marca_acomp}"  rows="2" cols="31" autoResize="false"
+                                                                             onkeyup="this.value = this.value.substring(0, 1000);" maxlength="1000"
+                                                                             >
+                                                            </p:inputTextarea>
+                                                        </h:panelGrid>
+                                                        <h:panelGrid  columns="6" cellpadding="1" rendered="#{examenModificacionBean.panelLema}">                                        
+                                                            <p:outputLabel value="N° Registro" />
+                                                            <p:inputText value="#{examenModificacionBean.modificacion.reg_lc_registrado}" size="5" maxlength="8" onkeyup="return ValNumero(this);"/>
+
+                                                            <p:selectOneMenu  value="#{examenModificacionBean.modificacion.serie_lc_registrado}" autoWidth="false">
+                                                                <f:selectItems value="#{examenModificacionBean.lstSerieRegistro}" var="r" itemLabel="#{r.nombre}" itemValue="#{r.codigo}"/>
+                                                            </p:selectOneMenu>
+                                                            <p:spacer height="1"/>
+                                                            <p:outputLabel value="Fecha" />
+
+                                                            <p:calendar value="#{examenModificacionBean.modificacion.fecha_lc_registrado}"                                                
+                                                                        locale="es" 
+                                                                        navigator="true" 
+                                                                        pattern="dd/MM/yyyy" mask="true"
+                                                                        size="12" 
+                                                                        >
+                                                            </p:calendar>
+                                                        </h:panelGrid>
+                                                    </h:panelGrid>
+                                                    <p:spacer height="1"/>
+                                                    <p:panelGrid style="width: 100%"> 
+                                                        <p:row>
+                                                            <p:column style="width: 18%">
+                                                                <p:outputLabel for="menu" value="Tipo signo:" style="font-weight: bold"/>
+                                                            </p:column>
+                                                            <p:column style="width: 70%">
+                                                                <p:selectCheckboxMenu id="menu" value="#{examenModificacionBean.tipoGeneroSeleccionado}" 
+                                                                                      label="#{examenModificacionBean.tipoSignoDescripcion}"  
+                                                                                      filter="true" filterMatchMode="startsWith" panelStyle="width:250px"  >
+                                                                    <f:selectItems value="#{examenModificacionBean.listaTipoSigno}" 
+                                                                                   var="tipoSigno" itemLabel="#{tipoSigno.nombre}" itemValue="#{tipoSigno.codigo}"/>
+                                                                    <p:ajax event="toggleSelect" listener="#{examenModificacionBean.muestraOtro()}" update="display pnlOtro"/>
+                                                                    <p:ajax event="change" listener="#{examenModificacionBean.muestraOtro()}" update="display pnlOtro"/>
+                                                                </p:selectCheckboxMenu>
+                                                            </p:column>
+                                                        </p:row>
+                                                        <p:row>
+                                                            <p:column style="width: 15%">
+                                                                <p:panelGrid id="pnlOtro">
+
+                                                                </p:panelGrid>
+
+                                                            </p:column>
+                                                            <p:column style="width: 70%">
+                                                                <p:outputPanel id="display" style="width:100%;padding-left:0px;margin-top:1px" >
+
+                                                                    <p:outputLabel  value="Otro:" rendered="#{examenModificacionBean.txtOtroRendered}"/>
+                                                                    <p:inputText value="#{examenModificacionBean.textoOtro}" rendered="#{examenModificacionBean.txtOtroRendered}" 
+                                                                                 style="width: 95%" />
+
+                                                                    <!--                                                            <p:dataList value="# {examenModificacionBean.tipoGeneroSeleccionado}" var="city" emptyMessage="No cities selected">
+                                                                                                                                    # {city}
+                                                                                                                                </p:dataList>-->
+                                                                </p:outputPanel>
+                                                            </p:column>
+                                                        </p:row>
+                                                    </p:panelGrid>
+
+
+
+
+                                                    <!--                                                        <p:outputLabel value="Tipo signo" style="display:block;width:80px" />
+                                                                                                            <p:selectOneMenu  value="# {examenModificacionBean.tipoSigno}" id="cboTipoSigno" >
+                                                                                                                <f:selectItem itemLabel="Elegir" itemValue="" />
+                                                                                                                <f:selectItems value="# {examenModificacionBean.listaTipoSigno}" var="tipoSigno" 
+                                                                                                                               itemLabel="# {tipoSigno.nombre}" itemValue="# {tipoSigno.codigo}"/>
+                                                    
+                                                                                                            </p:selectOneMenu>-->
+
+                                                </p:column>
+                                            </p:row>                                                                                
+                                        </p:panelGrid>
+                                    </fieldset>
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                        <p:panelGrid style="width: 100%" styleClass="quitarBordes" >
+                            <p:row >
+                                <p:column colspan="4" style="width: 100%;">
+                                    <fieldset >
+                                        <legend>
+                                            <p:outputLabel value="Datos del nuevo titular o licenciatario" />                                
+                                        </legend>                                          
+                                        <h:panelGrid id="nombre" styleClass="quitarBordes" style="width: 100%">  
+                                            <p:panelGrid rendered="#{examenModificacionBean.radioNombre}" style="width: 100%"> 
+                                                <p:row style="width: 100%; ">
+                                                    <p:column style="width: 100%; " colspan="2">
+                                                        <h:panelGrid style="padding-left: 46%; width: 100%;" rendered="#{examenModificacionBean.listaNuevoTitular.size()==0}" >
+                                                            <p:commandButton  value="Agregar" icon="ui-icon-circle-plus" actionListener="#{examenModificacionBean.cargaDialogoNuevoTitular()}" 
+                                                                              update=":formu:msg :formu:datosNuevoNombre :formu:nombre" >
+                                                                <p:ajax event="dialogReturn"  listener="#{examenModificacionBean.terminaDialogoNuevoTitular}" update=":formu:msg :formu:datosNuevoTItular :formu:nombre"/>
+                                                            </p:commandButton>
+                                                        </h:panelGrid>
+                                                        <p:dataGrid var="per" value="#{examenModificacionBean.listaNuevoTitular}" style="width: 100%"
+                                                                    emptyMessage="No existen nuevos titulares para cambio de nombre" id="datosNuevoNombre"
+                                                                    columns="1" rows="1" layout="grid" paginator="true" paginatorPosition="bottom">
+                                                            <p:panelGrid columns="2" style="width: 100%"  >
+                                                                <p:panelGrid style="width: 70%;"  >
+                                                                    <p:row style="background-color:#ecebf3; ">
+                                                                        <p:column  style="width: 10%;"><p:outputLabel value="Nuevo Titular" style="font-weight: bold; display: block; width: 90px"></p:outputLabel></p:column>
+                                                                        <p:column colspan="3" style="width: 690px; border-color: #045491">
+                                                                            <p:outputLabel styleClass="fondoInput"  value="#{examenModificacionBean.devuelveNombreJuridicoONatural(per.nombre_razonsocial,per.primer_apellido,per.segundo_apellido)}" style="width: 30%;" >
+                                                                            </p:outputLabel>
+
+                                                                        </p:column>
+                                                                    </p:row>    
+                                                                    <p:row style="background-color:#ecebf3">
+                                                                        <p:column  style="width: 10%"><p:outputLabel value="N° Doc." style="display: block; width: 85px;font-weight: bold"></p:outputLabel></p:column>
+                                                                        <p:column styleClass="fondoInput"><p:outputLabel value="#{per.numero_documento}" ></p:outputLabel></p:column>                                                             
+                                                                        <p:column style="width: 10%"><p:outputLabel value="Tipo Doc." style="display: block; width: 105px;font-weight: bold"></p:outputLabel></p:column>
+                                                                        <p:column style="width: 40%" styleClass="fondoInput"><p:outputLabel value="#{examenModificacionBean.devuelveTipoDocumento(per.tipo_documento)}" ></p:outputLabel></p:column>  
+                                                                    </p:row>
+                                                                    <p:row rendered="#{per.tipo_titular=='NAT'}" style="background-color:#ecebf3">
+                                                                        <p:column style="width: 10%;"><p:outputLabel value="Género" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                                        <p:column styleClass="fondoInput" style="width: 40%;"><p:outputLabel value="#{examenModificacionBean.devuelveGenero(per.genero)}"></p:outputLabel></p:column>   
+                                                                        <p:column style="width: 10%;"><p:outputLabel value="Lugar Expedición" style="display: block;width: 105px; font-weight: bold;" rendered="#{per.tipo_documento=='CI'}"></p:outputLabel></p:column>
+                                                                        <p:column styleClass="fondoInput" style="width: 40%;"><p:outputLabel value="#{examenModificacionBean.devuelveLugarExpedicion(per.lugar_expedicion)}" ></p:outputLabel></p:column>                                                                                                 
+                                                                    </p:row>
+                                                                    <p:row style="background-color:#ecebf3">
+                                                                        <p:column colspan="6" style="width: 100%; text-align: center">
+                                                                            <p:commandButton  value="Agregar" icon="ui-icon-circle-plus" actionListener="#{examenModificacionBean.cargaDialogoNuevoTitular()}" 
+                                                                                              update=":formu:msg" >
+                                                                                <p:ajax event="dialogReturn"  listener="#{examenModificacionBean.terminaDialogoNuevoTitular}" update=":formu:msg :formu:datosNuevoTItular :formu:nombre " />
+                                                                            </p:commandButton>
+                                                                            <p:spacer width="10"/>
+                                                                            <p:commandButton value="Modificar" icon="ui-icon-pencil"
+                                                                                             actionListener="#{examenModificacionBean.modificarNuevoTitular(per)}" >
+                                                                                <p:ajax event="dialogReturn"  listener="#{examenModificacionBean.terminaDialogoModificarNuevoTitular}" update=":formu:msg :formu:datosNuevoTItular :formu:nombre" />
+                                                                            </p:commandButton>
+
+                                                                            <p:spacer width="10"/>
+                                                                            <p:commandButton value="Eliminar" icon="ui-icon-circle-minus" update=":formu:msg :formu:datosNuevoTItular :formu:nombre :formu:datosNuevoNombre"
+                                                                                             actionListener="#{examenModificacionBean.borrarNuevoTitular(per)}"></p:commandButton>
+                                                                        </p:column>
+                                                                    </p:row>
+                                                                </p:panelGrid>
+                                                                <p:panelGrid style="width: 20%;">
+
+                                                                    <p:outputLabel value="Seleccione un nombre a modificar:" style="font-weight: bold" 
+                                                                                   rendered="#{examenModificacionBean.panelSeleccionarIdReferencia}"/>
+                                                                    <p:selectOneRadio   layout="grid" columns="1" value="#{per.id_referencia}" 
+                                                                                        rendered="#{examenModificacionBean.panelSeleccionarIdReferencia}">
+                                                                        <f:selectItems value="#{examenModificacionBean.lstTitularActual}" 
+                                                                                       var="valorId" itemLabel="#{examenModificacionBean.devuelveNombreJuridicoONatural(valorId.nombreRazonSocial, valorId.primerApellido, valorId.segundoApellido)}"
+                                                                                       itemValue="#{valorId.idSolicitanteApoderado}" />  
+                                                                        <f:selectItem  itemLabel="Todos" itemValue="-1"  />                                                                            
+                                                                    </p:selectOneRadio>  
+
+                                                                    <!--                                                                    <h:panelGrid rendered="false">
+                                                                                                                                            panel para casos extremos
+                                                                                                                                        </h:panelGrid>-->
+                                                                </p:panelGrid>
+                                                            </p:panelGrid>
+                                                        </p:dataGrid>   
+                                                    </p:column>
+
+                                                </p:row>
+
+                                            </p:panelGrid>
+                                            <h:panelGrid rendered="#{examenModificacionBean.radioTransferencia}" style="width: 100%">
+                                                <h:panelGrid style="padding-left: 46%; width: 100%;" rendered="#{examenModificacionBean.listaNuevoTitular.size()==0}" >
+                                                    <p:commandButton  value="Agregar" icon="ui-icon-circle-plus" actionListener="#{examenModificacionBean.cargaDialogoNuevoTitular()}" 
+                                                                      update=":formu:msg :formu:datosNuevoTItular :formu:nombre" immediate="true">
+                                                        <p:ajax event="dialogReturn"  listener="#{examenModificacionBean.terminaDialogoNuevoTitular}" update=":formu:msg :formu:datosNuevoTItular :formu:nombre"/>
+                                                    </p:commandButton>
+                                                </h:panelGrid>
+                                                <p:dataGrid var="per" value="#{examenModificacionBean.listaNuevoTitular}" emptyMessage="No existen solicitantes" id="datosNuevoTItular"
+                                                            style="width: 100%;" columns="1" rows="1" layout="grid" paginator="true" paginatorPosition="bottom">     
+                                                    <p:panelGrid style="width: 80%;">
+                                                        <p:row>
+                                                            <p:column  style="width: 10%;"><p:outputLabel value="Nuevo Titular:" style="font-weight: bold; display: block; width: 90px"></p:outputLabel></p:column>
+                                                            <p:column colspan="3" style="width: 90%;">
+                                                                <p:outputLabel styleClass="fondoInput" value="#{examenModificacionBean.devuelveNombreJuridicoONatural(per.nombre_razonsocial,per.primer_apellido,per.segundo_apellido)}" style="width: 98%;" >
+                                                                </p:outputLabel>
+                                                                <!-- <p:inputText value="# {per.nombre_razonsocial}" style="width: 98%;" rendered="# {per.tipo_titular=='JUR'}">
+                                                                                                                                </p:inputText>                                                               
+                                                                <p:inputText  value="# {per.nombre_razonsocial}" style="width: 30%;" rendered="# {per.tipo_titular=='NAT'}">
+                                                                                                                                </p:inputText>
+                                                                                                                                <p:inputText  value="# {per.primer_apellido}" style="width: 35%;" rendered="# {per.primer_apellido!=null}">
+                                                                                                                                </p:inputText>
+                                                                                                                                <p:inputText  value="# {per.segundo_apellido}" style="width: 28%;" rendered="# {per.segundo_apellido!=null}">
+                                                                                                                                </p:inputText>-->
+                                                            </p:column>
+                                                        </p:row>   
+                                                        <p:row rendered="#{examenModificacionBean.valorRadio!='CN'}">
+                                                            <p:column  style="width: 10%"><p:outputLabel value="N° Doc.:" style="display: block; width: 87px; font-weight: bold"></p:outputLabel></p:column>
+                                                            <p:column styleClass="fondoInput"><p:outputLabel value="#{per.numero_documento}" ></p:outputLabel></p:column>                                                             
+                                                            <p:column ><p:outputLabel value="Tipo Doc.:" style="display: block; width: 105px; font-weight: bold"></p:outputLabel></p:column>
+                                                            <p:column styleClass="fondoInput"><p:outputLabel value="#{examenModificacionBean.devuelveTipoDocumento(per.tipo_documento)}" style="display: block; width: 100%"></p:outputLabel></p:column>  
+                                                        </p:row>
+                                                        <p:row rendered="#{per.tipo_titular=='NAT'}">
+                                                            <p:column  style="width: 10%;"><p:outputLabel value="Género:" rendered="#{examenModificacionBean.valorRadio!='CN'}" style="font-weight: bold"></p:outputLabel></p:column>
+                                                            <p:column styleClass="fondoInput"><p:outputLabel value="#{examenModificacionBean.devuelveGenero(per.genero)}" rendered="#{examenModificacionBean.valorRadio!='CN'}"></p:outputLabel></p:column>   
+                                                            <p:column ><p:outputLabel value="Lugar Exp.:" style="display: block;width: 105px; font-weight: bold" rendered="#{examenModificacionBean.valorRadio!='CN'}"></p:outputLabel></p:column>
+                                                            <p:column styleClass="fondoInput"><p:outputLabel value="#{examenModificacionBean.devuelveLugarExpedicion(per.lugar_expedicion)}" rendered="#{examenModificacionBean.valorRadio!='CN'}"></p:outputLabel></p:column>  
+
+                                                        </p:row>
+                                                        <p:row rendered="#{examenModificacionBean.valorRadio!='CN'}">
+                                                            <p:column style="width: 10%;"><p:outputLabel value="Pais:" style="font-weight: bold"></p:outputLabel></p:column>
+                                                            <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{examenModificacionBean.devuelvePais(per.pais)}"></p:outputLabel></p:column>
+                                                            <p:column style="width: 10%;"><p:outputLabel value="Departamento:" style="font-weight: bold" rendered="#{per.pais=='BO'}"></p:outputLabel></p:column>
+                                                            <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{examenModificacionBean.devuelveLugarExpedicion(per.solicitud_departamento)}"></p:outputLabel></p:column>                                                               
+                                                        </p:row>
+                                                        <p:row rendered="#{examenModificacionBean.valorRadio!='CN'}">
+                                                            <p:column ><p:outputLabel value="Teléfono:" style="font-weight: bold"></p:outputLabel>
+
+                                                            </p:column>
+                                                            <p:column colspan="1">
+                                                                <h:panelGrid  columns="5">                                                                    
+                                                                    <p:outputLabel styleClass="fondoInput" value="#{per.telefono}" style="display: block; width: 120px" >
+                                                                    </p:outputLabel>
+                                                                    <p:spacer width="10"/>
+                                                                    <p:outputLabel value="Celular:" style="font-weight: bold; display: block; width: 100px"></p:outputLabel>
+                                                                    <p:spacer width="10"/>
+                                                                    <p:outputLabel styleClass="fondoInput" value="#{per.celular}" ></p:outputLabel>
+                                                                </h:panelGrid>
+                                                            </p:column> 
+                                                            <p:column colspan="2">
+                                                                <h:panelGrid  columns="3">
+                                                                    <p:outputLabel value="Fax:" style="display: block; width: 100px;font-weight: bold"></p:outputLabel>
+                                                                    <p:spacer width="12"/>
+                                                                    <p:outputLabel styleClass="fondoInput" value="#{per.fax}" ></p:outputLabel>
+                                                                </h:panelGrid>       
+                                                            </p:column>
+                                                        </p:row>
+                                                        <p:row rendered="#{examenModificacionBean.valorRadio!='CN'}">
+                                                            <p:column  style="width: 10%;"><p:outputLabel value="Dirección:" style="font-weight: bold"></p:outputLabel></p:column>
+                                                            <p:column colspan="3" style="width: 90%;" styleClass="fondoInput"><p:outputLabel value="#{per.direccion}" style="width: 98%;"></p:outputLabel></p:column>
+                                                        </p:row>
+
+                                                        <p:row rendered="#{examenModificacionBean.valorRadio!='CN'}">
+                                                            <p:column style="width: 10%;"><p:outputLabel value="email" style="font-weight: bold"></p:outputLabel></p:column>
+                                                            <p:column colspan="3" style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{per.email}" style="width: 98%;"></p:outputLabel></p:column>
+                                                        </p:row>
+                                                        <p:row>
+                                                            <p:column colspan="6" style="width: 100%; text-align: center">
+                                                                <p:commandButton  value="Agregar" icon="ui-icon-circle-plus" actionListener="#{examenModificacionBean.cargaDialogoNuevoTitular()}" 
+                                                                                  immediate="true">
+                                                                    <p:ajax event="dialogReturn"  listener="#{examenModificacionBean.terminaDialogoNuevoTitular}" update=":formu:msg :formu:datosNuevoTItular :formu:nombre"/>
+                                                                </p:commandButton>
+                                                                <p:spacer width="10"/>
+                                                                <p:commandButton value="Modificar" icon="ui-icon-pencil" immediate="true"
+                                                                                 actionListener="#{examenModificacionBean.modificarNuevoTitular(per)}" >
+                                                                    <p:ajax event="dialogReturn"  listener="#{examenModificacionBean.terminaDialogoModificarNuevoTitular}" update=":formu:msg :formu:datosNuevoTItular"/>
+                                                                </p:commandButton>
+
+                                                                <p:spacer width="10"/>
+                                                                <p:commandButton value="Eliminar" icon="ui-icon-circle-minus" update=":formu:msg :formu:datosNuevoTItular :formu:nombre"
+                                                                                 actionListener="#{examenModificacionBean.borrarNuevoTitular(per)}" immediate="true"></p:commandButton>
+                                                            </p:column>
+
+                                                        </p:row>
+                                                    </p:panelGrid>  
+                                                </p:dataGrid>                                                
+
+                                            </h:panelGrid>
+                                            <h:panelGrid rendered="#{examenModificacionBean.radioDomicilio}" style="width: 100%" >  
+                                                <p:row style="width: 100%">
+                                                    <p:column style="width: 100%" colspan="2">
+                                                        <h:panelGrid style="padding-left: 46%; width: 100%;" rendered="#{examenModificacionBean.listaNuevoTitular.size()==0}" >
+                                                            <p:commandButton  value="Agregar" icon="ui-icon-circle-plus" actionListener="#{examenModificacionBean.cargaDialogoNuevoTitular()}" 
+                                                                              update=":formu:msg :formu:datosNuevoDomicilio :formu:nombre" >
+                                                                <p:ajax event="dialogReturn"  listener="#{examenModificacionBean.terminaDialogoNuevoTitular}" update=":formu:msg :formu:datosNuevoTItular :formu:nombre"/>
+                                                            </p:commandButton>
+                                                        </h:panelGrid>
+                                                        <p:dataGrid var="per" value="#{examenModificacionBean.listaNuevoTitular}" emptyMessage="No existen nuevos domicilios" id="datosNuevoDomicilio"
+                                                                    style="width: 100%;" columns="1" rows="1" layout="grid" paginator="true" paginatorPosition="bottom">
+                                                            <p:panelGrid columns="2" style="width: 100%"  >
+                                                                <p:panelGrid  style="width: 75%" >
+                                                                    <p:row >
+
+                                                                        <p:column  style="width: 4%">
+
+                                                                            <p:outputLabel value="Domicilio" style="display: block; width: 83px; font-weight: bold"/> 
+
+
+
+                                                                        </p:column>
+                                                                        <p:column  styleClass="fondoInput" colspan="3">
+                                                                            <p:outputLabel  styleClass="fondoInput" value="#{per.direccion}" id="domicilioD" 
+                                                                                            title="OBLIGATORIO. Dirección nueva."                                                                                                       
+                                                                                            >                                                                        
+                                                                            </p:outputLabel>
+                                                                        </p:column>
+
+                                                                    </p:row>
+                                                                    <p:row style="width: 100%">
+
+                                                                        <p:column style="width: 4%;"><p:outputLabel value="Pais" style="font-weight: bold"></p:outputLabel></p:column>
+                                                                        <p:column style="width: 35%;"  styleClass="fondoInput"><p:outputLabel value="#{examenModificacionBean.devuelvePais(per.pais)}"></p:outputLabel></p:column>
+                                                                        <p:column style="width: 10%;"><p:outputLabel value="Departamento" rendered="#{per.pais=='BO'}" style="font-weight: bold"></p:outputLabel></p:column>
+                                                                        <p:column style="width: 35%;"  styleClass="fondoInput"><p:outputLabel value="#{examenModificacionBean.devuelveLugarExpedicion(per.solicitud_departamento)}" rendered="#{per.pais=='BO'}"></p:outputLabel></p:column>                                                
+
+                                                                    </p:row>
+                                                                    <p:row>
+                                                                        <p:column colspan="4" style="width: 100%; text-align: center">
+                                                                            <p:commandButton  value="Agregar" icon="ui-icon-circle-plus" actionListener="#{examenModificacionBean.cargaDialogoNuevoTitular()}" 
+                                                                                              update=":formu:msg :formu:datosNuevoDomicilio :formu:nombre" >
+                                                                                <p:ajax event="dialogReturn"  listener="#{examenModificacionBean.terminaDialogoNuevoTitular}" update=":formu:msg :formu:datosNuevoTItular :formu:nombre"/>
+                                                                            </p:commandButton>
+                                                                            <p:spacer width="10"/>
+                                                                            <p:commandButton value="Modificar" icon="ui-icon-pencil"
+                                                                                             actionListener="#{examenModificacionBean.modificarNuevoDomicilio(per)}" >
+                                                                                <p:ajax event="dialogReturn"  listener="#{examenModificacionBean.terminaDialogoModificarNuevoTitular}" update=":formu:msg :formu:datosNuevoTItular :formu:nombre" />
+                                                                            </p:commandButton>
+
+                                                                            <p:spacer width="10"/>
+                                                                            <p:commandButton value="Eliminar" icon="ui-icon-circle-minus" update=":formu:msg :formu:datosNuevoTItular :formu:nombre :formu:datosNuevoNombre"
+                                                                                             actionListener="#{examenModificacionBean.borrarNuevoTitular(per)}"></p:commandButton>
+                                                                        </p:column>
+                                                                    </p:row>
+
+                                                                </p:panelGrid>
+                                                                <h:panelGrid>
+                                                                    <p:outputLabel value="Seleccione un domicilio a modificar:" style="font-weight: bold" rendered="#{examenModificacionBean.panelSeleccionarIdReferencia}"/>
+                                                                    <p:selectOneRadio rendered="#{examenModificacionBean.panelSeleccionarIdReferencia}"
+                                                                                      value="#{per.id_referencia}" layout="grid" columns="1"  >
+                                                                        <f:selectItems value="#{examenModificacionBean.lstTitularActual}"
+                                                                                       var="actual" itemLabel="#{actual.direccion}" 
+                                                                                       itemValue="#{actual.idSolicitanteApoderado}" /> 
+                                                                        <f:selectItem  itemLabel="Todos" itemValue="-1"  />                                                                            
+                                                                    </p:selectOneRadio>
+                                                                </h:panelGrid>
+                                                            </p:panelGrid>
+                                                        </p:dataGrid>                                                                                                 
+                                                        <p:commandButton  value="PARA GUARDAR d" icon="ui-icon-circle-plus" rendered="false"
+                                                                          actionListener="#{examenModificacionBean.previa()}">                                                    
+                                                        </p:commandButton> 
+                                                    </p:column>
+                                                </p:row>
+                                            </h:panelGrid>
+                                            <h:panelGrid rendered="#{examenModificacionBean.radioFusion}" style="width: 100%">
+                                                <p:outputLabel value="En caso de Fusión:" style="color: #666666; font-weight: bold"/>
+
+
+                                                <p:panelGrid style="width: 100%" id="panelParticipanteFusion">
+                                                    <p:row>
+                                                        <p:column colspan="2" style="vertical-align: top; width: 40%">
+
+                                                            <p:panelGrid columns="3" >                                                                 
+                                                                <p:inputText value="#{examenModificacionBean.participanteFusion}"  
+                                                                             size="60"  maxlength="2000" id="participanteFusionDato" >                                                                   
+                                                                </p:inputText>
+                                                                <p:commandButton  icon="ui-icon-arrowthick-1-e" process="@this"        >   
+                                                                    <f:ajax listener="#{examenModificacionBean.addParticipanteFusion()}" execute="participanteFusionDato" render="panelParticipanteFusion"/>
+                                                                </p:commandButton>
+                                                                <!--  <p:commandButton  icon="ui-icon-arrowthick-1-e"  actionListener="# {examenModificacionBean.addParticipanteFusion()}"  
+                                                                                  update="panelParticipanteFusion">   
+                                                                </p:commandButton>
+    
+                                                                                                                               <p:commandButton icon="ui-icon-arrowthick-1-e"  value="1"      process="@this"     >
+                                                                                                                                    <p:ajax update="panelParticipanteFusion" process="participanteFusionDato" listener="# {examenModificacionBean.addParticipanteFusion}"/>
+                                                                                                                                </p:commandButton>-->
+                                                            </p:panelGrid>
+
+                                                        </p:column>
+                                                        <p:column colspan="2" style="vertical-align: top; width: 60%">
+                                                            <h:panelGrid id="pnlListaFusion" style="width: 100%;">
+                                                                <p:dataGrid id="dtgParticipantesFusion" var="per" value="#{examenModificacionBean.listaParticipanteFusion}" emptyMessage="No existen Participantes en la Fusion" 
+                                                                            paginatorPosition="bottom" style="width: 100%;" columns="1" rows="1" layout="grid" paginator="true">
+                                                                    <p:panelGrid style="width: 100%;">
+                                                                        <p:row>
+                                                                            <p:column  style="width: 10%;"><p:outputLabel value="Titular"></p:outputLabel></p:column>
+                                                                            <p:column colspan="2" style="width: 80%;">
+                                                                                <p:inputText value="#{per.nombre_razonsocial}" style="width: 98%;">
+                                                                                </p:inputText>
+                                                                            </p:column>
+                                                                            <p:column colspan="1" style="width: 10%;">
+                                                                                <p:commandButton icon="ui-icon-minusthick"   >
+                                                                                    <p:ajax listener="#{examenModificacionBean.borrarParticipanteFusion(per)}" event="click" update=":formu:panelParticipanteFusion"/>
+                                                                                </p:commandButton>
+                                                                            </p:column>
+                                                                        </p:row> 
+                                                                    </p:panelGrid>
+                                                                </p:dataGrid>     
+                                                            </h:panelGrid>
+                                                        </p:column>
+                                                    </p:row>
+                                                </p:panelGrid>
+
+
+                                            </h:panelGrid>       
+                                            <h:panelGrid rendered="#{examenModificacionBean.radioLU}" columns="5">
+                                                <p:outputLabel value="Plazo:" styleClass="labelBold"/>
+                                                <p:outputLabel value="Inicio" />                                                
+                                                <p:calendar value="#{examenModificacionBean.modificacion.luinicio}"                                                
+                                                            locale="es" 
+                                                            navigator="true" 
+                                                            pattern="dd/MM/yyyy" mask="true"
+                                                            size="9" >
+                                                </p:calendar>
+                                                <p:outputLabel value="Fin" />
+                                                <p:calendar value="#{examenModificacionBean.modificacion.lu_fin}"                                                
+                                                            locale="es" 
+                                                            navigator="true" 
+                                                            pattern="dd/MM/yyyy" mask="true"
+                                                            size="9" >
+                                                </p:calendar>
+                                            </h:panelGrid>
+                                        </h:panelGrid>
+                                    </fieldset>
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                        <p:panelGrid style="width: 100%" styleClass="quitarBordes">
+                            <p:row >
+                                <p:column colspan="1" style="vertical-align: top; width: 30%">
+                                    <fieldset >
+                                        <legend>
+                                            <p:outputLabel value="Datos administrativos" />         
+                                        </legend>
+                                        <p:panelGrid id="pnldatosAdministrativos">
+                                            <p:row >
+                                                <p:column colspan="2"  >
+                                                    <h:panelGrid columns="2">
+                                                        <p:outputLabel value="SITUACIÓN ACTUAL:"  style="display: block; width: 140px"/>
+                                                    </h:panelGrid>
+                                                </p:column>
+                                                <p:column >
+                                                    <p:selectOneMenu id="cboSituacionActual" value="#{examenModificacionBean.modificacion.estado_modificacion}" 
+                                                                     autoWidth="false" style="width: 78%" >
+                                                        <f:selectItem itemLabel="Elegir"  itemValue="" />
+                                                        <f:selectItems value="#{examenModificacionBean.lstSituacionActual}" var="estado" itemLabel="#{estado.nombre}"  itemValue="#{estado.codigo}" />                                                        
+
+                                                    </p:selectOneMenu>
+                                                </p:column>                                                           
+                                            </p:row>
+                                            <p:row>
+                                                <p:column colspan="2" > 
+                                                    <p:panelGrid columns="1">
+                                                        <p:outputLabel value="N° RESOLUCIÓN:" />
+                                                    </p:panelGrid>                                                    
+                                                </p:column>
+                                                <p:column colspan="1" >                                    
+                                                    <p:panelGrid columns="2" id="panelDatosAdministrativos" style="width: 100%">                                                        
+                                                        <p:inputText value="#{examenModificacionBean.adicionarResolucion}" onkeyup="return ValNumero(this);" style="width: 90%; font-weight: bold; background: #D8D8D8" maxlength="8" rendered="#{!examenModificacionBean.resolucionDisabled}"/>
+                                                        <p:inputText value="#{examenModificacionBean.adicionarGestion}" onkeyup="return ValNumero(this);" style="width: 65%; font-weight: bold; background: #D8D8D8" maxlength="8" rendered="#{!examenModificacionBean.resolucionDisabled}"/>
+                                                        <p:inputText value="#{examenModificacionBean.resolucion}" style="width: 90%; " styleClass="textoImportante" maxlength="8" readonly="true" rendered="#{examenModificacionBean.resolucionDisabled}" />
+                                                        <p:inputText value="#{examenModificacionBean.gestion}" style="width: 65%;" styleClass="textoImportante"  maxlength="4" readonly="true" rendered="#{examenModificacionBean.resolucionDisabled}"/>
+
+                                                    </p:panelGrid>                                                                          
+                                                </p:column>                                
+                                            </p:row>
+                                            <p:row>
+                                                <p:column colspan="2" >
+                                                    <h:panelGrid columns="1">
+                                                        <p:outputLabel value="FECHA RESOLUCIÓN:" style="display: block; width: 145px" />
+                                                    </h:panelGrid>
+                                                </p:column>
+                                                <p:column colspan="1" >
+                                                    <p:panelGrid columns="1" style="width: 80%">
+                                                        <p:calendar id="fechaRes" pattern="dd/MM/yyyy" mask="true" value="#{examenModificacionBean.fechaResolucion}" 
+                                                                    style="font-weight: bold" size="18" readonly="true" rendered="#{examenModificacionBean.resolucionDisabled}"/>   
+                                                        <p:calendar pattern="dd/MM/yyyy" mask="true" size="18" value="#{examenModificacionBean.adicionarFecha}" 
+                                                                    style="font-weight: bold;background: #D8D8D8"  rendered="#{!examenModificacionBean.resolucionDisabled}"/>   
+                                                    </p:panelGrid>
+                                                </p:column>
+                                            </p:row>
+                                            <p:row>
+                                                <p:column colspan="2" >
+                                                    <h:panelGrid columns="2">
+
+                                                        <p:outputLabel value="UBICACIÓN:" for="cboUbicacion" />
+                                                    </h:panelGrid>
+                                                </p:column>
+                                                <p:column colspan="1" >
+                                                    <p:selectOneMenu id="cboUbicacion" value="#{examenModificacionBean.modificacion.ubicacion_modificacion}" 
+                                                                     autoWidth="false" style="width: 150px" >
+                                                        <f:selectItem itemLabel="Elegir"  itemValue="" />
+                                                        <f:selectItems value="#{examenModificacionBean.lstUbicacionModificacion}" var="ubicacion" itemLabel="#{ubicacion.nombre}"  itemValue="#{ubicacion.codigo}" />                                                        
+
+                                                    </p:selectOneMenu>
+                                                </p:column>
+                                            </p:row>
+                                        </p:panelGrid>
+                                    </fieldset>
+                                </p:column>
+                                <p:column colspan="2" style="vertical-align: top; width: 55%; text-align: left">
+                                    <fieldset>
+                                        <legend>
+                                            <p:outputLabel value="Observaciones" />         
+                                        </legend>
+
+                                        <p:panelGrid columns="2" id="pnlObservacion">
+                                            <p:inputTextarea value="#{examenModificacionBean.observacionTramite.descripcion}"
+                                                             rows="5" cols="55" style="background: #F0F8FF" readonly="true" autoResize="false"
+                                                             onkeyup="this.value = this.value.substring(0, 500);"
+                                                             >
+                                            </p:inputTextarea>
+                                            <p:commandButton value="Ver observaciones" disabled="#{!examenModificacionBean.btnObservacionRendered}"
+                                                             icon="ui-icon-seek-next" style="height: 30px; width: 100%" update="msg pnlObservacion"
+                                                             actionListener="#{examenModificacionBean.accionAbrirObservacionTramite()}"
+                                                             >
+                                                <p:ajax event="dialogReturn"  listener="#{examenModificacionBean.terminaDialogoObservacion}" update="msg pnlObservacion" />
+                                            </p:commandButton>
+                                        </p:panelGrid>
+                                    </fieldset>
+                                    <br/>
+
+                                    <p:commandLink  update="msg" onclick="PF('asignarResolucion').show();" 
+                                                    rendered ="#{examenModificacionBean.linkReasignarRendered}" >
+                                        <h:outputText value="Administrar resolución manualmente" style="color: #650e0b"/>
+                                    </p:commandLink>
+
+                                    <p:dialog modal="true" resizable="false"  closable="true" widgetVar="asignarResolucion" 
+                                              height="250" width="380">
+                                        <p:outputPanel style="padding-bottom: 0px; padding-top: 0px; padding-left:10px; padding-right: 10px;">
+                                            <table>
+                                                <tr valign="middle">
+                                                    <td><p:graphicImage library="images" name="flechaTituloAzul.png" width="24" height="24"></p:graphicImage></td>
+                                                    <td><p:outputLabel value="Asignacion manual de resolución" styleClass="tituloPrincipalFuente"></p:outputLabel></td>
+                                                </tr>
+                                            </table>                    
+                                            <p:separator  style="border: 1px #045491 inset;"></p:separator>                    
+                                        </p:outputPanel>
+                                        <p:outputLabel value="Revise cuidadosamente los datos antes de anular o asignar Resolución"/>
+                                        <p:panelGrid id="pnlResolucion">
+                                            <p:row>
+                                                <p:column colspan="2"> 
+                                                    <h:panelGrid columns="1">
+                                                        <p:outputLabel value="N° RESOLUCION:" />
+                                                    </h:panelGrid>                                                    
+                                                </p:column>
+                                                <p:column colspan="1">                                    
+                                                    <h:panelGrid columns="2" >
+                                                        <p:inputText value="#{examenModificacionBean.resolucion}" style="width: 70%" maxlength="8" />
+                                                        <p:inputText value="#{examenModificacionBean.gestion}" style="width: 50%" maxlength="4" />
+                                                    </h:panelGrid>                                                                          
+                                                </p:column>                                
+                                            </p:row>
+                                            <p:row>
+                                                <p:column colspan="2">
+                                                    <h:panelGrid columns="1">
+                                                        <p:outputLabel value="FECHA RESOLUCION:" style="display: block; width: 150px" />
+                                                    </h:panelGrid>
+                                                </p:column>
+                                                <p:column colspan="1">
+                                                    <p:calendar pattern="dd/MM/yyyy" mask="true" value="#{examenModificacionBean.fechaResolucion}" size="8"
+                                                                style="width: 50%" />   
+                                                </p:column>
+                                            </p:row>
+                                        </p:panelGrid>
+                                        <p:spacer height="1"/>
+                                        <div align="center">
+                                            <p:panelGrid columns="3">
+                                                <p:commandButton icon="ui-icon-disk"  actionListener="#{examenModificacionBean.asignarResolucion()}"
+                                                                 onclick="PF('asignarResolucion').hide();" style="height: 125%; width: 115%"
+                                                                 update="msg panelDatosAdministrativos fechaRes" value="Asignar"/>
+                                                <p:separator style="width: 30px ; border: 0px; height: 0px"></p:separator>
+                                                <p:commandButton icon="ui-icon-closethick"  actionListener="#{examenModificacionBean.anularResolucion()}"
+                                                                 onclick="PF('asignarResolucion').hide();" style="background: indianred !important; color: #F0F8FF;height: 125%; width: 115%"
+                                                                 value="Anular" id="btnAnular" update="@form">
+                                                    <!--                                                    <p:confirm header="Confirmación anular resolución" 
+                                                                                                                   message="Se anulara la resolucion. ¿Esta seguro?"
+                                                                                                                   icon="ui-icon-alert" ></p:confirm>                    -->
+                                                </p:commandButton>
+                                            </p:panelGrid>
+
+                                            <!--                                            <p:confirmDialog global="true" >
+                                                                                            <div align="center">
+                                                                                                <h:panelGrid columns="3" style="text-align: left">                                               
+                                                                                                    <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                                                                                    <p:separator  style="width: 5px ; border: 0px; height: 0px"></p:separator>
+                                                                                                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                                                                                </h:panelGrid>
+                                                                                            </div>
+                                                                                        </p:confirmDialog>-->
+                                        </div> 
+
+
+
+
+                                        <!--                                             <p:outputLabel value="Observacion:" style="display: block; width: 130px" />
+                                                                                        <h:inputTextarea value="# {examenModificacionBean.textoObservacionResol}" style="height: 50px" cols="40">                                
+                                                                                        </h:inputTextarea>-->
+
+                                    </p:dialog>
+                                </p:column>
+                                <p:column colspan="1" style="width: 15%; height: 5%;text-align: center; vertical-align: top; padding-left: 0px">
+                                    <fieldset>
+                                        <p:commandButton value="Examen de modificación" disabled="true" style="height: 40px;width: 96%" actionListener="#{examenModificacionBean.abrirPlantillaExamenForma()}"
+                                                         styleClass="tituloPequenioBoton" icon="ui-icon-calculator">
+                                            <p:ajax event="dialogReturn"  listener="#{examenModificacionBean.terminaDialogoSeguimiento}" update=":formu:msg" />
+                                        </p:commandButton>
+                                        <p:spacer height="10"/>
+                                        <p:commandButton value="Notificar" style="width: 100%; height: 40px;width: 96%" actionListener="#{examenModificacionBean.viewNoti}"
+                                                         styleClass="tituloPequenioBoton" icon="ui-icon-contact" update="msg">
+                                        </p:commandButton> 
+                                        <p:spacer height="10"/>
+                                        <p:commandButton value="Registrar" icon="ui-icon-bookmark" style="height: 40px; width: 96%;" id="btnRegistrar" 
+                                                         actionListener="#{examenModificacionBean.vaciarTextoObservacionResolucion()}" update="descripcion"
+                                                         disabled="#{examenModificacionBean.btnRegistrarDisabled}" onclick="PF('observacion').show();" 
+                                                         >  
+                                            <!--                                        <p:confirm header="REGISTRO CONFIRMACION" message="Se asignará numero de resolución en el proceso. Este Tramite NO SE PODRÁ MODIFICAR O ELIMINAR luego de esto, ¿Desea Continuar?" icon="ui-icon-alert" />-->
+
+                                        </p:commandButton> 
+                                        <p:dialog modal="true" resizable="false"  closable="true" widgetVar="observacion" 
+                                                  height="270" width="410">
+                                            <p:outputPanel style="padding-bottom: 0px; padding-top: 0px; padding-left:5px; padding-right: 5px;">
+                                                <table>
+                                                    <tr valign="middle">
+                                                        <td><p:graphicImage library="images" name="flechaTituloAzul.png" width="24" height="24"></p:graphicImage></td>
+                                                        <td><p:outputLabel value="Confirmación  #{examenModificacionBean.devuelveTipoModificacion()}" styleClass="tituloPrincipalFuente"></p:outputLabel></td>
+                                                    </tr>
+                                                </table>                    
+                                                <p:separator  style="border: 1px #045491 inset;"></p:separator>                    
+                                            </p:outputPanel>
+                                            <div align="center">
+                                                <p:outputLabel value="Se registrará el Tramite: #{examenModificacionBean.modificacion.sigla} - #{examenModificacionBean.modificacion.numero} - #{examenModificacionBean.modificacion.gestion}.">
+                                                </p:outputLabel><br/>
+                                                <p:outputLabel value="Se asignará numero de resolución en el proceso. Este Tramite NO SE PODRÁ MODIFICAR O ELIMINAR luego de esto, ¿Desea Continuar?">                                                    
+                                                </p:outputLabel>
+                                                <h:panelGrid columns="1" cellpadding="3">
+                                                    <p:spacer height="1"></p:spacer>
+                                                    <p:outputLabel value="Observaciones:" styleClass="tituloPrincipalFuente"></p:outputLabel>
+                                                    <p:inputTextarea value="#{examenModificacionBean.textoObservacionResol}" 
+                                                                     style="height: 150px" cols="40" id="descripcion"  >                                
+                                                    </p:inputTextarea>
+                                                </h:panelGrid>     
+                                                <p:panelGrid columns="3">
+                                                    <p:commandButton icon="ui-icon-check"  value="Si" update="@form"  onclick="PF('observacion').hide();"
+                                                                     actionListener="#{examenModificacionBean.accionRegistrar()}" />
+                                                    <p:spacer width="2"></p:spacer>
+                                                    <p:commandButton icon="ui-icon-circle-close"  value="No" onclick="PF('observacion').hide();"
+                                                                     />
+                                                </p:panelGrid>
+
+                                            </div> 
+                                        </p:dialog>
+                                    </fieldset>
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                        <p:panelGrid style="width: 100%" styleClass="quitarBordes">
+                            <p:row>
+                                <p:column colspan="4">
+                                    <fieldset >                                        
+                                        <p:panelGrid style="width: 100%; text-align: center" id="pnlbotonesInferior">
+                                            <p:row style="width: 100%;text-align: center">
+                                                <!--                                                <p:column style="width: 10%">
+                                                                                                    <p:commandButton value="Recepcionar"  icon="ui-icon-circle-triangle-e"  style=" height: 40px; width: 95%">
+                                                
+                                                                                                    </p:commandButton>                                                
+                                                                                                    <p:spacer width="10"/>
+                                                                                                </p:column>-->
+                                                <p:column style="width: 10%">
+                                                    <p:commandButton value="Adicionar"  icon="ui-icon-circle-plus"  style=" height: 40px; width: 95%"
+                                                                     actionListener="#{examenModificacionBean.guardadoGeneral()}" update="@form"
+                                                                     disabled="#{examenModificacionBean.btnAdicionarDisabled}">
+                                                    </p:commandButton>
+                                                    <p:spacer width="6"/>
+                                                </p:column>
+                                                <p:column style="width: 10%">
+                                                    <p:commandButton value="Modificar" icon="ui-icon-pencil" style="height: 40px;width: 95%"
+                                                                     update=":formu:msg :formu:nombre" disabled="#{examenModificacionBean.btnModificarDisabled}"
+                                                                     actionListener="#{examenModificacionBean.guardadoGeneral()}">
+                                                    </p:commandButton>
+                                                    <p:spacer width="6"/>
+                                                </p:column>
+                                                <p:column style="width: 10%">
+                                                    <p:commandButton value="Limpiar"  icon="ui-icon-document" style="height: 40px;width: 95%"
+                                                                     >
+                                                        <p:ajax listener="#{examenModificacionBean.reset()}" update="@form" />
+                                                    </p:commandButton>
+                                                    <p:spacer width="6"/>                                                        
+                                                </p:column>
+                                                <p:column style="width: 10%">
+                                                    <p:commandButton value="Anterior" icon="ui-icon-seek-prev" style="height: 40px;width: 95%" 
+                                                                     actionListener="#{examenModificacionBean.mostrarAnterior()}" update="formu">
+                                                    </p:commandButton>
+                                                    <p:spacer width="6"/>
+                                                </p:column>
+                                                <p:column style="width: 10%">
+                                                    <p:commandButton value="Siguiente" style="height: 40px;width: 95%" icon="ui-icon-seek-next" 
+                                                                     actionListener="#{examenModificacionBean.mostrarSiguiente()}" update="formu">                                                
+                                                    </p:commandButton>
+                                                    <p:spacer width="6"/>
+                                                </p:column>
+                                                <p:column style="width: 10%">
+                                                    <p:commandButton value="Buscar" icon="ui-icon-search" style="height: 40px;width: 95%" 
+                                                                     actionListener="#{examenModificacionBean.abrirBuscador()}" >
+                                                        <p:ajax event="dialogReturn"  listener="#{examenModificacionBean.terminaDialogoBuscar}" update="msg formu" />
+                                                    </p:commandButton>
+                                                    <p:spacer width="6"/>                                            
+                                                </p:column>
+                                                <p:column style="width: 10%">
+                                                    <p:commandButton value="Resol. Antigua" style="height: 40px;width: 95%" icon="ui-icon-print" ajax="false"
+                                                                     actionListener="#{examenModificacionBean.imprimirAntigua()}" >                                                
+                                                    </p:commandButton>
+                                                    <p:spacer width="6"/>                                            
+                                                </p:column>
+                                                <p:column style="width: 10%">
+                                                    <p:commandButton value="Resolución" style="height: 40px;width: 95%" icon="ui-icon-print" ajax="false"
+                                                                     actionListener="#{examenModificacionBean.imprimirNueva()}"  >
+
+                                                    </p:commandButton>
+
+                                                    <p:spacer width="6"/>
+                                                </p:column>    
+                                                <p:column style="width: 10%">
+                                                    <p:commandButton value="Digitalizar" style="height: 40px;width: 95%" icon="ui-icon-folder-collapsed"
+                                                                     action="#{examenModificacionBean.verPanelExpedienteDigital()}">
+                                                    </p:commandButton>
+                                                    <p:spacer width="6"/>
+                                                </p:column>
+                                                <p:column style="width: 10%">
+                                                    <p:commandButton value="Subsanar Registro" 
+                                                                     icon="ui-icon-pencil" style="height: 40px;width: 95%"
+                                                                     onclick="#{examenModificacionBean.abrirSubsanacion(examenModificacionBean.idModificacion,examenSignosBean.idUsuario)}"
+                                                                     >
+                                                    </p:commandButton>   
+                                                    <p:spacer width="6"/>
+                                                </p:column>                                                
+                                            </p:row>
+                                            <p:row style="width: 100%; text-align: center" >
+                                                <p:column style="width: 10%; text-align: left" colspan="1">
+                                                    <p:commandButton value="Recepcionar"  icon="ui-icon-circle-triangle-e" update="pnlbotonesInferior" styleClass="botonAzulClaro"
+                                                                     style=" height: 40px; width: 100%;background: #3a62f0 !important;color: white !important" actionListener="#{examenModificacionBean.guardarSeguimiento()}" 
+                                                                     disabled="#{examenModificacionBean.botonRecepcionarDisabled}" rendered="#{examenModificacionBean.botonRecepcionarRendered}">  
+                                                        <p:confirm header="Confirmación Recepcionar" 
+                                                                   message="Se iniciara el seguimiento para: #{examenModificacionBean.modificacion.sigla} - #{examenModificacionBean.modificacion.numero} - #{examenModificacionBean.modificacion.gestion}"
+                                                                   icon="ui-icon-alert" ></p:confirm>    
+                                                    </p:commandButton>        
+
+                                                    <!--                                                    <p:confirmDialog global="true" >
+                                                                                                            <div align="center">
+                                                                                                                <p:outputLabel value="Se iniciara el seguimiento de esta etapa. ¿Seguro de continuar?"/>
+                                                                                                                <p:spacer height="10"/>
+                                                                                                                <h:panelGrid columns="3" style="text-align: left">                                               
+                                                                                                                    <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                                                                                                    <p:separator style="width: 5px ; border: 0px; height: 0px"></p:separator>
+                                                                                                                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                                                                                                </h:panelGrid>
+                                                                                                            </div>
+                                                                                                        </p:confirmDialog>  -->
+                                                </p:column>
+                                                <p:column colspan="5" style="width: 40%; text-align: left">
+                                                    <h:panelGrid columns="2" style="text-align: left" id="pnlRevocatoria" rendered="#{examenModificacionBean.botonFinalizarDisabled}">
+                                                        <p:outputLabel value="Crear un Seguimiento de Revocatoria" styleClass="tituloMarca"/>
+                                                        <p:selectBooleanCheckbox value="#{examenModificacionBean.esRevocatoria}" style="border-color: #3d768a; border-style: solid">                                                                                 
+                                                        </p:selectBooleanCheckbox>
+                                                    </h:panelGrid> 
+                                                </p:column>
+                                                <p:column style="width: 40%; text-align: right" colspan="4">
+
+                                                    <p:commandButton value="Finalizar"  icon="ui-icon-circle-check"  style=" height: 40px;width: 22%;background: #82b548 !important ;font-weight: bold" styleClass="botonVerdeClaro"
+                                                                     actionListener="#{examenModificacionBean.abrirFinalizar()}" update="pnlbotonesInferior cboUbicacion" 
+                                                                     disabled="#{examenModificacionBean.botonFinalizarDisabled}"
+                                                                     rendered="#{examenModificacionBean.botonFinalizarRendered}">
+                                                        <p:confirm header="Confirmación Finalizar" 
+                                                                   message="Se finalizara el seguimiento para: #{examenModificacionBean.modificacion.sigla} - #{examenModificacionBean.modificacion.numero} - #{examenModificacionBean.modificacion.gestion}"
+                                                                   icon="ui-icon-alert" ></p:confirm>   
+                                                    </p:commandButton>
+                                                    <!--                                                    <p:confirmDialog global="true" >
+                                                                                                            <div align="center">
+                                                                                                                <p:outputLabel value="Se finalizar el seguimiento de esta etapa. ¿Seguro de continuar?"/>
+                                                                                                                <p:spacer height="10"/>
+                                                                                                                <h:panelGrid columns="3" style="text-align: left">                                               
+                                                                                                                    <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                                                                                                    <p:separator style="width: 5px ; border: 0px; height: 0px"></p:separator>
+                                                                                                                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                                                                                                </h:panelGrid>
+                                                                                                            </div>
+                                                                                                        </p:confirmDialog>-->
+
+                                                </p:column>
+                                            </p:row>
+                                        </p:panelGrid>
+                                    </fieldset>
+                                </p:column>
+                            </p:row>                    
+                        </p:panelGrid>
+
+                        <!--                        <p:dialog modal="true" resizable="false"  closable="true" widgetVar="observacion" 
+                                                          height="250" width="380">
+                                                    <p:outputPanel style="padding-bottom: 0px; padding-top: 0px; padding-left:10px; padding-right: 10px;">
+                                                        <table>
+                                                            <tr valign="middle">
+                                                                <td><p:graphicImage library="images" name="flechaTituloAzul.png" width="24" height="24"></p:graphicImage></td>
+                                                                <td><p:outputLabel value="Observaciones" styleClass="tituloPrincipalFuente"></p:outputLabel></td>
+                                                            </tr>
+                                                        </table>                    
+                                                        <p:separator  style="border: 1px #045491 inset;"></p:separator>                    
+                                                    </p:outputPanel>
+                                                    <div align="center">
+                                                        <h:panelGrid columns="1" cellpadding="3">
+                                                            <h:inputTextarea value="# {examenModificacionBean.textoObservacionResol}" style="height: 140px" cols="35">                                
+                                                            </h:inputTextarea>
+                                                        </h:panelGrid>                        
+                                                        <p:commandButton ajax="false" icon="ui-icon-check"  onclick="PF('observacion').hide();" update="formu"
+                                                                         actionListener="# {examenModificacionBean.guardarObservacionResol()}" />
+                                                    </div> 
+                                                </p:dialog>-->
+
+                    </p:panelGrid> 
+                    <p:confirmDialog global="true"  width="40%">                                                    
+                        <div align="center">                      
+                            <h:panelGrid columns="3" style="text-align: left">                                     
+                                <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                <p:separator id="separador20" style="width: 5px ; border: 0px; height: 0px"></p:separator>
+                                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />                                
+                            </h:panelGrid>
+                        </div>
+                    </p:confirmDialog>
+                </h:form>
+
+            </ui:define>
+        </ui:composition>
+
+    </body>
+
+</html>
