@@ -1,0 +1,202 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <body>
+        <ui:composition template="./../WEB-INF/facelets/templates/DialogTemplate.xhtml">
+            <ui:define name="content">
+                <h:form id="formuseg" style="border-style: hidden; ">
+                     <p:growl id="msg" life="10000"/>
+                    <p:outputPanel style="padding-bottom: 1px; padding-top: 1px; padding-left:10px; padding-right: 10px;">
+                        <table>
+                            <tr valign="middle">
+                                <td><p:graphicImage library="images" name="flechaTituloAzul.png" width="24" height="24"></p:graphicImage></td>
+                                <td><p:outputLabel value="Seguimiento oposiciones" styleClass="tituloPrincipalFuente"></p:outputLabel></td>
+                            </tr>
+                        </table>                    
+                        <p:separator id="sepTitulo" style="border: 1px #045491 inset;"></p:separator>                    
+                    </p:outputPanel> 
+                    <fieldset>
+
+                        <p:panelGrid id="panelseguimiento">
+                            <p:panelGrid styleClass="quitarBordes" style="width: 90%">
+                                <p:row>
+                                    <p:column><p:outputLabel value="Expediente"/></p:column>
+                                    <p:column><p:inputText value="#{seguimientoOpoBean.numeropubliseg}" size="15" disabled="true"/></p:column>
+                                    <p:column><p:outputLabel value="Orden"/></p:column>
+                                    <p:column><p:inputText value="#{seguimientoOpoBean.ordenoposeg}" size="5" disabled="true"/></p:column>
+                                    <p:column><p:outputLabel value="Area"/></p:column>
+                                    <p:column><p:inputText value="SIGNOS DISTINTIVOS" size="20" disabled="true"/></p:column>
+
+                                </p:row>
+                                <p:row>
+                                    <p:column><p:outputLabel value="Actividad"/></p:column>
+                                    <p:column colspan="4">
+
+                                        <p:selectOneMenu id="serie" value="#{seguimientoOpoBean.cmbactividades}" style="width: 5px; font-size: small" filter="true" filterMatchMode="startsWith">
+                                            <f:selectItem  itemLabel="Elegir" itemValue=""/> 
+                                            <f:selectItems value="#{seguimientoOpoBean.lstOpoActividad}" var="r" itemLabel="#{r.actividad}" itemValue="#{r.idactividad}"/>
+                                            <p:ajax event="change" listener="#{seguimientoOpoBean.metodocarga}" update="recursoresolu"/>
+                                        </p:selectOneMenu>
+
+
+                                    </p:column>
+                                    <p:column>
+                                        <p:outputPanel  id="recursoresolu">
+                                            <p:panelGrid rendered="#{seguimientoOpoBean.objeto1}">
+
+                                                <p:panelGrid>
+                                                    <p:row>
+                                                        <p:column>Resolución</p:column>
+                                                        <p:column><p:inputText size="5" value="#{seguimientoOpoBean.txtnroresolucion}"/></p:column>
+                                                    </p:row>
+                                                    <p:row>
+                                                        <p:column>Oposición</p:column>
+                                                        <p:column>
+                                                            <p:selectOneMenu id="comboopo" value="#{seguimientoOpoBean.cmbseguimientoopo}" style="width: 5px; font-size: small">
+                                                                <f:selectItem  itemLabel="Elegir" itemValue=""/> 
+                                                                <f:selectItems value="#{seguimientoOpoBean.listarecursoOpo}" var="r" itemLabel="#{r.nombre}" itemValue="#{r.nombre}"/>
+                                                            </p:selectOneMenu>
+                                                        </p:column>
+                                                    </p:row>
+                                                    <p:row>
+                                                        <p:column>Signo</p:column>
+                                                        <p:column>
+                                                            <p:selectOneMenu id="combosigno" value="#{seguimientoOpoBean.cmbseguimientosig}" style="width: 5px; font-size: small">
+                                                                <f:selectItem  itemLabel="Elegir" itemValue=""/> 
+                                                                <f:selectItems value="#{seguimientoOpoBean.listarecursoSig}" var="r" itemLabel="#{r.nombre}" itemValue="#{r.nombre}"/>
+                                                            </p:selectOneMenu>                                                
+                                                        </p:column>
+                                                    </p:row>
+                                                    <p:row>
+                                                        <p:column>Cancelación</p:column>
+                                                        <p:column>
+                                                            <p:selectOneMenu id="combocance" value="#{seguimientoOpoBean.cmbseguimientocance}" style="width: 5px; font-size: small">
+                                                                <f:selectItem  itemLabel="Elegir" itemValue=""/> 
+                                                                <f:selectItems value="#{seguimientoOpoBean.listarecursoCance}" var="r" itemLabel="#{r.nombre}" itemValue="#{r.nombre}"/>
+                                                            </p:selectOneMenu>                                                
+                                                        </p:column>
+                                                    </p:row>                                        
+                                                </p:panelGrid>
+                                            </p:panelGrid>
+                                            <p:panelGrid rendered="#{seguimientoOpoBean.objeto2}">
+                                                <p:panelGrid>
+                                                    <p:row>
+                                                        <p:column>Resolución</p:column>
+                                                        <p:column><p:inputText size="5" value="#{seguimientoOpoBean.txtnrorecurso}"/></p:column>
+                                                    </p:row>
+                                                    <p:row>
+                                                        <p:column>Resuelve</p:column>
+                                                        <p:column>
+                                                            <p:selectOneMenu id="comboporecurso" value="#{seguimientoOpoBean.cmbseguimientrecurso}" style="width: 5px; font-size: small">
+                                                                <f:selectItem  itemLabel="Elegir" itemValue=""/> 
+                                                                <f:selectItems value="#{seguimientoOpoBean.listarecurso}" var="r" itemLabel="#{r.nombre}" itemValue="#{r.nombre}"/>
+                                                            </p:selectOneMenu>
+                                                        </p:column>
+                                                    </p:row>                                                                             
+                                                </p:panelGrid>
+                                            </p:panelGrid>     
+                                        </p:outputPanel>
+
+                                    </p:column>
+
+
+                                </p:row>
+                            </p:panelGrid>
+                            <p:panelGrid styleClass="quitarBordes">
+
+                                <p:row>
+                                    <p:column><p:outputLabel value="Fecha"/></p:column>
+                                    <p:column><p:calendar id="mask" pattern="dd-MM-yyyy HH-mm-ss" value= "#{seguimientoOpoBean.cldfechaactividadseg}" mask="true" size="20"/></p:column>
+                                    <p:column colspan="2"><p:outputLabel value="tiempo total de oposiciones (dias)"/></p:column>
+                                    <p:column><p:outputLabel value="254"/></p:column>
+                                    <p:column></p:column>
+
+
+                                </p:row>
+
+                                <p:row>
+                                    <p:column><p:outputLabel value="Observacion"/></p:column>
+                                    <p:column colspan="5"><p:inputTextarea  value="#{seguimientoOpoBean.txaobservacionseg}" rows="5" cols="63" /></p:column>
+
+                                </p:row>
+
+                                <p:row>
+                                    <p:column colspan="4">
+                                        <p:commandButton value="Adicionar" icon="ui-icon-circle-plus" actionListener="#{seguimientoOpoBean.guardar_datosOpoSeguimiento()}"
+                                                         update=":formuseg:tablaseguimiento :formuseg @form :formuseg:msg">
+                                          <p:confirm header="Confirmación" message="¿ Esta seguro de añadir actividad ?" icon="ui-icon-alert"/>
+                                        </p:commandButton>
+                                    </p:column>
+                                    <p:column>
+                                        <p:commandButton value="Cerrar"  icon="ui-icon-circle-close" >
+                                            <p:ajax listener="#{seguimientoOpoBean.cerrarDialogo()}" />
+                                        </p:commandButton>
+                                    </p:column>
+                                    <p:column></p:column>
+                                </p:row>
+
+                            </p:panelGrid> 
+                        </p:panelGrid>
+                    </fieldset>
+                    <fieldset>
+                        <p:panel style="width: 100%">
+                            <p:dataTable var="seguimiento" value="#{seguimientoOpoBean.listaevento}" id="tablaseguimiento"
+                                         selectionMode="single" selection="#{seguimientoOpoBean.selectedOpo}" rowKey="#{seguimiento.idevento}" 
+                                         scrollHeight="220"
+                                         scrollWidth="960" 
+                                         scrollable="true" style="width: 98%;"
+                                         >
+                                <p:ajax event="rowSelect" listener="#{seguimientoOpoBean.onRowSelectOposicion}" update=":formuseg"/>
+                                <p:column headerText="Actividad" width="50">
+                                    <h:outputText value="#{seguimientoOpoBean.obtieneactividadxidactividad(seguimiento.idactividad)}"/>
+                                </p:column>
+                                <p:column headerText="Fecha" width="45">
+                                    <p:calendar id="fechadeg" pattern="dd-MM-yyyy HH:mm:ss" value="#{seguimiento.fecha}" mask="true" size="16"/>
+
+                                </p:column>
+                                <p:column headerText="Observacion" width="70">
+                                    <p:inputText value="#{seguimiento.observacion}" style="width: 95%"/>
+                                </p:column>
+                                <p:column headerText="Dias" width="20">
+                                    <p:outputLabel value="dias"/>
+                                </p:column>
+
+                                <p:column headerText="Eliminar" width="10" style="text-align: center">
+                                    <p:commandButton icon="ui-icon-circle-minus" 
+                                                     title="Eliminar Tramite"
+                                                     actionListener="#{seguimientoOpoBean.eliminarseguimiento(seguimiento)}"
+                                                     update="@form"> 
+                                        <p:confirm header="Confirmación" message="Esta segur@ eliminar este seguimiento = #{seguimientoOpoBean.obtieneactividadxidactividad(seguimiento.idactividad)}" icon="ui-icon-alert"/>
+
+                                    </p:commandButton> 
+                                </p:column>
+
+                                <p:column headerText="Modificar" width="10" style="text-align: center">
+                                    <p:commandButton icon="ui-icon-pencil" 
+                                                     title="Modificar Tramite"
+                                                     actionListener="#{seguimientoOpoBean.modificarseguimiento(seguimiento)}"
+                                                     update="@form">  
+                                        <p:confirm header="Confirmación" message="Esta segur@ modificar este seguimiento = #{seguimientoOpoBean.obtieneactividadxidactividad(seguimiento.idactividad)}" icon="ui-icon-alert"/>
+                                    </p:commandButton> 
+                                </p:column>
+                            </p:dataTable>
+
+                        </p:panel>
+                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                            <p:outputPanel style="text-align: center">
+                                <p:commandButton value="SI" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                <p:commandButton value="NO" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                            </p:outputPanel>
+                        </p:confirmDialog>
+                    </fieldset>
+                </h:form>
+            </ui:define>     
+        </ui:composition>
+    </body>
+
+
+</html>

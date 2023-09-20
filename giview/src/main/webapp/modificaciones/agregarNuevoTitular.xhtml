@@ -1,0 +1,729 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <h:outputStylesheet name="./css/default.css"/>
+        <h:outputStylesheet name="./css/cssLayout.css"/>
+        <h:outputScript library="js" name="spanishLocale.js"/>
+    </h:head>
+    <h:form id="formu" style="border-style: hidden; width: 95%">
+        <p:outputPanel style="padding-bottom: 1px; padding-top: 1px; padding-left:10px; padding-right: 10px;">
+            <table>
+                <tr valign="middle">
+                    <td><p:graphicImage library="images" name="flechaTituloAzul.png" width="24" height="24"></p:graphicImage></td>
+                    <td><p:outputLabel value="#{agregarSolicitanteApoderadoBean.tituloPagina}" styleClass="tituloPrincipalFuente"></p:outputLabel></td>
+                </tr>
+            </table>                    
+            <p:separator id="sepTitulo" style="border: 1px #045491 inset;"></p:separator>                    
+        </p:outputPanel>
+        <div align="center">
+            <p:panelGrid id="tipoSolicitante" rendered="#{agregarSolicitanteApoderadoBean.comboTipoSolicitante}" style="width: 97%;" styleClass="quitarBordes">                 
+                <p:row>
+                    <p:column colspan="2">
+                        <h:panelGrid columns="2">
+                            <h:panelGrid>
+                                <p:outputLabel value="Tipo Solicitante"/>
+                            </h:panelGrid>
+                            <p:selectOneMenu id="comboTipoSolicitante" value="#{agregarSolicitanteApoderadoBean.tipoSolicitante}" title="OBLIGATORIO. Escoja un tipo de Solicitante o Titular" style="text-align:left" disabled="#{registroGeneralModificacionBean.desabilitaTipoSolicitanteCarga}">
+                                <f:selectItems value="#{agregarSolicitanteApoderadoBean.listaTipoTitular}" var ="tipoTitular" itemLabel="#{tipoTitular.nombre}" itemValue="#{tipoTitular.codigo}"/>                                
+                                <p:ajax event="change" 
+                                        update=":formu:panelGridDocumentos :formu:panelNombre :formu:panelTitularRegistrado"
+                                        listener="#{agregarSolicitanteApoderadoBean.activaCamposNaturalJuridico()}" />        
+                            </p:selectOneMenu>                             
+                        </h:panelGrid>
+                    </p:column>
+                </p:row>
+            </p:panelGrid>
+            <p:panelGrid columns="1" id="panelGridDocumentos" rendered="#{agregarSolicitanteApoderadoBean.panelTransFusLu}" style="vertical-align: top" styleClass="quitarBordes">
+                <p:panelGrid rendered="#{agregarSolicitanteApoderadoBean.panelSolicitanteRendered}" styleClass="quitarBordes"> 
+                    <p:column colspan="2">
+                        <h:panelGrid columns="3">
+
+                            <p:message for="razonSocial" display="icon" />
+                            <p:outputLabel value="Razon social" style="display: block; width: 95px" for="razonSocial"/>
+                            <p:inputText id="razonSocial"  value="#{agregarSolicitanteApoderadoBean.razonSocial}"  
+                                         required="true" label="Nombre"
+                                         size="69"  maxlength="2000"  
+                                         autocomplete="off" 
+                                         title="OBLIGATORIO. Nombre o Razon Social del Solicitante o Titular. " >
+                                <f:validateLength minimum="2" />
+                            </p:inputText>    
+                            <!--                                    <p:outputLabel value="*" style="color: #C00"/>-->
+
+                        </h:panelGrid>
+                    </p:column>                              
+                    <p:row >
+                        <p:column style="width: 50%">
+                            <h:panelGrid columns="3">                                
+                                <p:message for="nroDocumento" display="icon" />
+                                <p:outputLabel for="nroDocumento" value="N° Documento" style="display: block; width: 95px"/>  
+                                <p:inputText id="nroDocumento" title="OBLIGATORIO. Número del documento de identidad del Solicitante o Titular, en caso de no contar con el dato, colocar valor 0."                                                                                         
+                                             value="#{agregarSolicitanteApoderadoBean.numeroDocumento}" required="true" label="documento"                                                                                     
+                                             style="width: 100%" maxlength="25" autocomplete="off">
+                                    <f:validateLength minimum="1" />
+                                </p:inputText>
+                                <!--                                <p:outputLabel value="*" style="color: #C00"/> -->
+                            </h:panelGrid>
+                        </p:column>
+                        <p:column style="width: 50%">
+                            <h:panelGrid columns="3">
+                                <p:message for="tipoDocumentoJ" display="icon" />  
+                                <p:outputLabel for="tipoDocumentoJ" value="Tipo documento" style="display: block; width: 105px"/>  
+                                <p:selectOneMenu  style="width: 120px" value="#{agregarSolicitanteApoderadoBean.tipoDocumento}" id="tipoDocumentoJ"
+                                                  title="OBLIGATORIO. Tipo de documento de identidad del Solicitante o Titular, en caso de no contar con el dato, colocar valor Otro."
+                                                  required="true" autoWidth="false">                                                                                                                                           
+                                    <f:selectItem   itemLabel="Elegir" itemValue="" />
+                                    <f:selectItems value="#{agregarSolicitanteApoderadoBean.listaTipoDocumentoJuridico}" 
+                                                   var="tipoDoc"  itemLabel="#{tipoDoc.nombre}" itemValue="#{tipoDoc.codigo}" />   
+                                    <f:ajax event="change"/>
+                                    <f:validateLength minimum="2" />
+                                </p:selectOneMenu>
+                            </h:panelGrid>  
+                        </p:column>
+                    </p:row>
+                    <p:row >
+                        <p:column style="width: 50%">
+                            <h:panelGrid columns="4" >
+                                <p:message for="comboPaisJ" display="icon" />   
+                                <p:outputLabel for="comboPaisJ" value="Pais" style="display: block; width: 88px"/>
+
+                                <p:selectOneMenu id="comboPaisJ" style="width: 143px !important" value="#{agregarSolicitanteApoderadoBean.pais}" autoWidth="false"
+                                                 title="OBLIGATORIO. País de origen del Solicitante o Titular." required="true" >
+                                    <f:selectItem itemLabel="Elegir" itemValue=""    /> 
+                                    <f:selectItems  value="#{agregarSolicitanteApoderadoBean.listaPais}" var="pais" itemLabel="#{pais.nombre}" itemValue="#{pais.codigo}"    />                  
+                                    <p:ajax event="change" update="panelDpto"/>
+                                    <f:validateLength minimum="2" />
+                                </p:selectOneMenu> 
+                            </h:panelGrid>
+                        </p:column>
+                        <p:column style="width: 50%">
+                            <h:panelGrid columns="3" id="panelDpto">
+                                <p:message for="comboDptoJ" display="icon" rendered="#{agregarSolicitanteApoderadoBean.pais=='BO'}"/>  
+                                <p:outputLabel for="comboDptoJ" value="Departamento" style="display: block; width: 105px" rendered="#{agregarSolicitanteApoderadoBean.pais=='BO'}"/>
+                                <p:selectOneMenu  id="comboDptoJ" value="#{agregarSolicitanteApoderadoBean.departamento}" autoWidth="false"
+                                                  title="OBLIGATORIO. Departamento."  style="width: 120px" required="#{agregarSolicitanteApoderadoBean.pais=='BO'}"
+                                                  rendered="#{agregarSolicitanteApoderadoBean.pais=='BO'}">
+                                    <f:selectItem itemLabel="Elegir" itemValue=""    /> 
+                                    <f:selectItems value="#{agregarSolicitanteApoderadoBean.listaLugarExpedicion}" var="dpto" itemLabel="#{dpto.nombre}" itemValue="#{dpto.codigo}" />                                                                                        
+                                    <f:validateLength minimum="2" />
+                                </p:selectOneMenu> 
+                            </h:panelGrid> 
+                        </p:column>
+                    </p:row>
+                    <p:row >
+                        <p:column style="width: 100%" colspan="2" >
+                            <h:panelGrid columns="3">
+                                <p:message for="telefonoTra" display="icon" />   
+                                <p:outputLabel value="Telefono" style="display: block; width: 90px"/>
+                                <p:inputText  value="#{agregarSolicitanteApoderadoBean.telefono}" id="telefonoTra"
+                                              title="OPCIONAL. Número(s) telefónico(s) del Solicitante o Titular."
+                                              style="width: 100%" maxlength="50" autocomplete="off"/>
+                            </h:panelGrid>
+                        </p:column>                                        
+                    </p:row>
+                    <p:row >
+                        <p:column style="width: 50%">
+                            <h:panelGrid columns="3">
+                                <p:message for="faxTra" display="icon" />   
+                                <p:outputLabel value="Fax" style="display: block; width: 90px"/>
+                                <p:inputText  value="#{agregarSolicitanteApoderadoBean.fax}" id="faxTra"
+                                              title="OPCIONAL. Fax del Solicitante o Titular."
+                                              style="width: 100%" maxlength="50" autocomplete="off"/>
+                            </h:panelGrid>
+                        </p:column>
+                        <p:column style="width: 50%">
+                            <h:panelGrid columns="2">
+                                <p:outputLabel value="Celular" style="display: block; width: 105px"/>
+                                <p:inputText  value="#{agregarSolicitanteApoderadoBean.celular}" 
+                                              title="OPCIONAL. Numero de Celular del Solicitante o Titular."
+                                              style="width: 83%" maxlength="50" autocomplete="off"/>
+                            </h:panelGrid>
+                        </p:column>
+                    </p:row>
+                    <p:row >
+
+                        <p:column style="width: 100%" colspan="2">
+                            <h:panelGrid columns="3">
+
+                                <p:message for="domicilioJ" display="icon" />  
+                                <p:outputLabel for="domicilioJ" value="Domicilio" style="display: block; width: 88px"/> 
+
+                                <p:inputText  size="69" value="#{agregarSolicitanteApoderadoBean.domicilio}" id="domicilioJ" required="true"
+                                              title="OBLIGATORIO. Dirección domiciliaria del Solicitante o Titular."                     
+                                              maxlength="200" autocomplete="off"
+                                              >
+                                    <f:validateLength minimum="2" />
+                                </p:inputText>
+                            </h:panelGrid>
+
+                        </p:column>
+
+                    </p:row>
+                    <p:row >
+                        <p:column style="width: 100%" colspan="2">
+                            <h:panelGrid columns="2" id="panelCorreoJ" >
+                                <p:outputLabel value="Correo Electronico" style="display: block; width: 112px"/>
+                                <p:inputText  id="correoJ" size="67"        maxlength="50"                                       
+                                              value="#{agregarSolicitanteApoderadoBean.correoElectronico}"  
+                                              title="OPCIONAL. Cuenta de correo electrónico del Solicitante o Titular."                           
+                                              autocomplete="off">
+                                    <p:ajax event="keyup" update="panelCorreoJ" listener="#{agregarSolicitanteApoderadoBean.metodoCorreo()}"/>
+
+                                </p:inputText> 
+                                <p:watermark for="correoJ" value="correo@dominio.ext" />                                
+                                <p:outputLabel value="Formato de Correo Invalido" style="color: #C00" rendered="#{agregarSolicitanteApoderadoBean.mensaje}" />
+                            </h:panelGrid>
+                        </p:column>
+                    </p:row>
+                    <p:row >
+                        <p:column style="width: 50%; text-align: center" >
+                            <p:commandButton value="Aceptar" icon="ui-icon-circle-check" update="panelGridDocumentos panelCorreoJ" 
+                                             actionListener="#{agregarSolicitanteApoderadoBean.addNuevoTitularJuridico}"/>
+                        </p:column>
+                        <p:column style="width: 50%; text-align: center" >
+                            <p:commandButton value="Cancelar"  icon="ui-icon-circle-close" >
+                                <p:ajax listener="#{agregarSolicitanteApoderadoBean.cerrarDialogo()}" />
+                            </p:commandButton>
+                        </p:column>
+                    </p:row>
+
+                </p:panelGrid>
+
+                <p:panelGrid rendered="#{!agregarSolicitanteApoderadoBean.panelSolicitanteRendered}"  styleClass="quitarBordes"> 
+                    <p:row>
+                        <p:column style="width: 50%">
+                            <h:panelGrid columns="3">
+                                <p:message for="nombres" display="icon" />  
+                                <p:outputLabel for="nombres" value="Nombre(s)" style="display: block; width: 105px"/>
+                                <p:inputText required="true" id="nombres" 
+                                             value="#{agregarSolicitanteApoderadoBean.nombre}" title="OBLIGATORIO. Nombre(s) del Solicitante o Titular. "                                                                                         
+                                             maxlength="2000" autocomplete="off" size="23">      
+                                    <f:validateLength minimum="2" />
+                                </p:inputText>
+
+                            </h:panelGrid>
+                        </p:column>
+                        <p:column style="width: 50%">
+                            <h:panelGrid columns="3">
+                                <p:message for="apellido" display="icon" />   
+                                <p:outputLabel for="apellido" value="Primer Apellido" style="display: block; width: 100px"/>
+                                <p:inputText size="20" id="apellido" required="true"
+                                             title="OBLIGATORIO. Primer Apellido del Solicitante o Titular. "
+                                             value="#{agregarSolicitanteApoderadoBean.primerApellido}"
+                                             maxlength="50" autocomplete="off">
+                                    <f:validateLength minimum="2" />
+                                </p:inputText>
+                            </h:panelGrid>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column style="width: 50%">
+                            <h:panelGrid columns="3">
+                                <p:message for="apellidoMaterno" display="icon" />   
+                                <p:outputLabel value="Segundo Apellido" style="display: block; width: 107px"/>
+                                <p:inputText id="apellidoMaterno" 
+                                             value="#{agregarSolicitanteApoderadoBean.segundoApellido}" title="OPCIONAL. Segundo Apellido del Solicitante o Titular. "                                          
+                                             size="23" maxlength="50" autocomplete="off"/>
+                            </h:panelGrid>
+                        </p:column>
+                        <p:column style="width: 50%">
+                            <h:panelGrid columns="3">
+                                <p:message for="nroDocumentoN" display="icon" />    
+                                <p:outputLabel for="nroDocumentoN" value="N° Documento" style="display: block; width: 100px"/>  
+                                <p:inputText  id="nroDocumentoN" required="true"
+                                              title="OBLIGATORIO. Número del documento de identidad del Solicitante o Titular, en caso de no contar con el dato, colocar valor 0."                                                                                         
+                                              value="#{agregarSolicitanteApoderadoBean.numeroDocumento}"                                                                                         
+                                              size="20" maxlength="25" autocomplete="off">
+                                    <f:validateLength minimum="1" />
+                                </p:inputText>
+                            </h:panelGrid>
+                        </p:column>
+                    </p:row>     
+
+                    <p:row>
+                        <p:column style="width: 50%">
+                            <h:panelGrid columns="3">
+                                <p:message for="tipoDocumentoN" display="icon" />    
+                                <p:outputLabel for="tipoDocumentoN" value="Tipo Documento"  style="display: block; width: 107px"/>  
+                                <p:selectOneMenu  id="tipoDocumentoN" value="#{agregarSolicitanteApoderadoBean.tipoDocumento}" style="width: 150px" autoWidth="false"
+                                                  title="OBLIGATORIO. Tipo de documento de identidad del Solicitante o Titular, en caso de no contar con el dato, colocar valor Otro."
+                                                  required="true">
+                                    <f:selectItem itemLabel="Elegir" itemValue=""  /> 
+                                    <f:selectItems value="#{agregarSolicitanteApoderadoBean.listaTipoDocumentoNatural}" 
+                                                   var="tipoDoc"  itemLabel="#{tipoDoc.nombre}" itemValue="#{tipoDoc.codigo}" />                                                                                  
+                                    <p:ajax event="change" update="panelLugar"/>
+                                    <f:validateLength minimum="2" />
+                                </p:selectOneMenu>
+                            </h:panelGrid>                
+                        </p:column>
+                        <p:column style="width: 50%">
+                            <h:panelGrid columns="3" id="panelLugar">
+                                <p:message for="lugar" display="icon"   rendered="#{agregarSolicitanteApoderadoBean.tipoDocumento=='CI'}"/>   
+                                <p:outputLabel for="lugar" value="Lugar Expedicion" rendered="#{agregarSolicitanteApoderadoBean.tipoDocumento=='CI'}"/>  
+                                <p:selectOneMenu id="lugar" style="width: 100%"  value="#{agregarSolicitanteApoderadoBean.lugarExpedicion}"
+                                                 rendered="#{agregarSolicitanteApoderadoBean.tipoDocumento=='CI'}"
+                                                 title="OBLIGATORIO. Seleccione el Lugar de Expedicion del documento de Identidad."                                                                                             
+                                                 required="#{agregarSolicitanteApoderadoBean.tipoDocumento=='CI'}">
+                                    <f:selectItem itemLabel="Elegir" itemValue=""  /> 
+                                    <f:selectItems value="#{agregarSolicitanteApoderadoBean.listaLugarExpedicion}" var="dpto" itemLabel="#{dpto.nombre}" itemValue="#{dpto.codigo}"    />                                                                                        
+                                    <f:validateLength minimum="2" />
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column style="width: 50%">
+                            <h:panelGrid columns="3">
+                                <p:message for="pais" display="icon"/>  
+                                <p:outputLabel for="pais" value="Pais" style="display: block; width: 105px"/>
+                                <p:selectOneMenu id="pais"   value="#{agregarSolicitanteApoderadoBean.pais}" required="true" style="width: 150px"
+                                                 title="OBLIGATORIO. País de origen del Solicitante o Titular." autoWidth="false">
+                                    <f:selectItem itemLabel="Elegir" itemValue=""    />  
+                                    <f:selectItems  value="#{agregarSolicitanteApoderadoBean.listaPais}" var="pais" itemLabel="#{pais.nombre}" itemValue="#{pais.codigo}"    />                
+                                    <p:ajax event="change" update="panelDptoN"/>
+                                    <f:validateLength minimum="2" />
+                                </p:selectOneMenu> 
+                            </h:panelGrid>
+                        </p:column>
+                        <p:column style="width: 50%">
+                            <h:panelGrid columns="3" id="panelDptoN">
+                                <p:message for="departamento" display="icon"   rendered="#{agregarSolicitanteApoderadoBean.pais=='BO'}"/>  
+                                <p:outputLabel for="departamento" value="Departamento" style="display: block; width: 105px" rendered="#{agregarSolicitanteApoderadoBean.pais=='BO'}"/>
+                                <p:selectOneMenu  id="departamento" title="OBLIGATORIO. Departamento." style="width: 100%"  required="#{agregarSolicitanteApoderadoBean.pais=='BO'}"
+                                                  value="#{agregarSolicitanteApoderadoBean.departamento}" rendered="#{agregarSolicitanteApoderadoBean.pais=='BO'}">
+                                    <f:selectItem itemLabel="Elegir" itemValue=""    />
+                                    <f:selectItems value="#{agregarSolicitanteApoderadoBean.listaLugarExpedicion}" var="dpto" itemLabel="#{dpto.nombre}" itemValue="#{dpto.codigo}"    />                                                                                          
+                                    <f:validateLength minimum="2" />
+                                </p:selectOneMenu> 
+                            </h:panelGrid> 
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column style="width: 50%">
+                            <h:panelGrid columns="3" id="GeneroPersona">
+                                <p:message for="genero" display="icon"/>                                  
+                                <p:outputLabel for="genero" value="Genero" style="display: block; width: 97px"/>                                                                                                         
+                                <p:selectOneRadio id="genero"    layout="grid" columns="2" 
+                                                  required="true" value="#{agregarSolicitanteApoderadoBean.generoPersona}">                                              
+
+                                    <f:selectItems value="#{agregarSolicitanteApoderadoBean.listaGenero}" var="genero" itemLabel="#{genero.nombre}" itemValue="#{genero.codigo}"/>
+                                    <f:validateLength minimum="2" />
+                                </p:selectOneRadio>
+                            </h:panelGrid>
+                        </p:column>
+                        <p:column style="width: 50%">
+                            <h:panelGrid columns="2">
+                                <p:outputLabel value="Teléfono" style="display: block; width: 93px"/>
+                                <p:inputText id="telUno" title="OPCIONAL. Número(s) telefónico(s) del Solicitante o Titular."
+                                             value="#{agregarSolicitanteApoderadoBean.telefono}"                  
+                                             style="width: 94%" maxlength="50" autocomplete="off"/>
+                            </h:panelGrid>
+                        </p:column>
+                    </p:row>
+                    <p:row >
+                        <p:column style="width: 50%">
+                            <h:panelGrid columns="3">
+                                <p:message for="faxTraNat" display="icon"/>        
+                                <p:outputLabel value="Fax" style="display: block; width: 100px"/>
+                                <p:inputText  value="#{agregarSolicitanteApoderadoBean.fax}" id="faxTraNat"
+                                              title="OPCIONAL. Fax del Solicitante o Titular."
+                                              style="width: 80%" maxlength="50" autocomplete="off"/>
+                            </h:panelGrid>
+                        </p:column>
+                        <p:column style="width: 50%">
+                            <h:panelGrid columns="2">
+                                <p:outputLabel value="Celular" style="display: block; width: 93px"/>
+                                <p:inputText  value="#{agregarSolicitanteApoderadoBean.celular}" 
+                                              title="OPCIONAL. Numero de Celular del Solicitante o Titular."
+                                              style="width: 95%" maxlength="50" autocomplete="off"/>
+                            </h:panelGrid>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column style="width: 100%" colspan="2">
+                            <h:panelGrid columns="3">
+
+                                <p:message for="direccionUno" display="icon"/>       
+                                <p:outputLabel for="direccionUno" value="Domicilio" style="display: block; width: 65px"/> 
+
+                                <p:inputText id="direccionUno" size="68" required="true"
+                                             value="#{agregarSolicitanteApoderadoBean.domicilio}" title="OBLIGATORIO. Dirección domiciliaria del Solicitante o Titular."                     
+                                             maxlength="200" autocomplete="off">
+                                    <f:validateLength minimum="2" />
+                                </p:inputText>
+                            </h:panelGrid>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column style="width: 100%" colspan="2">
+                            <h:panelGrid columns="2" id="panelCorreoN" >
+                                <p:outputLabel value="Correo Electronico" style="display: block; width: 115px"/>
+                                <p:inputText  id="correoN" size="63"     maxlength="50"                                          
+                                              value="#{agregarSolicitanteApoderadoBean.correoElectronico}"  
+                                              title="OPCIONAL. Cuenta de correo electrónico del Solicitante o Titular."                           
+                                              autocomplete="off">
+                                    <p:ajax event="keyup" update="panelCorreoN" listener="#{agregarSolicitanteApoderadoBean.metodoCorreo()}"/>
+
+                                </p:inputText> 
+                                <p:watermark for="correoN" value="correo@dominio.ext" />                                
+                                <p:outputLabel value="Formato de Correo Invalido" style="color: #C00" rendered="#{agregarSolicitanteApoderadoBean.mensaje}" />
+                            </h:panelGrid>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column style="width: 50%; text-align: center" >
+
+                            <p:commandButton value="Aceptar" icon="ui-icon-circle-check" update="panelGridDocumentos panelCorreoJ"
+                                             actionListener="#{agregarSolicitanteApoderadoBean.addNuevoTitularNatural()}"/>
+                        </p:column>
+                        <p:column style="width: 50%; text-align: center" >
+                            <p:commandButton value="Cancelar"  icon="ui-icon-circle-close" >
+                                <p:ajax listener="#{agregarSolicitanteApoderadoBean.cerrarDialogo()}" />
+                            </p:commandButton>
+                        </p:column>
+                    </p:row>
+
+                </p:panelGrid>
+            </p:panelGrid>   
+            <p:panelGrid columns="1" id="panelNombre" rendered="#{agregarSolicitanteApoderadoBean.panelNombre}" styleClass="quitarBordes">
+                <p:panelGrid rendered="#{agregarSolicitanteApoderadoBean.panelSolicitanteRendered}" > 
+                    <p:row >
+                        <p:column colspan="2">
+                            <h:panelGrid columns="3">
+                                <h:panelGrid columns="2" style="width: 10%">                                    
+                                    <p:message for="razonSocialCN" display="icon" />
+                                    <p:outputLabel for="razonSocialCN" value="Razon social" style="display: block; width: 86px" />
+
+                                </h:panelGrid>
+                                <p:inputText id="razonSocialCN"  value="#{agregarSolicitanteApoderadoBean.razonSocial}"  
+                                             required="true" label="Nombre"
+                                             size="65"  maxlength="2000"  
+                                             autocomplete="off" 
+                                             title="OBLIGATORIO. Nombre o Razon Social del Nuevo Titular o Licenciatario." >
+                                    <f:validateLength minimum="2" />
+                                </p:inputText>                                    
+
+                            </h:panelGrid>
+                        </p:column>
+                    </p:row>                               
+                    <p:row >
+                        <p:column style="width: 50%">
+                            <h:panelGrid columns="3">                                
+                                <p:message for="nroDocumentoCNJ" display="icon" />
+                                <p:outputLabel for="nroDocumentoCNJ" value="N° Documento" style="display: block; width: 95px"/>  
+                                <p:inputText id="nroDocumentoCNJ" title="OBLIGATORIO. Número del documento de identidad del Nuevo Titular, en caso de no contar con el dato, colocar valor 0."                                                                                         
+                                             value="#{agregarSolicitanteApoderadoBean.numeroDocumento}" required="true" label="documento"                                                                                     
+                                             style="width: 100%" maxlength="25" autocomplete="off">
+                                    <f:validateLength minimum="1" />
+                                </p:inputText>
+                                <!--                                <p:outputLabel value="*" style="color: #C00"/> -->
+                            </h:panelGrid>
+                        </p:column>
+                        <p:column style="width: 50%">
+                            <h:panelGrid columns="3">
+                                <p:message for="tipoDocumentoJcn" display="icon" />  
+                                <p:outputLabel for="tipoDocumentoJcn" value="Tipo documento" style="display: block; width: 105px"/>  
+                                <p:selectOneMenu   value="#{agregarSolicitanteApoderadoBean.tipoDocumento}" id="tipoDocumentoJcn"
+                                                  title="OBLIGATORIO. Tipo de documento de identidad del Nuevo Titular, en caso de no contar con el dato, colocar valor Otro."
+                                                  required="true" autoWidth="false">                                                                                                                                           
+                                    <f:selectItem   itemLabel="Elegir" itemValue="" />
+                                    <f:selectItems value="#{agregarSolicitanteApoderadoBean.listaTipoDocumentoJuridico}" 
+                                                   var="tipoDoc"  itemLabel="#{tipoDoc.nombre}" itemValue="#{tipoDoc.codigo}" />   
+                                    <f:ajax event="change"/>
+                                    <f:validateLength minimum="2" />
+                                </p:selectOneMenu>
+                            </h:panelGrid>  
+                        </p:column>
+                    </p:row>
+
+                    <p:row >
+                        <p:column style="width: 50%; text-align: center" >
+                            <p:commandButton value="Aceptar" icon="ui-icon-circle-check" update="panelGridDocumentos panelCorreoJ panelNombre" 
+                                             actionListener="#{agregarSolicitanteApoderadoBean.addNuevoTitularNombre}"/>
+                        </p:column>
+                        <p:column style="width: 50%; text-align: center" >
+                            <p:commandButton value="Cancelar"  icon="ui-icon-circle-close" >
+                                <p:ajax listener="#{agregarSolicitanteApoderadoBean.cerrarDialogo()}" />
+                            </p:commandButton>
+                        </p:column>
+                    </p:row>
+
+                </p:panelGrid>
+
+                <p:panelGrid rendered="#{!agregarSolicitanteApoderadoBean.panelSolicitanteRendered}"  > 
+                    <p:row>
+                        <p:column style="width: 50%">
+                            <h:panelGrid columns="3">
+                                <p:message for="nombreN" display="icon" />  
+                                <p:outputLabel for="nombreN" value="Nombre(s)" style="display: block; width: 100px"/>
+                                <p:inputText required="true" id="nombreN" 
+                                             value="#{agregarSolicitanteApoderadoBean.nombre}" title="OBLIGATORIO. Nombre(s) del Nuevo Titular o Licenciaterio. "                                                                                         
+                                             maxlength="2000" autocomplete="off" style="width: 100%">      
+                                    <f:validateLength minimum="2" />
+                                </p:inputText>
+
+                            </h:panelGrid>
+                        </p:column>
+                        <p:column style="width: 50%">
+                            <h:panelGrid columns="3">
+                                <p:message for="apellidoN" display="icon" />   
+                                <p:outputLabel for="apellidoN" value="Primer Apellido" style="display: block; width: 100px"/>
+                                <p:inputText style="width: 100%" id="apellidoN" required="true"
+                                             title="OBLIGATORIO. Primer Apellido del Nuevo Titular o Licenciaterio."
+                                             value="#{agregarSolicitanteApoderadoBean.primerApellido}"
+                                             maxlength="50" autocomplete="off">
+                                    <f:validateLength minimum="2" />
+                                </p:inputText>
+                            </h:panelGrid>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column style="width: 50%">
+                            <h:panelGrid columns="3">
+                                <p:message for="segundoAp" display="icon" />  
+                                <p:outputLabel value="Segundo Apellido" style="display: block; width: 105px"/>
+                                <p:inputText id="segundoAp"
+                                    value="#{agregarSolicitanteApoderadoBean.segundoApellido}" title="OPCIONAL. Segundo Apellido del Nuevo Titular."                                          
+                                    style="width: 100%" maxlength="50" autocomplete="off"/>
+                            </h:panelGrid>
+                        </p:column>
+                        <p:column style="width: 50%">
+                            <h:panelGrid columns="3">
+                                <p:message for="nroDocumentoCN" display="icon" />    
+                                <p:outputLabel for="nroDocumentoCN" value="N° Documento" style="display: block; width: 95px"/>  
+                                <p:inputText  id="nroDocumentoCN" required="true"
+                                              title="OBLIGATORIO. Número del documento de identidad del Nuevo Titular, en caso de no contar con el dato, colocar valor 0."                                                                                         
+                                              value="#{agregarSolicitanteApoderadoBean.numeroDocumento}"                                                                                         
+                                              size="20" maxlength="25" autocomplete="off">
+                                    <f:validateLength minimum="1" />
+                                </p:inputText>
+                            </h:panelGrid>
+                        </p:column>
+                    </p:row>     
+                    <p:row>
+                        <p:column style="width: 50%">
+                            <h:panelGrid columns="3">
+                                <p:message for="tipoDocumentoCN" display="icon" />    
+                                <p:outputLabel for="tipoDocumentoCN" value="Tipo Documento"  style="display: block; width: 107px"/>  
+                                <p:selectOneMenu  id="tipoDocumentoCN" value="#{agregarSolicitanteApoderadoBean.tipoDocumento}" style="width: 150px" autoWidth="false"
+                                                  title="OBLIGATORIO. Tipo de documento de identidad del Solicitante o Titular, en caso de no contar con el dato, colocar valor Otro."
+                                                  required="true">
+                                    <f:selectItem itemLabel="Elegir" itemValue=""  /> 
+                                    <f:selectItems value="#{agregarSolicitanteApoderadoBean.listaTipoDocumentoNatural}" 
+                                                   var="tipoDoc"  itemLabel="#{tipoDoc.nombre}" itemValue="#{tipoDoc.codigo}" />                                                                                  
+                                    <p:ajax event="change" update="panelLugarCN"/>
+                                    <f:validateLength minimum="2" />
+                                </p:selectOneMenu>
+                            </h:panelGrid>                
+                        </p:column>
+                        <p:column style="width: 50%">
+                            <h:panelGrid columns="3" id="panelLugarCN">
+                                <p:message for="lugarCN" display="icon"   rendered="#{agregarSolicitanteApoderadoBean.tipoDocumento=='CI'}"/>   
+                                <p:outputLabel for="lugarCN" value="Lugar Expedicion" rendered="#{agregarSolicitanteApoderadoBean.tipoDocumento=='CI'}"/>  
+                                <p:selectOneMenu id="lugarCN" style="width: 100%"  value="#{agregarSolicitanteApoderadoBean.lugarExpedicion}"
+                                                 rendered="#{agregarSolicitanteApoderadoBean.tipoDocumento=='CI'}"
+                                                 title="OBLIGATORIO. Seleccione el Lugar de Expedicion del documento de Identidad."                                                                                             
+                                                 required="#{agregarSolicitanteApoderadoBean.tipoDocumento=='CI'}">
+                                    <f:selectItem itemLabel="Elegir" itemValue=""  /> 
+                                    <f:selectItems value="#{agregarSolicitanteApoderadoBean.listaLugarExpedicion}" var="dpto" itemLabel="#{dpto.nombre}" itemValue="#{dpto.codigo}"    />                                                                                        
+                                    <f:validateLength minimum="2" />
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column style="width: 50%">
+                            <h:panelGrid columns="3" id="GeneroPersonaCN">
+                                <p:message for="generoCN" display="icon"/>                                  
+                                <p:outputLabel for="generoCN" value="Genero" style="display: block; width: 97px"/>                                                                                                         
+                                <p:selectOneRadio id="generoCN"    layout="grid" columns="2" 
+                                                  required="true" value="#{agregarSolicitanteApoderadoBean.generoPersona}">                                              
+
+                                    <f:selectItems value="#{agregarSolicitanteApoderadoBean.listaGenero}" var="genero" itemLabel="#{genero.nombre}" itemValue="#{genero.codigo}"/>
+                                    <f:validateLength minimum="2" />
+                                </p:selectOneRadio>
+                            </h:panelGrid>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column style="width: 50%; text-align: center" >
+
+                            <p:commandButton value="Aceptar" icon="ui-icon-circle-check" update="panelGridDocumentos panelCorreoJ panelNombre"
+                                             actionListener="#{agregarSolicitanteApoderadoBean.addNuevoTitularNombre}"/>
+                        </p:column>
+                        <p:column style="width: 50%; text-align: center" >
+                            <p:commandButton value="Cancelar"  icon="ui-icon-circle-close" >
+                                <p:ajax listener="#{agregarSolicitanteApoderadoBean.cerrarDialogo()}" />
+                            </p:commandButton>
+                        </p:column>
+                    </p:row>
+
+                </p:panelGrid>
+            </p:panelGrid>
+
+
+
+
+
+            <p:panelGrid columns="1" id="panelTitularRegistrado" rendered="#{agregarSolicitanteApoderadoBean.panelTitularRegistrado}" styleClass="quitarBordes">
+                <p:panelGrid>
+                    <p:row >
+                        <p:column colspan="2" style="width: 100%">   
+                            <h:panelGrid columns="2" rendered="#{agregarSolicitanteApoderadoBean.panelSolicitanteRendered}">
+                                <h:panelGrid columns="2" style="width: 10%">                                    
+                                    <p:message for="razonSocialR" display="icon" />
+                                    <p:outputLabel value="Razon social" style="display: block; width: 105px" for="razonSocialR"/>
+                                </h:panelGrid>
+                                <p:inputText id="razonSocialR"  value="#{agregarSolicitanteApoderadoBean.razonSocial}"  
+                                             required="true" label="Nombre"
+                                             size="65"  maxlength="2000"  
+                                             autocomplete="off" 
+                                             title="OBLIGATORIO. Nombre o Razon Social del Nuevo Titular o Licenciatario." >
+                                    <f:validateLength minimum="2" />
+                                </p:inputText> 
+
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" rendered="#{!agregarSolicitanteApoderadoBean.panelSolicitanteRendered}">
+                                <h:panelGrid columns="2" style="width: 10%">
+                                    <p:message for="nombreN" display="icon" />  
+                                    <p:outputLabel for="nombreN" value="Nombre(s)" style="display: block; width: 100px"/>
+                                </h:panelGrid>
+                                <p:inputText required="true"  
+                                             value="#{agregarSolicitanteApoderadoBean.nombre}" title="OBLIGATORIO. Nombre(s) del Nuevo Titular o Licenciaterio. "                                                                                         
+                                             maxlength="2000" autocomplete="off" size="50">      
+                                    <f:validateLength minimum="2" />
+                                </p:inputText>
+                                <h:panelGrid columns="2" style="width: 10%">
+                                    <p:message for="apellidoN" display="icon" />   
+                                    <p:outputLabel for="apellidoN" value="Primer Apellido" style="display: block; width: 100px"/>
+
+                                </h:panelGrid>
+                                <p:inputText size="50" required="true"
+                                             title="OBLIGATORIO. Primer Apellido del Nuevo Titular o Licenciaterio."
+                                             value="#{agregarSolicitanteApoderadoBean.primerApellido}"
+                                             maxlength="50" autocomplete="off">
+                                    <f:validateLength minimum="2" />
+                                </p:inputText>
+                                <h:panelGrid columns="2" style="width: 10%">
+                                    <p:message for="segundoApellidoReg" display="icon" />  
+                                    <p:outputLabel value="Segundo Apellido" style="display: block; width: 105px" id="segundoApellidoReg"/>
+                                </h:panelGrid>
+                                <p:inputText 
+                                    value="#{agregarSolicitanteApoderadoBean.segundoApellido}" title="OPCIONAL. Segundo Apellido del Solicitante o Titular."                                          
+                                    size="50" maxlength="50" autocomplete="off"/>
+                            </h:panelGrid>
+                        </p:column>
+                    </p:row> 
+                    <p:row >
+                        <p:column style="width: 100%" colspan="2">
+                            <h:panelGrid columns="2">
+                                <h:panelGrid columns="2" style="width: 10%">
+                                    <p:message for="domicilioR" display="icon" />  
+                                    <p:outputLabel for="domicilioR" value="Domicilio" style="display: block; width: 105px"/> 
+                                </h:panelGrid>
+                                <p:inputText  size="65" value="#{agregarSolicitanteApoderadoBean.domicilio}" id="domicilioR" required="true"
+                                              title="OBLIGATORIO. Dirección domiciliaria nueva. (Número máximo de caracteres: 200)"                     
+                                              maxlength="200" autocomplete="off"
+                                              >
+                                    <f:validateLength minimum="2" />
+                                </p:inputText>
+                            </h:panelGrid>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column style="width: 50%; text-align: center" >
+                            <p:commandButton value="Aceptar" icon="ui-icon-circle-check" update="panelTitularRegistrado"
+                                             actionListener="#{agregarSolicitanteApoderadoBean.addTitularRegistrado}"/>
+                        </p:column>
+                        <p:column style="width: 50%; text-align: center" >
+                            <p:commandButton value="Cancelar"  icon="ui-icon-circle-close" >
+                                <p:ajax listener="#{agregarSolicitanteApoderadoBean.cerrarDialogo()}" />
+                            </p:commandButton>
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+
+            </p:panelGrid>
+
+
+
+
+
+            <p:panelGrid columns="1" id="panelDomicilio" rendered="#{agregarSolicitanteApoderadoBean.panelDomicilio}" styleClass="quitarBordes">
+                <p:panelGrid >
+
+
+                    <p:row >
+
+                        <p:column style="width: 100%" colspan="2">
+                            <h:panelGrid columns="2">
+                                <h:panelGrid columns="2" style="width: 10%">
+                                    <p:message for="domicilioD" display="icon" />  
+                                    <p:outputLabel for="domicilioD" value="Domicilio" style="display: block; width: 83px"/> 
+                                </h:panelGrid>
+                                <p:inputText  size="65" value="#{agregarSolicitanteApoderadoBean.domicilio}" id="domicilioD" required="true"
+                                              title="OBLIGATORIO. Dirección domiciliaria nueva."                     
+                                              maxlength="200" autocomplete="off"
+                                              >
+                                    <f:validateLength minimum="2" />
+                                </p:inputText>
+                            </h:panelGrid>
+
+                        </p:column>
+
+                    </p:row>
+                    <p:row >
+                        <p:column style="width: 50%">
+                            <h:panelGrid columns="3">
+                                <p:message for="comboPaisD" display="icon" />   
+                                <p:outputLabel for="comboPaisD" value="Pais" style="display: block; width: 88px"/>
+                                <p:selectOneMenu id="comboPaisD" autoWidth="false" value="#{agregarSolicitanteApoderadoBean.pais}"  
+                                                 title="OBLIGATORIO. País de origen del Titular." required="true" style="width: 150px">
+                                    <f:selectItem itemLabel="Elegir" itemValue=""    /> 
+                                    <f:selectItems value="#{agregarSolicitanteApoderadoBean.listaPais}" var="pais" itemLabel="#{pais.nombre}" 
+                                                   itemValue="#{pais.codigo}"    />                                                                                             
+                                    <p:ajax event="change" update="panelDptoD"/>
+                                    <f:validateLength minimum="2" />
+                                </p:selectOneMenu> 
+                            </h:panelGrid>
+                        </p:column>
+                        <p:column style="width: 50%">
+                            <h:panelGrid columns="3" id="panelDptoD">
+                                <p:message for="comboDptoD" display="icon" rendered="#{agregarSolicitanteApoderadoBean.pais=='BO'}"/>  
+                                <p:outputLabel for="comboDptoD" value="Departamento" style="display: block; width: 105px" rendered="#{agregarSolicitanteApoderadoBean.pais=='BO'}"/>
+                                <p:selectOneMenu  id="comboDptoD" value="#{agregarSolicitanteApoderadoBean.departamento}" 
+                                                  title="OBLIGATORIO. Departamento." style="width: 100%" required="#{agregarSolicitanteApoderadoBean.pais=='BO'}"
+                                                  rendered="#{agregarSolicitanteApoderadoBean.pais=='BO'}">
+                                    <f:selectItem itemLabel="Elegir" itemValue=""    /> 
+                                    <f:selectItems value="#{agregarSolicitanteApoderadoBean.listaLugarExpedicion}" var="dpto" itemLabel="#{dpto.nombre}" 
+                                                   itemValue="#{dpto.codigo}"    />                                                                                            
+                                    <f:validateLength minimum="2" />
+                                </p:selectOneMenu> 
+                            </h:panelGrid> 
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column style="width: 50%; text-align: center" >
+
+                            <p:commandButton value="Aceptar" icon="ui-icon-circle-check" update="panelGridDocumentos panelDomicilio"
+                                             actionListener="#{agregarSolicitanteApoderadoBean.addNuevoDomicilio()}"/>
+                        </p:column>
+                        <p:column style="width: 50%; text-align: center" >
+                            <p:commandButton value="Cancelar"  icon="ui-icon-circle-close" >
+                                <p:ajax listener="#{agregarSolicitanteApoderadoBean.cerrarDialogo()}" />
+                            </p:commandButton>
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+            </p:panelGrid>
+        </div>
+    </h:form>
+</html>

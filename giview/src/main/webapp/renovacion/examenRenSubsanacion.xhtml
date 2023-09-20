@@ -1,0 +1,712 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <body>
+        <ui:composition template="./../WEB-INF/facelets/templates/Template.xhtml">
+            <ui:define name="content">      
+                <!--            <link rel="stylesheet" type="text/css" href="style.css" />-->
+                <h:form id="formu">
+                    <p:growl id="msg" />
+                    <p:panelGrid style="width: 100%; height: 100%" styleClass="quitarBordes">
+                        <p:panelGrid style="width: 100%;" styleClass="quitarBordes">
+                            <p:row>
+                                <p:column style="width: 100%;" colspan="2">
+                                    <p:outputPanel style="padding-bottom: 1px; padding-top: 1px; padding-left:10px; padding-right: 10px;">
+                                        <table>
+                                            <tr valign="middle">
+                                                <td><p:graphicImage library="images" name="flechaTituloAzul.png" width="24" height="24"></p:graphicImage></td>
+                                                <td><p:outputLabel value="Expediente renovación" styleClass="tituloPrincipalFuente"></p:outputLabel></td>
+                                                <p:separator id="sepTitulodd" style="border: 1px #045491 inset;"></p:separator>                    
+                                                <td>
+                                                    <p:panelGrid columns="2" style="width: 100%;" styleClass="quitarBordes">
+                                                        <p:outputLabel value="/ Subsanación:" styleClass="tituloPrincipalFuente"></p:outputLabel>
+                                                        <p:outputLabel value="#{examenRenSubsanacionBean.numeroFormulario}" style="width: 80%; color:#538C15;font-weight: bold" ></p:outputLabel>
+                                                    </p:panelGrid>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <p:separator id="sepTitulo" style="border: 1px #045491 inset;"></p:separator>                    
+                                    </p:outputPanel>                                
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                        <!--PANELGRID PARA BUSCAR-->
+                        <p:panelGrid  style="width: 100%;" id="pnlBuscador">
+                            <p:row>
+                                <p:column style="width: 20%; text-align: right" colspan="2">
+                                    <p:outputLabel value="Nro. FORM" style="font-weight: bold" styleClass="textoImportante"/>
+                                </p:column>
+                                <p:column style="width: 20%; text-align: center">
+                                    <fieldset>
+
+                                        <p:panelGrid columns="1" style="width: 100%">
+                                            <p:inputText value="#{examenRenSubsanacionBean.numeroFormulario}" id="txtNumeroFormulario" 
+                                                         style="height: 20px;background: #add3d8 !important; vertical-align: central; text-align: center; width: 80%; font-weight: bold; font-size: 15px !important"/>
+                                        </p:panelGrid>
+                                    </fieldset>
+                                </p:column>
+                                <p:column style="width: 20%">
+                                    <p:commandButton value="Buscar" actionListener="#{examenRenSubsanacionBean.buscarFormularioExterno()}"
+                                                     icon="ui-icon-search"
+                                                     update=":formu"
+                                                     style="height: 40px;"/>
+                                </p:column>
+                                <p:column style="width: 20%" >
+                                    <p:outputLabel id="pnlExistente">
+                                        <p:panelGrid columns="1" rendered="#{examenRenSubsanacionBean.panelNoEncontrado}">
+                                            <p:outputLabel value="#{examenRenSubsanacionBean.mensajeBusqueda}" style="font-weight: bold"/>
+
+                                        </p:panelGrid>                                        
+                                    </p:outputLabel>
+                                </p:column>        
+                            </p:row>
+                        </p:panelGrid>
+                        
+                        <p:focus context="pnlBuscador"/>
+                        
+                        <p:panelGrid style="width: 100%;" styleClass="quitarBordes">
+                            <p:column colspan="1" style="width: 10%">
+
+                            </p:column>
+                            <p:row style="width: 100%;">
+                                <p:column colspan="1" style="width: 30%;vertical-align: top;">
+                                    <fieldset>
+                                        <legend>
+                                            <p:outputLabel value="Administración" styleClass="labelImportante"/>
+                                        </legend>
+                                        <p:panelGrid columns="2" style="width: 9%">
+                                            <p:outputLabel value="Oficina"></p:outputLabel>
+                                            <p:selectOneMenu  id="oficina" value="#{examenRenSubsanacionBean.oficina}" style="background: #dddddd !important; vertical-align: central">
+                                                <f:selectItems value="#{examenRenSubsanacionBean.listaCiudadOficina}" var="r" itemLabel="#{r.nombre}" itemValue="#{r.codigo}"/>
+                                            </p:selectOneMenu>
+                                        </p:panelGrid>
+                                        <p:panelGrid columns="4" style="width: 90%">
+                                            <p:outputLabel value="N° Recibo" style="display: block; width: 60px"></p:outputLabel>
+                                            <p:inputText value="#{examenRenSubsanacionBean.renSolicitudRenovacion.numero_recibo}" 
+                                                         style="background: #dddddd !important;  vertical-align: central; width: 85%"></p:inputText>
+                                            <p:selectOneMenu autoWidth="false" id="recibo" value="#{examenRenSubsanacionBean.serieRecibo}" style="background: #dddddd !important; vertical-align: central; ">
+                                                <f:selectItem itemLabel="Elegir" itemValue="#{null}"></f:selectItem>
+                                                <f:selectItems value="#{examenRenSubsanacionBean.listaTipoRecibo}" var="r" itemLabel="#{r.nombre}" itemValue="#{r.codigo}"/>
+                                            </p:selectOneMenu>
+                                            <p:selectBooleanCheckbox value="#{registroBean.encabezado}" >
+                                            </p:selectBooleanCheckbox>
+                                            <p:outputLabel value="N° Titulo"></p:outputLabel>
+                                            <p:inputText value="#{examenRenSubsanacionBean.renSolicitudRenovacion.numero_titulo}" 
+                                                         style="background: #dddddd !important; vertical-align: central;width: 85%"></p:inputText>
+                                            <p:selectOneMenu autoWidth="false" id="titulo" value="#{examenRenSubsanacionBean.serieTitulo}" style="background: #dddddd !important; vertical-align: central; ">
+                                                <f:selectItem itemLabel="Elegir" itemValue="#{null}"></f:selectItem>
+                                                <f:selectItems value="#{examenRenSubsanacionBean.listaTipoTitulo}" var="r" itemLabel="#{r.nombre}" itemValue="#{r.codigo}"/>
+                                            </p:selectOneMenu>
+                                        </p:panelGrid>
+                                    </fieldset>
+                                </p:column>
+                                <p:column colspan="1" style="width: 30%;vertical-align: top;">
+                                    <fieldset>
+                                        <legend>
+                                            <p:outputLabel value="Datos SR" />
+                                        </legend>
+                                        <p:panelGrid columns="1">
+                                            <h:panelGrid columns="3" style="text-align: center">
+                                                <p:outputLabel value="SR" style="display: block; width: 45px; font-weight: bold; text-align: center; color: #650e0b"></p:outputLabel>
+                                                <p:inputText value="#{examenRenSubsanacionBean.numeroSr}" size="10" style="background: #add3d8 !important; height: 105%; vertical-align: central; text-align: center; font-weight: bold"></p:inputText>
+                                                <p:inputText value="#{examenRenSubsanacionBean.gestion}" size="5" style="background: #add3d8 !important; height: 105%; vertical-align: central; text-align: center;font-weight: bold"></p:inputText>
+                                                <p:outputLabel value="Código" ></p:outputLabel>
+                                                <p:outputLabel value="N° solicitud"></p:outputLabel>
+                                                <p:outputLabel value="Gestión"></p:outputLabel>
+                                                <p:spacer width="1"></p:spacer>                                            
+                                            </h:panelGrid>
+
+                                            <p:panelGrid columns="2">
+                                                <p:outputLabel value="Fec. de sol." style="display: block; width: 102px;"></p:outputLabel>
+                                                <p:calendar id="datetime"   value="#{examenRenSubsanacionBean.renSolicitudRenovacion.fecha_ingreso}" pattern="#{sessionState.formatoFechaHora}" />
+                                            </p:panelGrid>
+                                        </p:panelGrid>
+                                    </fieldset>
+                                </p:column>
+                                <p:column colspan="1" style="width: 27%;vertical-align: top;">
+                                    <fieldset>
+                                        <legend>
+                                            <p:outputLabel value="Referencia del expediente" />
+                                        </legend>
+                                        <h:panelGrid columns="1" >
+                                            <p:panelGrid columns="4">
+                                                <p:outputLabel value="N° Registro:" style="display:block;width: 95px"/>
+                                                <p:inputText value="#{examenRenSubsanacionBean.registroExpediente}" style="width: 70%" onkeyup="return ValNumero(this);" id="txtRegistoExpediente">
+                                                </p:inputText>
+                                                <p:selectOneMenu id="serie2" value="#{examenRenSubsanacionBean.serieRegExpediente}" autoWidth="false">
+                                                    <f:selectItem  itemLabel="Elegir" itemValue=""/> 
+                                                    <f:selectItems value="#{examenRenSubsanacionBean.listaSerieRegistro}" var="r" itemLabel="#{r.nombre}" itemValue="#{r.codigo}"/> 
+                                                </p:selectOneMenu>
+                                            </p:panelGrid>                                           
+                                            <p:panelGrid columns="5"  >
+                                                <p:outputLabel value="Expediente SM:" style="display:block;width: 95px"/>
+                                                <p:inputText value="#{examenRenSubsanacionBean.smExpediente}" style="width: 90%"
+                                                             id="txtsmExpediente">
+                                                </p:inputText>
+                                                <p:inputText value="#{examenRenSubsanacionBean.gestionExpediente}" style="width: 90%" 
+                                                             id="txtgestionExpediente" >
+                                                </p:inputText>
+                                                <p:inputText value="#{examenRenSubsanacionBean.extensionExpediente}" style="width: 40%"
+                                                             >
+                                                </p:inputText>                                                
+                                            </p:panelGrid>
+                                            <p:panelGrid columns="3"  >
+                                                <p:outputLabel value="N° Publicacion:" style="display:block;width: 95px"/>
+                                                <p:inputText value="#{examenRenSubsanacionBean.nroPublicacionExpediente}" style="width: 90%" onkeyup="return ValNumero(this);">                                                    
+                                                </p:inputText>
+                                            </p:panelGrid>
+                                        </h:panelGrid>
+                                    </fieldset>
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                        <p:panelGrid id="solicitanteapoderado" style="width: 100%" styleClass="quitarBordes">
+                            <p:row>
+                                <p:column colspan="2" style="vertical-align: top; width: 50%">
+                                    <fieldset>
+                                        <legend>
+                                            <p:outputLabel value="Datos del solicitante" />
+                                        </legend>
+
+                                        <p:dataGrid var="per" value="#{examenRenSubsanacionBean.listaRenSolicitantesSipi}" emptyMessage="No existen solicitantes" id="datosSolicitante"
+                                                    style="width: 100%;" columns="1" rows="1" layout="grid" paginator="true" paginatorPosition="bottom">     
+                                            <p:panelGrid style="width: 100%;">
+                                                <p:row>
+                                                    <p:column  style="width: 10%;"><p:outputLabel value="Solicitante:" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                    <p:column colspan="3" style="width: 90%;" >
+                                                        <p:outputLabel  styleClass="fondoInput" style="width: 100%;" value="#{examenRenSubsanacionBean.devuelveNombreJuridicoONatural(per.nombreRazonSocial,per.primerApellido,per.segundoApellido)}" >
+                                                        </p:outputLabel>
+                                                    </p:column>
+                                                </p:row>   
+                                                <p:row>
+                                                    <p:column style="width: 10%;">
+                                                        <p:outputLabel value="N° Doc:" style="display: block; width: 88px; font-weight: bold"></p:outputLabel>
+                                                    </p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput">
+                                                        <p:outputLabel value="#{per.numeroDocumento}">
+                                                        </p:outputLabel>
+                                                    </p:column>
+                                                    <p:column style="width: 10%;">
+                                                        <p:outputLabel value="Tipo Doc:" style="display: block; width: 100px ; font-weight: bold">
+                                                        </p:outputLabel>
+                                                    </p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput">
+                                                        <p:outputLabel value="#{examenRenSubsanacionBean.devuelveTipoDocumento(per.tipoDocumento)}" style="display: block; width: 160px" ></p:outputLabel></p:column>                                                
+                                                </p:row>
+                                                <p:row rendered="#{per.tipoPersona=='NAT'}">
+                                                    <p:column style="width: 10%;" styleClass="fondoInput"><p:outputLabel value="Genero:" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;"><p:outputLabel value="#{examenRenSubsanacionBean.devuelveGenero(per.genero)}"></p:outputLabel>  </p:column>   
+                                                    <p:column style="width: 10%;">
+                                                        <p:outputLabel value="Lugar Exp.:" style="display: block;width: 105px; font-weight: bold"></p:outputLabel>
+                                                    </p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput">
+                                                        <p:outputLabel value="#{examenRenSubsanacionBean.devuelveLugarExpedicion(per.lugarExpedicion)}" ></p:outputLabel>
+                                                    </p:column>                                                                                                 
+                                                </p:row>
+                                                <p:row>
+                                                    <p:column style="width: 10%;">
+                                                        <p:outputLabel value="Pais" style="font-weight: bold;"></p:outputLabel>
+                                                    </p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput">
+                                                        <p:outputLabel value="#{examenRenSubsanacionBean.devuelvePais(per.pais)}" ></p:outputLabel>
+                                                    </p:column>
+                                                    <p:column style="width: 10%;">
+                                                        <p:outputLabel value="Departamento:" style="font-weight: bold;"></p:outputLabel>
+                                                    </p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput">                                                
+                                                        <p:outputLabel value="#{examenRenSubsanacionBean.devuelveDepartamento(per.departamentoSolicitud)}" ></p:outputLabel>
+
+                                                    </p:column>                                                
+                                                </p:row>
+                                                <p:row>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Telefono:" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{per.telefono}" ></p:outputLabel></p:column>
+                                                    <p:column colspan="2">
+
+                                                    </p:column>
+                                                </p:row>
+                                                <p:row>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Celular:" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{per.celular}" ></p:outputLabel></p:column>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Fax:" style="font-weight: bold;" ></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="" ></p:outputLabel></p:column>                                                
+                                                </p:row>
+                                                <p:row>
+                                                    <p:column  style="width: 10%;"><p:outputLabel value="Direccion:" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                    <p:column colspan="3" style="width: 90%;"><p:outputLabel value="#{per.domicilio}" styleClass="fondoInput" style="width: 98%;"></p:outputLabel></p:column>
+                                                </p:row>
+
+                                                <p:row>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Email:" style="font-weight: bold;" ></p:outputLabel></p:column>
+                                                    <p:column colspan="3" style="width: 90%;"><p:outputLabel value="#{per.correoElectronico}" styleClass="fondoInput" style="width: 98%;"></p:outputLabel></p:column>
+                                                </p:row>
+                                            </p:panelGrid>  
+                                        </p:dataGrid>
+                                    </fieldset>
+                                </p:column>
+                                <p:column colspan="2" style="vertical-align: top;width: 50% ">
+                                    <fieldset>
+                                        <legend>
+                                            <p:outputLabel value="Datos del apoderado" />
+                                        </legend>
+
+                                        <p:dataGrid var="apoderado" value="#{examenRenSubsanacionBean.listaRenApoderadosSipi}" emptyMessage="No existen apoderados" id="datosApoderado"
+                                                    paginatorPosition="bottom" style="width: 100%;" columns="1" rows="1" layout="grid" paginator="true">                                            
+                                            <p:panelGrid style="width: 100%;">
+                                                <p:row>
+                                                    <p:column  style="width: 10%; "><p:outputLabel  value="Apoderado" style="font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column colspan="3" style="width: 90%;">
+                                                        <p:outputLabel styleClass="fondoInput"  value="#{apoderado.nombres} #{apoderado.primerApellido} #{apoderado.segundoApellido}" style="width: 100%;" >
+                                                        </p:outputLabel>
+                                                    </p:column>
+                                                </p:row>        
+                                                <p:row>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="N° Doc:" style="display: block; width: 95px; font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput" ><p:outputLabel value="#{apoderado.numeroDocumento}"></p:outputLabel></p:column>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Tipo Doc:" style="display: block; width: 105px ;font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput" ><p:outputLabel value="#{examenRenSubsanacionBean.devuelveTipoDocumento(apoderado.tipoDocumento)}" style="display: block; width: 160px"></p:outputLabel></p:column>                                                
+                                                </p:row>
+                                                <p:row >
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Genero:" style="font-weight: bold" ></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput" ><p:outputLabel value="#{examenRenSubsanacionBean.devuelveGenero(apoderado.genero)}"></p:outputLabel></p:column>       
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Lugar Exp.:" style="display: block;width: 110px ; font-weight: bold" rendered="#{apoderado.tipoDocumento=='CI'}"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput" ><p:outputLabel value="#{examenRenSubsanacionBean.devuelveLugarExpedicion(apoderado.lugarExpedicion)}" rendered="#{apoderado.tipoDocumento=='CI'}"></p:outputLabel></p:column>                                                                                             
+                                                </p:row>
+                                                <p:row>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Telefono:" style="font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput" ><p:outputLabel value="#{apoderado.telefono}" ></p:outputLabel></p:column>
+                                                    <p:column colspan="2">
+
+                                                    </p:column>
+                                                </p:row>
+                                                <p:row>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Celular:" style="font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput" ><p:outputLabel value="#{apoderado.celular}"></p:outputLabel></p:column>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Fax:" style="font-weight: bold " ></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput" ><p:outputLabel value="" ></p:outputLabel></p:column>                                                
+                                                </p:row>
+                                                <p:row>
+                                                    <p:column  style="width: 10%;"><p:outputLabel value="Direccion:" style="font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column colspan="3" style="width: 90%;"><p:outputLabel styleClass="fondoInput"  value="#{apoderado.domicilio}" style="width: 98%;"></p:outputLabel></p:column>
+                                                </p:row>
+                                                <p:row>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Email:" style="font-weight: bold" ></p:outputLabel></p:column>
+                                                    <p:column colspan="3" style="width: 40%;"><p:outputLabel value="#{apoderado.correoElectronico}" style="width: 98%;" styleClass="fondoInput" ></p:outputLabel></p:column>
+                                                </p:row>
+                                                <p:row>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Poder:" style="font-weight: bold" ></p:outputLabel></p:column>
+                                                    <p:column colspan="3" style="width: 40%;">
+                                                        <h:panelGrid columns="2">                                                           
+                                                            <p:outputLabel value="#{apoderado.numeroPoder}" styleClass="fondoInput"></p:outputLabel>
+                                                        </h:panelGrid>
+                                                    </p:column>
+                                                </p:row>
+                                            </p:panelGrid>                             
+                                        </p:dataGrid>
+                                    </fieldset>
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                        <p:panelGrid style="width: 100%" styleClass="quitarBordes" id="panelNotificacion">
+                            <p:row >
+                                <p:column colspan="4">
+                                    <fieldset>
+                                        <legend>
+                                            <p:outputLabel value="Direccion de notificacion" />
+                                        </legend>
+
+                                        <p:panelGrid style="width: 100%">
+                                            <p:row>
+                                                <p:column style="width: 10%"> <p:outputLabel value="Ciudad:" style="font-weight: bold;"/> 
+                                                </p:column>                    
+                                                <p:column  style="width: 40%">
+                                                    <p:selectOneMenu id="cmbCiudadNotificacion" style="width: 80px !important" value="#{examenRenSubsanacionBean.direccionNotificacionSipi.ciudadNotificacion}" autoWidth="false"
+                                                                     title="OBLIGATORIO. Ciudad para notificacion"  >
+                                                        <f:selectItem itemLabel="Elegir" itemValue=""    /> 
+                                                        <f:selectItems  value="#{examenRenSubsanacionBean.listaCiudadOficina}" var="r" itemLabel="#{r.nombre}" itemValue="#{r.codigo}"   />                  
+                                                        <f:validateLength minimum="0" />
+                                                    </p:selectOneMenu>  
+                                                </p:column>
+
+                                                <p:column style="width: 10%"> <p:outputLabel value="Barrio/Zona:" style="font-weight: bold;"/></p:column>
+                                                <p:column  style="width: 40%"> <p:inputTextarea id="zonaBarrio" value="#{examenRenSubsanacionBean.direccionNotificacionSipi.zonaBarrio}" 
+                                                                                                rows="2" cols="110"  autoResize="false" maxlength="500">
+                                                    </p:inputTextarea></p:column>
+                                            </p:row>
+
+                                        </p:panelGrid>
+
+                                        <p:panelGrid style="width: 100%">
+                                            <p:row >
+                                                <p:column style="width: 70%">
+                                                    <h:panelGrid columns="2" style="width: 99%">
+                                                        <p:outputLabel value="Av/Calle:" style="font-weight: bold;"/>
+                                                        <p:inputText id="avenida" value="#{examenRenSubsanacionBean.direccionNotificacionSipi.avenidaCalle}" 
+                                                                     maxlength="50" style="width: 100%" size="50"></p:inputText> 
+                                                    </h:panelGrid>
+                                                </p:column>                    
+                                                <p:column  style="width: 10%">
+                                                    <h:panelGrid columns="2">
+                                                        <p:outputLabel value="N°:" style="display: block; width: 20px; font-weight: bold"/>
+                                                        <p:inputText id="numeroNoti" style="width: 80%" value="#{examenRenSubsanacionBean.direccionNotificacionSipi.numeroDomicilio}" 
+                                                                     maxlength="8">
+                                                        </p:inputText>                  
+                                                    </h:panelGrid>
+                                                </p:column>
+                                                <p:column style="width: 10%"> 
+                                                    <h:panelGrid columns="2">
+                                                        <p:outputLabel value="Celular:" style="font-weight: bold;" />
+                                                        <p:inputText value="#{examenRenSubsanacionBean.direccionNotificacionSipi.celular}"  maxlength="50"/> 
+                                                    </h:panelGrid>
+                                                </p:column>
+                                                <p:column  style="width:10%">
+                                                    <h:panelGrid columns="2">
+                                                        <p:outputLabel value="Telefono:" style="font-weight: bold;"/>
+                                                        <p:inputText value="#{examenRenSubsanacionBean.direccionNotificacionSipi.telefono}"  maxlength="50"/> 
+                                                    </h:panelGrid>
+                                                </p:column>
+                                            </p:row>
+                                        </p:panelGrid>
+                                        <p:panelGrid style="width: 100%">
+                                            <p:row>
+                                                <p:column style="width: 7%"><p:outputLabel value="Referencia:" style="font-weight: bold;"/> 
+                                                </p:column>                    
+                                                <p:column  style="width: 90%" colspan="3"> 
+                                                    <p:inputText value="#{examenRenSubsanacionBean.direccionNotificacionSipi.referencia}"  style="width: 99%"  maxlength="250"/>                   
+                                                </p:column>
+
+                                            </p:row>
+                                        </p:panelGrid>
+                                        <p:panelGrid style="width: 100%">
+                                            <p:row >
+                                                <p:column style="width: 45%">
+                                                    <h:panelGrid columns="2" style="width: 99%">
+                                                        <p:outputLabel  id="lblEdificio" value="Edificio:" style="font-weight: bold;"/>
+                                                        <p:inputText value="#{examenRenSubsanacionBean.direccionNotificacionSipi.nombreEdificio}" style="width: 100%" size="33"  maxlength="50"/>
+                                                    </h:panelGrid>
+                                                </p:column>                    
+                                                <p:column  style="width: 10%">
+                                                    <h:panelGrid columns="2">
+                                                        <p:outputLabel value="Piso:" style="font-weight: bold;"/>
+                                                        <p:inputText value="#{examenRenSubsanacionBean.direccionNotificacionSipi.piso}" style="width: 80%" maxlength="8"/>       
+                                                    </h:panelGrid>
+                                                </p:column>
+                                                <p:column style="width: 10%"> 
+                                                    <h:panelGrid columns="2">
+                                                        <p:outputLabel value="Departamento:"  style="font-weight: bold;"/>
+                                                        <p:inputText value="#{examenRenSubsanacionBean.direccionNotificacionSipi.departamento}" size="13" maxlength="10"/>
+                                                    </h:panelGrid>
+                                                </p:column>
+                                                <p:column  style="width:35%">
+                                                    <h:panelGrid columns="2">
+                                                        <p:outputLabel value="E-mail:"  style="display: block; width: 50px; font-weight: bold"/>
+                                                        <p:inputText id="correoNoti" style="width: 100%" value="#{examenRenSubsanacionBean.direccionNotificacionSipi.correoelectronico}" 
+                                                                     maxlength="100" size="35"
+                                                                     >
+                                                        </p:inputText>
+                                                        <p:watermark for="correoNoti" value="correo@dominio.ext" />
+                                                    </h:panelGrid>
+                                                </p:column>
+                                            </p:row>
+                                        </p:panelGrid> 
+                                    </fieldset>
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+
+                        <p:panelGrid style="width: 100%" styleClass="quitarBordes">
+                            <p:row >
+                                <p:column colspan="4">
+                                    <fieldset>
+                                        <legend>
+                                            <p:outputLabel value="Lista de productos limitación y clase niza" styleClass="labelImportante"/>
+                                        </legend>
+                                        <p:panelGrid style="width: 100%" styleClass="quitarBordes">
+                                            <p:row>
+                                                <p:column style="width: 10%">
+                                                    <p:outputLabel value="Productos para Limitación" style="display: block;width: 164px; font-weight: bold" />
+                                                </p:column>
+                                                <p:column style="width: 52%">
+                                                    <p:inputTextarea value="#{examenRenSubsanacionBean.solicitudRenovacionesSipi.listaProductosLimitacion}"  
+                                                                     rows="4" cols="200" style="width: 97%" autoResize="false"
+                                                                     onkeyup="this.value = this.value.substring(0, 500);"></p:inputTextarea>
+                                                </p:column>
+                                                <p:column style="width: 40%">
+                                                    <p:panelGrid styleClass="quitarBordes">
+                                                        <p:row style="width: 100%">
+                                                            <p:column style="width: 30%">
+                                                                <p:outputLabel value="Reclasificación solicitada: " style="display: block;font-weight: bold;width: 170px" />
+                                                            </p:column>
+                                                            <p:column style="width: 10%;">
+                                                                <p:outputLabel value="Version clase niza: " style="display: block; width: 120px;font-weight: bold"/>
+                                                            </p:column>
+                                                            <p:column style="width: 30%;">
+                                                                <p:inputText value="#{examenRenSubsanacionBean.versionReclasificacion}" disabled="true" style="width: 80%"/>
+                                                            </p:column>
+
+                                                            <p:column style="width: 10%; text-align: left">
+                                                                <p:outputLabel value="Clase:" style="font-weight: bold"/>
+                                                            </p:column>
+                                                            <p:column style="width: 30%;">
+                                                                <p:inputText value="#{examenRenSubsanacionBean.solicitudRenovacionesSipi.claseNizaReclasificacion}" disabled="true" style="width: 80%;"/>
+                                                            </p:column>
+                                                        </p:row>  
+                                                    </p:panelGrid>
+                                                </p:column>
+                                            </p:row>                                            
+                                        </p:panelGrid>
+                                    </fieldset>
+
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+
+                        <p:panelGrid style="width: 100%" styleClass="quitarBordes">
+                            <p:row >
+                                <p:column colspan="4">
+                                    <fieldset>
+                                        <legend>
+                                            <p:outputLabel value="Datos de la marca y renovaciones" styleClass="labelImportante"/>
+                                        </legend>
+                                        <p:panelGrid style="width: 100%" styleClass="quitarBordes">
+                                            <p:row>
+                                                <p:column style="width: 25%">
+                                                    <p:panelGrid columns="5">
+                                                        <p:outputLabel value="SM" style="font-weight: bold"/>
+                                                        <p:inputText value="#{examenRenSubsanacionBean.numeroSM}" size="7" maxlength="18"/>
+                                                        <p:inputText value="#{examenRenSubsanacionBean.gestionSM}" size="5" maxlength="4"/>
+                                                        <p:inputText value="#{examenRenSubsanacionBean.extensionSM}" size="1"/>
+                                                    </p:panelGrid>        
+                                                </p:column>
+                                                <p:column style="width: 25%">
+                                                    <p:panelGrid columns="3">
+                                                        <p:outputLabel value="N° Registro" style="font-weight: bold"/>
+                                                        <p:inputText value="#{examenRenSubsanacionBean.solicitudRenovacionesSipi.numeroRegistro}" size="9"/>
+                                                        <p:selectOneMenu id="serieRegistroMarca" value="#{examenRenSubsanacionBean.serieRegistroMarca}" style="background: #dddddd !important; vertical-align: central">
+                                                            <f:selectItems value="#{examenRenSubsanacionBean.listaSerieRegistro}" var="r" itemLabel="#{r.nombre}" itemValue="#{r.codigo}"/>
+                                                        </p:selectOneMenu>
+                                                    </p:panelGrid>
+                                                </p:column>
+                                                <p:column style="width: 25%">
+                                                    <p:panelGrid columns="3">
+                                                        <p:outputLabel value="Ultima renovación" style="font-weight: bold"/>
+                                                        <p:inputText value="#{examenRenSubsanacionBean.solicitudRenovacionesSipi.numeroUltimaRenovacion}" size="9"/>
+                                                        <p:selectOneMenu id="serieRenovacionUltima" value="#{examenRenSubsanacionBean.serieRenovacionPenultima}" style="background: #dddddd !important; vertical-align: central">
+                                                            <f:selectItems value="#{examenRenSubsanacionBean.listaSerieRenovacion}" var="r" itemLabel="#{r.nombre}" itemValue="#{r.codigo}"/>
+                                                        </p:selectOneMenu>
+                                                    </p:panelGrid>
+                                                </p:column>
+                                                <p:column style="width: 25%">
+                                                    <p:panelGrid columns="3">
+                                                        <p:outputLabel value="Penultima renovación" style="font-weight: bold; display: block; width: 145px"/>
+                                                        <p:inputText value="#{examenRenSubsanacionBean.solicitudRenovacionesSipi.numeroPenultimaRenovacion}" size="9"/>
+                                                        <p:selectOneMenu id="serieRenovacionPenultima" value="#{examenRenSubsanacionBean.serieRenovacion}" style="background: #dddddd !important; vertical-align: central">
+                                                            <f:selectItems value="#{examenRenSubsanacionBean.listaSerieRenovacion}" var="r" itemLabel="#{r.nombre}" itemValue="#{r.codigo}"/>
+                                                        </p:selectOneMenu>
+                                                    </p:panelGrid>
+                                                </p:column>
+                                            </p:row>                                            
+                                        </p:panelGrid>
+
+                                    </fieldset>
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+
+                        <p:panelGrid style="width: 100%" styleClass="quitarBordes">
+                            <p:row >
+                                <p:column colspan="4">
+                                    <fieldset>
+                                        <legend>
+                                            <p:outputLabel value="Datos del signo registrado" />
+                                        </legend>
+                                        <p:panelGrid style="width: 100%" id="panelDatosRegistrados">
+                                            <p:row>
+                                                <p:column style="width: 65%; vertical-align: top">  
+
+                                                    <p:dataGrid var="per" value="#{examenRenSubsanacionBean.listaTitularRegistradoSipi}" emptyMessage="No existen Titulares" 
+                                                                paginatorPosition="bottom" style="width: 100%;" columns="1" rows="1" layout="grid" paginator="true">                                            
+                                                        <p:panelGrid style="width: 100%;">
+                                                            <p:row>
+                                                                <p:column  style="width: 10%;"><p:outputLabel value="Titular:" style="font-weight: bold"></p:outputLabel></p:column>
+                                                                <p:column colspan="3" style="width: 90%;" styleClass="fondoInput">
+                                                                    <p:outputLabel value="#{per.nombreRazonSocial}" style="width: 98%;">
+                                                                    </p:outputLabel>
+                                                                </p:column>
+                                                            </p:row>                                                                                        
+                                                            <p:row>
+                                                                <p:column  style="width: 10%;"><p:outputLabel value="Direccion:" style="font-weight: bold"></p:outputLabel></p:column>
+                                                                <p:column colspan="3" style="width: 90%;" styleClass="fondoInput">
+                                                                    <p:outputLabel value="#{per.direccion}" style="width: 98%;"></p:outputLabel>
+                                                                </p:column>
+                                                            </p:row>  
+                                                        </p:panelGrid>                             
+                                                    </p:dataGrid>        
+                                                    <p:spacer height="1"/>
+                                                    <p:panelGrid  style="width: 100%"> 
+                                                        <p:row style="width: 100%">
+                                                            <p:column style="width: 8%">
+                                                                <p:outputLabel value="Signo Distintivo"  style="display: block; width: 100px; font-weight: bold"/>
+                                                            </p:column>
+                                                            <p:column style="width: 90%" colspan="3">
+                                                                <p:inputTextarea value="#{examenRenSubsanacionBean.solicitudRenovacionesSipi.signoRegistrado}"  rows="1" cols="50" autoResize="false"
+                                                                                 onkeyup="this.value = this.value.substring(0, 1000);" maxlength="1000" id="txtSigno" 
+                                                                                 style="width: 98%" styleClass="tituloMarca">
+                                                                </p:inputTextarea>  
+                                                            </p:column>
+                                                        </p:row>
+                                                        <p:row style="width: 100%">
+                                                            <p:column style="width: 20%;">
+                                                                <p:outputLabel value="Version clase niza: " style="display: block; width: 150px;font-weight: bold"/>
+                                                            </p:column>
+                                                            <p:column style="width: 10%;">
+                                                                <p:inputText value="#{examenRenSubsanacionBean.versionReclasificacion}" style="width: 40%" disabled="true"/> 
+                                                            </p:column>                                                            
+                                                            <p:column style="width: 8%">
+                                                                <p:outputLabel value="Clase:" style="font-weight: bold"/>
+                                                            </p:column>
+                                                            <p:column style="width: 25%">
+                                                                <p:inputText value="#{examenRenSubsanacionBean.solicitudRenovacionesSipi.claseNizaRegistrado}" style="width: 40%" disabled="true"/> 
+                                                            </p:column>
+                                                            <p:column style="width: 14%">
+                                                                <p:outputLabel value="Fecha de registro:" style="font-weight: bold"/>
+                                                            </p:column >
+                                                            <p:column style="width: 25%">
+                                                                <p:calendar value="#{examenRenSubsanacionBean.renSolicitudRenovacion.fecha_registro_registrado}"                                                
+                                                                            locale="es" 
+                                                                            navigator="true" 
+                                                                            pattern="#{sessionState.formatoFecha}" mask="true"
+                                                                            size="15" 
+                                                                            >
+                                                                </p:calendar>
+                                                            </p:column>
+                                                        </p:row>
+                                                    </p:panelGrid>
+                                                </p:column>
+                                                <p:column style="vertical-align: top; padding-left: 1%">                                            
+                                                    <p:panelGrid columns="2" >
+                                                        <p:outputLabel value="Tipo marca" style="display:block;width:80px;font-weight: bold" />
+                                                        <p:selectOneMenu  value="#{examenRenSubsanacionBean.tipoMarca}" >
+                                                            <f:selectItem itemLabel="Elegir" itemValue="" />
+                                                            <f:selectItems value="#{examenRenSubsanacionBean.listaTipoMarca}" var="tipoGenero" itemLabel="#{tipoGenero.nombre}" itemValue="#{tipoGenero.codigo}"/>
+                                                            <p:ajax listener="#{examenRenSubsanacionBean.activaPanelLema()}"
+                                                                    event="change" update=":formu:panelLema"></p:ajax>
+                                                        </p:selectOneMenu>                                                       
+                                                    </p:panelGrid>
+                                                    <h:panelGrid id="panelLema">
+                                                        <h:panelGrid  columns="2" cellspacing="1" rendered="#{examenRenSubsanacionBean.panelLema}">
+                                                            <p:outputLabel value="Acompaña a la" style="display: block; width: 95px"/>
+                                                            <p:inputTextarea value="#{examenRenSubsanacionBean.renSolicitudRenovacion.marca_acomp}"  rows="2" cols="31" autoResize="false"
+                                                                             onkeyup="this.value = this.value.substring(0, 1000);" maxlength="1000"
+                                                                             >
+                                                            </p:inputTextarea>
+                                                        </h:panelGrid>
+                                                        <h:panelGrid  columns="6" cellpadding="1" rendered="#{examenRenSubsanacionBean.panelLema}">                                        
+                                                            <p:outputLabel value="N° Registro" style="display: block; width: 95px"/>
+                                                            <p:inputText value="#{examenRenSubsanacionBean.renSolicitudRenovacion.clase_niza_registrado}" style="width: 80%"/>
+                                                            <p:selectOneMenu id="serieRegistroMarcaLema" autoWidth="false" value="#{examenRenSubsanacionBean.serieRegistroMarcaLema}" style="background: #dddddd !important; vertical-align: central">
+                                                                <f:selectItems value="#{examenRenSubsanacionBean.listaSerieRegistro}" var="r" itemLabel="#{r.nombre}" itemValue="#{r.codigo}"/>
+                                                            </p:selectOneMenu>
+                                                            <p:spacer height="1"/>
+                                                            <p:outputLabel value="Fecha" />
+                                                            <p:calendar value="#{examenRenSubsanacionBean.renSolicitudRenovacion.fecha_lc_registrado}"                                                
+                                                                        locale="es" 
+                                                                        navigator="true" 
+                                                                        pattern="#{sessionState.formatoFecha}" mask="true"
+                                                                        size="8" 
+                                                                        >
+                                                            </p:calendar>
+                                                        </h:panelGrid>
+                                                    </h:panelGrid>
+                                                    <p:panelGrid style="width: 100%"> 
+                                                        <p:row>
+                                                            <p:column style="width: 20%">
+                                                                <p:outputLabel  value="Tipo Signo:" style="font-weight: bold"/>
+                                                            </p:column>
+                                                            <p:column style="width: 70%">
+                                                                <p:selectCheckboxMenu id="menu" value="#{examenRenSubsanacionBean.tipoGeneroSeleccionado}"
+                                                                                      label="#{examenRenSubsanacionBean.tipoSignoDescripcion}"
+                                                                                      filter="true"
+                                                                                      filterMatchMode="startsWith"
+                                                                                      panelStyle="width:250px"  >
+                                                                    <f:selectItems value="#{examenRenSubsanacionBean.listaTipoSigno}" 
+                                                                                   var="tipoSigno"
+                                                                                   itemLabel="#{tipoSigno.nombre}" itemValue="#{tipoSigno.codigo}"/>
+                                                                    <p:ajax event="toggleSelect" listener="#{examenRenSubsanacionBean.muestraOtro()}"
+                                                                            update="menu display pnlOtro"
+                                                                            />
+                                                                    <p:ajax event="change" listener="#{examenRenSubsanacionBean.muestraOtro()}"
+                                                                            update="menu display pnlOtro"
+                                                                            />
+                                                                </p:selectCheckboxMenu>
+
+                                                            </p:column>
+                                                        </p:row>
+                                                        <p:row>
+                                                            <p:column style="width: 15%">
+                                                                <p:panelGrid id="pnlOtro">
+                                                                    <p:outputLabel for="menu" value="Otro:" rendered="#{examenRenSubsanacionBean.txtOtroRendered}"/>
+                                                                </p:panelGrid>
+                                                            </p:column>
+                                                            <p:column style="width: 70%">
+                                                                <p:outputPanel id="display" style="width:100%;padding-left:0px;margin-top:1px" >
+                                                                    <p:inputText id="txtotro" value="#{examenRenSubsanacionBean.textoOtro}" rendered="#{examenRenSubsanacionBean.txtOtroRendered}" style="width: 100%"/>
+                                                                    <p:watermark for="txtotro" value="Descripción de otro" />
+                                                                </p:outputPanel>
+                                                            </p:column>
+                                                        </p:row>
+                                                    </p:panelGrid>
+                                                </p:column>
+                                            </p:row>                                                                                
+                                        </p:panelGrid>
+                                    </fieldset>
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                        <p:panelGrid style="width: 100%" styleClass="quitarBordes">
+                            <p:row style="vertical-align: top">
+                                <p:column style="vertical-align: top">
+                                    <fieldset>
+                                        <p:panelGrid style="width: 100%; text-align: center">
+                                            <p:row style="width: 100%;text-align: center; vertical-align: central">
+                                                <p:column style="width: 10%">
+                                                    <p:commandButton value="Subsanar Registro" 
+                                                                     icon="ui-icon-pencil" style="height: 40px;width: 100px"
+                                                                     update=":formu:msg"
+                                                                     actionListener="#{examenRenSubsanacionBean.subsanarExpedienteRenovacion}"
+                                                                     >
+                                                    </p:commandButton>   
+                                                    <p:spacer width="3"/>
+                                                </p:column>
+                                            </p:row>
+                                        </p:panelGrid>
+                                    </fieldset>
+                                </p:column>
+                            </p:row>                    
+                        </p:panelGrid>
+
+
+                        <p:panelGrid style="width: 100%" styleClass="quitarBordes" id="pnlBotonesSegui">
+
+                            <p:row>
+                                <p:column colspan="4">
+                                    <p:panelGrid style="width: 100%; text-align: center" >
+                                        <p:row style="width: 100%;">
+
+                                        </p:row>
+                                    </p:panelGrid>
+                                </p:column>
+                            </p:row>                    
+                        </p:panelGrid>
+
+                    </p:panelGrid> 
+
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

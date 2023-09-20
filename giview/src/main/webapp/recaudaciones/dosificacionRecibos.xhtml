@@ -1,0 +1,160 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <body>
+        <ui:composition template="./../WEB-INF/facelets/templates/Template.xhtml">
+            <ui:define name="content">
+                <h:form id="form">
+
+                    <p:panelGrid  style="width: 100%" styleClass="quitarBordes">
+                        <p:panelGrid style="width: 100%;" styleClass="quitarBordes">
+                            <p:row>
+                                <p:column style="width: 100%;" colspan="2">
+                                    <p:outputPanel style="padding-bottom: 1px; padding-top: 1px; padding-left:10px; padding-right: 10px;">
+                                        <table>
+                                            <tr valign="middle">
+                                                <td><p:graphicImage library="images" name="flechaTituloAzul.png" width="24" height="24"></p:graphicImage></td>
+                                                <td><p:outputLabel value="Dosificación de recibos" styleClass="tituloPrincipalFuente"></p:outputLabel></td>
+                                            </tr>
+                                        </table>                    
+                                        <p:separator id="sepTitulo" style="border: 1px #045491 inset;"></p:separator>                    
+                                    </p:outputPanel>                                
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+
+
+
+
+
+
+                        <p:panelGrid style="width: 100%;" styleClass="quitarBordes">
+
+
+                            <p:row style="width: 100%">
+                                <p:column colspan="4" style="vertical-align: top; width: 100%; border-style: solid" >
+                                    <fieldset>
+                                        <legend>
+                                            <p:outputLabel value="GENERA DOSIFICACION DE RECIBOS" styleClass="labelImportante" style="font-weight: bold"/>
+                                        </legend>
+                                        <p:panelGrid columns="10">
+                                            <p:outputLabel value="Nro. Inicial" style="font-weight: bold"></p:outputLabel>
+                                            <p:inputText value="001" size="8" style="background: #dddddd !important; vertical-align: central; text-align: center"></p:inputText>
+                                            <p:outputLabel value="Nro. Final" style="font-weight: bold"></p:outputLabel>
+                                            <p:inputText value="001" size="8" style="background: #dddddd !important; vertical-align: central; text-align: center"></p:inputText>
+                                            <p:outputLabel value="Serie:" style="font-weight: bold"></p:outputLabel>
+                                            <p:selectOneMenu value="B" >
+                                                <f:selectItem itemLabel="A" itemValue="A" />
+                                                <f:selectItem itemLabel="E" itemValue="E" />
+                                                <f:selectItem itemLabel="C" itemValue="C" />
+                                                <f:selectItem itemLabel="D" itemValue="D" />
+                                            </p:selectOneMenu>
+
+                                            <p:outputLabel value="Gestion:" style="font-weight: bold"></p:outputLabel>
+                                            <p:inputText value="2016" size="8" style="background: #dddddd !important; vertical-align: central; text-align: center"></p:inputText>
+                                            <p:outputLabel value="Sucursal:" style="font-weight: bold"></p:outputLabel>
+                                            <p:selectOneMenu value="La Paz" >
+                                                <f:selectItem itemLabel="Santa Cruz" itemValue="Santa Cruz" />
+                                                <f:selectItem itemLabel="El Alto" itemValue="El Alto" />
+                                                <f:selectItem itemLabel="Cochabamba" itemValue="Cochabamba" />
+                                            </p:selectOneMenu>
+                                        </p:panelGrid>
+                                    </fieldset>
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                        <p:row >
+                            <p:column>
+                                <div align="center">
+                                    <p:panelGrid>
+                                        <p:commandButton
+                                            id="btngenerar"
+                                            icon="ui-icon-disk"
+                                            value="GENERAR">
+                                            <f:ajax execute="@this" event="click"/>
+                                        </p:commandButton>
+                                        <p:spacer width="20"></p:spacer>
+                                        <p:commandButton
+                                            id="btnmodificar"
+                                            icon="ui-icon-pencil"
+                                            value="MODIFICAR">
+                                            <f:ajax execute="@this" event="click"/>
+                                        </p:commandButton>
+                                        <p:spacer width="20"></p:spacer>
+                                        <p:commandButton
+                                            id="btnlimpiar"
+                                            icon="ui-icon-clipboard"
+                                            value="LIMPIAR">
+                                            <f:ajax execute="@this" event="click"/>
+                                        </p:commandButton>
+                                    </p:panelGrid>
+                                </div>
+                            </p:column>
+                        </p:row>
+                        <p:row style="width: 100%">
+                            <p:column colspan="4" style="vertical-align: top; width: 100%; border-style: solid" >
+                                <fieldset>
+                                    <legend>
+                                        <p:outputLabel value="LISTA DE DOSIFICACION DE RECIBOS" styleClass="labelImportante" style="font-weight: bold"/>
+                                    </legend>
+                                    <p:panelGrid columns="1">
+                                        <p:panelGrid columns="2">
+                                            <p:outputLabel value="Sucursal"></p:outputLabel>
+                                            <p:selectOneMenu id="sucursal" value="#{reciboBean.tasa}" style="background: #dddddd !important; vertical-align: central">
+                                                <f:selectItem itemLabel="LA PAZ" itemValue="LA PAZ" />
+                                                <f:selectItem itemLabel="COCHABAMBA" itemValue="COCHABAMBA" />
+                                                <f:selectItem itemLabel="SANTA CRUZ" itemValue="SANTA CRUZ" />
+                                            </p:selectOneMenu>  
+                                        </p:panelGrid>
+                                        <p:dataGrid var="per" value="#{ingresoSolicitudBean.lstPersonas}" emptyMessage="No existen solicitantes" 
+                                                    style="width: 100%;" columns="1" rows="1" layout="grid" paginator="true">                                            
+                                            <p:panelGrid style="width: 100%;">
+                                                <p:row>
+                                                    <p:column  style="width: 10%"><p:outputLabel value="No. Inicial"></p:outputLabel></p:column>
+                                                    <p:column  style="width: 10%;">
+                                                        <p:inputText value="#{per.telefono}">
+                                                        </p:inputText>
+                                                    </p:column>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="No. Final"></p:outputLabel></p:column>
+                                                    <p:column style="width: 10%;"><p:inputText value="#{per.telefono}"></p:inputText></p:column>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="No. Actual"></p:outputLabel></p:column>
+                                                    <p:column style="width: 10%;"><p:inputText value="#{per.telefono}"></p:inputText></p:column>                                                
+                                                </p:row>
+                                                <p:row>
+                                                    <p:column  style="width: 10%;"><p:outputLabel value="Serie"></p:outputLabel></p:column>
+                                                    <p:column style="width: 10%;"><p:inputText value="#{per.telefono}"></p:inputText></p:column>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Sucursal"></p:outputLabel></p:column>
+                                                    <p:column style="width: 10%;"><p:inputText value="#{per.departamento}" ></p:inputText></p:column>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Gestion"></p:outputLabel></p:column>
+                                                    <p:column style="width: 10%;"><p:inputText value="#{per.pyme}"></p:inputText></p:column>                                                
+                                                </p:row>
+                                            </p:panelGrid>                             
+                                        </p:dataGrid>          
+                                    </p:panelGrid>
+                                </fieldset>
+                            </p:column>
+                        </p:row>
+
+                    </p:panelGrid>
+
+
+
+
+
+
+
+
+                </h:form>
+            </ui:define>
+        </ui:composition>
+
+    </body>
+</html>
+
+
+

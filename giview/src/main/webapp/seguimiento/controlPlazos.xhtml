@@ -1,0 +1,233 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <body>
+        <ui:composition template="#{controlPlazosBean.template}">
+            <ui:define name="content">
+                <h:form id="frmSeguimiento" style="width: 97%; padding-left: 1%; vertical-align: top">   
+                    <p:growl id="msg" life="10000"/>
+                    <p:panelGrid style="width: 100%;" styleClass="quitarBordes">
+                        <p:panelGrid  style="width: 100%;" styleClass="quitarBordes">
+                            <p:row>
+                                <p:column style="width: 100%;" colspan="2">
+                                    <p:outputPanel style="padding-bottom: 0px; padding-top: 0px; padding-left:10px; padding-right: 10px;">
+                                        <table>
+                                            <tr valign="middle">
+                                                <td><p:graphicImage library="images" name="flechaTituloAzul.png" width="20" height="17"></p:graphicImage></td>
+                                                <td><p:outputLabel value="Control de calidad" styleClass="tituloPrincipalFuente"></p:outputLabel></td>
+                                            </tr>
+                                        </table>                    
+                                        <p:separator id="sepTitulo" style="border: 1px #045491 inset;"></p:separator>                    
+                                    </p:outputPanel> 
+                                </p:column>
+                            </p:row>
+                            <p:row style="vertical-align: central">
+                                <p:column style="width: 20%; text-align: right; padding-left: 10%;">
+                                    <p:selectOneMenu value="#{controlPlazosBean.filtroArea}" style="width:60px;"
+                                                     disabled="#{controlPlazosBean.filtroAreaDisabled}">                                        
+                                        <f:selectItem itemLabel="Solicitud de Marca" itemValue="SIG" />
+                                        <f:selectItem itemLabel="Modificacion de Registro" itemValue="MOD" />  
+                                        <f:selectItem itemLabel="Renovacion de Registro" itemValue="REN" />
+                                        <p:ajax event="change" listener="#{controlPlazosBean.activaCambios()}" update=":frmSeguimiento:pnlOpciones frmSeguimiento:tblSeguimiento :frmSeguimiento:pnlConteos"/>
+                                    </p:selectOneMenu>
+                                </p:column>
+                                <p:column style="width: 80%; vertical-align: top" >
+                                    <h:panelGrid columns="1" id="pnlOpciones" styleClass="quitarBordes">
+                                        <h:panelGrid columns="3" style="padding-left: 15%" styleClass="quitarBordes"
+                                                     rendered="#{controlPlazosBean.buscadorSignosRender}">
+                                            <p:selectOneRadio style="text-align: left;display: block;width: 150px" value="#{controlPlazosBean.filtroSolicitud}" 
+                                                              layout="grid" columns="1">
+                                                <f:selectItem itemValue="SM" itemLabel="SM"/>                                                        
+                                                <f:selectItem itemValue="REG" itemLabel="N° registro"/>
+                                                <f:selectItem itemValue="PUB" itemLabel="N° publicación"/>
+                                                <p:ajax event="change" listener="#{controlPlazosBean.activaCambiosBuscadorSolicitud()}" update="pnlSignos"/>
+                                            </p:selectOneRadio>
+                                            <h:panelGrid columns="1" style="width: 60%; text-align: center" id="pnlSignos">
+                                                <h:panelGrid columns="3" rendered="#{controlPlazosBean.buscadorSigSMRender}">
+                                                    <p:inputText value="#{controlPlazosBean.numeroSolicitud}" size="8" style="text-align: center"/>
+                                                    <p:inputText value="#{controlPlazosBean.gestionSolicitud}" size="8" style="text-align: center"/>
+                                                    <p:inputText value="#{controlPlazosBean.extensionExpediente}" size="2" style="text-align: center"/>
+                                                    <p:outputLabel value="Número"/>
+                                                    <p:outputLabel value="Gestión"/>
+                                                    <p:outputLabel value="Extesion"/>
+                                                </h:panelGrid>
+                                                <h:panelGrid columns="2" rendered="#{controlPlazosBean.buscadorSigRegistroRender}">
+                                                    <p:inputText value="#{controlPlazosBean.registroSolicitud}" size="8" style="text-align: center"/>
+                                                    <p:inputText value="#{controlPlazosBean.serieRegistro}" size="2" style="text-align: center"/>
+                                                    <p:outputLabel value="Número"/>
+                                                    <p:outputLabel value="Serie"/> 
+                                                </h:panelGrid>
+                                                <h:panelGrid columns="1" rendered="#{controlPlazosBean.buscadorSigPublicacionRender}">
+                                                    <p:inputText value="#{controlPlazosBean.numeroPublicacion}" size="10" style="text-align: center"/>
+                                                    <p:outputLabel value="Número Publ."/>
+
+                                                </h:panelGrid>
+                                            </h:panelGrid>    
+                                            <h:panelGrid columns="1" style="padding-left: 15%">
+                                                <p:commandButton value="Buscar" icon="ui-icon-search" style="height: 40px;width: 95%"   >                                                            
+                                                    <p:ajax event="click" listener="#{controlPlazosBean.buscaSeguimientoSignos()}" 
+                                                            update="@form" process="@form"/>
+                                                </p:commandButton>  
+                                            </h:panelGrid>
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="2" style="padding-left: 15%" rendered="#{controlPlazosBean.buscadorModificacionesRender}">
+                                            <p:selectOneRadio style="text-align: left;display: block;width: 150px" value="#{controlPlazosBean.filtroSolicitud}" 
+                                                              layout="grid" columns="1" rendered="false">
+                                                <f:selectItem itemValue="MO"  itemLabel="N° Solicitud" />
+                                                <f:selectItem itemValue="REG" itemLabel="N° registro"/>
+                                                <f:selectItem itemValue="PUB" itemLabel="N° publicación"/>                                                        
+                                                <p:ajax event="change" listener="#{controlPlazosBean.activaCambiosBuscadorSolicitud()}" update="pnlModificacion"/>
+                                            </p:selectOneRadio>
+                                            <h:panelGrid columns="1" style="width: 60%; text-align: center" id="pnlModificacion">
+                                                <br />
+                                                <h:panelGrid columns="3" rendered="#{controlPlazosBean.buscadorSigSMRender}">
+                                                    <p:selectOneMenu value="#{controlPlazosBean.valorTipoModificacion}" autoWidth="false" style="width: 120px">                                        
+                                                        <f:selectItem itemLabel="Cambio de nombre" itemValue="CANO" />
+                                                        <f:selectItem itemLabel="Cambio de domicilio" itemValue="CADO" />
+                                                        <f:selectItem itemLabel="Transferencia" itemValue="CATR" />
+                                                        <f:selectItem itemLabel="Fusión" itemValue="CAFU" />
+                                                        <f:selectItem itemLabel="Licencia de uso" itemValue="CALU" />     
+
+                                                    </p:selectOneMenu>
+                                                    <p:inputText value="#{controlPlazosBean.numeroSolicitud}" size="8" style="text-align: center"/>
+                                                    <p:inputText value="#{controlPlazosBean.gestionSolicitud}" size="8" style="text-align: center"/>
+                                                    <p:spacer />
+                                                    <p:outputLabel value="Número"/>
+                                                    <p:outputLabel value="Gestión"/>
+
+                                                </h:panelGrid>
+                                                <!--                                                <h:panelGrid columns="2" rendered="# {controlPlazosBean.buscadorSigRegistroRender}">
+                                                                                                    <p:inputText value="# {controlPlazosBean.registroSolicitud}" size="8"/>
+                                                                                                    <p:inputText value="# {controlPlazosBean.serieRegistro}" size="2"/>
+                                                                                                    <p:outputLabel value="Número"/>
+                                                                                                    <p:outputLabel value="Serie"/> 
+                                                                                                </h:panelGrid>
+                                                                                                <h:panelGrid columns="1" rendered="# {controlPlazosBean.buscadorSigPublicacionRender}">
+                                                                                                    <p:inputText value="# {controlPlazosBean.numeroPublicacion}" size="8"/>
+                                                                                                    <p:outputLabel value="Número Publ."/>
+                                                
+                                                                                                </h:panelGrid>-->
+                                            </h:panelGrid>    
+                                            <h:panelGrid columns="1" style="padding-left: 15%">
+                                                <p:commandButton value="Buscar" icon="ui-icon-search" style="height: 40px;width: 95%">
+                                                    <p:ajax event="click" listener="#{controlPlazosBean.buscaSeguimientoModificacion()}" 
+                                                            update="@form" process="@form"/>
+                                                </p:commandButton>  
+                                            </h:panelGrid>
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="3" style="padding-left: 15%" rendered="#{controlPlazosBean.buscadorRenovacionesRender}">
+                                            <p:selectOneRadio style="text-align: left;display: block;width: 150px" value="#{controlPlazosBean.filtroSolicitud}" 
+                                                              layout="grid" columns="1" rendered="false">
+                                                <f:selectItem itemValue="SR" itemLabel="SR" />
+                                                <f:selectItem itemValue="REG" itemLabel="N° registro"/>
+                                                <f:selectItem itemValue="PUB" itemLabel="N° publicación"/>                                                        
+                                                <p:ajax event="change" listener="#{controlPlazosBean.activaCambiosBuscadorSolicitud()}" update="pnlRenovacion"/>
+                                            </p:selectOneRadio>
+                                            <h:panelGrid columns="1" style="width: 60%; text-align: center" id="pnlRenovacion">
+                                                <br />
+                                                <h:panelGrid columns="3" rendered="#{controlPlazosBean.buscadorSigSMRender}">
+                                                    <p:outputLabel value="SR"  style="font-weight: bold"/>
+                                                    <p:inputText value="#{controlPlazosBean.numeroSolicitud}" size="8" style="text-align: center"/>
+                                                    <p:inputText value="#{controlPlazosBean.gestionSolicitud}" size="8" style="text-align: center"/>    
+                                                    <p:spacer />
+                                                    <p:outputLabel value="Número"/>
+                                                    <p:outputLabel value="Gestión"/>                                                            
+                                                </h:panelGrid>
+                                                <!--                                                <h:panelGrid columns="2" rendered="# {controlPlazosBean.buscadorSigRegistroRender}">
+                                                                                                    <p:inputText value="# {controlPlazosBean.registroSolicitud}" size="8"/>
+                                                                                                    <p:inputText value="# {controlPlazosBean.serieRegistro}" size="2"/>
+                                                                                                    <p:outputLabel value="Número"/>
+                                                                                                    <p:outputLabel value="Serie"/> 
+                                                                                                </h:panelGrid>
+                                                                                                <h:panelGrid columns="1" rendered="# {controlPlazosBean.buscadorSigPublicacionRender}">
+                                                                                                    <p:inputText value="# {controlPlazosBean.numeroPublicacion}" size="8"/>
+                                                                                                    <p:outputLabel value="Número Publ."/>
+                                                                                                </h:panelGrid>-->
+                                            </h:panelGrid>    
+                                            <h:panelGrid columns="1" style="padding-left: 15%">
+                                                <p:commandButton value="Buscar" icon="ui-icon-search" style="height: 40px;width: 95%"/> 
+                                                <p:ajax event="click" listener="#{controlPlazosBean.buscaSeguimientoRenovacion()}" 
+                                                        update="@form" process="@form"/>
+                                            </h:panelGrid>
+                                        </h:panelGrid>
+                                    </h:panelGrid>
+                                </p:column>                                        
+                            </p:row>
+                        </p:panelGrid>
+
+                        <div align="center">                           
+                            <p:dataTable value="#{controlPlazosBean.listaSeguimiento}"  id="tblSeguimiento"
+                                         var="item" scrollHeight="340" 
+                                         scrollWidth="1068" 
+                                         scrollable="true" style="width: 100%;"
+                                         >
+                                <f:facet name="header">
+                                    <p:outputLabel  value="#{controlPlazosBean.solicitud}" style="font-size: x-large" styleClass="textoImportante">
+                                    </p:outputLabel>
+                                </f:facet>
+                                <p:column headerText="Etapa" width="260" >
+                                    <p:panelGrid columns="1" style="width:100%" styleClass="quitarBordes">
+                                        <p:outputLabel value="#{controlPlazosBean.etapaDescripcion(item.etapa,item.idSeguimiento)[0]}" styleClass="textoImportante"/>                               
+                                        <p:panelGrid columns="2" styleClass="quitarBordes" style="width: 100%">
+                                            <p:panelGrid columns="2" style="width: 70%" styleClass="quitarBordes">
+                                                <h:outputText value="Plazo" style="font-weight: bold"/>
+
+                                                <h:outputText value="#{item.plazo_limite}" style="display: block"/>
+                                                <h:outputText value="Plazo Real" style="display: block; width: 135px; font-weight: bold"/>
+                                                <h:outputText value="#{item.plazoReal}" style="display: block;color:#{controlPlazosBean.colorAlerta(item.plazo_limite,item.plazoReal)}; font-weight: bold "/>
+                                            </p:panelGrid>
+
+                                            <p:panelGrid columns="2" style="width: 100%" styleClass="quitarBordes">
+                                                <h:outputText value="Fecha de Recepción:" style="display: block; width: 150px; font-weight: bold"/>                                        
+                                                <p:calendar pattern="#{sessionState.formatoFechaHora}" mask="true" size="16" rendered="#{controlPlazosBean.mostrarCalendario(item.etapa,item.fechaFin)}"
+                                                        value="#{item.fechaRecepcion}"/>
+                                                <h:outputText value="#{item.fechaRecepcion}"  rendered="#{!controlPlazosBean.mostrarCalendario(item.etapa, item.fechaFin)}">
+                                                    <f:convertDateTime  pattern="dd/MM/yyyy HH:mm:ss"/>    
+                                                </h:outputText>
+                                                <h:outputLabel value="Fecha de Entrega:" style="display: block; width: 150px; font-weight: bold"/>
+
+                                                <h:outputText value="#{item.fechaFin}" >
+                                                    <f:convertDateTime  pattern="dd/MM/yyyy HH:mm:ss"/>    
+                                                </h:outputText>
+                                            </p:panelGrid>
+                                        </p:panelGrid>
+                                    </p:panelGrid>
+                                </p:column>
+
+                                <p:column headerText="Observacion" width="130" style="text-align: center">                                
+                                    <p:inputTextarea value="#{item.observacion}"  rows="2" cols="307" autoResize="false"
+                                                     onkeyup="this.value = this.value.substring(0, 1000);" maxlength="1000"  >
+                                    </p:inputTextarea>  
+                                </p:column>
+                                <p:column headerText="Modificar" width="60" style="text-align: center">
+                                    <p:commandButton value="Modificar" icon="ui-icon-pencil" actionListener="#{controlPlazosBean.modificarObservacion(item)}" update=":frmSeguimiento:msg">
+                                    </p:commandButton>
+                                </p:column> 
+                            </p:dataTable>                           
+                        </div>
+                        <p:spacer height="1"/>
+                        <p:panelGrid  columns="8" styleClass="quitarBordes" id="pnlConteos">
+                            <h:outputLabel value="Plazo establecido:" style="display: block; width: 125px; "/>
+                            <h:outputLabel value="#{controlPlazosBean.plazoEstablecido}" style="display: block; width: 105px; font-weight: bold"/>                           
+                            <h:outputLabel value="Plazo total:" style="display: block; width: 90px; "/>
+                            <h:outputLabel value="#{controlPlazosBean.totalPlazoLimite}" style="display: block; width: 105px; font-weight: bold"/>
+                            <h:outputLabel value="Plazo total real:" style="display: block; width: 105px; "/>
+                            <h:outputLabel value="#{controlPlazosBean.platoRealTotal}" style="display: block; width: 105px; color: #045491; font-weight: bold"/>
+                            <h:outputLabel value="Tiempo pasivo:" style="display: block; width: 105px; "/>
+                            <h:outputLabel value="#{controlPlazosBean.tiempoPasivo}" style="display: block; width: 105px; color: #045491; font-weight: bold"/>
+                        </p:panelGrid>
+
+                    </p:panelGrid>
+
+
+
+
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

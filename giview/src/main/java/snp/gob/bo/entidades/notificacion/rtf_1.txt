@@ -1,0 +1,4 @@
+{\rtf1\ansi\ansicpg1252\deff0\deflang3082
+{\fonttbl{\f0\fswiss\fcharset0 Arial;}{\f1\fmodern\fprq1\fcharset0 Courier New;}}
+{\colortbl ;\red255\green0\blue0;\red0\green0\blue128;}
+\viewkind4\uc1\pard\b\f0\fs20 NRTFTree v0.1\b0 es una librer\’eda \cf1\b\fs24 escrita en C# \cf0\b0\fs20 para el \cf2\i\fs24 tratamiento estructurado\fs20 \cf0\i0 de\f1\fs40 documentos RTF\f0\fs20 .\par}

@@ -1,0 +1,431 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:pe="http://primefaces.org/ui/extensions">
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <h:outputStylesheet name="./css/default.css"/>
+        <h:outputStylesheet name="./css/cssLayout.css"/>
+        <h:outputScript library="js" name="spanishLocale.js"/>
+        <!--        <title># {agregarSolicitanteApoderadoBean.tituloPagina}</title>-->
+    </h:head>
+    <h:form id="form"> 
+        <p:growl id="msg" />
+        <p:panelGrid style="width: 100%;" styleClass="quitarBordes">    
+
+            <p:panelGrid style="width: 100%;" styleClass="quitarBordes">     
+                <p:row >
+                    <p:column>
+                        <fieldset>
+                            <legend>
+                                <p:outputLabel value="Buscador por registro" styleClass="labelImportante"/>
+                            </legend>
+                            <p:panelGrid>
+                                <p:row>
+                                    <p:column style="width: 90%;">
+                                        <p:panelGrid columns="4">
+                                            <p:outputLabel value="N° registro:" />
+                                            <p:inputText value="#{busquedaRenovacionBean.renRenovacion.numero_renovacion}" size="10" maxlength="10" onkeyup="return ValNumero(this);"/>
+                                            <p:selectOneMenu id="serieRenovacionNuevo" value="#{busquedaRenovacionBean.serieRenovacionNuevo}" style="background: #dddddd !important; vertical-align: central">
+                                                <f:selectItems value="#{busquedaRenovacionBean.listaSerieRenovacion}" var="r" itemLabel="#{r.nombre}" itemValue="#{r.codigo}"/>
+                                            </p:selectOneMenu>
+                                            <p:commandButton  value="Buscar" icon="ui-icon-search" styleClass="botonMediano">                                    
+                                            </p:commandButton>
+                                        </p:panelGrid>
+                                    </p:column>    
+
+                                </p:row>
+                            </p:panelGrid>
+                        </fieldset>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column >
+                        <fieldset>
+                            <legend>
+                                <p:outputLabel value="Datos de la renovación" styleClass="labelImportante"/>
+                            </legend>                            
+                            <div align="center" style="padding-left:12%">
+                                <p:panelGrid id="panelDatos" >
+                                    <p:row>
+                                        <p:column style="text-align: center">                                                                                    
+                                            <p:panelGrid columns="1">
+                                                <p:inputTextarea value="#{busquedaRenovacionBean.signoRegistradoNuevo}"  rows="2" cols="50" autoResize="false"
+                                                                 onkeyup="this.value = this.value.substring(0, 1000);" maxlength="1000" 
+                                                                 style="color:#045491; font-weight: bold; text-align: center; width: 98%;text-align: center; border-style: none">
+                                                </p:inputTextarea>  
+                                                <p:outputLabel value="#{busquedaRenovacionBean.cadenaTipoSigno}"  style="text-align: center"/>
+                                            </p:panelGrid>                                            
+                                        </p:column>
+                                        <!--<p:column style="padding-left: 5%; width: 36%">-->
+
+<!--                                            <p:panelGrid columns="1">
+                                                <p:spacer height="1" />
+                                                <p:commandButton value="Rehacer resolución"  styleClass="botonGrande" icon="ui-icon-refresh" style="width: 100%">
+                                                    <p:confirm header="CONFIRMACION REHACER" message="Mensaje personalizado. pregunta?" icon="ui-icon-alert" />
+                                                </p:commandButton> 
+                                                <p:spacer height="1" />
+                                                <p:commandButton value="Resolución"  styleClass="botonGrande" icon="ui-icon-trash" style="width: 100%">
+                                                    <p:confirm header="Confirmación resolución" message="Se Borrara el N° de Registro: 123456 C. ¿Esta Seguro?" icon="ui-icon-alert" />
+                                                </p:commandButton> 
+                                                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                                    <div align="center">
+                                                        <h:panelGrid columns="3" cellpadding="5" cellspacing="5" >                                                        
+                                                            <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                                            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                                        </h:panelGrid>
+                                                    </div>
+                                                </p:confirmDialog>
+                                            </p:panelGrid>-->
+<!--                                            <p:panelGrid columns="2"> 
+                                                <p:selectBooleanCheckbox value="pruebas" >
+                                                </p:selectBooleanCheckbox>
+                                                <p:outputLabel value="Llenar manualmente " />
+                                            </p:panelGrid>-->
+                                        <!--</p:column>-->                                    
+                                    </p:row>
+                                    <p:row>  
+                                        <p:column colspan="2">  
+                                            <p:panelGrid columns="2">
+                                                <p:outputLabel value="Tipo:" style="font-weight: bold "/>
+                                                <p:outputLabel value="#{busquedaRenovacionBean.devuelveTipoGenero(busquedaRenovacionBean.cadenaTipoGenero)}"/>
+                                                <p:outputLabel value="Clase niza:" style="font-weight: bold "/>
+                                                <p:outputLabel value="#{busquedaRenovacionBean.devuelveClaseNiza(busquedaRenovacionBean.renRenovacion.idclase_niza_renovacion)}" style="font-weight:bold;color:darkgreen "/>
+                                                <p:outputLabel value="Renovación N°:" style="font-weight: bold " rendered="#{!busquedaRenovacionBean.mostrarPorAsignar}"/>
+                                                <p:outputLabel value="POR ASIGNAR" rendered="#{!busquedaRenovacionBean.mostrarPorAsignar}" style="font-weight: bold " />
+                                                <p:outputLabel value="Renovación N°:" style="font-weight: bold " rendered="#{busquedaRenovacionBean.mostrarPorAsignar}"/>
+                                                <p:outputLabel value="#{busquedaRenovacionBean.renRenovacion.numero_renovacion}-A" rendered="#{busquedaRenovacionBean.mostrarPorAsignar}" style="font-weight:bold;color:darkgreen " />
+                                                <p:outputLabel value="Resolución  de renovación N°:" style="font-weight: bold " rendered="#{!busquedaRenovacionBean.mostrarPorAsignar}" />
+                                                <p:outputLabel value="POR ASIGNAR" rendered="#{!busquedaRenovacionBean.mostrarPorAsignar}" style="font-weight: bold"/>
+                                                <p:outputLabel value="Resolución  de renovación N°:" style="font-weight: bold " rendered="#{busquedaRenovacionBean.mostrarPorAsignar}"/>
+                                                <p:outputLabel value="#{busquedaRenovacionBean.renResolucion.numero_resolucion}/#{busquedaRenovacionBean.renResolucion.gestion_resolucion}" rendered="#{busquedaRenovacionBean.mostrarPorAsignar}" style="font-weight:bold;color:darkgreen "/>
+                                                <p:outputLabel value="Titular:" style="font-weight: bold "/>
+                                                <p:outputLabel value="#{busquedaRenovacionBean.cadenaTitular}"/>
+                                                <p:outputLabel value="Fecha concesión:" style="font-weight: bold "/>
+                                                <p:outputLabel value="#{busquedaRenovacionBean.formatoFecha(busquedaRenovacionBean.renRenovacion.fecha_concesion)}">
+                                                    <f:convertDateTime pattern="#{sessionState.formatoFecha}"  />
+                                                </p:outputLabel>
+                                                <p:outputLabel value="Orden de renovación:" style="font-weight: bold "/>
+                                                <p:outputLabel value="#{busquedaRenovacionBean.devuelveLiteralNumero(busquedaRenovacionBean.renRenovacion.orden_renovacion)} RENOVACION" style="font-weight: bold "/>
+                                                <p:outputLabel value="Observaciones:"/>
+                                                <p:inputTextarea   rows="5" cols="60" value="#{busquedaRenovacionBean.renResolucion.observacion_resolucion}" />
+                                            </p:panelGrid>
+                                        </p:column>                                    
+                                    </p:row>
+                                </p:panelGrid>         
+                            </div>
+                        </fieldset>
+                    </p:column>
+                </p:row>
+                <p:spacer height="1"/>
+                <p:row> 
+                    <p:column>
+                        <fieldset>
+                            <legend>
+                                <p:outputLabel value="Opciones" styleClass="labelImportante"/>
+                            </legend>
+                            <p:panelGrid style="width: 100%">
+                                <p:row>
+                                    <p:column style="width: 40%">
+                                        <p:panelGrid columns="6" style="border-style: initial; padding: 1em 1em 1em 1em">
+                                            <!--                                            <h:commandButton value="Ver>>" styleClass="botonMediano"
+                                                                                                         onclick="this.form.target = '_blank'"
+                                                                                                         onblur="this.form.target = '_self'"
+                                                                                                         action="prueba" 
+                                                                                                         style="width: 51px; height: 20px;border-radius: 4px; color:brown;background: lightgray !important;"> 
+                                                                                        </h:commandButton>-->
+                                            <p:outputLabel value="SR:"  />
+                                            <p:inputText value="#{busquedaRenovacionBean.renSolicitudRenovacion.sr}" size="5" style="background: #dddddd !important; height: 105%; vertical-align: central"/>
+                                            <p:inputText value="#{busquedaRenovacionBean.renSolicitudRenovacion.gestion_sr}" size="3" style="background: #dddddd !important; height: 105%; vertical-align: central"/>
+                                            <!--                                            <p:commandButton  icon="ui-icon-play"  value="Llenar" >                                    
+                                                                                        </p:commandButton>-->
+                                        </p:panelGrid>
+                                    </p:column>
+                                    <p:column style="width: 60%">
+                                        <p:panelGrid>
+                                            <p:row >
+                                                <p:column >
+                                                    <p:commandButton value="Aceptar"  icon="ui-icon-circle-check"
+                                                                     styleClass="botonGrande" 
+                                                                     update="form:pinformativo"
+                                                                        disabled="#{busquedaRenovacionBean.activaAceptarRenovacion}"
+                                                                     onclick="PF('revision').show();">
+                                                    </p:commandButton> 
+                                                    <p:spacer width="10"/>
+                                                    <p:dialog id="pinformativoDos" header="Verificar datos" modal="true" resizable="false"  widgetVar="revision" 
+                                                              height="220" width="450">
+                                                        <p:panelGrid id="pinformativo" columns="1">
+                                                            <div align="center">
+                                                                <p:outputLabel value="El N° de Renovacion que se asigne a este formualrio no se podra modifcar o eliminar. ¿Desea Continuar?" />
+                                                                <div align="center">
+                                                                    <p:panelGrid columns="4">
+                                                                        <p:spacer width="90"/>    
+                                                                        <p:commandButton 
+                                                                            icon="ui-icon-check" 
+                                                                            value="SI" 
+                                                                           
+                                                                            actionListener="#{busquedaRenovacionBean.accion_GuardaRenovacionResolucion}"
+                                                                            update=":form"
+                                                                            onclick="PF('observacion').hide();"/>
+                                                                        <p:commandButton 
+                                                                            icon="ui-icon-check" 
+                                                                            value="NO" 
+                                                                            update=":form"
+                                                                            onclick="PF('observacion').hide();"/>
+                                                                        <p:spacer width="25"/>    
+                                                                    </p:panelGrid>
+                                                                </div> 
+                                                            </div> 
+                                                        </p:panelGrid>      
+                                                    </p:dialog>
+                                                </p:column>
+
+                                                <p:column>
+                                                    <p:commandButton 
+                                                        value="Cerrar" 
+                                                        icon="ui-icon-circle-close" 
+                                                        update=":form" 
+                                                        actionListener="#{busquedaRenovacionBean.cierraDialogo()}"/>
+                                                </p:column>
+
+                                            </p:row>
+                                        </p:panelGrid>
+                                        <p:panelGrid columns="2" id="botonesResolucion">
+
+
+                                        </p:panelGrid>
+
+                                    </p:column>
+                                </p:row>                                       
+                            </p:panelGrid>
+                        </fieldset>                                
+                    </p:column>
+
+
+                </p:row> 
+              
+                <p:row > 
+
+                    <p:column>
+                        <fieldset>
+                            <legend>
+                                <p:outputLabel value="Opciones de Impresión de resolucion" styleClass="labelImportante"/>
+                            </legend>
+                            <p:panelGrid style="width: 100%" columns="6">
+                                 <p:spacer height="40"/>
+                                <p:column>
+                                    <p:commandButton value="Resolucion  1"  icon="ui-icon-play"  style=" height: 26px; width: 30%"
+                                                     update=":form:payment-amount-panel2 :form:msg" ajax="false" onclick="target='_blank'"
+                                                     actionListener="#{busquedaRenovacionBean.imprimirResolucion('RA', busquedaRenovacionBean.renSolicitudRenovacion)}">
+
+                                    </p:commandButton>  
+                                </p:column>
+                                <p:column>
+                                    <p:commandButton value="Resolucion 2"  icon="ui-icon-play"  style=" height: 26px; width: 30%"
+                                                     update=":form:payment-amount-panel2 :form:msg" ajax="false" onclick="target='_blank'"
+                                                     actionListener="#{busquedaRenovacionBean.imprimirResolucion('RN',busquedaRenovacionBean.renSolicitudRenovacion)}">
+                                    </p:commandButton> 
+                                </p:column>
+                      
+
+                            </p:panelGrid>
+
+                        </fieldset>
+
+                    </p:column>
+
+                </p:row>                                        
+                <p:row > 
+
+                    <p:column>
+                        <fieldset>
+                            <legend>
+                                <p:outputLabel value="Opciones de Impresión de resolucion" styleClass="labelImportante"/>
+                            </legend>
+                            <p:panelGrid style="width: 100%" columns="6">
+                                 <p:spacer height="40"/>
+                              
+                                <p:column>
+                                    <p:commandButton value="Titulo 1"  icon="ui-icon-play"  style=" height: 26px; width: 30%"
+                                                     update=":form:payment-amount-panel1 :form:msg" ajax="false" onclick="target='_blank'" 
+                                                     actionListener="#{busquedaRenovacionBean.imprimirTitulo('TN',busquedaRenovacionBean.renSolicitudRenovacion)}">
+                                    </p:commandButton>    
+                                </p:column>
+                                <p:column>
+                                    <p:commandButton value="Titulo 2"  icon="ui-icon-play"  style=" height: 26px; width: 30%"
+                                                     update=":form:payment-amount-panel1 :form:msg" ajax="false" onclick="target='_blank'"
+                                                     actionListener="#{busquedaRenovacionBean.imprimirTitulo('TS',busquedaRenovacionBean.renSolicitudRenovacion)}">
+                                    </p:commandButton>     
+                                </p:column> 
+                                <p:column>
+                                    <p:commandButton value="Titulo 3"  icon="ui-icon-play"  style=" height: 26px; width: 30%"
+                                                     update=":form:payment-amount-panel1 :form:msg" ajax="false" onclick="target='_blank'"
+                                                     actionListener="#{busquedaRenovacionBean.imprimirTitulo('TA',busquedaRenovacionBean.renSolicitudRenovacion)}">
+                                    </p:commandButton>    
+                                </p:column> 
+
+
+                            </p:panelGrid>
+
+                        </fieldset>
+
+                    </p:column>
+
+                </p:row>                                        
+                
+            </p:panelGrid>            
+        </p:panelGrid>            
+        <p:dialog id="resolucion" header="Impresión de Titulos" modal="true" appendTo="@(body)" resizable="false" closable="true" widgetVar="impresionTitulos" 
+                  height="900" width="1000" >
+            <p:panelGrid style="width: 100%; height: 100%" styleClass="quitarBordes">
+                <p:panelGrid>
+                    <p:separator/>
+                </p:panelGrid>
+                <p:panelGrid style="width: 100%" id="panel" styleClass="quitarBordes">
+                    <p:row >
+                        <p:column style="width: 100%">
+                            <p:panelGrid rendered="true" style="width: 100%">
+                                <p:row>
+                                    <p:column style="width: 25%; vertical-align: top">
+                                        <fieldset>
+                                            <legend>
+                                                <p:outputLabel value="Datos Renovación" styleClass="labelImportante"/>         
+                                            </legend>
+                                            <p:panelGrid columns="2">
+                                                <p:outputLabel value="RENOVACION:" style="font-weight: bold"/>                                                
+                                                <p:outputLabel value="#{busquedaRenovacionBean.renRenovacion.numero_renovacion}-#{busquedaRenovacionBean.renRenovacion.serie_renovacion}"  style="font-weight: bold; background: white; color: green"/>
+                                            </p:panelGrid>
+                                        </fieldset>
+                                    </p:column>
+                                    <p:column style="width: 75%;text-align: center;vertical-align: middle">
+                                        <p:panelGrid style="width: 100%; text-align: center;">
+                                            <p:row style="width: 100%;">
+                                                <p:column style="width: 15%">
+                                                    <p:spacer width="6"/>
+                                                </p:column>
+                                                <p:column style="width: 15%">
+                                                    <p:commandButton value="Titulo 1"  icon="ui-icon-play"  style=" height: 40px; width: 90%"
+                                                                     update=":form:payment-amount-panel1 :form:msg"
+                                                                     actionListener="#{busquedaRenovacionBean.imprimirTitulo('TN',busquedaRenovacionBean.renSolicitudRenovacion)}">
+                                                    </p:commandButton>                                                
+                                                    <p:spacer width="6"/>
+                                                </p:column>                                            
+                                                <p:column style="width: 15%">
+                                                    <p:commandButton value="Titulo 2"  icon="ui-icon-play"  style=" height: 40px; width: 90%"
+                                                                     update=":form:payment-amount-panel1 :form:msg"
+                                                                     actionListener="#{busquedaRenovacionBean.imprimirTitulo('TS',busquedaRenovacionBean.renSolicitudRenovacion)}">
+                                                    </p:commandButton>                                                
+                                                    <p:spacer width="6"/>
+                                                </p:column>                                            
+                                                <p:column style="width: 15%">
+                                                    <p:commandButton value="Titulo 3"  icon="ui-icon-play"  style=" height: 40px; width: 90%"
+                                                                     update=":form:payment-amount-panel1 :form:msg"
+                                                                     actionListener="#{busquedaRenovacionBean.imprimirTitulo('TA',busquedaRenovacionBean.renSolicitudRenovacion)}">
+                                                    </p:commandButton>                                                
+                                                    <p:spacer width="6"/>
+                                                </p:column>                                            
+                                                <p:column style="width: 15%">
+                                                    <p:commandButton value="Cerrar" icon="ui-icon-close"  style=" height: 40px; width: 90%"
+                                                                     onclick="PF('impresionTitulos').hide();">                                                
+                                                    </p:commandButton>       
+                                                    <p:spacer width="6"/>
+                                                </p:column>
+                                            </p:row>
+                                        </p:panelGrid>
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column  colspan="2" style="vertical-align: top; width: 100%">
+                                        <p:panelGrid>
+                                            <p:spacer height="20"/>
+                                            <h:panelGroup id="payment-amount-panel1">
+                                                <p:outputPanel  id="outReporteConciliacion1" style="width: 100%; height: 885%;" rendered="#{busquedaRenovacionBean.reporteRecibo1}">
+                                                    <pe:documentViewer height="500" value="#{sessionState.stream}" rendered="true"/>  
+                                                </p:outputPanel>
+                                            </h:panelGroup>
+                                        </p:panelGrid>
+                                    </p:column>
+                                </p:row>
+                            </p:panelGrid> 
+                        </p:column>
+                    </p:row>                              
+                </p:panelGrid>
+            </p:panelGrid>    
+        </p:dialog>
+        <p:dialog header="Impresión de Resoluciones" modal="true" appendTo="@(body)" resizable="false" closable="true" widgetVar="impresionResolucion" 
+                  height="900" width="1000" >
+            <p:panelGrid style="width: 100%; height: 100%" styleClass="quitarBordes">
+                <p:panelGrid>
+                    <p:separator/>
+                </p:panelGrid>
+                <p:panelGrid style="width: 100%" id="panelResolucion" styleClass="quitarBordes">
+                    <p:row >
+                        <p:column style="width: 100%">
+                            <p:panelGrid rendered="true" style="width: 100%">
+                                <p:row>
+                                    <p:column style="width: 25%; vertical-align: top">
+                                        <fieldset>
+                                            <legend>
+                                                <p:outputLabel value="Datos Renovación" styleClass="labelImportante"/>         
+                                            </legend>
+                                            <p:panelGrid columns="2">
+                                                <p:outputLabel value="RENOVACION:" style="font-weight: bold"/>                                                
+                                                <p:outputLabel value="#{busquedaRenovacionBean.renRenovacion.numero_renovacion}-#{busquedaRenovacionBean.renRenovacion.serie_renovacion}"  style="font-weight: bold; background: white; color: green"/>
+                                            </p:panelGrid>
+                                        </fieldset>
+                                    </p:column>
+                                    <p:column style="width: 75%;text-align: center;vertical-align: middle">
+                                        <p:panelGrid style="width: 100%; text-align: center;">
+                                            <p:row style="width: 100%;">
+                                                <p:column style="width: 15%">
+                                                    <p:spacer width="6"/>
+                                                </p:column>
+                                                <p:column style="width: 15%">
+                                                    <p:commandButton value="Resolucion  1"  icon="ui-icon-play"  style=" height: 40px; width: 90%"
+                                                                     update=":form:payment-amount-panel2 :form:msg"
+                                                                     actionListener="#{busquedaRenovacionBean.imprimirResolucion('RA', busquedaRenovacionBean.renSolicitudRenovacionRepo)}">
+                                                    </p:commandButton>                                                
+                                                    <p:spacer width="6"/>
+                                                </p:column>                                            
+                                                <p:column style="width: 15%">
+                                                    <p:commandButton value="Resolucion 2"  icon="ui-icon-play"  style=" height: 40px; width: 90%"
+                                                                     update=":form:payment-amount-panel2 :form:msg"
+                                                                     actionListener="#{busquedaRenovacionBean.imprimirResolucion('RN',busquedaRenovacionBean.renSolicitudRenovacionRepo)}">
+                                                    </p:commandButton>                                                
+                                                    <p:spacer width="6"/>
+                                                </p:column>                                            
+                                                <p:column style="width: 15%">
+                                                    <p:commandButton value="Cerrar" icon="ui-icon-close"  style=" height: 40px; width: 90%"
+                                                                     onclick="PF('impresionResolucion').hide();">                                                
+                                                    </p:commandButton>       
+                                                    <p:spacer width="6"/>
+                                                </p:column>
+                                            </p:row>
+                                        </p:panelGrid>
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column  colspan="2" style="vertical-align: top; width: 100%">
+                                        <p:panelGrid>
+                                            <p:spacer height="20"/>
+                                            <h:panelGroup id="payment-amount-panel2">
+                                                <p:outputPanel  id="outReporteConciliacion2" style="width: 100%; height: 885%;" rendered="#{busquedaRenovacionBean.reporteRecibo2}">
+                                                    <pe:documentViewer height="500" value="#{sessionState.stream}" rendered="true"/>  
+                                                </p:outputPanel>
+                                            </h:panelGroup>
+                                        </p:panelGrid>
+                                    </p:column>
+                                </p:row>
+                            </p:panelGrid> 
+                        </p:column>
+                    </p:row>                              
+                </p:panelGrid>
+            </p:panelGrid>    
+        </p:dialog>
+    </h:form> 
+</html>

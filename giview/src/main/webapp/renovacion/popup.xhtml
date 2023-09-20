@@ -1,0 +1,332 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:p="http://primefaces.org/ui"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 template="#{sessionState.pathTemplate}"
+                 xmlns:si.componentes="http://java.sun.com/jsf/composite/si.componentes"
+                 xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <ui:define name="content">
+        <p:panelGrid  style="width: 100%">
+
+            <p:row>
+                <p:column  styleClass="ui-widget-header">
+
+                </p:column>
+                <p:column  styleClass="ui-widget-header">
+
+                </p:column>
+                <p:column  styleClass="ui-widget-header">
+
+                </p:column>
+
+                <p:column  styleClass="ui-widget-header">
+
+                </p:column>
+            </p:row>
+
+            <p:row>
+                <p:column colspan="5">
+                    <fieldset>
+                        <legend>
+                            Datos Solicitante
+                        </legend>
+                        <p:panelGrid>
+                            <p:row>
+                                <p:column colspan="4">
+                                    <p:dataTable var="item" value="listado" >
+                                        <p:column headerText="Solicitante">
+                                            <h:outputText value="NOMBRE APELLIDO APELLIDO SOLICITANTE SRL" />
+                                        </p:column>
+                                        <p:column headerText="Nacionalidad" >
+                                            <h:outputText value="Bolivia" />
+                                        </p:column>
+                                        <p:column headerText="Dpto." >
+                                            <h:outputText value="Santa Cruz" />
+                                        </p:column>
+                                        <p:column headerText="Datos Contacto" >
+                                            <h:outputText value="Direccion: DIRECCION CIUDAD AVENIDA CALLE NUMERO" />
+                                        </p:column>                                                                            
+                                    </p:dataTable>
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column  styleClass="ui-widget-header" colspan="3">
+
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column  styleClass="ui-widget-header" >
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>     
+                    </fieldset>
+                </p:column>
+            </p:row>
+            <p:row>
+                <p:column colspan="5">
+                    <legend>
+                        Datos Apoderado
+                    </legend>
+                    <p:panelGrid>
+                        <p:row>
+                            <p:column colspan="4">
+                                <p:dataTable var="item" value="listado" >
+                                    <p:column headerText="Solicitante">
+                                        <h:outputText value="NOMBRE APELLIDO APELLIDO SOLICITANTE SRL" />
+                                    </p:column>
+                                    <p:column headerText="Nacionalidad" >
+                                        <h:outputText value="Bolivia" />
+                                    </p:column>
+                                    <p:column headerText="Dpto." >
+                                        <h:outputText value="Santa Cruz" />
+                                    </p:column>
+                                    <p:column headerText="Datos Contacto" >
+                                        <h:outputText value="Direccion: DIRECCION CIUDAD AVENIDA CALLE NUMERO" />
+                                    </p:column>                                                                            
+                                </p:dataTable>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column  styleClass="ui-widget-header">
+                            </p:column>
+                            
+                            <p:column  styleClass="ui-widget-header">
+                            </p:column>
+                            
+                            <p:column  styleClass="ui-widget-header">
+                            </p:column>
+                            
+                            <p:column  styleClass="ui-widget-header">
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>     
+                    </fieldset>
+                </p:column>
+            </p:row>
+            <p:row>
+                <p:column colspan="5">
+                    <fieldset>
+                        <legend>
+                            Datos de Deposito
+                        </legend>
+                        <p:panel id="formDeposito" style="border-style: hidden">
+                            <p:fieldset legend="Adicionar Depositos" toggleable="true" toggleSpeed="500" collapsed="#{reciboBean.muestraFormularioDeposito}">
+                                <p:panelGrid>  
+                                    <p:row >
+                                        <p:column></p:column>
+                                        <p:column colspan="3">
+                                            <p:panelGrid columns="2" style="margin-bottom:10px">
+                                                <p:outputLabel for="banco" value="Banco:" />
+                                                <p:selectOneRadio id="banco" value="#{reciboBean.codigoTramiteSession}">
+                                                    <f:selectItem itemLabel="BANCO UNION " itemValue="BANCO UNION" />
+                                                    <f:selectItem itemLabel="BANCO MERCANTIL SANTA CRUZ" itemValue="MERCANTIL SANTA CRUZ" />
+                                                </p:selectOneRadio>
+                                            </p:panelGrid>
+                                        </p:column>
+                                    </p:row>
+                                    <p:row >
+                                        <p:column></p:column>
+                                        <p:column colspan="3">
+                                            <p:panelGrid columns="8">
+                                                <p:outputLabel value="Código Depositante:"/>  
+                                                <p:inputText  value="750" />
+                                                <p:outputLabel value="Nro. Deposito:"/>  
+                                                <p:inputText id="nroDeposito" value="456" size="50" />
+                                                <p:outputLabel value="Fecha:"/>  
+                                                <p:calendar id="mask" 
+                                                            locale="es" 
+                                                            navigator="true" 
+                                                            pattern="dd-MM-yyyy" 
+                                                            mask="true"
+                                                            size="12" 
+                                                            style="#{reciboBean.cambiaColorFechaDeposito==true?'border-color: #C00':''}; width: 90%"/>
+                                                <p:outputLabel value="Monto Total (Bs.)"/>  
+                                                <p:inputText id="monto" value="750" style="#{reciboBean.cambiaColormontoDeposito == true?'border-color: #C00':''}; width: 90%;text-align:right" />
+                                            </p:panelGrid>
+                                        </p:column>
+                                    </p:row>
+                                    <p:row >
+                                        <p:column></p:column>
+                                        <p:column colspan="3">
+                                            <p:outputLabel value="Depositante:"/>  
+                                            <p:inputText id="personaDeposito" value="PersonaDeposito" size="100" />
+                                        </p:column>
+                                    </p:row>
+                                    <p:row >
+                                        <p:column colspan="4">
+                                            <p:panelGrid columns="3">
+                                                <p:commandButton id="botonDepositoAdicionaBanco"
+                                                                 value="Adicionar Deposito"
+                                                                 icon="ui-icon ui-icon-disk"
+                                                                 >
+                                                    <f:ajax execute="@this" event="click"/>
+                                                </p:commandButton>
+                                                <p:commandButton
+                                                    id="botonDepositoModifica"
+                                                    value="Modificar Deposito"
+                                                    icon="ui-icon-pencil">
+                                                    <f:ajax execute="@this" event="click"/>
+                                                </p:commandButton>
+                                                <p:column colspan="2">
+                                                    <p:commandButton
+                                                        id="botonDepositoCancela"
+                                                        value="Cancelar">
+                                                        <f:ajax execute="@this" event="click"/>
+                                                    </p:commandButton>
+                                                </p:column>
+                                            </p:panelGrid>
+                                        </p:column>
+                                    </p:row>
+                                </p:panelGrid>
+                            </p:fieldset>
+                        </p:panel>
+                        <p:dataTable id="checkboxDT">
+                            <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+                            <p:column headerText="No.">
+                                <h:outputText value="id" />
+                            </p:column>
+                            <p:column headerText="Depositante">
+                                <h:outputText value="car" />
+                            </p:column>
+                            <p:column headerText="Fecha">
+                                <h:outputText value="arand" />
+                            </p:column>
+                            <p:column headerText="Saldo">
+                                <h:outputText value="ca.colo" />
+                            </p:column>
+                            <p:column headerText="Modificar">
+                                <h:outputText value="ca.colo" />
+                            </p:column>
+                            <p:column headerText="Eliminar">
+                                <h:outputText value="ca.colo" />
+                            </p:column>
+                        </p:dataTable>
+                    </fieldset>
+                </p:column>
+            </p:row>
+
+
+            <p:row>
+                <p:column  >
+                </p:column>
+                <p:column>
+
+
+                </p:column>
+                <p:column   >
+                    <p:commandButton
+                        id="botonDncela"
+                        value="GENERAR RECIBO">
+                        <f:ajax execute="@this" event="click"/>
+                    </p:commandButton>
+                    <p:commandButton
+                        id="botonDncela"
+                        value="MODIFICAR RECIBO">
+                        <f:ajax execute="@this" event="click"/>
+                    </p:commandButton>
+                    <p:commandButton
+                        id="botonDncela"
+                        value="CANCELAR">
+                        <f:ajax execute="@this" event="click"/>
+                    </p:commandButton>
+                </p:column>
+                <p:column   >
+
+                </p:column>
+            </p:row>
+
+
+
+
+
+            <p:row>
+                <p:column colspan="5">
+                    <fieldset>
+                        <legend>
+                            Datos de Recibo Generado
+                        </legend>
+                        <p:dataTable id="Recibos">
+                            <p:column headerText="No. Recibo" width="12%" style="text-align:right">
+                                <h:outputText value=" #{recibo.serie} - #{recibo.nroRecibo}" />
+                            </p:column>
+                            <p:column headerText="No. Titulo" width="12%" style="text-align:right">
+                                <h:outputText value="dsadsa" />
+                            </p:column>
+                            <p:column headerText="Cant." width="6%" style="text-align:right" >
+                                <h:outputText  style="text-align:right" value="dsa" />
+                            </p:column>
+                            <p:column headerText="Descripción Tasa" width="30%">
+                                <h:outputText value="sdasda" />
+                            </p:column>
+                            <p:column headerText="Tasa" width="8%" style="text-align:right" >
+                                <h:outputText  style="text-align:right" value="dsadsad" />
+                            </p:column>
+                            <p:column headerText="Monto" width="10%" style="text-align:right" >
+                                <h:outputText  style="text-align:right" value="dsad" />
+                            </p:column>
+                            <p:column headerText="Código Trámite" width="15%" style="text-align:right" >
+                                <h:outputText value="ad" style="text-align:right"/>
+                            </p:column>
+                            <p:column headerText="Descripción Tramite" width="25%" style="text-align:right" >
+                                <h:outputText value="sdad" style="text-align:right"/>
+                            </p:column>
+                            <p:column headerText="No. Deposito" width="12%" style="text-align:right" >
+                                <h:outputText value="ad" style="text-align:right"/>
+                            </p:column>
+                            <p:column headerText="Imprimir" style="text-align: center" width="10%">
+                                <p:commandButton
+                                    id="derivarRecibo"
+                                    icon="ui-icon-print"
+                                    style="border-image: 0" 
+                                    >
+                                </p:commandButton>
+                            </p:column>
+                            <p:column headerText="Eliminar Recibo" style="text-align: center" width="10%">
+                                <p:commandButton
+                                    id="modificar"
+                                    icon="ui-icon-minusthick" 
+                                    onclick="PF('eliminaTramiteUsar').show()"
+                                    > 
+                                </p:commandButton>
+                            </p:column>
+                            <p:column headerText="Anular Recibo" style="text-align: center" width="10%">
+                                <p:commandButton
+                                    id="eliminaRecibo"
+                                    icon="ui-icon-minusthick" 
+                                    onclick="PF('eliminaTramite').show()"
+                                    > 
+                                    <f:ajax execute="@this"  event="click"/>
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                    </fieldset>
+                </p:column>
+            </p:row>
+
+        </p:panelGrid>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </ui:define>
+</ui:composition>
+
+
+
+
+

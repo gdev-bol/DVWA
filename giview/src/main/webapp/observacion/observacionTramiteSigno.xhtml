@@ -1,0 +1,107 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        
+    </h:head>
+    <body>
+        <ui:composition template="#{observacionTramiteSignoBean.template}">
+            <ui:define name="content">
+                <h:form id="frmObservacion" style="padding-left: 1%; width: 95%">
+                    <p:outputPanel style="padding-bottom: 1px; padding-top: 1px; padding-left:10px; padding-right: 10px;">
+                        <table>
+                            <tr valign="middle">
+                                <td><p:graphicImage library="images" name="flechaTituloAzul.png" width="24" height="24"></p:graphicImage></td>
+                                <td><p:outputLabel value="Detalle Observaciones" styleClass="tituloPrincipalFuente"></p:outputLabel></td>
+                            </tr>
+                        </table>                    
+                        <p:separator id="sepTitulo" style="border: 1px #045491 inset;"></p:separator>                    
+                    </p:outputPanel>
+                    <!--<p:panelGrid columns="1" styleClass="quitarBordes">
+                        <p:row>
+                            <p:column style="text-align: center;">
+                                <fieldset>
+                                    <legend>Observaciones</legend>
+                                    <p:panelGrid columns="4" style="padding-left: 10%" styleClass="quitarBordes">
+                                        <p:inputTextarea 
+                                            rows="4" cols="67" style="background: #F0F8FF" autoResize="false"
+                                            onkeyup="this.value = this.value.substring(0, 2000);"
+                                            value="# {observacionTramiteBean.observacion}"
+                                            id="txtObservacion"
+                                            >
+                                        </p:inputTextarea>
+                                        <p:commandButton value="Guardar" icon="ui-icon-disk" style="height: 40%; width: 108%" 
+                                                         actionListener="# {observacionTramiteBean.guardarObservacion()}" 
+                                                         update="listaTable txtObservacion"/>
+                                        <p:spacer width="6"/>
+                                        <p:commandButton value="Limpiar" icon="ui-icon-document" style="height: 40%; width: 108%"
+                                                         actionListener="# {observacionTramiteBean.limpiarObservacion()}" 
+                                                         update="frmObservacion:txtObservacion"/>
+                                    </p:panelGrid>
+                                </fieldset>
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>-->
+                    <p:spacer height="1"/>
+                    <h:panelGrid id="gridobservaciones" style="width: 100%">
+                        <p:dataTable value="#{observacionTramiteSignoBean.listaObservacionSig}"
+                                     var="item" style="width: 100%"
+                                     resizableColumns="true"
+                                     id="listaTable"
+                                     scrollHeight="260"
+                                     scrollWidth="860" 
+                                     scrollable="true" 
+                                     >
+
+                            <p:column headerText="Descripcion" width="140">
+                                <p:inputTextarea value="#{item.descripcion}" style="width: 98%"  rows="3" scrollHeight="4" autoResize="false" >
+                                </p:inputTextarea> 
+                            </p:column>
+                            
+                            <!--<p:column headerText="Etapa tramite" width="110">
+                                <p:outputLabel value="# {observacionTramiteBean.devuelveEtapa(item.etapaTramite)}"  />
+                            </p:column>-->
+                            
+                            <p:column headerText="Fecha" width="75">                               
+                                <h:outputText value="#{item.fechaObservacion}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss"/>    
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column headerText="Operador" width="110">
+                                <p:outputLabel value="#{item.nombreUsuario}" />
+                            </p:column>
+                            
+                            <!--<p:column headerText="Modificar"  style="text-align: center; width: 5%" width="27">
+                                <p:commandButton icon="ui-icon-pencil" 
+                                                 actionListener="# {observacionTramiteBean.modificarObservacion(item)}"
+
+                                                 rendered="# {observacionTramiteBean.preguntaUltimo(item.idObservacionTramite)}"
+                                                 />
+                            </p:column>
+                            <p:column headerText="Eliminar"  style="text-align: center; width: 5%" width="27">
+                                <p:commandButton 
+                                    id="cmdEliminarRegistro"   rendered="# {observacionTramiteBean.preguntaUltimo(item.idObservacionTramite)}"         
+                                    icon="ui-icon-circle-minus"
+                                    actionListener="# {observacionTramiteBean.eliminarItemObservacion(item)}"
+                                    update="listaTable"
+                                    />
+                            </p:column>-->
+                        </p:dataTable>
+                    </h:panelGrid>
+                    
+                    <br/>
+
+                    <p:panelGrid style="text-align: center; width: 100%" columns="1" styleClass="quitarBordes">
+                        <p:commandButton value="Cerrar" icon="ui-icon-close"  action="#{observacionTramiteSignoBean.retornarPagina}"/>
+                    </p:panelGrid>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

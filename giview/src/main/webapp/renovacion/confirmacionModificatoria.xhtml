@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <body>
+        <ui:composition template="./../WEB-INF/facelets/templates/Template.xhtml">
+            <ui:define name="content">
+                <h:form id="form">
+                    <fieldset>
+                        <legend>
+                            <p:outputLabel value="Confirmacion Modificatoria" styleClass="labelImportante" style="font-weight: bold"/>
+                        </legend>
+                        <p:panelGrid  style="width: 100%" styleClass="quitarBordes">
+                            <p:row >
+                                <p:column>
+                                    <div align="center">
+                                        <p:panelGrid columns="1">
+                                            <p:outputLabel value="DESEA CERRAR LA APLICACION">
+                                            </p:outputLabel>
+                                            <p:panelGrid columns="2">
+                                                <p:commandButton
+                                                    id="btnmodificardos"
+                                                    icon="ui-icon-disk"
+                                                    action="#{confirmacionBean.cerrarAplicacion()}"
+                                                    ajax="false" 
+                                                    value="Confirmar">
+                                                </p:commandButton>
+                                                <p:spacer width="20"></p:spacer>
+                                                <p:commandButton
+                                                    id="btnmodificar"
+                                                    icon="ui-icon-pencil"
+                                                    value="Retornar">
+                                                    </p:commandButton>
+                                            </p:panelGrid>
+                                        </p:panelGrid>
+                                    </div>
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                    </fieldset>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>
+
+
+
+
+

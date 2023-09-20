@@ -1,0 +1,198 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <body>
+        <ui:composition template="./../WEB-INF/facelets/templates/Template.xhtml">
+            <ui:define name="content">
+                <h:form id="form">
+                    <p:panelGrid  style="width: 100%" styleClass="quitarBordes">
+                        <p:panelGrid style="width: 100%;" styleClass="quitarBordes">
+                            <p:row>
+                                <p:column style="width: 100%;" colspan="2">
+                                    <p:outputPanel style="padding-bottom: 1px; padding-top: 1px; padding-left:10px; padding-right: 10px;">
+                                        <table>
+                                            <tr valign="middle">
+                                                <td><p:graphicImage library="images" name="flechaTituloAzul.png" width="24" height="24"></p:graphicImage></td>
+                                                <td><p:outputLabel value="Tasas de servicio" styleClass="tituloPrincipalFuente"></p:outputLabel></td>
+                                            </tr>
+                                        </table>                    
+                                        <p:separator id="sepTitulo" style="border: 1px #045491 inset;"></p:separator>                    
+                                    </p:outputPanel>                                
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                        <p:panelGrid style="width: 100%;" styleClass="quitarBordes" id="idlistatasa">
+                            <p:row style="width: 100%">
+                                <p:column colspan="4" style="vertical-align: top; width: 100%; border-style: solid" >
+                                    <fieldset>
+                                        <legend>
+                                            <p:outputLabel value="LISTA DE TASAS" styleClass="labelImportante" style="font-weight: bold"/>
+                                        </legend>
+                                        <p:panelGrid columns="1">
+                                            <p:dataTable id="listaTasa" 
+                                                         value="#{tasaBean.lstTasa}" 
+                                                         var="tasa"
+                                                         scrollable="true" scrollHeight="400" resizableColumns="true"
+                                                         style="width: 100%;">
+                                                <f:facet name="header">
+                                                    Lista Tasas
+                                                </f:facet>
+                                                <p:column headerText="Nro." width="10%" style="text-align:right">
+                                                    <h:outputText value="#{tasaBean.numeracionTasas(tasa)}" />
+                                                </p:column>
+                                                <p:column headerText="Nombre de la Tasa Servicio" width="20%">
+                                                    <h:outputText value="#{tasa.descripcion}" />
+                                                </p:column>
+                                                <p:column headerText="Costo (Bs.)" width="10%" style="text-align:right">
+                                                    <h:outputText value="#{tasa.costo}" />
+                                                </p:column>
+                                                <p:column headerText="Vigente" width="10%" style="text-align:right">
+                                                    <h:outputText value="#{tasaBean.muestraDescripcionEstado(tasa.estado)}" />
+                                                </p:column>
+                                                <p:column headerText="Gestion" width="10%" style="text-align:right">
+                                                    <h:outputText value="#{tasa.gestion}" />
+                                                </p:column>
+                                                <p:column headerText="Modificar" style="text-align: center" width="10%">
+                                                    <p:commandButton
+                                                        id="modiTasa"
+                                                        icon="ui-icon-minusthick" 
+                                                        actionListener="#{tasaBean.cargaValoresAModificar(tasa)}"
+                                                        update=":form"
+                                                        > 
+                                                    </p:commandButton>
+                                                </p:column>
+                                                <f:facet name="footer">
+                                                    <p:spacer height="10"/>
+                                                </f:facet>
+                                            </p:dataTable>   
+                                        </p:panelGrid>
+                                    </fieldset>
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                        <p:panelGrid style="width: 100%;" styleClass="quitarBordes">
+                            <p:row style="width: 100%">
+                                <p:column  style="width: 10%;">
+                                </p:column>
+                                <p:column colspan="2" style="vertical-align: top; width: 70%; border-style: solid" >
+                                    <fieldset>
+                                        <legend>
+                                            <p:outputLabel value="DATOS TASA" styleClass="labelImportante" style="font-weight: bold"/>
+                                        </legend>
+                                        <p:panelGrid columns="8">
+                                            <p:outputLabel value="Vigencia:" style="font-weight: bold"></p:outputLabel>
+                                            <p:selectOneMenu id="vigencia" value="#{tasaBean.vigente}">
+                                                <f:selectItem itemLabel="SI" itemValue="AC" />
+                                                <f:selectItem itemLabel="NO" itemValue="NA" />
+                                            </p:selectOneMenu>
+                                            <p:outputLabel value="Gestion:" style="font-weight: bold"></p:outputLabel>
+                                            <p:inputText value="#{tasaBean.tasas.gestion}"  size="8" style="background: #dddddd !important; height: 105%; vertical-align: central"></p:inputText>
+                                        </p:panelGrid>
+                                        <p:panelGrid columns="2">
+                                            <p:outputLabel value="Nombre de la Tasa:" style="font-weight: bold"></p:outputLabel>
+                                            <p:inputText value="#{tasaBean.tasas.descripcion}"  size="80" style="background: #dddddd !important; height: 105%; vertical-align: central" ></p:inputText>
+                                            <p:outputLabel value="Costo (Bs.):" style="font-weight: bold"></p:outputLabel>
+                                            <p:inputText value="#{tasaBean.tasas.costo}"  size="8" style="background: #dddddd !important; height: 105%; vertical-align: central"></p:inputText>
+                                        </p:panelGrid>
+                                        <p:spacer width="1"></p:spacer>
+                                    </fieldset>
+                                </p:column>
+                                <p:column colspan="1" style="width: 30%;vertical-align: middle; padding-left: 1%;">
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                        <p:row >
+                            <p:column>
+                                <div align="center">
+                                    <p:panelGrid>
+                                        <p:commandButton
+                                            id="btnmodificardos"
+                                            icon="ui-icon-disk"
+                                            actionListener="#{tasaBean.accion_guardaTasas()}"
+                                            update=":form"
+                                            value="Adicionar">
+                                            <f:ajax execute="@this" event="click"/>
+                                        </p:commandButton>
+                                        <p:spacer width="20"></p:spacer>
+                                        <p:commandButton
+                                            id="btnmodificar"
+                                            icon="ui-icon-pencil"
+                                            actionListener="#{tasaBean.modificarTasa()}"
+                                            update=":form"
+                                            value="Modificar">
+                                            <f:ajax execute="@this" event="click"/>
+                                        </p:commandButton>
+                                        <p:spacer width="20"></p:spacer>
+                                        <p:commandButton
+                                            id="btnlimpiar"
+                                            icon="ui-icon-close"
+                                            value="Eliminar">
+                                            <f:ajax execute="@this" event="click"/>
+                                        </p:commandButton>
+                                    </p:panelGrid>
+                                </div>
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+
+                    <p:dialog id="dialogModificarTasa" header="Modificar" widgetVar="modificaTasa" resizable="false" closable="false" modal="true"
+                              width="30%" height="200" showEffect="fade"  style="text-align: center">
+                        <div align="center" style="padding:1em 2.2em;">
+                            <p:panel>
+                                <div align="center" style="padding:1em 2.2em;">
+                                    <h:panelGrid columns="1">
+                                        <p:outputLabel value="Esta seguro que desea eliminar el Recibo? El número asignado a este recibo se podra reasignar"/>
+                                    </h:panelGrid>
+                                    <p:commandButton
+                                        value="SI"
+                                        onclick="PF('modificaTasa').hide();"
+                                        update=":form"
+                                        actionListener="#{tasaBean.modificarTasa()}"
+                                        icon="ui-icon-check">
+                                    </p:commandButton>
+                                    <p:commandButton
+                                        value="NO"
+                                        onclick="PF('modificaTasa').hide();"
+                                        icon="ui-icon-close"/>
+                                </div>
+                            </p:panel>
+                        </div>
+                    </p:dialog>
+
+                    <p:dialog id="dialogEliminarTasa" header="Eliminar Tasa" widgetVar="eliminaTasa" resizable="false" closable="false" modal="true"
+                              width="30%" height="200" showEffect="fade"  style="text-align: center">
+                        <div align="center" style="padding:1em 2.2em;">
+                            <p:panel>
+                                <div align="center" style="padding:1em 2.2em;">
+                                    <h:panelGrid columns="1">
+                                        <p:outputLabel value="Esta seguro que desea eliminar el Recibo? El número asignado a este recibo se podra reasignar"/>
+                                    </h:panelGrid>
+                                    <p:commandButton
+                                        value="SI"
+                                        onclick="PF('eliminaTasa').hide();"
+                                        update=":form"
+                                        actionListener="#{tasaBean.eliminaTasa()}"
+                                        icon="ui-icon-check">
+                                    </p:commandButton>
+                                    <p:commandButton
+                                        value="NO"
+                                        onclick="PF('eliminaTasa').hide();"
+                                        icon="ui-icon-close"/>
+                                </div>
+                            </p:panel>
+                        </div>
+                    </p:dialog>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>
+
+
+
+
+

@@ -1,0 +1,520 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:pe="http://primefaces.org/ui/extensions">
+    <body>
+        <meta charset="UTF-8" />
+        <ui:composition template="./../WEB-INF/facelets/templates/Template.xhtml">
+            <ui:define name="content">
+                <h:form id="form">
+                    <p:growl id="msg" />
+                    <p:panelGrid  style="width: 100%" styleClass="quitarBordes">
+                        <p:panelGrid style="width: 100%;" styleClass="quitarBordes">
+                            <p:row>
+                                <p:column style="width: 100%;" colspan="2">
+                                    <p:outputPanel style="padding-bottom: 1px; padding-top: 1px; padding-left:10px; padding-right: 10px;">
+                                        <table>
+                                            <tr valign="middle">
+                                                <td><p:graphicImage library="images" name="flechaTituloAzul.png" width="24" height="24"></p:graphicImage></td>
+                                                <td><p:outputLabel value="Nuevo recibo" styleClass="tituloPrincipalFuente"></p:outputLabel></td>
+                                            </tr>
+                                        </table>                    
+                                        <p:separator id="sepTitulo" style="border: 1px #045491 inset;"></p:separator>                    
+                                    </p:outputPanel>                                
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                        <p:panelGrid  style="width: 100%" styleClass="quitarBordes">
+                            <p:row>
+                                <p:column  >
+                                </p:column>
+                                <p:column  >
+                                    <!--                                    <p:panelGrid columns="2">
+                                                                            <p:outputLabel value="Fecha:" style="font-weight: bold"></p:outputLabel>
+                                                                            <p:calendar id="j"  disabled="true"  style="font-weight: bold"  value="# {reciboBean.fechaImpresion}" pattern="# {sessionState.formatoFechaHora}" />
+                                                                        </p:panelGrid>-->
+                                </p:column>
+                                <p:column  >
+                                    <!--                                    <p:panelGrid columns="3">
+                                                                            <p:outputLabel value="Reasignar N° Recibo"></p:outputLabel>
+                                                                            <p:selectBooleanCheckbox value="# {reciboBean.activaRecibo}">
+                                                                                <p:ajax update=":form"  listener="# {reciboBean.activaCamposRecibo()}" />
+                                                                            </p:selectBooleanCheckbox>
+                                                                            <p:panelGrid columns="4" id="reciboAsignarPanel" rendered="# {reciboBean.activaRecibo}">
+                                                                                <p:outputLabel value="N° recibo:" style="font-weight: bold" styleClass="labelImportante"/>
+                                                                                <p:inputText value="# {reciboBean.numeroRecibo}" size="10" style="background: #dddddd !important; height: 80%; vertical-align: central;font-weight: bold; text-align: center; font-family:Arial ;font-size: 16pt !important;color: red "></p:inputText>
+                                                                                <p:outputLabel value="Serie:" style="font-weight: bold" styleClass="labelImportante"/>
+                                                                                <p:inputText value="# {reciboBean.serieRecibo}"  size="3" style="background: #dddddd !important; height: 80%; vertical-align: central;font-weight: bold; text-align: center; font-family:Arial ;font-size: 16pt !important;color: red "></p:inputText>
+                                                                            </p:panelGrid>
+                                                                        </p:panelGrid>-->
+                                </p:column>
+                                <p:column  >
+                                    <!--                                    <p:panelGrid columns="3">
+                                                                            <p:outputLabel value="Reasignar N° Titulo"></p:outputLabel>
+                                                                            <p:selectBooleanCheckbox value="# {reciboBean.activaTitulo}">
+                                                                                <p:ajax update=":form"  listener="# {reciboBean.activaCamposTitulo()}" />
+                                                                            </p:selectBooleanCheckbox>
+                                                                            <p:panelGrid columns="4" rendered="# {reciboBean.activaTitulo}">
+                                                                                <p:outputLabel value="N° titulo:" style="font-weight: bold" styleClass="labelImportante"/>
+                                                                                <p:inputText value="# {reciboBean.numeroTitulo}" size="10" style="background: #dddddd !important; height: 80%; vertical-align: central;font-weight: bold; text-align: center; font-family:Arial ;font-size: 16pt !important;color: red "></p:inputText>
+                                                                                <p:outputLabel value="Serie titulo:" style="font-weight: bold" styleClass="labelImportante"/>
+                                                                                <p:inputText value="# {reciboBean.serieTitulo}" size="5" style="background: #dddddd !important; height: 80%; vertical-align: central;font-weight: bold; text-align: center; font-family:Arial ;font-size: 16pt !important;color: red "></p:inputText>
+                                                                            </p:panelGrid>
+                                                                        </p:panelGrid>-->
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                        <p:row>
+                            <p:column colspan="5">
+                                <fieldset>
+                                    <legend>    
+                                        <p:outputLabel value="Datos trámite" styleClass="labelImportante"/>
+                                    </legend>
+                                    <p:panelGrid styleClass="quitarBordes">
+                                        
+                                        <p:row>
+                                            <p:column   colspan="3">
+                                                <p:panelGrid id="panelprimero" columns="11" styleClass="quitarBordes">
+                                                    <p:focus context="panelprimero" />
+                                                    <p:outputLabel value="N° de Formulario:" style="font-weight: bold"></p:outputLabel>
+                                                    <p:inputText value="#{reciboBean.numeroDeFormulario}" 
+                                                                
+                                                                 style="#{canjeDepositoBean.cambiaColormontoDeposito == true?'border-color: #C00':''}; background: #dddddd !important; height: 100%; vertical-align: central;font-weight: bold; text-align: center; font-family:Arial ;font-size: 16pt !important;color: blue " 
+                                                                 size="14"></p:inputText>
+                                                    <p:commandButton
+                                                        id="botonBuscar"
+                                                        actionListener="#{reciboBean.accion_buscarSolicitudFormulario()}"
+                                                        update=":form: msg"
+                                                        icon="ui-icon-search"
+                                                        value="Buscar"
+                                                        >
+                                                     </p:commandButton>
+                                                    <p:commandButton
+                                                        icon="ui-icon-document"
+                                                        actionListener="#{reciboBean.limpiaFormulario()}"
+                                                        id="botonLimpiaBuscar"
+                                                        update=":form"
+                                                        value="Limpiar"
+                                                        >
+                                                    </p:commandButton>
+                                                </p:panelGrid>
+                                            </p:column>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column   colspan="3">
+                                                <p:panelGrid columns="9" >
+                                                    <p:outputLabel value="N° Exp., Pub, Reg:" style="font-weight: bold"  ></p:outputLabel>
+                                                    <p:inputText value="#{reciboBean.numeroExpediente}" size="12" style="#{canjeDepositoBean.cambiaColormontoDeposito == true?'border-color: #C00':''}; background: #dddddd !important; height: 100%; vertical-align: central;font-weight: bold; text-align: center; font-family:Arial ;font-size: 16pt !important;color: blue "></p:inputText>
+                                                    <p:outputLabel value="Gestión:" style="font-weight: bold"></p:outputLabel>
+                                                    <p:inputText value="#{reciboBean.gestionTramite}" size="6" style="#{canjeDepositoBean.cambiaColormontoDeposito == true?'border-color: #C00':''}; background: #dddddd !important; height: 100%; vertical-align: central;font-weight: bold; text-align: center; font-family:Arial ;font-size: 16pt !important;color: blue "></p:inputText>
+
+                                                    <p:outputLabel value="Tipo Tramite:" style="font-weight: bold"></p:outputLabel>
+                                                    <!--<p:selectOneMenu id="tipoTramiteRecaudaciones" value="# {reciboBean.tipoTramiteCombo}" style="background: #dddddd !important; vertical-align: central">-->
+                                                    <p:selectOneMenu id="tipoTramiteRecaudaciones" value="#{reciboBean.tipoTramiteCombo}" style="#{canjeDepositoBean.cambiaColormontoDeposito == true?'border-color: #C00':''}; background: #dddddd !important; height: 100%; vertical-align: central;font-weight: bold; text-align: center; font-family:Arial ;font-size: 16pt !important;color: blue " >
+                                                        <f:selectItems value="#{reciboBean.lstTipoTramiteRecibo}" var="r" itemLabel="#{r.codigo}" itemValue="#{r.codigo}"/>
+                                                    </p:selectOneMenu>
+                                                    <p:outputLabel value="Clase Niza:" style="font-weight: bold"></p:outputLabel>
+                                                    <p:inputText value="#{reciboBean.claseNizaInt}" style="#{canjeDepositoBean.cambiaColormontoDeposito == true?'border-color: #C00':''}; background: #dddddd !important; height: 100%; vertical-align: central;font-weight: bold; text-align: center; font-family:Arial ;font-size: 16pt !important;color: blue " size="10"></p:inputText>
+
+
+                                                </p:panelGrid>
+                                            </p:column>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column  >
+                                                <p:panelGrid columns="2">
+
+                                                    <p:outputLabel value="Descripción(Marca):" style="font-weight: bold"  ></p:outputLabel>
+                                                    <p:inputText value="#{reciboBean.marcaTramite}" style="#{canjeDepositoBean.cambiaColormontoDeposito == true?'border-color: #C00':''}; background: #dddddd !important; height: 100%; vertical-align: central;font-weight: bold; text-align: center; font-family:Arial ;font-size: 16pt !important;color: blue "  size="80"></p:inputText>
+
+                                                </p:panelGrid>
+                                            </p:column>
+                                        </p:row>
+                                    </p:panelGrid>     
+                                </fieldset>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column colspan="5">
+                                <fieldset>
+                                    <legend>
+                                        <p:outputLabel value="Datos deposito" styleClass="labelImportante"/>
+                                    </legend>
+                                    <p:panel id="deposito" style="border-style: hidden">
+                                        <p:panelGrid styleClass="quitarBordes">  
+                                            <p:row >
+                                                <p:column></p:column>
+                                                <p:column colspan="3">
+                                                    <p:panelGrid columns="8" style="margin-bottom:10px">
+                                                        <p:outputLabel  value="Banco:" style="font-weight: bold" />
+                                                        <p:selectOneRadio  id="bancodeposito" layout="grid" columns="3" value="#{reciboBean.valorOpcionesRadioBanco}">
+                                                            <f:selectItem itemValue="BUNI" itemLabel="BANCO UNION S.A." />
+                                                        </p:selectOneRadio>
+                                                        <p:outputLabel value="Depositante:" style="font-weight: bold"/>  
+                                                        <p:inputText id="personaDeposito"   value="#{reciboBean.depositoGuardar.nombreDepositante}" style="#{canjeDepositoBean.cambiaColormontoDeposito == true?'border-color: #C00':''}; background: #dddddd !important; height: 100%;font-weight: bold; vertical-align: central;font-size: 14pt !important;color: green;text-transform:uppercase;"  size="65" />
+                                                        <p:outputLabel value="Monto(Bs):" style="font-weight: bold"/>  
+                                                        <p:inputText id="monto" value="#{reciboBean.depositoGuardar.monto}"  size="8"  style="#{canjeDepositoBean.cambiaColormontoDeposito == true?'border-color: #C00':''}; background: #dddddd !important; height: 120%; vertical-align: central;font-weight: bold; text-align: center; font-family:Arial ;font-size: 16pt !important;color: green " />
+                                                    </p:panelGrid>
+                                                </p:column>
+                                            </p:row>
+                                            <p:row >
+                                                <p:column></p:column>
+                                                <p:column colspan="4">
+                                                    <p:panelGrid columns="8">
+                                                        <p:outputLabel value="N° deposito:" style="font-weight: bold; display: block;width: 100px"/>  
+                                                        <p:inputText id="nro" value="#{reciboBean.depositoGuardar.numeroDeposito}" size="15" style="#{canjeDepositoBean.cambiaColormontoDeposito == true?'border-color: #C00':''}; background: #dddddd !important; height: 100%; vertical-align: central;font-weight: bold; text-align: center; font-family:Arial ;font-size: 16pt !important;color: green " />
+                                                        <p:outputLabel value="Fecha deposito:" style="font-weight: bold" />  
+                                                        <p:calendar id="Dmaskdsad" 
+                                                                    value="#{reciboBean.depositoGuardar.fechaDeposito}"
+                                                                    locale="es" 
+                                                                    navigator="true" 
+                                                                    pattern="dd/MM/yyyy" 
+                                                                    mask="true"
+                                                                    size="8" 
+                                                                    styleClass="titulMarca"
+                                                                    style="#{canjeDepositoBean.cambiaColormontoDeposito == true?'border-color: #C00':''}; background: #dddddd !important; height: 120%; vertical-align: central;font-weight: bold; text-align: center; font-family:Arial ;font-size: 16pt !important;color: green "/>
+                                                        <p:outputLabel value="Sucursal bancaria:" style="font-weight: bold; display: block;width: 120px"/>  
+                                                        <p:selectOneMenu id="tipoSucursalRecaudaciones" value="#{reciboBean.tipoSucursalCombo}" style="#{canjeDepositoBean.cambiaColormontoDeposito == true?'border-color: #C00':''}; background: #dddddd !important; height: 120%; vertical-align: central;font-weight: bold; text-align: center; font-family:Arial ;font-size: 12pt !important;color: green ">
+                                                            <f:selectItems value="#{reciboBean.lstSucursalBancaria}" var="r" itemLabel="#{r.nombre}-Cod(#{r.codigo})" itemValue="#{r.codigo}"/>
+                                                        </p:selectOneMenu>
+                                                        <p:commandButton
+                                                            id="adicionardeposito"
+                                                            value="Adicionar deposito"
+                                                            icon="ui-icon-plus" 
+                                                            actionListener="#{reciboBean.accion_adicionaDeposito()}"
+                                                            update="msg :form:deposito"
+                                                            > 
+                                                        </p:commandButton>
+                                                    </p:panelGrid>  
+                                                </p:column>
+                                            </p:row>
+                                            <p:row >
+                                                <p:column>
+                                                </p:column>
+                                            </p:row>
+
+                                        </p:panelGrid>
+                                        <p:dataTable id="depositoPU" var="dep" value="#{reciboBean.lstDesposito}" style="text-align: center">
+                                            <f:facet name="header">
+                                                Depositos
+                                            </f:facet>
+                                            <p:column headerText="N° Deposito">
+                                                <h:outputText value="#{dep.numeroDeposito}" />
+                                            </p:column>
+                                            <p:column headerText="Cod.Suc.">
+                                                <h:outputText value="#{dep.deposCodDep}" />
+                                            </p:column>
+                                            <p:column headerText="Despositante">
+                                                <h:outputText value=" #{dep.nombreDepositante}"/>
+                                            </p:column>
+                                            <p:column headerText="Fecha Dep.">
+                                                <h:outputText value="#{dep.fechaDeposito}" >
+                                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                                </h:outputText>
+                                            </p:column>
+                                            <p:column headerText="Monto(Bs)">
+                                                <h:outputText value="#{dep.monto}" />
+                                            </p:column>
+                                            <p:column headerText="Saldo(Bs)">
+                                                <h:outputText value="#{dep.saldo}" />
+                                            </p:column>
+                                            <p:column headerText="Modificar">
+                                                <p:commandButton
+                                                    id="modificaDeposito"
+                                                    actionListener="#{reciboBean.modificaDeposito(dep)}"
+                                                    update=":form form:deposito"
+                                                    icon="ui-icon-pencil" 
+                                                    /> 
+                                            </p:column>
+
+                                            <!--                                            <p:column headerText="Eliminar">
+                                                                                            <p:commandButton
+                                                                                                id="eliminaDeposito"
+                                                                                                disabled="# {reciboBean.activaModificarEliminarDeposito(dep)}"
+                                                                                                actionListener="# {reciboBean.eliminaDeposito(dep)}"
+                                                                                                update=":form :form:deposito"
+                                                                                                icon="ui-icon-minusthick" 
+                                                                                                />
+                                            
+                                                                                        </p:column>-->
+                                            <!--                                            <p:column headerText="Renuncias">
+                                                                                            <p:commandButton
+                                                                                                id="renunciaDeposito"
+                                                                                                icon="ui-icon-extlink" 
+                                                                                                /> 
+                                                                                        </p:column>-->
+                                        </p:dataTable>
+                                    </p:panel>
+                                </fieldset>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column colspan="5">
+                                <fieldset style="background-color: #cce0b1">
+                                    <legend >
+                                        <p:outputLabel value="Datos tasa" styleClass="labelImportante"/>
+                                    </legend>
+                                    <p:panelGrid styleClass="quitarBordesVerde">
+                                        <p:row>
+                                            <p:column   colspan="4">
+                                                <p:panelGrid columns="6">
+                                                    <p:outputLabel value="Cant.:" style="font-weight: bold"></p:outputLabel>
+                                                    <p:inputText value="#{reciboBean.cantidad}" size="3"  style="background: #dddddd !important; height: 105%; vertical-align: central;font-weight: bold; text-align: center;color: green"></p:inputText>
+                                                    <p:outputLabel value="Tasa:"  style="display: block; width: 24px"/>
+                                                    <p:selectOneMenu id="tasaRecaudaciones" value="#{reciboBean.tasa}" style="background: #dddddd !important; vertical-align: central">
+                                                        <f:selectItems value="#{reciboBean.lstTasa}" var="r" itemLabel="#{r.descripcion}. (#{r.costo})" itemValue="#{r.idTasa}"/>
+                                                        <!--                                                        <p:ajax event="change" update=":form:idmonto" listener="# {reciboBean.calculaMonto(reciboBean.cantidad)}" />-->
+                                                    </p:selectOneMenu>
+                                                </p:panelGrid>
+                                            </p:column>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column  >
+                                            </p:column>
+                                            <p:column >
+                                                <p:panelGrid columns="4" id="idmonto">
+                                                    <!--                                                    <p:outputLabel value="Monto total:" style="font-weight: bold"></p:outputLabel>
+                                                                                                        <p:inputText value="# {reciboBean.montoTotal}" style="background: #dddddd !important; height: 105%; vertical-align: central;font-weight: bold; text-align: center;color: green"></p:inputText>-->
+                                                    <!--                                                    <p:outputLabel value="Bs."></p:outputLabel>
+                                                                                                        <p:outputLabel value="..................... 00/100 bolivianos "></p:outputLabel>-->
+                                                </p:panelGrid>
+                                            </p:column>
+                                            <p:column >
+                                                <p:panelGrid columns="2">
+                                                </p:panelGrid>
+                                            </p:column>
+                                            <p:column >
+                                            </p:column>
+                                        </p:row>
+                                    </p:panelGrid>     
+                                </fieldset>
+                            </p:column>
+                        </p:row>
+
+                        <p:row>         
+                        </p:row>
+                        <p:row>
+                            <div align="center">
+                                <p:column colspan="4">
+                                    <p:commandButton
+                                        style='width:200px; height:30px'
+                                        id="btngenerar"
+                                        icon="ui-icon-calculator"
+                                        value="Generar Recibo"
+                                        actionListener="#{reciboBean.accion_GeneraRecibo()}"
+                                        update=":form"
+                                        >
+                                    </p:commandButton>
+
+                                    <p:spacer width="20"></p:spacer>
+                                    <p:spacer width="20"></p:spacer>
+
+                                </p:column>
+                            </div>
+                        </p:row>
+                        <p:row>
+                            <p:column colspan="5">
+                                <fieldset>
+                                    <legend>
+                                        <p:outputLabel value="Datos recibo generado" styleClass="labelImportante"/>
+                                    </legend>
+
+                                    <p:panelGrid columns="4" style="quitarBordes">
+                                        <p:outputLabel value="Fecha:" style="font-weight: bold"/>  
+                                        <p:calendar id="fecha" 
+                                                    locale="es" 
+                                                    value="#{reciboBean.fechaBuscar}"
+                                                    navigator="true" 
+                                                    pattern="dd-MM-yyyy" 
+                                                    mask="true"
+                                                    size="12" 
+                                                    style="#{reciboBean.cambiaColorFechaDeposito==true?'border-color: #C00':''}; width: 90%"/>
+                                        <p:commandButton
+                                            id="btnbuscar"
+                                            icon="ui-icon-search"
+                                            actionListener="#{reciboBean.listaPorFechas()}"
+                                            update=":form"
+                                            value="Buscar por fecha">
+                                            <f:ajax execute="@this" event="click"/>
+                                        </p:commandButton>
+                                        <p:commandButton value="Excel" icon="ui-icon-contact" ajax="false" >
+                                            <p:dataExporter type="xls" target="Recibos" fileName="Recibo" 
+                                                            postProcessor="#{reciboBean.postProcessXLS}" />
+                                        </p:commandButton>
+                                    </p:panelGrid>
+                                    <p:dataTable id="Recibos"  
+                                                 var="recibo" 
+                                                 value="#{reciboBean.listaReciboGenerado}" 
+                                                 rowStyleClass="old" 
+                                                 scrollRows="10" 
+                                                 scrollable="true"  
+                                                 liveScroll="true" 
+                                                 scrollHeight="250">
+                                        <p:column headerText="N° rec." width="9%" style="text-align:right">
+                                            <h:outputText value=" #{recibo.numeroRecibo}-#{recibo.serieRecibo}" />
+                                        </p:column>
+
+                                        <p:column headerText="Can." width="6%" style="text-align:right" >
+                                            <h:outputText   value="#{recibo.cantidad}" />
+                                        </p:column>
+                                        <p:column headerText="Tasa" width="20%">
+                                            <h:outputText value="#{recibo.concepto}" />
+                                        </p:column>
+                                        <p:column headerText="Monto" width="8%" style="text-align:right" >
+                                            <h:outputText  style="text-align:right" value="#{recibo.monto}" />
+                                        </p:column>
+                                        <p:column headerText="Código trámite" width="16%" style="text-align:right" >
+                                            <h:outputText value="#{reciboBean.devuelveCodigo(recibo)}" style="text-align:right"/>
+                                        </p:column>
+                                        <p:column headerText="Descrip. trámite" width="18%" style="text-align:right" >
+                                            <h:outputText value="#{recibo.descripcionMarca}" style="text-align:right"/>
+                                        </p:column>
+                                        <p:column headerText="Fec. rec." width="12%" style="text-align:right" >
+                                            <h:outputText value="#{recibo.fechaEmisionRecibo}" style="text-align:right">
+                                                <f:convertDateTime  pattern="dd/MM/yyyy HH:mm:ss"/>    
+                                            </h:outputText>
+
+                                        </p:column>
+                                        <p:column headerText="N° deposito" width="10%" style="text-align:right" >
+                                            <h:outputText value="#{reciboBean.muestraNumerosDeposito(recibo)}" style="text-align:right"/>
+                                        </p:column>
+                                        <p:column headerText="Fec.dep." width="9%" style="text-align:right" >
+                                            <h:outputText value="#{reciboBean.muestrafechaDepos(recibo)}" style="text-align:right"/>
+                                        </p:column>
+                                        <p:column headerText="Cod." width="8%" style="text-align:right" >
+                                            <h:outputText value="#{reciboBean.muestraCodigoDepos(recibo)}" style="text-align:right"/>
+                                        </p:column>
+                                        <p:column headerText="Depositante" width="18%" style="text-align:right" >
+                                            <h:outputText value="#{reciboBean.muestraDepositante(recibo)}" style="text-align:right"/>
+                                        </p:column>
+
+                                        
+                                        <p:column headerText="Impr." style="text-align: center" width="6%">
+                                            <p:commandButton id="derivarRecibo"  icon="ui-icon-print" 
+                                                             update=":form:payment-amount-panel"
+                                                             actionListener="#{reciboBean.imprimir(recibo,'IMP')}">
+                                            </p:commandButton>
+                                        </p:column>
+                                        <p:column headerText="VER PDF" style="text-align: center" width="6%">
+                                            <p:commandButton id="derivarReciboPDF"  icon="ui-icon-print" 
+                                                             update=":form:payment-amount-panel"
+                                                             ajax="false" onclick="target = '_blank'"
+                                                             actionListener="#{reciboBean.imprimir(recibo,'VER')}">
+                                            </p:commandButton>
+                                        </p:column>
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+<!--                                        <p:column headerText="Impr." style="text-align: center" width="6%">
+                                            <p:commandButton id="derivarRecibo"  icon="ui-icon-print" 
+                                                             update=":form:payment-amount-panel"
+                                                             actionListener="# {reciboBean.imprimir(recibo)}">
+                                            </p:commandButton>
+                                        </p:column>
+                                        <p:column headerText="VER PDF" style="text-align: center" width="6%">
+                                            <p:commandButton id="derivarReciboPDF"  icon="ui-icon-print" 
+                                                             update=":form:payment-amount-panel"
+                                                             ajax="false" onclick="target = '_blank'"
+                                                             actionListener="# {reciboBean.verPdf(recibo)}">
+                                            </p:commandButton>
+                                        </p:column>-->
+
+
+<!--                                        <p:column headerText="Eli." style="text-align: center" width="6%">
+                                            <p:commandButton
+                                                id="anularrecibo"
+                                                icon="ui-icon-minusthick" 
+                                                actionListener="# {reciboBean.cargaValoresAAnularRecibo(recibo)}"
+                                                onclick="PF('anularRecibo').show()"
+                                                > 
+                                            </p:commandButton>
+                                        </p:column>-->
+
+                                    </p:dataTable>
+
+                                </fieldset>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column  colspan="2" style="vertical-align: top; width: 100%">
+                                <p:panelGrid>
+                                    <p:spacer height="20"/>
+                                    <h:panelGroup id="payment-amount-panel">
+                                        <p:outputPanel  id="outReporteConciliacion">
+                                            <pe:documentViewer width="0" height="0" value="#{sessionState.stream}" rendered="true"/>  
+                                        </p:outputPanel>
+                                    </h:panelGroup>
+                                </p:panelGrid>
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                    <p:dialog id="dialogeliminar" header="Eliminar Recibo" widgetVar="eliminaRecibo" resizable="false" closable="false" modal="true"
+                              width="30%" height="200" showEffect="fade"  style="text-align: center">
+                        <div align="center" style="padding:1em 2.2em;">
+                            <p:panel>
+                                <div align="center" style="padding:1em 2.2em;">
+                                    <h:panelGrid columns="1">
+                                        <p:outputLabel value="Esta seguro que desea eliminar el Recibo? El número asignado a este recibo se podra reasignar"/>
+                                    </h:panelGrid>
+                                    <p:commandButton
+                                        value="SI"
+                                        onclick="PF('eliminaRecibo').hide();"
+                                        update=":form:Recibos :form:deposito"
+                                        actionListener="#{reciboBean.eliminarReciboFinal()}"
+                                        icon="ui-icon-check">
+
+                                    </p:commandButton>
+                                    <p:commandButton
+                                        value="NO"
+                                        onclick="PF('eliminaRecibo').hide();"
+                                        icon="ui-icon-close"/>
+                                </div>
+                            </p:panel>
+                        </div>
+                    </p:dialog>
+                    <p:dialog id="anularRecibosVista" header="Anular Recibo" widgetVar="anularRecibo" resizable="false" closable="false" modal="true"
+                              width="30%" height="200" showEffect="fade"  style="text-align: center">
+                        <div align="center" style="padding:1em 2.2em;">
+                            <p:panel>
+                                <div align="center" style="padding:1em 2.2em;">
+                                    <h:panelGrid columns="1">
+                                        <p:outputLabel value="Esta seguro que desea anular el recibo? El número asignado a este recibo no se podra recuperar"/>
+                                    </h:panelGrid>
+                                    <p:commandButton
+                                        value="SI"
+                                        onclick="PF('anularRecibo').hide();"
+                                        update=":form:Recibos :form:deposito"
+                                        actionListener="#{reciboBean.anularReciboFinal()}"
+                                        icon="ui-icon-check">
+                                    </p:commandButton>
+                                    <p:commandButton
+                                        value="NO"
+                                        onclick="PF('anularRecibo').hide();"
+                                        icon="ui-icon-close"/>
+                                </div>
+                            </p:panel>
+                        </div>
+                    </p:dialog>
+                </h:form>
+                <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+                <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                    <p:graphicImage name="/images/cargando.gif" />
+                </p:dialog>
+
+
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>
+

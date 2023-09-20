@@ -1,0 +1,1562 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"          
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../WEB-INF/facelets/templates/Template.xhtml">
+
+            <ui:define name="content">
+
+
+
+                <h:form id="frmIngresoTramite">
+                    <p:panelGrid id="panelBusqueda" style="width: 100%;" styleClass="quitarBordes">
+                        <p:row>
+                            <p:column style="width: 100%;" colspan="5">
+                                <p:outputPanel style="padding-bottom: 1px; padding-top: 1px; padding-left:10px; padding-right: 10px;">
+                                    <table>
+                                        <tr valign="middle">
+                                            <td><p:graphicImage library="images" name="flechaTituloAzul.png" width="24" height="24"></p:graphicImage></td>
+                                            <td><p:outputLabel value="Verificacion de Existencia de Formulario" styleClass="tituloPrincipalFuente"></p:outputLabel></td>
+                                        </tr>
+                                    </table>                    
+                                    <p:separator id="sepTitulo" style="border: 1px #045491 inset;"></p:separator>                    
+                                </p:outputPanel>
+
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column colspan="5">
+                                <fieldset>
+                                    <p:panelGrid  style="width: 100%;" >
+                                        <p:row>
+                                            <p:column style="width: 20%; text-align: center;">
+                                                <p:panelGrid columns="1" style="width: 100%;">
+                                                    <p:outputLabel value="Ingreso"/>
+                                                    <p:outputLabel value="Solicitud de tramite"/>
+                                                    <p:outputLabel value="#{ingresoSolicitudSignosBean.fechaSolicitud}">
+                                                        <f:convertDateTime pattern="#{sessionState.formatoFecha}"/>
+                                                    </p:outputLabel>
+                                                </p:panelGrid>
+                                            </p:column>
+                                            <p:column style="width: 20%; text-align: right" colspan="2">
+                                                <p:outputLabel value="Nro. FORM" style="font-weight: bold" styleClass="textoImportante"/>
+                                            </p:column>
+
+                                            <p:column style="width: 20%; text-align: center">
+                                                <fieldset>
+
+                                                    <p:panelGrid columns="1" style="width: 100%">
+                                                        <p:inputText value="#{ingresoSolicitudSignosBean.numeroFormulario}" id="txtNumeroFormulario" 
+                                                                     style="height: 105%; text-align: center"/>
+                                                        <p:outputLabel value="Número de formulario"/>
+                                                    </p:panelGrid>
+                                                </fieldset>
+                                            </p:column>
+                                            <p:column style="width: 20%">
+                                                <p:commandButton value="Buscar" actionListener="#{ingresoSolicitudSignosBean.busquedaFormularioTipoTramite()}"
+                                                                 update="todo :frmIngresoTramite:pnlExistente panelRequisitos" icon="ui-icon-search"
+                                                                 style="height: 70%"/>
+                                            </p:column>
+
+                                            <p:column style="width: 20%" >
+                                                <p:outputLabel id="pnlExistente">
+                                                    <p:panelGrid columns="1" rendered="#{ingresoSolicitudSignosBean.panelEncontrado}">
+                                                        <p:outputLabel value="el tramite ya fue ingresado "/>
+                                                        <p:outputLabel value="Ver formulario ingreso "/>
+                                                        <p:commandButton value="Revisar formulario ingreso"
+                                                                         action="#{ingresoSolicitudSignosBean.accionAbrirPlantillaTramiteIngresado()}"
+                                                                         update="todo :frmIngresoTramite:pnlExistente" icon="ui-icon-search"/>
+                                                    </p:panelGrid>
+                                                </p:outputLabel>
+
+                                            </p:column>
+                                        </p:row>
+                                    </p:panelGrid>
+                                </fieldset>
+                            </p:column>
+                        </p:row>
+
+
+                    </p:panelGrid>
+
+                    <h:panelGrid id="todo" style="width: 100%">
+
+                        <p:panelGrid id="panelSignos" style="width: 100%;" rendered="#{ingresoSolicitudSignosBean.panelPI100}" styleClass="quitarBordes">
+                            <p:row>
+                                <p:column width="50%" style="text-align: center" colspan="2">
+
+                                    <fieldset>
+                                        <legend>Solicitud de registro de signo distintivo</legend>
+                                        <br />
+                                        <p:outputLabel value=" FORM PI - 100"/>
+                                        <h:panelGrid columns="1" style="width: 100%; padding-left: 15%">
+                                            <p:panelGrid columns="2" >
+                                                <p:outputLabel value="Fecha y hora de solicitud de formulario:" />
+                                                <p:calendar pattern="dd/MM/yyyy HH:mm:ss" mask="true"
+                                                            locale="es"
+                                                            value="#{ingresoSolicitudSignosBean.fechaIngreso}" style="width: 2%"/>
+                                            </p:panelGrid>
+                                        </h:panelGrid>
+                                    </fieldset>
+
+                                </p:column>
+                                <p:column width="34%" style="text-align: center">
+                                    <p:panelGrid columns="2" style="width: 100%">
+                                        <h:panelGrid columns="2" >
+                                            <p:outputLabel value="Oficina:" style="display: block; width: 80px"/>
+                                            <p:selectOneMenu id="cmbCiudadNotificacionPI100" value="#{ingresoSolicitudSignosBean.oficina}" >
+                                                <f:selectItem itemLabel="Elija regional" itemValue=""/>
+                                                <f:selectItems var="oficina"
+                                                               itemLabel="#{oficina.nombre}"
+                                                               itemValue="#{oficina.codigo}"
+                                                               value="#{ingresoSolicitudSignosBean.listaOficina}" />
+                                                <p:ajax listener="#{ingresoSolicitudSignosBean.cambiarRegionalSM()}" event="change"
+                                                        update=":frmIngresoTramite">
+                                                </p:ajax>
+                                            </p:selectOneMenu>
+                                        </h:panelGrid>
+                                        <p:panelGrid style="width: 60%">
+                                        </p:panelGrid>
+                                    </p:panelGrid>
+                                </p:column>
+                            </p:row>
+                            <p:row style="vertical-align: top">
+                                <p:column width="80%" style="text-align: left" colspan="2">
+                                    <fieldset>
+                                        <legend>Signo</legend>
+                                        <p:panelGrid >
+                                            <p:row style="vertical-align: top">
+                                                <p:column style="vertical-align: top">
+                                                    <h:panelGrid columns="2">
+                                                        <p:galleria id="imagenCargadaPI100" showCaption="false" showFilmstrip="false" 
+                                                                    value="#{ingresoSolicitudSignosBean.formularioPI100.logotipos}"
+                                                                    var="image" panelWidth="120" panelHeight="120" 
+                                                                    >
+                                                            <p:graphicImage id="graphicImagenPI100" value="/temp/#{image.nombreArchivo}" 
+                                                                            title="imagen de la marca" 
+                                                                            width="100%" height="100%"/>
+                                                        </p:galleria>
+                                                        <p:panelGrid columns="2" style="width: 200px" > 
+                                                            <p:outputLabel value="#{ingresoSolicitudSignosBean.devuelveTipoGenero(ingresoSolicitudSignosBean.formularioPI100.signoMarca.tipoGenero)}" 
+                                                                           style="font-weight: bold"></p:outputLabel>
+                                                            <br /><br /><br />
+                                                            <p:dataList value="#{ingresoSolicitudSignosBean.formularioPI100.smTipoSignos}" 
+                                                                        var="c"  type="definition">
+                                                                <f:facet name="header">
+                                                                    <p:outputLabel style="display: block; width: 100px"
+                                                                                   value="Tipo Signo">                                                                        
+                                                                    </p:outputLabel>                                                                    
+                                                                </f:facet>                                                                
+
+                                                                <p:outputLabel style="padding-left: 10%"
+                                                                               value="#{ingresoSolicitudSignosBean.devuelveTipoSigno(c.tipoSigno)}">                                                                        
+                                                                </p:outputLabel>
+
+
+
+                                                            </p:dataList>
+
+                                                            <h:panelGrid columns="1" id="otroSignoPI100" rendered="#{ingresoSolicitudSignosBean.panelOtro}" >
+                                                                <h:outputLabel value="Otro"/>
+                                                                <p:inputTextarea id="tipoSignoOtrosDato" 
+                                                                                 value="#{ingresoSolicitudSignosBean.textoOtroPI100}" rows="2"/>
+                                                            </h:panelGrid>
+
+                                                        </p:panelGrid>
+                                                    </h:panelGrid>
+                                                </p:column>
+                                                <p:column style="width: 50%; text-align: center">
+                                                    <p:panelGrid columns="1" style="width: 100%">
+                                                        <p:outputLabel value="Marca:" styleClass="tituloMarca"/> 
+                                                        <p:inputTextarea value="#{ingresoSolicitudSignosBean.formularioPI100.signoMarca.marca}" 
+                                                                         style="text-align: center; width: 205px"/>
+                                                    </p:panelGrid>
+                                                </p:column>
+                                            </p:row>
+
+                                        </p:panelGrid>
+                                    </fieldset>
+                                </p:column>
+                                <p:column width="20%" >
+
+                                    <fieldset>
+                                        <legend>   <p:outputLabel value="Clase niza"/></legend>
+                                        <p:dataTable value="#{ingresoSolicitudSignosBean.formularioPI100.smSignoClaseNizases}"
+                                                     var="itemniza"
+                                                     style="width: 98%; text-align: center ">                                                                                     
+                                            <p:column width="1">  
+                                                <f:facet name="header" >N° clase </f:facet>
+                                                <p:outputLabel value="#{itemniza.numeroClaseNiza}"/>
+                                            </p:column>
+                                            <p:column width="100">  
+                                                <f:facet name="header">Listado de productos</f:facet>
+                                                <p:inputTextarea value="#{itemniza.listaProductos}" style="width: 95%"  rows="6" autoResize="false" readonly="true"/>
+                                            </p:column>
+                                        </p:dataTable>
+                                    </fieldset>
+                                </p:column>
+
+                            </p:row>
+
+
+                            <p:row>
+
+                                <p:column width="40%" style="text-align: left" colspan="3">
+                                    <fieldset>
+                                        <legend>
+                                            <p:outputLabel value="Datos del solicitante" /></legend>
+
+                                        <p:dataGrid 
+                                            var="solicitante" value="#{ingresoSolicitudSignosBean.formularioPI100.solicitantes}" 
+                                            emptyMessage="No existen solicitantes" 
+                                            style="width: 100%;" 
+                                            columns="1" rows="1" layout="grid" paginator="true" paginatorPosition="bottom">     
+                                            <p:panelGrid style="width: 100%;">
+                                                <p:row>
+                                                    <p:column  style="width: 10%;"><p:outputLabel value="Solicitante" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                    <p:column  style="width: 40%;" styleClass="fondoInput">
+                                                        <p:outputLabel id="texto" value="#{solicitante.nombreRazonSocial} #{solicitante.primerApellido} #{solicitante.segundoApellido}" style="width: 98%;" >
+                                                        </p:outputLabel>
+
+                                                    </p:column>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Tipo titular" style="display: block; width: 105px; font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column style="width: 90%;" styleClass="fondoInput"><p:outputLabel  value="#{ingresoSolicitudSignosBean.devuelveTipoTitular(solicitante.tipoPersona)}" style="display: block; width: 160px"></p:outputLabel></p:column>                                                
+                                                </p:row>   
+                                                <p:row>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="N° Doc." style="display: block; width: 85px; font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel  value="#{solicitante.numeroDocumento}"></p:outputLabel></p:column>
+                                                    <p:column  style="width: 10%;"><p:outputLabel value="Dirección" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                    <p:column colspan="3" style="width: 90%;" styleClass="fondoInput"><p:outputLabel  value="#{solicitante.domicilio}" style="width: 98%;"></p:outputLabel></p:column>
+                                                </p:row>
+
+
+                                                <p:row>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Pais" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput" ><p:outputLabel value="#{ingresoSolicitudSignosBean.devuelvePais(solicitante.pais)}"></p:outputLabel></p:column>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Departamento" style="font-weight: bold;" rendered="#{solicitante.pais=='BO'}"></p:outputLabel> </p:column>
+                                                    <p:column style="width: 90%;" styleClass="fondoInput"><p:outputLabel  value="#{ingresoSolicitudSignosBean.devuelveDepartamento(solicitante.departamentoSolicitud)}" ></p:outputLabel></p:column>                                                
+                                                </p:row>
+
+                                            </p:panelGrid>  
+                                        </p:dataGrid>  
+                                    </fieldset>
+
+                                    <!--                                    <p:dataTable value="# {ingresoSolicitudSignosBean.formularioPI100.solicitantes}"
+                                                                                     var="solicitante"
+                                                                                     style="width: 98%; text-align: center ">                                                                                     
+                                                                            <p:column >  
+                                                                                <f:facet name="header" >N° Doc. </f:facet>
+                                                                                <p:outputLabel value="# {solicitante.numeroDocumento}" />
+                                                                            </p:column>
+                                                                            <p:column>  
+                                                                                <f:facet name="header">Nombre</f:facet>
+                                                                                <p:outputLabel value="# {solicitante.nombreRazonSocial}"/>
+                                                                            </p:column>
+                                                                            <p:column>
+                                                                                <f:facet name="header">Tipo titular</f:facet>
+                                                                                <p:outputLabel value="# {ingresoSolicitudSignosBean.devuelveTipoTitular(solicitante.tipoPersona)}"/>
+                                                                            </p:column>
+                                                                            <p:column>
+                                                                                <f:facet name="header">País</f:facet>
+                                                                                <p:outputLabel value="# {ingresoSolicitudSignosBean.devuelvePais(solicitante.pais)}"/>
+                                                                            </p:column>
+                                                                            <p:column>
+                                                                                <f:facet name="header">Departamento</f:facet>
+                                                                                <p:outputLabel value="# {solicitante.departamentoSolicitud}"/>
+                                                                            </p:column>
+                                                                            <p:column>                                  
+                                                                                <f:facet name="header">Dirección</f:facet>
+                                                                                <p:outputLabel value="# {solicitante.domicilio}"/>
+                                                                            </p:column>
+                                                                        </p:dataTable>-->
+
+                                </p:column>
+
+                            </p:row>
+
+                            <p:row>
+
+                                <p:column width="40%" style="text-align: left" colspan="3">
+                                    <fieldset>
+                                        <legend>
+                                            <p:outputLabel value="Datos del apoderado" />
+                                        </legend>
+                                        <p:dataGrid  value="#{ingresoSolicitudSignosBean.formularioPI100.apoderados}"
+                                                     var="apoderado" emptyMessage="No existen apoderados" 
+                                                     paginatorPosition="bottom" style="width: 100%;" columns="1" rows="1" layout="grid" paginator="true">                                            
+                                            <p:panelGrid style="width: 100%;">
+                                                <p:row>
+                                                    <p:column  style="width: 10%;"><p:outputLabel value="Apoderado" style="font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column colspan="3" style="width: 90%;">
+                                                        <p:outputLabel styleClass="fondoInput"  value="#{apoderado.nombres} #{apoderado.primerApellido} #{apoderado.segundoApellido}" style="width: 30%;" >
+                                                        </p:outputLabel>                                                       
+                                                    </p:column>
+                                                </p:row>        
+                                                <p:row>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="N° Doc." style="display: block; width: 85px; font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{apoderado.numeroDocumento}"></p:outputLabel></p:column>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Dirección" style="font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column style="width: 90%;" styleClass="fondoInput"><p:outputLabel value="#{apoderado.domicilio}" style="width: 98%;"></p:outputLabel></p:column>
+                                                </p:row>
+
+                                                <p:row>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Poder" style="font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{apoderado.numeroPoder}" /></p:column> 
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Expiración" style="font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column style="width: 90%;" styleClass="fondoInput"><p:outputLabel value="#{apoderado.fechaPoder}" style="width: 98%;">
+                                                            <f:convertDateTime pattern="#{sessionState.formatoFecha}"/> </p:outputLabel></p:column>
+                                                </p:row>
+
+                                            </p:panelGrid>                             
+                                        </p:dataGrid>
+                                    </fieldset>
+
+                                    <!--                                    <p:dataTable 
+                                                                            id="listaRepresentante"
+                                                                            value="# {ingresoSolicitudSignosBean.formularioPI100.apoderados}"
+                                                                            var="apoderado"
+                                                                            style="width: 98%">
+                                                                            <p:column >  
+                                                                                <f:facet name="header" >Nro. Poder </f:facet>
+                                                                                <p:outputLabel value="# {apoderado.numeroPoder}"/>
+                                                                            </p:column>   
+                                                                            <p:column >  
+                                                                                <f:facet name="header" >Expiracion</f:facet>
+                                    
+                                                                            </p:column> 
+                                                                            <p:column >  
+                                                                                <f:facet name="header" >N° Doc.</f:facet>
+                                                                                <p:outputLabel value="# {apoderado.numeroDocumento}"/>
+                                                                            </p:column>                                       
+                                                                            <p:column >  
+                                                                                <f:facet name="header" >Nombres</f:facet>
+                                                                                <p:outputLabel value="# {apoderado.nombres}"/>
+                                                                            </p:column>     
+                                                                            <p:column>
+                                                                                <f:facet name="header">
+                                                                                    Domicilio
+                                                                                </f:facet>
+                                                                                <p:outputLabel value="# {apoderado.domicilio}"/>
+                                                                            </p:column>
+                                                                        </p:dataTable>-->
+                                </p:column>
+
+                            </p:row>
+
+                        </p:panelGrid>
+
+
+                        <p:panelGrid id="panelRotuloComercial" style="width: 100%;" rendered="#{ingresoSolicitudSignosBean.panelPI101}" styleClass="quitarBordes">
+                            <p:row>
+
+                                <p:column width="25%" style="text-align: center" colspan="2">
+                                    <fieldset>
+                                        <legend>Solicitud de depósito de nombre, rótulo comercial o lema</legend>
+                                        <br />  
+                                        <p:outputLabel value="FORM PI - 101"/>
+                                        <h:panelGrid columns="1" style="width: 100%; padding-left: 20%">
+                                            <p:panelGrid columns="2" >
+                                                <p:outputLabel value="Fecha y hora de solicitud: " />
+                                                <p:calendar pattern="dd/MM/yyyy HH:mm:ss" mask="true"
+                                                            locale="es"
+                                                            value="#{ingresoSolicitudSignosBean.fechaIngreso}" style="width: 2%"/>
+                                            </p:panelGrid>
+                                        </h:panelGrid>
+
+                                    </fieldset>
+
+
+                                </p:column>
+                                <p:column width="25%" style="text-align: center">
+                                    <p:panelGrid columns="2" style="width: 100%">
+                                        <p:panelGrid columns="2" style="width: 50%">
+                                            <p:outputLabel value="Oficina:" />
+                                            <p:selectOneMenu id="cmbCiudadNotificacionPI101" value="#{ingresoSolicitudSignosBean.oficina}" >
+                                                <f:selectItem itemLabel="Elija regional" itemValue=""/>
+                                                <f:selectItems var="oficina"
+                                                               itemLabel="#{oficina.nombre}"
+                                                               itemValue="#{oficina.codigo}"
+                                                               value="#{ingresoSolicitudSignosBean.listaOficina}" />
+                                            </p:selectOneMenu>
+                                        </p:panelGrid>
+                                        <p:panelGrid style="width: 60%">
+                                        </p:panelGrid>
+                                    </p:panelGrid>
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                                                                            <p:column width="80%"  colspan="2">
+                                    <fieldset>
+                                        <legend>Nombre, rótulo comercial o lema</legend>
+                                        <p:panelGrid style="width: 100%; ">
+                                            <p:row style="width: 100%; vertical-align: top">
+                                                <p:column style="vertical-align: top">
+                                                    <h:panelGrid columns="2">
+                                                        <p:galleria id="imagenCargadaPI101" showCaption="false" showFilmstrip="false"
+                                                                    value="#{ingresoSolicitudSignosBean.formularioPI101.logotipos}"
+                                                                    var="image" panelWidth="120" panelHeight="120" 
+                                                                    >
+                                                            <p:graphicImage id="graphicImagenPI101" value="/temp/#{image.nombreArchivo}" 
+                                                                            title="imagen de la marca" 
+                                                                            width="100%" height="100%"/>
+                                                        </p:galleria>
+                                                        <p:panelGrid columns="2" style="width: 200px" >
+                                                            <p:outputLabel value="#{ingresoSolicitudSignosBean.devuelveTipoGenero(ingresoSolicitudSignosBean.formularioPI101.signoMarca.tipoGenero)}" 
+                                                                           style="font-weight: bold"></p:outputLabel>
+                                                            <br /><br /><br />
+                                                            <p:dataList value="#{ingresoSolicitudSignosBean.formularioPI101.smTipoSignos}" 
+                                                                        var="c" >
+                                                                <f:facet name="header">
+                                                                    <p:outputLabel style="display: block; width: 100px"
+                                                                                   value="Tipo Signo">                                                                        
+                                                                    </p:outputLabel>
+                                                                </f:facet>
+                                                                <p:outputLabel style="padding-left: 10%"
+                                                                               value="#{ingresoSolicitudSignosBean.devuelveTipoSigno(c.tipoSigno)}">                                                                        
+                                                                </p:outputLabel>                                                                
+                                                            </p:dataList>
+
+                                                            <h:panelGrid columns="1" id="otroSignoPI101" rendered="#{ingresoSolicitudSignosBean.panelOtro}" >
+                                                                <h:outputLabel value="Otro"/>
+                                                                <p:inputTextarea id="tipoSignoOtrosDato1" value="#{ingresoSolicitudSignosBean.textoOtroPI100}" rows="2"/>
+                                                            </h:panelGrid>                                                            
+                                                        </p:panelGrid>                                            
+                                                    </h:panelGrid>
+                                                </p:column>
+                                                <p:column style="width: 50%; text-align: center">
+                                                    <p:panelGrid columns="1" style="width: 100%">
+                                                        <p:inputTextarea value="#{ingresoSolicitudSignosBean.formularioPI101.signoMarca.marca}" 
+                                                                         style="text-align: center; width: 205px"/>
+                                                    </p:panelGrid>
+                                                </p:column>
+                                            </p:row>
+                                        </p:panelGrid>
+                                    </fieldset>
+                                </p:column>
+                                <p:column width="20%" style="text-align: left; vertical-align: top">
+                                    <fieldset>
+                                        <legend>   <p:outputLabel value="Clase niza"/></legend>
+                                        <p:dataTable value="#{ingresoSolicitudSignosBean.formularioPI101.smSignoClaseNizases}"
+                                                     var="itemniza"
+                                                     style="width: 98%; text-align: center ">                                                                                     
+                                            <p:column width="1">  
+                                                <f:facet name="header" >N° clase </f:facet>
+                                                <p:outputLabel value="#{itemniza.numeroClaseNiza}"/>
+                                            </p:column>
+                                            <p:column width="100">  
+                                                <f:facet name="header">Listado de productos</f:facet>                                                
+                                                <p:inputTextarea value="#{itemniza.listaProductos}" style="width: 95%"  rows="6" autoResize="false" readonly="true"/>
+                                            </p:column>
+                                        </p:dataTable>
+                                    </fieldset>
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column  colspan="3">
+                                    <fieldset>
+                                        <legend>
+                                            <p:outputLabel value="Datos del solicitante" /></legend>
+                                        <p:dataGrid 
+                                            var="solicitante" value="#{ingresoSolicitudSignosBean.formularioPI101.solicitantes}" 
+                                            emptyMessage="No existen solicitantes" 
+                                            style="width: 100%;" 
+                                            columns="1" rows="1" layout="grid" paginator="true" paginatorPosition="bottom">     
+                                            <p:panelGrid style="width: 100%;">
+                                                <p:row>
+                                                    <p:column  style="width: 10%;"><p:outputLabel value="Solicitante" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                    <p:column  style="width: 40%;" >
+                                                        <p:outputLabel styleClass="fondoInput" id="texto" value="#{solicitante.nombreRazonSocial} #{solicitante.primerApellido} #{solicitante.segundoApellido}" style="width: 98%;" >
+                                                        </p:outputLabel>
+
+                                                    </p:column>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Tipo titular" style="display: block; width: 105px; font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column style="width: 90%;" styleClass="fondoInput"><p:outputLabel value="#{ingresoSolicitudSignosBean.devuelveTipoTitular(solicitante.tipoPersona)}" style="display: block; width: 160px"></p:outputLabel></p:column>                                                
+                                                </p:row>   
+                                                <p:row>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="N° Doc." style="display: block; width: 85px; font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{solicitante.numeroDocumento}"></p:outputLabel></p:column>
+                                                    <p:column  style="width: 10%;"><p:outputLabel value="Dirección" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                    <p:column colspan="3" style="width: 90%;" styleClass="fondoInput"><p:outputLabel value="#{solicitante.domicilio}" style="width: 98%;"></p:outputLabel></p:column>
+                                                </p:row>
+
+
+                                                <p:row>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Pais" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{ingresoSolicitudSignosBean.devuelvePais(solicitante.pais)}"></p:outputLabel></p:column>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Departamento" style="font-weight: bold;" rendered="#{solicitante.pais=='BO'}"></p:outputLabel> </p:column>
+                                                    <p:column style="width: 90%;" styleClass="fondoInput"><p:outputLabel value="#{ingresoSolicitudSignosBean.devuelveDepartamento(solicitante.departamentoSolicitud)}" ></p:outputLabel></p:column>                                                
+                                                </p:row>
+
+                                            </p:panelGrid>  
+                                        </p:dataGrid>  
+                                    </fieldset>
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column width="40%" style="text-align: left" colspan="3">
+                                    <fieldset>
+                                        <legend>
+                                            <p:outputLabel value="Datos del apoderado" />
+                                        </legend>
+                                        <p:dataGrid  value="#{ingresoSolicitudSignosBean.formularioPI101.apoderados}"
+                                                     var="apoderado" emptyMessage="No existen apoderados" 
+                                                     paginatorPosition="bottom" style="width: 100%;" columns="1" rows="1" layout="grid" paginator="true">                                            
+                                            <p:panelGrid style="width: 100%;">
+                                                <p:row>
+                                                    <p:column  style="width: 10%;"><p:outputLabel value="Apoderado" style="font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column colspan="3" style="width: 90%;">
+                                                        <p:outputLabel styleClass="fondoInput" value="#{apoderado.nombres} #{apoderado.primerApellido} #{apoderado.segundoApellido}" style="width: 30%;" >
+                                                        </p:outputLabel>                                                       
+                                                    </p:column>
+                                                </p:row>        
+                                                <p:row>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="N° Doc." style="display: block; width: 85px; font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{apoderado.numeroDocumento}"></p:outputLabel></p:column>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Dirección" style="font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column style="width: 90%;" styleClass="fondoInput"><p:outputLabel value="#{apoderado.domicilio}" style="width: 98%;"></p:outputLabel></p:column>
+                                                </p:row>
+
+                                                <p:row>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Poder" style="font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{apoderado.numeroPoder}" /></p:column> 
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Expiración" style="font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column style="width: 90%;" styleClass="fondoInput"><p:outputLabel value="#{apoderado.fechaPoder}" style="width: 98%;"><f:convertDateTime pattern="#{sessionState.formatoFecha}"/></p:outputLabel></p:column>
+                                                </p:row>
+
+                                            </p:panelGrid>                             
+                                        </p:dataGrid>
+                                    </fieldset>
+
+                                    <!--                                    <p:dataTable 
+                                                                            value="# {ingresoSolicitudSignosBean.formularioPI101.apoderados}"
+                                                                            var="apoderado"
+                                                                            style="width: 98%">
+                                                                            <p:column >  
+                                                                                <f:facet name="header" >Nro. Poder </f:facet>
+                                                                                <p:outputLabel value="# {apoderado.numeroPoder}"/>
+                                                                            </p:column>   
+                                                                            <p:column >  
+                                                                                <f:facet name="header" >Expiracion</f:facet>
+                                                                                <h:outputText value="# {apoderado.fechaPoder}">
+                                                                                    <f:convertDateTime pattern="# {sessionState.formatoFecha}"/>
+                                                                                </h:outputText>
+                                                                            </p:column> 
+                                                                            <p:column >  
+                                                                                <f:facet name="header" >N° Doc.</f:facet>
+                                                                                <p:outputLabel value="# {apoderado.domicilio}"/>
+                                                                            </p:column>                                       
+                                                                            <p:column >  
+                                                                                <f:facet name="header" >Nombres</f:facet>
+                                                                                <p:outputLabel value="# {apoderado.nombres}"/>
+                                                                            </p:column>     
+                                                                            <p:column>
+                                                                                <f:facet name="header">
+                                                                                    Domicilio
+                                                                                </f:facet>
+                                                                                <p:outputLabel value="# {apoderado.domicilio}"/>
+                                                                            </p:column>
+                                                                        </p:dataTable>-->
+
+
+
+                                </p:column>
+
+                            </p:row>
+
+                        </p:panelGrid>
+
+
+                        <p:panelGrid id="panelLemaComercial" style="width: 100%;" rendered="#{ingresoSolicitudSignosBean.panelPI102}" styleClass="quitarBordes">
+                            <p:row>
+                                <p:column width="50%" style="text-align: center">
+                                    <fieldset>
+                                        <legend>
+                                            Solicitud de lema comercial
+                                        </legend>
+                                        <br />
+                                        <p:outputLabel value="FORM PI - 102"/>
+                                        <h:panelGrid columns="1" style="padding-left: 20%; width: 100%">
+                                            <p:panelGrid columns="2" >
+                                                <p:outputLabel value="Fecha y hora de solicitud de formulario:" />
+                                                <p:calendar pattern="dd/MM/yyyy HH:mm:ss" mask="true"
+                                                            locale="es"
+                                                            value="#{ingresoSolicitudSignosBean.fechaIngreso}" style="width: 2%"/>
+                                            </p:panelGrid>
+                                        </h:panelGrid>
+                                    </fieldset>
+                                </p:column>
+                                <p:column width="25%" style="text-align: center">
+                                    <p:panelGrid columns="2" style="width: 100%">
+                                        <h:panelGrid columns="2" >
+                                            <p:outputLabel value="Oficina:" style="display: block; width: 80px"/>
+                                            <p:selectOneMenu id="cmbCiudadNotificacionPI102" value="#{ingresoSolicitudSignosBean.oficina}" >
+                                                <f:selectItem itemLabel="Elija regional" itemValue=""/>
+                                                <f:selectItems var="oficina"
+                                                               itemLabel="#{oficina.nombre}"
+                                                               itemValue="#{oficina.codigo}"
+                                                               value="#{ingresoSolicitudSignosBean.listaOficina}" />
+                                            </p:selectOneMenu>
+                                        </h:panelGrid>
+
+
+                                    </p:panelGrid>
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:panelGrid style="width: 100%" styleClass="quitarBordes">
+                                    <p:column colspan="3" style="width: 100%; text-align: left">
+                                        <fieldset>
+                                            <legend>Datos del lema comercial</legend>
+                                            <h:panelGrid columns="2" style=" width: 80%; padding: 0em 1em 0em; padding-left: 10%">
+                                                <p:outputLabel value="Frase o lema comercial:" style="font-weight: bold"/>
+
+                                                <p:inputTextarea value="#{ingresoSolicitudSignosBean.formularioPI102.signoMarca.marca}"
+                                                                 style="width: 80%;height: 70%; overflow:auto; resize: none"
+                                                                 cols="50" rows="4" onkeyup="this.value = this.value.substring(0, 500);">
+                                                </p:inputTextarea>
+
+                                                <p:outputLabel value="Signo solicitado o registrado:" style="font-weight: bold"/>
+                                                <p:inputText value="#{ingresoSolicitudSignosBean.formularioPI102.lemasComerciales.nombreMarca}" 
+                                                             style="width: 80%;"/>
+
+                                                <p:outputLabel value="SM:" style="font-weight: bold"/>
+                                                <p:inputText value="#{ingresoSolicitudSignosBean.formularioPI102.lemasComerciales.numeroSolicitudMarca}" 
+                                                             style="width: 80%;"/>
+
+                                                <p:outputLabel value="Nro de registro: " style="font-weight: bold"/>
+                                                <h:panelGrid columns="4" style="width: 50%;">
+
+                                                    <p:inputText value="#{ingresoSolicitudSignosBean.formularioPI102.lemasComerciales.numeroRegistro}" 
+                                                                 style="width: 60%;"/>
+                                                    <p:outputLabel></p:outputLabel>
+                                                    <p:outputLabel value="Serie: " style="font-weight: bold"/>
+                                                    <p:inputText value="#{ingresoSolicitudSignosBean.formularioPI102.lemasComerciales.serie}" 
+                                                                 style="width: 40%"/>
+                                                </h:panelGrid>
+
+
+                                                <p:outputLabel value="Vigente hasta: " style="font-weight: bold"/>
+                                                <h:outputText value="#{ingresoSolicitudSignosBean.formularioPI102.lemasComerciales.fechaVigente}"  >
+                                                    <f:convertDateTime pattern="#{sessionState.formatoFecha}"/>    
+                                                </h:outputText>
+                                            </h:panelGrid>
+                                        </fieldset>
+                                    </p:column>
+
+
+                                </p:panelGrid>
+
+
+
+
+                            </p:row>
+                            <p:row>
+
+                                <p:column width="40%" style="text-align: left" colspan="3">
+                                    <fieldset>
+                                        <legend>
+                                            <p:outputLabel value="Datos del solicitante" /></legend>
+
+                                        <p:dataGrid 
+                                            var="solicitante" value="#{ingresoSolicitudSignosBean.formularioPI102.solicitantes}" 
+                                            emptyMessage="No existen solicitantes" 
+                                            style="width: 100%;" 
+                                            columns="1" rows="1" layout="grid" paginator="true" paginatorPosition="bottom">     
+                                            <p:panelGrid style="width: 100%;" styleClass="quitarBordes">
+                                                <p:row>
+                                                    <p:column  style="width: 10%;"><p:outputLabel value="Solicitante" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                    <p:column  style="width: 40%;" styleClass="fondoInput">
+                                                        <p:outputLabel id="texto" value="#{solicitante.nombreRazonSocial} #{solicitante.primerApellido} #{solicitante.segundoApellido}" style="width: 98%;" >
+                                                        </p:outputLabel>
+
+                                                    </p:column>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Tipo titular" style="display: block; width: 105px; font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{ingresoSolicitudSignosBean.devuelveTipoTitular(solicitante.tipoPersona)}" style="display: block; width: 160px"></p:outputLabel></p:column>                                                
+                                                </p:row>   
+                                                <p:row>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="N° Doc." style="display: block; width: 85px; font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{solicitante.numeroDocumento}"></p:outputLabel></p:column>
+                                                    <p:column  style="width: 10%;"><p:outputLabel value="Dirección" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                    <p:column colspan="3" style="width: 90%;" styleClass="fondoInput"><p:outputLabel value="#{solicitante.domicilio}" style="width: 98%;"></p:outputLabel></p:column>
+                                                </p:row>
+
+
+                                                <p:row>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Pais" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{ingresoSolicitudSignosBean.devuelvePais(solicitante.pais)}"></p:outputLabel></p:column>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Departamento" style="font-weight: bold;" rendered="#{solicitante.pais=='BO'}"></p:outputLabel> </p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{ingresoSolicitudSignosBean.devuelveDepartamento(solicitante.departamentoSolicitud)}" ></p:outputLabel></p:column>                                                
+                                                </p:row>
+
+                                            </p:panelGrid>  
+                                        </p:dataGrid>  
+                                    </fieldset>
+
+                                </p:column>
+
+                            </p:row>
+                            <p:row>
+                                <p:column width="40%" style="text-align: left" colspan="3">
+                                    <fieldset>
+                                        <legend>
+                                            <p:outputLabel value="Datos del apoderado" />
+                                        </legend>
+                                        <p:dataGrid  value="#{ingresoSolicitudSignosBean.formularioPI102.apoderados}"
+                                                     var="apoderado" emptyMessage="No existen apoderados" 
+                                                     paginatorPosition="bottom" style="width: 100%;" columns="1" rows="1" layout="grid" paginator="true">                                            
+                                            <p:panelGrid style="width: 100%;" styleClass="quitarBordes">
+                                                <p:row>
+                                                    <p:column  style="width: 10%;"><p:outputLabel value="Apoderado" style="font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column colspan="3" style="width: 90%;" >
+                                                        <!--<p:outputLabel  value="# {ingresoSolicitudSignosBean.devuelveNombreJuridicoONatural(apoderado.nombres, apoderado.primerApellido, apoderado.segundoApellido)}" style="width: 30%;" >-->
+                                                        <p:outputLabel  value="#{apoderado.nombres} #{apoderado.primerApellido} #{apoderado.segundoApellido}" style="width: 30%;" >
+                                                        </p:outputLabel>                                                       
+                                                    </p:column>
+                                                </p:row>        
+                                                <p:row>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="N° Doc." style="display: block; width: 85px; font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;"><p:outputLabel value="#{apoderado.numeroDocumento}"></p:outputLabel></p:column>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Dirección" style="font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column style="width: 90%;"><p:outputLabel value="#{apoderado.domicilio}" style="width: 98%;"></p:outputLabel></p:column>
+                                                </p:row>
+
+                                                <p:row>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Poder" style="font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;"><p:outputLabel value="#{apoderado.numeroPoder}" /></p:column> 
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Expiración" style="font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column style="width: 90%;"><p:outputLabel value="#{apoderado.fechaPoder}" style="width: 98%;"><f:convertDateTime pattern="#{sessionState.formatoFecha}"/></p:outputLabel></p:column>
+                                                </p:row>
+
+                                            </p:panelGrid>                             
+                                        </p:dataGrid>
+                                    </fieldset>
+
+                                </p:column>
+
+                            </p:row>
+
+
+                        </p:panelGrid>
+
+
+                        <p:panelGrid id="panelModificacion" style="width: 100%;" rendered="#{ingresoSolicitudSignosBean.panelPI103}" styleClass="quitarBordes">
+                            <p:row>
+                                <!--                                <p:column width="25%" style="text-align: center">
+                                                                    <p:panelGrid columns="1" style="width: 100%">
+                                
+                                                                    </p:panelGrid>
+                                                                </p:column>-->
+                                <p:column width="50%" style="text-align: center" colspan="2">
+                                    <fieldset>
+                                        <legend>Solicitud de modificación de registro de signo distintivo</legend>
+                                        <br />
+                                        <p:outputLabel value="FORM PI - 103"/>
+                                        <h:panelGrid columns="1" style="width: 100%; padding-left: 20%" >
+                                            <p:panelGrid columns="2" >
+                                                <p:outputLabel value="Fecha y hora de solicitud de formulario:" />
+                                                <p:calendar pattern="dd/MM/yyyy HH:mm:ss" mask="true" 
+                                                            locale="es"
+                                                            value="#{ingresoSolicitudSignosBean.fechaIngreso}" style="width: 2%; text-align: center"/>
+                                            </p:panelGrid>
+
+                                        </h:panelGrid>
+
+                                    </fieldset>
+                                </p:column>
+                                <p:column width="34%" style="text-align: center">
+                                    <p:panelGrid columns="2" style="width: 100%">
+                                        <h:panelGrid columns="2" style="width: 70%">
+                                            <p:outputLabel value="Oficina:" />
+                                            <p:selectOneMenu id="cmbCiudadNotificacionPI103" value="#{ingresoSolicitudSignosBean.oficina}" >
+                                                <f:selectItem itemLabel="Elija regional" itemValue=""/>
+                                                <f:selectItems var="oficina"
+                                                               itemLabel="#{oficina.nombre}"
+                                                               itemValue="#{oficina.codigo}"
+                                                               value="#{ingresoSolicitudSignosBean.listaOficina}"/>
+                                                <p:ajax listener="#{ingresoSolicitudSignosBean.cambiarOficinaModificacion}"
+                                                        event="change"
+                                                        update=":frmIngresoTramite"/>
+                                            </p:selectOneMenu>
+                                        </h:panelGrid>
+                                        <p:panelGrid style="width: 60%">
+                                            <!--                                            <fieldset>
+                                                                                            <legend>Observacion </legend>
+                                                                                            <p:inputTextarea value="juan perez: Observacion realizada al tramite por mala operación del usuario. (14/05/2016)"
+                                                                                                             style="width: 98%; background: #F0F8FF" scrollHeight="5" rows="3">
+                                                                                            </p:inputTextarea>
+                                                                                            <p:commandButton value="Detalle" icon="ui-icon-seek-next" style="height: 60%" 
+                                                                                                             action="# {ingresoSolicitudSignosBean.abrirObservacionTramite()}"/>
+                                                                                        </fieldset>-->
+                                        </p:panelGrid>
+
+                                    </p:panelGrid>
+                                </p:column>
+                            </p:row>
+
+                            <p:row>
+                                <p:column width="40%" style="text-align: left" colspan="3">
+                                    <fieldset>
+                                        <legend>
+                                            <p:outputLabel value="Datos del solicitante" />
+                                        </legend>
+
+                                        <p:dataGrid 
+                                            var="solicitante" value="#{ingresoSolicitudSignosBean.formularioPI103.solicitantes}" 
+                                            emptyMessage="No existen solicitantes" 
+                                            style="width: 100%;" 
+                                            columns="1" rows="1" layout="grid" paginator="true" paginatorPosition="bottom">     
+                                            <p:panelGrid style="width: 100%;">
+                                                <p:row>
+                                                    <p:column  style="width: 10%;"><p:outputLabel value="Solicitante" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                    <p:column  style="width: 40%;" styleClass="fondoInput">
+                                                        <p:outputLabel id="texto" value="#{ingresoSolicitudSignosBean.devuelveNombreJuridicoONatural(solicitante.nombreRazonSocial,solicitante.primerApellido,solicitante.segundoApellido)}" style="width: 98%;" >
+                                                        </p:outputLabel>
+                                                        <!--                                                        <p:outputLabel  value="# {per.nombre_razonsocial}" style="width: 30%;" rendered="# {per.tipo_titular=='NAT'}">
+                                                                                                                </p:outputLabel><p:spacer width="3"/>
+                                                                                                                <p:outputLabel  value="# {per.primer_apellido}" style="width: 35%;" rendered="# {per.primer_apellido!=null}">
+                                                                                                                </p:outputLabel><p:spacer width="3"/>
+                                                                                                                <p:outputLabel  value="# {per.segundo_apellido}" style="width: 28%;" rendered="# {per.segundo_apellido!=null}">
+                                                                                                                </p:outputLabel>-->
+                                                    </p:column>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Tipo titular" style="display: block; width: 105px; font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column style="width: 90%;" styleClass="fondoInput"><p:outputLabel value="#{ingresoSolicitudSignosBean.devuelveTipoTitular(solicitante.tipoPersona)}" style="display: block; width: 160px"></p:outputLabel></p:column>                                                
+                                                </p:row>   
+                                                <p:row>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="N° Doc." style="display: block; width: 85px; font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{solicitante.numeroDocumento}"></p:outputLabel></p:column>
+                                                    <p:column  style="width: 10%;"><p:outputLabel value="Dirección" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                    <p:column colspan="3" style="width: 90%;" styleClass="fondoInput"><p:outputLabel value="#{solicitante.domicilio}" style="width: 98%;"></p:outputLabel></p:column>
+                                                </p:row>
+
+
+                                                <p:row>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Pais" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{ingresoSolicitudSignosBean.devuelvePais(solicitante.pais)}"></p:outputLabel></p:column>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Departamento" style="font-weight: bold;" rendered="#{solicitante.pais=='BO'}"></p:outputLabel> </p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{ingresoSolicitudSignosBean.devuelveDepartamento(solicitante.departamentoSolicitud)}" ></p:outputLabel></p:column>                                                
+                                                </p:row>
+
+                                            </p:panelGrid>  
+                                        </p:dataGrid>
+                                    </fieldset>
+                                    <!--                                    <div align="left">
+                                                                           <p:outputLabel value="Solicitantes"/>
+                                                                        </div>-->
+                                    <!--                                     <p:dataTable value="# {ingresoSolicitudSignosBean.formularioPI103.solicitantes}"
+                                                                                     var="solicitante"
+                                                                                     style="width: 98%; text-align: center ">                                                                                     
+                                                                            <p:column>  
+                                                                                <f:facet name="header" >N° Doc. </f:facet>
+                                                                                <p:outputLabel value="# {solicitante.numeroDocumento}" />
+                                                                            </p:column>
+                                                                            <p:column>  
+                                                                                <f:facet name="header">Nombre</f:facet>
+                                                                                <p:outputLabel value="# {solicitante.nombreRazonSocial}"/>
+                                                                            </p:column>
+                                                                            <p:column>
+                                                                                <f:facet name="header">Tipo titular</f:facet>
+                                                                                <p:outputLabel value="# {ingresoSolicitudSignosBean.devuelveTipoTitular(solicitante.tipoPersona)}"/>
+                                                                            </p:column>
+                                                                            <p:column>
+                                                                                <f:facet name="header">País</f:facet>
+                                                                                <p:outputLabel value="# {ingresoSolicitudSignosBean.devuelvePais(solicitante.pais)}"/>
+                                                                            </p:column>
+                                                                            <p:column>
+                                                                                <f:facet name="header">Departamento</f:facet>
+                                                                                <p:outputLabel value="# {solicitante.departamentoSolicitud}"/>
+                                                                            </p:column>
+                                                                            <p:column>                                  
+                                                                                <f:facet name="header">Dirección</f:facet>
+                                                                                <p:outputLabel value="# {solicitante.domicilio}"/>
+                                                                            </p:column>
+                                                                        </p:dataTable>-->
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column width="40%" style="text-align: left" colspan="3">
+                                    <fieldset>
+                                        <legend>
+                                            <p:outputLabel value="Datos del apoderado" />
+                                        </legend>
+                                        <p:dataGrid  value="#{ingresoSolicitudSignosBean.formularioPI103.apoderados}"
+                                                     var="apoderado" emptyMessage="No existen apoderados" id="datosApoderado"
+                                                     paginatorPosition="bottom" style="width: 100%;" columns="1" rows="1" layout="grid" paginator="true">                                            
+                                            <p:panelGrid style="width: 100%;">
+                                                <p:row>
+                                                    <p:column  style="width: 10%;"><p:outputLabel value="Apoderado" style="font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column colspan="3" style="width: 90%;" >
+                                                        <p:outputLabel styleClass="fondoInput" value="#{ingresoSolicitudSignosBean.devuelveNombreJuridicoONatural(apoderado.nombres,apoderado.primerApellido,apoderado.segundoApellido)}}" style="width: 30%;" >
+                                                        </p:outputLabel>                                                       
+                                                    </p:column>
+                                                </p:row>        
+                                                <p:row>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="N° Doc." style="display: block; width: 85px; font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{apoderado.numeroDocumento}"></p:outputLabel></p:column>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Dirección" style="font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column style="width: 90%;" styleClass="fondoInput"><p:outputLabel value="#{apoderado.domicilio}" style="width: 98%;"></p:outputLabel></p:column>
+                                                </p:row>
+
+                                                <p:row>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Poder" style="font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{apoderado.numeroPoder}" /></p:column> 
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Expiración" style="font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column style="width: 90%;" styleClass="fondoInput"><p:outputLabel value="#{apoderado.fechaPoder}" style="width: 98%;"><f:convertDateTime pattern="#{sessionState.formatoFecha}"/></p:outputLabel></p:column>
+                                                </p:row>
+
+                                            </p:panelGrid>                             
+                                        </p:dataGrid>
+                                    </fieldset>
+                                    <!--                                    <div align="left">
+                                                                            <p:outputLabel value="Apoderados"/>
+                                                                        </div>
+                                                                        <p:dataTable 
+                                                                            value="# {ingresoSolicitudSignosBean.formularioPI103.apoderados}"
+                                                                            var="apoderado"
+                                                                            style="width: 98%">
+                                                                            <p:column >  
+                                                                                <f:facet name="header" >Nro. Poder </f:facet>
+                                                                                <p:outputLabel value="# {apoderado.numeroPoder}"/>
+                                                                            </p:column>   
+                                                                            <p:column >  
+                                                                                <f:facet name="header" >Expiracion</f:facet>
+                                    
+                                                                            </p:column> 
+                                                                            <p:column >  
+                                                                                <f:facet name="header" >N° Doc.</f:facet>
+                                                                                <p:outputLabel value="# {apoderado.numeroDocumento}"/>
+                                                                            </p:column>                                       
+                                                                            <p:column >  
+                                                                                <f:facet name="header" >Nombres</f:facet>
+                                                                                <p:outputLabel value="# {apoderado.nombres}"/>
+                                                                            </p:column>     
+                                                                            <p:column>
+                                                                                <f:facet name="header">
+                                                                                    Domicilio
+                                                                                </f:facet>
+                                                                                <p:outputLabel value="# {apoderado.domicilio}"/>
+                                                                            </p:column>
+                                                                        </p:dataTable>-->
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column colspan="3">
+                                    <fieldset>
+                                        <legend>
+                                            <p:outputLabel value="Datos del signo registrado" />
+                                        </legend>
+                                        <p:panelGrid style="width: 100%">
+                                            <p:row>
+                                                <p:column style="width: 70%">        
+                                                    <p:dataGrid var="per" value="#{ingresoSolicitudSignosBean.formularioPI103.titularLicenciatarios}"
+                                                                emptyMessage="No existen titulares registrados" 
+                                                                paginatorPosition="bottom"
+                                                                style="width: 100%;"
+                                                                columns="1" rows="1"
+                                                                layout="grid"
+                                                                paginator="true">                                            
+                                                        <p:panelGrid style="width: 100%;">
+
+                                                            <p:row>
+                                                                <p:column  style="width: 10%;"><p:outputLabel value="Titular" style="font-weight: bold"></p:outputLabel></p:column>
+                                                                <p:column colspan="3" style="width: 90%;" styleClass="fondoInput">
+                                                                    <p:outputLabel value="#{per.nombreRazonSocial}" style="width: 98%;">
+                                                                    </p:outputLabel>
+                                                                </p:column>
+                                                            </p:row>                                                                                        
+                                                            <p:row>
+                                                                <p:column  style="width: 10%;"><p:outputLabel value="Dirección" style="font-weight: bold"></p:outputLabel></p:column>
+                                                                <p:column colspan="3" style="width: 90%;" styleClass="fondoInput"><p:outputLabel value="#{per.direccion}" style="width: 98%;"></p:outputLabel></p:column>
+                                                            </p:row> 
+                                                        </p:panelGrid>                             
+                                                    </p:dataGrid>        
+                                                    <p:spacer height="1"/>
+                                                    <p:panelGrid columns="2" >
+                                                        <p:outputLabel value="Signo distintivo:" style="font-weight: bold" />
+                                                        <p:inputTextarea value="#{ingresoSolicitudSignosBean.formularioPI103.modificaciones.signoRegistro}"
+                                                                         rows="2" autoResize="false" styleClass="tituloMarca"
+                                                                         cols="58"
+                                                                         >
+                                                        </p:inputTextarea>
+                                                        <p:outputLabel value="Clase:" style="font-weight: bold"/>
+                                                        <p:inputText value="#{ingresoSolicitudSignosBean.formularioPI103.modificaciones.claseRegistrado}" size="10"/>
+                                                    </p:panelGrid>  
+                                                </p:column>
+                                                <p:column style="vertical-align: top; padding-left: 1%">                                            
+                                                    <p:panelGrid columns="2" >
+                                                        <p:outputLabel value="Género:" style="display:block;width:90px; font-weight: bold"/>
+
+
+                                                        <p:selectOneMenu  value="#{ingresoSolicitudSignosBean.valorTipoGenero}" >
+                                                            <f:selectItems value="#{ingresoSolicitudSignosBean.lstTipoGenero}" var="tipogenero"
+                                                                           itemLabel="#{tipogenero.nombre}" itemValue="#{tipogenero.codigo}"/>
+                                                        </p:selectOneMenu>
+                                                    </p:panelGrid>
+                                                    <p:spacer height="1"/>
+                                                    <h:panelGrid>
+                                                        <h:panelGrid  columns="2" cellspacing="1" rendered="#{examenModificacionBean.panelLema}">
+                                                            <p:outputLabel value="Acompaña a la" />
+                                                            <h:inputTextarea value="MARCA PATITO"  rows="3" cols="31"
+                                                                             onkeyup="this.value = this.value.substring(0, 500);"
+                                                                             >
+                                                            </h:inputTextarea>
+                                                        </h:panelGrid>
+                                                        <h:panelGrid  columns="6" cellpadding="1" rendered="#{examenModificacionBean.panelLema}">                                        
+                                                            <p:outputLabel value="N° registro" />
+                                                            <p:inputText value="1000" size="5"/>
+                                                            <p:selectOneMenu  value="VALOR" >
+                                                                <f:selectItem itemLabel="C" itemValue="" />                                        
+                                                            </p:selectOneMenu>
+                                                            <p:spacer height="1"/>
+                                                            <p:outputLabel value="Fecha" />
+                                                            <p:calendar pattern="dd-MM-yyyy" mask="true" size="9"/>
+                                                        </h:panelGrid>
+                                                    </h:panelGrid>
+                                                </p:column>
+                                            </p:row>                                                                                
+                                        </p:panelGrid>
+                                    </fieldset>
+                                </p:column>
+                            </p:row>
+
+
+
+
+                            <p:row>
+                                <p:column colspan="3">
+                                    <fieldset>
+                                        <legend>
+                                            <p:outputLabel value="Datos del nuevo titular o licenciatario" />
+                                        </legend>      
+                                        <h:panelGrid id="nombre"  style="width: 100%;">
+                                            <h:panelGrid  style="width: 100%;">
+                                                <p:dataGrid var="per" value="#{ingresoSolicitudSignosBean.formularioPI103.tiTularLicenciatarioNuevos}" emptyMessage="No existen solicitantes" id="datosNuevoTItular"
+                                                            style="width: 100%;" columns="1" rows="1" layout="grid" paginator="true" paginatorPosition="bottom">     
+                                                    <p:panelGrid style="width: 80%;">
+                                                        <p:row>
+                                                            <p:column  style="width: 10%;"><p:outputLabel value="Nuevo Titular:" style="font-weight: bold; display: block; width: 90px"></p:outputLabel></p:column>
+                                                            <p:column colspan="3" style="width: 90%;">
+                                                                <p:outputLabel styleClass="fondoInput" value="#{ingresoSolicitudSignosBean.devuelveNombreJuridicoONatural(per.nombreRazonSocial,per.primerApellido,per.segundoApellido)}" style="width: 98%;" >
+                                                                </p:outputLabel>
+
+                                                            </p:column>
+                                                        </p:row>   
+
+                                                        <p:row >
+                                                            <p:column style="width: 10%;"><p:outputLabel value="Pais:" style="font-weight: bold"></p:outputLabel></p:column>
+                                                            <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{ingresoSolicitudSignosBean.devuelvePais(per.pais)}"></p:outputLabel></p:column>
+                                                            <p:column style="width: 10%;"><p:outputLabel value="Departamento:" style="font-weight: bold" rendered="#{per.pais=='BO'}"></p:outputLabel></p:column>
+                                                            <p:column style="width: 90%;" styleClass="fondoInput"><p:outputLabel value="#{ingresoSolicitudSignosBean.devuelveLugarExpedicion(per.solicitudDepartamento)}"></p:outputLabel></p:column>                                                               
+                                                        </p:row>
+
+                                                        <p:row >
+                                                            <p:column style="width: 10%;"><p:outputLabel value="Dirección:" style="font-weight: bold"></p:outputLabel></p:column>
+                                                            <p:column style="width: 55%;" styleClass="fondoInput"><p:outputLabel value="#{per.direccion}" style="width: 98%;"></p:outputLabel></p:column>
+                                                            <p:column style="width: 10%;"><p:outputLabel value="Telefono:" style="font-weight: bold"></p:outputLabel></p:column>
+                                                            <p:column style="width: 90%;" styleClass="fondoInput"><p:outputLabel value="#{per.telefono}" style="width: 98%;"></p:outputLabel></p:column>
+                                                        </p:row>
+
+                                                        <p:row >
+                                                            <p:column style="width: 10%;"><p:outputLabel styleClass="fondoInput" value="email" style="font-weight: bold"></p:outputLabel></p:column>
+                                                            <p:column colspan="3" style="width: 90%;"><p:outputLabel value="#{per.email}" style="width: 98%;"></p:outputLabel></p:column>
+                                                        </p:row>
+
+                                                    </p:panelGrid>  
+                                                </p:dataGrid>                                                
+                                                <!--                                                <p:dataGrid var="per" value="# {ingresoSolicitudSignosBean.formularioPI103.tiTularLicenciatarioNuevos}"
+                                                                                                            emptyMessage="No existen nuevos titulares o licenciatarios" 
+                                                                                                            paginatorPosition="bottom" style="width: 100%;"
+                                                                                                            columns="1" rows="1" layout="grid" paginator="true">                                            
+                                                                                                    <p:panelGrid style="width: 100%;">
+                                                                                                        <p:row>
+                                                                                                            <p:column  style="width: 10%;"><p:outputLabel value="Nuevo Titular"></p:outputLabel></p:column>
+                                                                                                            <p:column colspan="3" style="width: 90%;">
+                                                                                                                <p:inputText value="# {per.nombreRazonSocial}" style="width: 98%;">
+                                                                                                                </p:inputText>
+                                                                                                            </p:column>
+                                                                                                        </p:row>                                     
+                                                                                                        <p:row>
+                                                                                                            <p:column style="width: 10%;">
+                                                
+                                                                                                                <p:outputLabel value="Nacionalidad"></p:outputLabel>
+                                                
+                                                                                                            </p:column>
+                                                                                                            <p:column style="width: 50%;">
+                                                                                                                <p:panelGrid columns="4" style="width: 100%;">
+                                                                                                                    <p:inputText value="# {ingresoSolicitudSignosBean.devuelvePais(per.pais)}" style="width: 100%;"></p:inputText>
+                                                                                                                    <p:spacer width="1"/>
+                                                                                                                    <p:outputLabel value="Departamento"></p:outputLabel>
+                                                                                                                    <p:inputText value="# {ingresoSolicitudSignosBean.devuelveDepartamento(per.solicitudDepartamento)}"></p:inputText>
+                                                                                                                </p:panelGrid>
+                                                                                                            </p:column>
+                                                                                                            <p:column style="width: 20%;">
+                                                                                                                <p:panelGrid columns="2">
+                                                                                                                    <p:outputLabel value="Telefono"></p:outputLabel>
+                                                                                                                    <p:inputText value="# {per.telefono}" ></p:inputText>
+                                                                                                                </p:panelGrid>
+                                                                                                            </p:column>
+                                                                                                        </p:row>
+                                                                                                        <p:row>
+                                                                                                            <p:column  style="width: 20%;"><p:outputLabel value="Dirección"></p:outputLabel></p:column>
+                                                                                                            <p:column colspan="3" style="width: 90%;"><p:inputText value="# {per.direccion}" style="width: 98%;"></p:inputText></p:column>
+                                                                                                        </p:row>
+                                                                                                        <p:row>
+                                                                                                            <p:column style="width: 20%;"><p:outputLabel value="email" ></p:outputLabel></p:column>
+                                                                                                            <p:column colspan="3" style="width: 40%;"><p:inputText value="# {per.email}" style="width: 98%;"></p:inputText></p:column>
+                                                
+                                                                                                        </p:row>
+                                                                                                    </p:panelGrid>                             
+                                                
+                                                                                                </p:dataGrid>        -->
+
+                                            </h:panelGrid>
+                                            <h:panelGrid rendered="#{examenModificacionBean.radioDomicilio}" >                                            
+                                                <p:panelGrid columns="2"  >
+                                                    <p:outputLabel value="Nuevo domicilio" />
+                                                    <p:inputText value="1000" size="107"/>
+                                                    <p:outputLabel value="Nacionalidad / Pais Constitucion" />
+                                                    <p:selectOneMenu value="pais" style="width:70px;">
+                                                        <f:selectItem itemLabel="Bolivia" itemValue="Bolivia" />
+                                                        <f:selectItem itemLabel="Argentina" itemValue="Xbox One" />
+                                                        <f:selectItem itemLabel="Brasil" itemValue="PS4" />
+                                                        <f:selectItem itemLabel="España" itemValue="Wii U" />
+                                                    </p:selectOneMenu>
+                                                </p:panelGrid>
+                                            </h:panelGrid>
+                                            <h:panelGrid rendered="#{examenModificacionBean.radioFusion}" >
+                                                <p:outputLabel value="En caso de Fusion:" styleClass="labelBold"/>
+                                                <p:dataTable var="item" value="listado" >
+                                                    <p:column headerText="Participantes fusion" colspan="3">
+                                                        <h:outputText value="texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto" />
+                                                    </p:column>                                                                                                                       
+                                                </p:dataTable>
+                                            </h:panelGrid>       
+                                            <h:panelGrid rendered="#{examenModificacionBean.radioLU}" columns="5">
+                                                <p:outputLabel value="Plazo:" styleClass="labelBold"/>
+                                                <p:outputLabel value="Inicio" />
+                                                <p:calendar pattern="dd-MM-yyyy" mask="true" size="9"/>
+                                                <p:outputLabel value="Fin" />
+                                                <p:calendar pattern="dd-MM-yyyy" mask="true" size="9"/>
+                                            </h:panelGrid>
+                                        </h:panelGrid>
+                                    </fieldset>
+
+
+                                </p:column>
+
+                            </p:row>
+
+
+                        </p:panelGrid>
+
+
+                        <p:panelGrid id="panelRenovacion" style="width: 100%;" rendered="#{ingresoSolicitudSignosBean.panelPI104}" styleClass="quitarBordes">
+                            <p:row>
+                                <p:column width="50%" style="text-align: center">
+                                    <fieldset>
+                                        <legend>Solicitud de renovación de registro de signo distintivo</legend>
+                                        <br />
+                                        <p:outputLabel value="FORM PI - 104"/>
+                                        <h:panelGrid columns="1" style="width: 100%; padding-left: 20%">                                            
+                                            <p:panelGrid columns="2" >
+                                                <p:outputLabel value="Fecha y hora de solicitud de formulario:" />
+                                                <p:calendar pattern="dd/MM/yyyy HH:mm:ss" mask="true"
+                                                            locale="es"
+                                                            value="#{ingresoSolicitudSignosBean.fechaIngreso}" style="width: 2%"/>
+                                            </p:panelGrid>
+                                        </h:panelGrid>
+                                    </fieldset>
+                                </p:column>
+                                <p:column width="34%" style="text-align: center">
+                                    <p:panelGrid columns="2" style="width: 100%">
+                                        <h:panelGrid columns="2" >
+                                            <p:outputLabel value="Oficina:" style="display: block; width: 80px"/>
+                                            <p:selectOneMenu id="cmbCiudadNotificacionPI104" value="#{ingresoSolicitudSignosBean.oficina}" >
+                                                <f:selectItem itemLabel="Elija regional" itemValue=""/>
+                                                <f:selectItems var="oficina"
+                                                               itemLabel="#{oficina.nombre}"
+                                                               itemValue="#{oficina.codigo}"
+                                                               value="#{ingresoSolicitudSignosBean.listaOficina}" />
+                                            </p:selectOneMenu>
+                                        </h:panelGrid>
+                                        <p:panelGrid style="width: 60%">
+                                            <!--                                            <fieldset>
+                                                                                            <legend>Observacion </legend>
+                                                                                            <p:inputTextarea value="juan perez: Observacion realizada al tramite por mala operación del usuario. (14/05/2016)"
+                                                                                                             style="width: 98%; background: #F0F8FF" scrollHeight="5" rows="3">
+                                                                                            </p:inputTextarea>
+                                                                                            <p:commandButton value="Detalle" icon="ui-icon-seek-next" style="height: 60%" 
+                                                                                                             action="# {ingresoSolicitudSignosBean.abrirObservacionTramite()}"/>
+                                                                                        </fieldset>-->
+                                        </p:panelGrid>
+
+                                    </p:panelGrid>
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column width="100%" style="text-align: left" colspan="3">
+                                    <fieldset style="text-align: center">
+                                        <legend>Datos de la renovación</legend>
+                                        <fieldset style="text-align: left">
+                                            <legend><p:outputLabel value="Lista de titulares" /></legend>
+                                            <p:dataGrid var="per" value="#{ingresoSolicitudSignosBean.formularioPI104.renTitularRegistrados}"
+                                                        emptyMessage="No existen titulares registrados" 
+                                                        paginatorPosition="bottom"
+                                                        style="width: 100%;"
+                                                        columns="1" rows="1"
+                                                        layout="grid"
+                                                        paginator="true">                                            
+                                                <p:panelGrid style="width: 100%;">
+
+                                                    <p:row>
+                                                        <p:column  style="width: 10%;"><p:outputLabel value="Titular" style="font-weight: bold"></p:outputLabel></p:column>
+                                                        <p:column colspan="3" style="width: 90%;" styleClass="fondoInput">
+                                                            <p:outputLabel value="#{ingresoSolicitudSignosBean.devuelveNombreJuridicoONatural(per.nombreRazonSocial,per.primerApellido,per.segundoApellido)}" 
+                                                                           style="width: 98%;">
+                                                            </p:outputLabel>
+                                                        </p:column>
+                                                    </p:row>                                                                                        
+                                                    <p:row>
+                                                        <p:column  style="width: 10%;"><p:outputLabel value="Dirección" style="font-weight: bold"></p:outputLabel></p:column>
+                                                        <p:column colspan="3" style="width: 90%;" styleClass="fondoInput"><p:outputLabel value="#{per.direccion}" style="width: 98%;"></p:outputLabel></p:column>
+                                                    </p:row> 
+                                                </p:panelGrid>                             
+
+                                            </p:dataGrid>
+                                        </fieldset>
+
+                                        <!--                                        <p:dataTable 
+                                                                                    value="# {ingresoSolicitudSignosBean.formularioPI104.renTitularRegistrados}"
+                                                                                    style="width: 98%"
+                                                                                    var="titularRegistrado">
+                                                                                    <p:column >  
+                                                                                        <f:facet name="header" >Nombres </f:facet>
+                                                                                        <h:outputText value="# {titularRegistrado.nombreRazonSocial} # {titularRegistrado.primerApellido} # {titularRegistrado.segundoApellido}" />
+                                                                                    </p:column>   
+                                                                                    <p:column >  
+                                                                                        <f:facet name="header" >Domicilio</f:facet>
+                                                                                        <h:outputText value="# {titularRegistrado.direccion}">
+                                                                                        </h:outputText>
+                                                                                    </p:column> 
+                                                                                </p:dataTable>-->
+
+                                        <div align="center">
+                                            <p:panelGrid columns="2" style="width: 45%">
+                                                <p:outputLabel value="Tipo de signo" />
+                                                <p:outputLabel styleClass="fondoInput" value="#{ingresoSolicitudSignosBean.devuelveTipoGenero(ingresoSolicitudSignosBean.formularioPI104.solicitudRenovaciones.tipoGenero)}" />                                                
+                                                <p:outputLabel value="Clasificación internacional NIZA" />
+                                                <p:outputLabel styleClass="fondoInput"  value="#{ingresoSolicitudSignosBean.formularioPI104.solicitudRenovaciones.claseNizaRegistrado}" />
+                                                <p:panelGrid columns="3">
+                                                    <p:outputLabel value="Numero de registro" style="display: block; width: 115px"/>
+                                                    <p:inputText value="#{ingresoSolicitudSignosBean.valornumeroRegistroRegistrado}" style="width: 50px"/>
+                                                    <p:inputText value="C" style="width: 20%"/>
+                                                </p:panelGrid>
+                                                <p:panelGrid columns="2">
+                                                    <p:outputLabel value="Fecha otorgación de la marca:" style="display: block; width: 180px"/>
+                                                    <p:calendar pattern="dd-MM-yyyy" mask="true" value="#{ingresoSolicitudSignosBean.fechaOtorgacionMarca}" size="10"/>
+                                                </p:panelGrid>
+                                                <p:outputLabel value="Numero de última renovación"/>
+                                                <p:inputText value="#{ingresoSolicitudSignosBean.valorNumeroUltimaRenovacion}"/>
+
+                                                <p:outputLabel value="Numero de penúltima renovación"/>
+                                                <p:inputText value="#{ingresoSolicitudSignosBean.valorNumeroPenultimaRenovacion}"/>
+
+                                                <p:outputLabel value="Lista de productos o servicios"/>
+                                                <p:inputTextarea value="#{ingresoSolicitudSignosBean.valorListaProductosLimitacion}"
+                                                                 style="width: 98%;" scrollHeight="5" rows="3">
+                                                </p:inputTextarea>
+
+                                                <p:outputLabel value="Clase NIZA actual" />
+
+                                                <p:selectOneMenu value="#{ingresoSolicitudSignosBean.valorClaseNizaReclasificacion}">
+                                                    <f:selectItem itemLabel="Sin clase niza" itemValue="46"/>
+                                                    <f:selectItem itemLabel="Ninguno" itemValue="47"/>
+                                                    <f:selectItems value="#{ingresoSolicitudSignosBean.lstClaseNiza}" 
+                                                                   var="claseNiza"
+                                                                   itemLabel="#{claseNiza.numeroClaseNiza}" itemValue="#{claseNiza.idClaseNiza}" />
+                                                </p:selectOneMenu>
+                                            </p:panelGrid>
+                                        </div>
+                                    </fieldset>
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column width="40%" style="text-align: left" colspan="3">
+                                    <fieldset>
+                                        <legend>
+                                            <p:outputLabel value="Datos del solicitante" /></legend>
+                                        <p:dataGrid 
+                                            var="solicitante" value="#{ingresoSolicitudSignosBean.formularioPI104.solicitantes}" 
+                                            emptyMessage="No existen solicitantes" 
+                                            style="width: 100%;" 
+                                            columns="1" rows="1" layout="grid" paginator="true" paginatorPosition="bottom">     
+                                            <p:panelGrid style="width: 100%;">
+                                                <p:row>
+                                                    <p:column  style="width: 10%;"><p:outputLabel value="Solicitante" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                    <p:column  style="width: 40%;" styleClass="fondoInput">
+                                                        <p:outputLabel id="texto" value="#{ingresoSolicitudSignosBean.devuelveNombreJuridicoONatural(solicitante.nombreRazonSocial, solicitante.primerApellido, solicitante.segundoApellido)}" style="width: 98%;" >
+                                                        </p:outputLabel>
+
+                                                    </p:column>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Tipo titular" style="display: block; width: 105px; font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column style="width: 90%;" styleClass="fondoInput"><p:outputLabel value="#{ingresoSolicitudSignosBean.devuelveTipoTitular(solicitante.tipoPersona)}" style="display: block; width: 160px"></p:outputLabel></p:column>                                                
+                                                </p:row>   
+                                                <p:row>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="N° Doc." style="display: block; width: 85px; font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{solicitante.numeroDocumento}"></p:outputLabel></p:column>
+                                                    <p:column  style="width: 10%;"><p:outputLabel value="Dirección" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                    <p:column colspan="3" style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{solicitante.domicilio}" style="width: 98%;"></p:outputLabel></p:column>
+                                                </p:row>
+
+
+                                                <p:row>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Pais" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{ingresoSolicitudSignosBean.devuelvePais(solicitante.pais)}"></p:outputLabel></p:column>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Departamento" style="font-weight: bold;" rendered="#{solicitante.pais=='BO'}"></p:outputLabel> </p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{ingresoSolicitudSignosBean.devuelveDepartamento(solicitante.departamentoSolicitud)}" ></p:outputLabel></p:column>                                                
+                                                </p:row>
+
+                                            </p:panelGrid>  
+                                        </p:dataGrid>  
+                                    </fieldset>
+
+                                    <!--                                    <p:dataTable value="# {ingresoSolicitudSignosBean.formularioPI104.solicitantes}"
+                                                                                     var="solicitante"
+                                                                                     style="width: 98%; text-align: center ">
+                                                                            <p:column >
+                                                                                <f:facet name="header" >N° Doc. </f:facet>
+                                                                                <p:outputLabel value="# {solicitante.numeroDocumento}" />
+                                                                            </p:column>
+                                                                            <p:column>  
+                                                                                <f:facet name="header">Nombre</f:facet>
+                                                                                <p:outputLabel value="# {solicitante.nombreRazonSocial}"/>
+                                                                            </p:column>
+                                                                            <p:column>
+                                                                                <f:facet name="header">Tipo titular</f:facet>
+                                                                                <p:outputLabel value="# {ingresoSolicitudSignosBean.devuelveTipoTitular(solicitante.tipoPersona)}"/>
+                                                                            </p:column>
+                                                                            <p:column>
+                                                                                <f:facet name="header">País</f:facet>
+                                                                                <p:outputLabel value="# {ingresoSolicitudSignosBean.devuelvePais(solicitante.pais)}"/>
+                                                                            </p:column>
+                                                                            <p:column>
+                                                                                <f:facet name="header">Departamento</f:facet>
+                                                                                <p:outputLabel value="# {solicitante.departamentoSolicitud}"/>
+                                                                            </p:column>
+                                                                            <p:column>                                  
+                                                                                <f:facet name="header">Dirección</f:facet>
+                                                                                <p:outputLabel value="# {solicitante.domicilio}"/>
+                                                                            </p:column>
+                                                                        </p:dataTable>-->
+
+
+
+                                </p:column>
+
+                            </p:row>
+                            <p:row>
+
+                                <p:column width="40%" style="text-align: left" colspan="3">
+                                    <fieldset>
+                                        <legend>
+                                            <p:outputLabel value="Datos del apoderado" />
+                                        </legend>
+                                        <p:dataGrid  value="#{ingresoSolicitudSignosBean.formularioPI104.apoderados}"
+                                                     var="apoderado" emptyMessage="No existen apoderados" 
+                                                     paginatorPosition="bottom" style="width: 100%;" columns="1" rows="1" layout="grid" paginator="true">                                            
+                                            <p:panelGrid style="width: 100%;">
+                                                <p:row>
+                                                    <p:column  style="width: 10%;"><p:outputLabel value="Apoderado" style="font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column colspan="3" style="width: 90%;">
+                                                        <p:outputLabel styleClass="fondoInput" value="#{ingresoSolicitudSignosBean.devuelveNombreJuridicoONatural(apoderado.nombres, apoderado.primerApellido, apoderado.segundoApellido)}" style="width: 30%;" >
+                                                        </p:outputLabel>                                                       
+                                                    </p:column>
+                                                </p:row>        
+                                                <p:row>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="N° Doc." style="display: block; width: 85px; font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{apoderado.numeroDocumento}"></p:outputLabel></p:column>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Dirección" style="font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column style="width: 90%;" styleClass="fondoInput"><p:outputLabel value="#{apoderado.domicilio}" style="width: 98%;"></p:outputLabel></p:column>
+                                                </p:row>
+
+                                                <p:row>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Poder" style="font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{apoderado.numeroPoder}" /></p:column> 
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Expiración" style="font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column style="width: 90%;" styleClass="fondoInput"><p:outputLabel value="#{apoderado.fechaPoder}" style="width: 98%;"><f:convertDateTime pattern="#{sessionState.formatoFecha}"/></p:outputLabel></p:column>
+                                                </p:row>
+
+                                            </p:panelGrid>                             
+                                        </p:dataGrid>
+                                    </fieldset>
+                                    <!--                                    <p:dataTable 
+                                                                            value="# {ingresoSolicitudSignosBean.formularioPI104.apoderados}"
+                                                                            var="apoderado"
+                                                                            style="width: 98%">
+                                                                            <p:column>
+                                                                                <f:facet name="header">Nro. Poder</f:facet>
+                                                                                <p:outputLabel value="# {apoderado.numeroPoder}"/>
+                                                                            </p:column>   
+                                                                            <p:column>
+                                                                                <f:facet name="header">Expiracion</f:facet>
+                                    
+                                                                            </p:column> 
+                                                                            <p:column >  
+                                                                                <f:facet name="header">N° Doc.</f:facet>
+                                                                                <p:outputLabel value="# {apoderado.numeroDocumento}"/>
+                                                                            </p:column>                                       
+                                                                            <p:column >  
+                                                                                <f:facet name="header">Nombres</f:facet>
+                                                                                <p:outputLabel value="# {apoderado.nombres}"/>
+                                                                            </p:column>     
+                                                                            <p:column>
+                                                                                <f:facet name="header">
+                                                                                    Domicilio
+                                                                                </f:facet>
+                                                                                <p:outputLabel value="# {apoderado.domicilio}"/>
+                                                                            </p:column>
+                                                                        </p:dataTable>-->
+
+                                </p:column>
+
+                            </p:row>
+                        </p:panelGrid>
+
+
+                        <p:panelGrid id="panelNoEncontrado" style="width: 100%"
+                                     rendered="#{ingresoSolicitudSignosBean.panelNoEncontrado}"
+                                     styleClass="quitarBordes">
+                            <p:row>
+                                <p:column width="100%">
+
+                                    <fieldset>
+
+                                        <legend>
+                                            Datos del Tramite
+                                        </legend>
+
+                                        <p:outputLabel value="Registro no encontrado" />
+                                    </fieldset>
+
+                                </p:column>
+
+                            </p:row>
+
+                        </p:panelGrid>
+
+                        <p:panelGrid id="panelRequisitos" style="width: 100%;" styleClass="quitarBordes"
+                                     rendered="#{ingresoSolicitudSignosBean.panelPI100
+                                                 or ingresoSolicitudSignosBean.panelPI101
+                                                 or ingresoSolicitudSignosBean.panelPI102
+                                                 or ingresoSolicitudSignosBean.panelPI103
+                                                 or ingresoSolicitudSignosBean.panelPI104}">
+
+                            <p:row>
+                                <p:column colspan="5" width="100%" style="text-align: center">
+
+                                    <!--                                <p:commandButton value="Verificar requisitos" style="height: 30px; width: 25%"
+                                                                                     action="# {ingresoSolicitudSignosBean.accionGenerarPlantillaVentanilla()}"
+                                                                                     icon="ui-icon-circle-zoomin"
+                                                                                     ajax="false"/>-->
+
+                                    <!--                                <p:commandButton value="Verificar requisitos" style="height: 30px; width: 25%"
+                                                                                     actionListener="# {ingresoSolicitudSignosBean.accionPanelGenerarPlantillaVentanilla()}"
+                                                                                     icon="ui-icon-circle-zoomin"
+                                                                                     ajax="false">
+                                                                        <p:ajax event="dialogReturn" listener="# {ingresoSolicitudSignosBean.obtenerListadoPlantilla}"/>
+                                    
+                                                                    </p:commandButton>-->
+
+
+<!--                                    <p:commandButton value="Ver Registro" style="height: 30px; width: 25%"
+                                                     action="# {ingresoSolicitudSignosBean.accionIngresarRegistro()}"
+                                                     icon="ui-icon-circle-check" 
+                                                     ajax="false"/>-->
+                                </p:column>
+                            </p:row>
+
+
+                        </p:panelGrid>
+
+                    </h:panelGrid>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <!--                <br></br>
+                                    <table id="png2" border="1" width="100%">
+                                        <tr>
+                                            <td colspan="5" width="100%">
+                                                <fieldset>
+                                                    <table width="100%">
+                                                        <tr>
+                                                            <td width="50%">
+                                                                <p:panelGrid columns="1">
+                                                                    <p:outputLabel value="INGRESO"/>
+                                                                    <p:outputLabel value="SOLICITUD DE SIGNO DISTINTIVO"/>
+                                                                </p:panelGrid>
+                    
+                                                            </td>
+                                                            <td width="50%" align="right">
+                                                                <p:panelGrid columns="1">
+                                                                    <p:outputLabel value="NT: 0000/2009"/>
+                                                                    <p:outputLabel value="20000001630007200"/>
+                                                                </p:panelGrid>
+                                                            </td>
+                                                        </tr>
+                                                    </table>                                
+                                                </fieldset>
+                    
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>11</td>
+                                            <td>22</td>
+                                            <td>33</td>                                                 
+                                            <td>44</td>                                                 
+                                            <td>55</td>                                                 
+                                        </tr>
+                                    </table>-->
+
+
+
+
+
+
+
+
+
+                    <!--
+                    <p:panelGrid  style="width: 100%;border: 1px solid;" >
+                                                    <p:row>
+                                                        <p:column style="width: 50%; text-align: center;border: 1px solid;">
+                    -->
+
+
+
+
+                </h:form>
+
+
+
+            </ui:define>
+
+        </ui:composition>        
+    </body>
+</html>

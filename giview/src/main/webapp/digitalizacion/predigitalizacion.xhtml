@@ -1,0 +1,106 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <body>
+        <ui:composition template="./../WEB-INF/facelets/templates/Template.xhtml">
+            <ui:define name="content">
+
+
+        <h:form id="frmpredigitalizacion">
+
+
+            <p:panel header="Digitalizacion de Documentos TRAMITE: SM-001956-2016" style="text-align: center">
+                <p:spacer height="20"></p:spacer>
+
+
+                <p:panelGrid styleClass="quitarBorder" style="width: 40%; margin: 0 auto;">
+                    <p:row>
+                        <p:column colspan="2">
+                            <p:commandButton value="Ingreso el Numero de Solicitud Asignado" 
+                                             disabled="false" style="border-style: none" icon="ui-icon-info" >
+
+                            </p:commandButton> 
+                        </p:column>
+
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Codigo Asignado" />
+                        </p:column>
+                        <p:column>
+                            <p:panelGrid styleClass="quitarBordes" columns="5">
+                                <p:selectOneMenu id="console"  style="width:60px;">
+                                    <f:selectItem itemLabel="SM" itemValue="uno" />
+                                    <f:selectItem itemLabel="CN" itemValue="dos" />
+                                    <f:selectItem itemLabel="SR" itemValue="dos" />
+                                </p:selectOneMenu>
+                                <p:outputLabel value=" - " />
+                                <p:inputText size="10" />
+                                <p:outputLabel value=" - " />
+                                <p:inputText value="2016" size="10" />
+                            </p:panelGrid>
+
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:commandButton value="Buscar" 
+                                             disabled="false" icon="ui-icon-search" >
+
+                            </p:commandButton> 
+                        </p:column>
+                        <p:column>
+                            <p:commandButton value="Limpiar Busqueda" 
+                                             disabled="false" icon="ui-icon-arrowrefresh-1-w" >
+
+                            </p:commandButton> 
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+                <p:spacer height="20px"></p:spacer>
+
+                <div align="center">
+                    <p:panelGrid styleClass="quitarBordes" >
+                        <p:row>
+                            <p:column rowspan="4">    <p:graphicImage url="/images/agenda.jpg" height="180" width="150"/></p:column>
+                            <p:column> <p:outputLabel value="Numero de Solicitud Marca (SM)" /></p:column>
+                            <p:column> <p:inputText value="SM-000569-2016" size="20" /></p:column>
+
+                        </p:row>
+                        <p:row>
+
+                            <p:column> <p:outputLabel value="Codigo Dia" style="text-align: right"/></p:column>
+                            <p:column><p:inputText value="1025201658" size="20" /></p:column>
+                        </p:row>
+                        <p:row>
+
+                            <p:column><p:outputLabel value="Tipo Tramite" /></p:column>
+                            <p:column><p:inputText value="Registro en el Area de signos" size="20" /></p:column>
+                        </p:row> 
+                        <p:row>
+                            <p:column colspan="2">
+                                <p:commandButton  value="Digitalizar Documentos"
+                                                  action="#{preDigitalizacionBean.ingresarDigitalizacion()}"
+                                                  icon="ui-icon-circle-arrow-s">
+                                </p:commandButton>
+                            </p:column>
+                        </p:row> 
+                    </p:panelGrid> 
+                </div>
+
+
+
+
+
+            </p:panel>
+        </h:form>
+            </ui:define>
+        </ui:composition>
+
+    </body>
+</html>

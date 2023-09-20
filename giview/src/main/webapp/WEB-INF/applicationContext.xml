@@ -1,0 +1,518 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+ 
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd">
+ 
+     
+    <!--Pool de conexiones base hidra -->
+<!--    <bean id="dataSourceGI" class="org.springframework.jndi.JndiObjectFactoryBean">
+        <property name="jndiName" value="jndihidra"/>
+        <property name="resourceRef" value="true"/>
+    </bean>-->
+
+    <context:annotation-config/>
+    <!--<context:component-scan base-package="snp.gob.bo.gimodel.servicio.impl" />-->  
+      
+    <!--Conexion Postgres bdhidra-->
+    <bean id="dataSourceGI" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="org.postgresql.Driver"/>
+        <property name="url" value="jdbc:postgresql://10.0.139.27:5432/hidra15"/>        
+        <property name="username" value="chano"/>
+        <property name="password" value="r0j4s"/>
+    </bean>
+   
+ 
+    <!--JDBC-->
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <constructor-arg ref="dataSourceGI"></constructor-arg>
+    </bean>
+  
+   
+    <bean id="transactionManagerHidra"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+
+      
+    <tx:annotation-driven transaction-manager="transactionManagerHidra"/>
+   
+   
+    <bean id="dominioService" class="snp.gob.bo.gimodel.servicio.impl.DominioServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+   
+    <bean id="ingresoFormularioService" class="snp.gob.bo.gimodel.solicitudes.servicio.impl.IngresoFormularioServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+   
+    <bean id="sigSignoMarcaService" class="snp.gob.bo.gimodel.servicio.impl.SigSignoMarcaServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+   
+    <bean id="sigTipoSignoService" class="snp.gob.bo.gimodel.servicio.impl.SigTipoSignoServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+   
+    <bean id="sigSignoClaseNizaService" class="snp.gob.bo.gimodel.servicio.impl.SigSignoClaseNizaServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+   
+    <bean id="claseNizaService" class="snp.gob.bo.gimodel.servicio.impl.ClaseNizaServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+   
+    <bean id="usuarioMenuService" class="snp.gob.bo.gimodel.servicio.impl.UsuarioMenuServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+   
+    <bean id="sigDireccionDeNotificacionService" class="snp.gob.bo.gimodel.servicio.impl.SigDireccionDeNotificacionServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+   
+    <bean id="sigPrioridadPreferencia" class="snp.gob.bo.gimodel.servicio.impl.SigPrioridadPreferenciaServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+   
+    <bean id="sigLemaComercialService" class="snp.gob.bo.gimodel.servicio.impl.SigLemaComercialServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+   
+    <bean id="datoElementoFormularioService" class="snp.gob.bo.gimodel.servicio.impl.DatoElementoFormularioServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+   
+    <bean id="elementoFormularioTramiteService" class="snp.gob.bo.gimodel.servicio.impl.ElementoFormularioTramiteServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+   
+   
+    <bean id="seguimientoService" class="snp.gob.bo.gimodel.servicio.impl.SeguimientoServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+   
+   
+   
+    <bean id="sigSolicitanteApoderadoService" class="snp.gob.bo.gimodel.servicio.impl.SigSolicitanteApoderadoServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+    <bean id="usuarioPaginaService" class="snp.gob.bo.gimodel.servicio.impl.UsuarioPaginaServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+    <bean id="notificacionService" class="snp.gob.bo.gimodel.servicio.impl.NotificacionServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+    <bean id="listaUsuarioRolService" class="snp.gob.bo.gimodel.servicio.impl.ListaUsuarioRolServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+    <!--Servicios modificacion-->
+    <bean id="modDireccionDeNotificacionService" class="snp.gob.bo.gimodel.servicio.impl.ModDireccionDeNotificacionServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>    
+    <bean id="modModificacionService" class="snp.gob.bo.gimodel.servicio.impl.ModModificacionServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>    
+   
+    <bean id="modResolucionService" class="snp.gob.bo.gimodel.servicio.impl.ModResolucionServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>    
+       
+    <bean id="modSolicitanteApoderadoService" class="snp.gob.bo.gimodel.servicio.impl.ModSolicitanteApoderadoServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>    
+    <bean id="modTitularLicencitarioNuevoService" class="snp.gob.bo.gimodel.servicio.impl.ModTitularLicenciatarioNuevoServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>    
+    <bean id="modTitularLicenciatarioRegistradoService" class="snp.gob.bo.gimodel.servicio.impl.ModTitularLicenciatarioRegistradoServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+ 
+    <bean id="modTipoSignoService" class="snp.gob.bo.gimodel.servicio.impl.ModTipoSignoServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+    <bean id="busquedaModificacionResultadoService" class="snp.gob.bo.gimodel.servicio.impl.BusquedaModificacionResultadoServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+    <bean id="modHistorialService" class="snp.gob.bo.gimodel.servicio.impl.ModHistorialServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+ 
+    <bean id="comunService" class="snp.gob.bo.gimodel.servicio.impl.ComunServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+    <!--SERVICIOS DE OPOSICIONES-->
+    <bean id="oposicionService" class="snp.gob.bo.gimodel.servicio.impl.OposicionServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+     
+    <bean id="opoSolicitanteApoderadoService" class="snp.gob.bo.gimodel.servicio.impl.OpoSolicitanteapoderadoServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+   
+    <bean id="opoNotificacionService" class="snp.gob.bo.gimodel.servicio.impl.OpoNotificacionServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+   
+    <bean id="opoMarcaDemandanteService" class="snp.gob.bo.gimodel.servicio.impl.OpoMarcademandanteServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+   
+    <bean id="opoMarcaDemandadaService" class="snp.gob.bo.gimodel.servicio.impl.OpoMarcademandadaServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+   
+    <bean id="opoGeneralService" class="snp.gob.bo.gimodel.servicio.impl.OpoGeneralServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+   
+    <bean id="observacionTramiteService" class="snp.gob.bo.gimodel.servicio.impl.ObservacionTramiteServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+   
+    <bean id="expedienteService" class="snp.gob.bo.gimodel.servicio.impl.ExpedienteServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+   
+     
+    <bean id="opoEventoService" class="snp.gob.bo.gimodel.servicio.impl.OpoEventoServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+   
+    <bean id="opoFechaLimiteService" class="snp.gob.bo.gimodel.servicio.impl.OpoFechaLimiteServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+   
+    <bean id="opoHistorialService" class="snp.gob.bo.gimodel.servicio.impl.OpoHistorialServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+   
+    <bean id="opoActividadService" class="snp.gob.bo.gimodel.servicio.impl.OpoActividadServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+   
+    <bean id="opoEstadoService" class="snp.gob.bo.gimodel.servicio.impl.OpoEstadoServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+    <bean id="opoResolucionService" class="snp.gob.bo.gimodel.servicio.impl.OpoResolucionServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+    <bean id="opoRecursoService" class="snp.gob.bo.gimodel.servicio.impl.OpoRecursoServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+   
+    <bean id="busquedaOposicionService" class="snp.gob.bo.gimodel.servicio.impl.BusquedaOposicionServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+   
+    <bean id="gestionCalidadService" class="snp.gob.bo.gimodel.servicio.impl.GestionCalidadServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+    <bean id="flujoTiempoService" class="snp.gob.bo.gimodel.servicio.impl.FlujoTiempoServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+    <bean id="flujoSeguimientoService" class="snp.gob.bo.gimodel.servicio.impl.FlujoSeguimientoServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+    <!-- FIN DE SERVICO DE OPOSICION-->
+ 
+ 
+    <!--SERVICIOS RENOVACIONES-->
+    <bean id="renDireccionDeNotificacionService" class="snp.gob.bo.gimodel.servicio.impl.RenDireccionDeNotificacionServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+   
+    <bean id="renRenovacionService" class="snp.gob.bo.gimodel.servicio.impl.RenRenovacionServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+   
+    <bean id="renResolucionService" class="snp.gob.bo.gimodel.servicio.impl.RenResolucionServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+   
+    <bean id="renSolicitanteApoderadoService" class="snp.gob.bo.gimodel.servicio.impl.RenSolicitanteApoderadoServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+   
+    <bean id="renSolicitudRenovacionService" class="snp.gob.bo.gimodel.servicio.impl.RenSolicitudRenovacionServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+   
+    <bean id="renTitularRegistradoService" class="snp.gob.bo.gimodel.servicio.impl.RenTitularRegistradoServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+   
+    <bean id="correlativoService" class="snp.gob.bo.gimodel.servicio.impl.CorrelativoServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+   
+    <bean id="correlativoRegionalService" class="snp.gob.bo.gimodel.servicio.impl.CorrelativoRegionalServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+   
+    <bean id="renTipoSignoService" class="snp.gob.bo.gimodel.servicio.impl.RenTipoSignoServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+   
+    <bean id="renHistorialService" class="snp.gob.bo.gimodel.servicio.impl.RenHistorialServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+    <bean id="busquedaHistorialRenovacionService" class="snp.gob.bo.gimodel.servicio.impl.BusquedaHistorialRenovacionServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+    <!--FIN SERVICIOS RENOVACIONES-->
+   
+    <bean id="documentoService" class="snp.gob.bo.gimodel.servicio.impl.DocumentoServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+   
+    <bean id="usuarioEtapaService" class="snp.gob.bo.gimodel.servicio.impl.UsuarioEtapaServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+   
+    <!--SERVICIOS NOTIFICACION -->
+    <bean id="usuarioService" class="snp.gob.bo.gimodel.servicio.impl.UsuarioServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+    <bean id="notificacionBuzonService" class="snp.gob.bo.gimodel.servicio.impl.NotificacionBuzonServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+    <bean id="notificacionHistorialService" class="snp.gob.bo.gimodel.servicio.impl.NotificacionHistorialServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+    <bean id="notificacionBusquedaService" class="snp.gob.bo.gimodel.servicio.impl.NotificacionBusquedaServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+    <!--SERVICIOS PODER -->
+    <bean id="poderService" class="snp.gob.bo.gimodel.servicio.impl.PoderServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+    <bean id="busquedaMarcaResultadoService" class="snp.gob.bo.gimodel.servicio.impl.BusquedaMarcaResultadoServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+    <!--FIN SERVICIOS NOTIFICACION -->
+   
+    <!-- SERVICIOS DIGITALIZACION-->
+    <!--    <bean id="sigDocumentoService" class="snp.gob.bo.gimodel.servicio.impl.SigDocumentoServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>-->
+   
+    <!--SERVICIOS PUBLICACION -->
+    <bean id="sigPublicacionService" class="snp.gob.bo.gimodel.servicio.impl.SigPublicacionServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>      
+    <bean id="sigDetallePublicacionService" class="snp.gob.bo.gimodel.servicio.impl.SigDetallePublicacionServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+    <!--FIN SERVICIOS PUBLICACION-->
+   
+    <!--SERVICIOS PUBLICACION -->
+    <bean id="seccionSubPublicacionService" class="snp.gob.bo.gimodel.servicio.impl.SeccionSubPublicacionServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>      
+    <!--FIN SERVICIOS PUBLICACION-->
+   
+    <!--SERVICIOS ETAPA -->
+    <bean id="etapaService" class="snp.gob.bo.gimodel.servicio.impl.EtapaServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+   
+    <bean id="sigRegistroService" class="snp.gob.bo.gimodel.servicio.impl.SigRegistroServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+   
+    <!--FIN SERVICIOS REGISTRO-->
+   
+    <!--SERVICIOS STICKER -->
+    <bean id="stickerService" class="snp.gob.bo.gimodel.servicio.impl.StickerServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+    <!--FIN SERVICIOS REGISTRO -->
+    <!-- SERVICIOS ENTREGA-->
+    <bean id="procuradorService" class="snp.gob.bo.gimodel.servicio.impl.ProcuradorServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+    <bean id="tramiteEntregaService" class="snp.gob.bo.gimodel.servicio.impl.TramiteEntregaServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+    
+    <!--SERVICIOS ENTREGA-->
+    <bean id="tasaService" class="snp.gob.bo.gimodel.servicio.impl.TasaServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+ 
+    <bean id="dosificacionService" class="snp.gob.bo.gimodel.servicio.impl.DosificacionServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+ 
+    <bean id="dosificacionTasaService" class="snp.gob.bo.gimodel.servicio.impl.DosificacionTasaServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+   
+    <bean id="regionalTasaService" class="snp.gob.bo.gimodel.servicio.impl.RegionalServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+   
+    <bean id="depositoService" class="snp.gob.bo.gimodel.servicio.impl.DepositoServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+ 
+    <bean id="reciboDepositoService" class="snp.gob.bo.gimodel.servicio.impl.ReciboDepositoServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+   
+    <bean id="regionalService" class="snp.gob.bo.gimodel.servicio.impl.RegionalServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+ 
+    <bean id="historialService" class="snp.gob.bo.gimodel.servicio.impl.HistorialServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+   
+    <bean id="sigHistorialService" class="snp.gob.bo.gimodel.servicio.impl.SigHistorialServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+   
+   
+    <bean id="reciboService" class="snp.gob.bo.gimodel.servicio.impl.ReciboServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+   
+   
+    <bean id="reciboResultadoService" class="snp.gob.bo.gimodel.servicio.impl.ReciboResultadoServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+   
+    <bean id="reciboAgrupacionService" class="snp.gob.bo.gimodel.servicio.impl.ReciboAgrupacionServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+   
+    <bean id="reciboTasaResultadoService" class="snp.gob.bo.gimodel.servicio.impl.ReciboTasaResultadoServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+   
+    <bean id="historialResultadoService" class="snp.gob.bo.gimodel.servicio.impl.HistorialResultadoServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+   
+    <bean id="logTransService" class="snp.gob.bo.gimodel.servicio.impl.LogTransServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+    
+    <bean id="sistemaService" class="snp.gob.bo.gimodel.servicio.impl.SistemaServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+    <bean id="menuService" class="snp.gob.bo.gimodel.servicio.impl.MenuServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+    <bean id="paginaService" class="snp.gob.bo.gimodel.servicio.impl.PaginaServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+    <bean id="menuPaginaService" class="snp.gob.bo.gimodel.servicio.impl.MenuPaginaServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+    <bean id="entregaTramiteService" class="snp.gob.bo.gimodel.servicio.impl.EntregaTramiteServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean>
+ 
+    <!--Pool de conexiones base usuario externo -->
+       
+<!--    <bean id="dataSourceSO" class="org.springframework.jndi.JndiObjectFactoryBean">
+        <property name="jndiName" value="jndisipi"/>
+        <property name="resourceRef" value="true"/>
+    </bean>-->
+
+    <!--Conexion Postgres bdformulario-->
+    <bean id="dataSourceSO" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="org.postgresql.Driver"/>
+        <property name="url" value="jdbc:postgresql://10.0.139.27:5432/sipi"/>
+        <property name="username" value="chano"/>
+        <property name="password" value="r0j4s"/>
+    </bean>
+   
+    <!--JDBC-->
+    <bean id="jdbcTemplateSO" class="org.springframework.jdbc.core.JdbcTemplate">
+        <constructor-arg ref="dataSourceSO"></constructor-arg>
+    </bean>
+ 
+    <bean id="formularioPI100Service" class="snp.gob.bo.gimodel.solicitudes.servicio.impl.FormularioPI100ServiceImpl">
+        <property name="dataSource" ref="dataSourceSO" />
+    </bean>
+ 
+    <bean id="formularioPI101Service" class="snp.gob.bo.gimodel.solicitudes.servicio.impl.FormularioPI101ServiceImpl">
+        <property name="dataSource" ref="dataSourceSO" />
+    </bean>
+ 
+    <bean id="formularioPI102Service" class="snp.gob.bo.gimodel.solicitudes.servicio.impl.FormularioPI102ServiceImpl">
+        <property name="dataSource" ref="dataSourceSO" />
+    </bean>
+   
+    <bean id="formularioPI103Service" class="snp.gob.bo.gimodel.solicitudes.servicio.impl.FormularioPI103ServiceImpl">
+        <property name="dataSource" ref="dataSourceSO" />
+    </bean>
+   
+    <bean id="formularioPI104Service" class="snp.gob.bo.gimodel.solicitudes.servicio.impl.FormularioPI104ServiceImpl">
+        <property name="dataSource" ref="dataSourceSO" />
+    </bean>
+   
+    <bean id="formularioPI105Service" class="snp.gob.bo.gimodel.solicitudes.servicio.impl.FormularioPI105ServiceImpl">
+        <property name="dataSource" ref="dataSourceSO" />
+    </bean>
+   
+    <bean id="formularioService" class="snp.gob.bo.gimodel.solicitudes.servicio.impl.FormularioServiceImpl">
+        <property name="dataSource" ref="dataSourceSO" />
+    </bean>
+    <bean id="usuarioTramiteService" class="snp.gob.bo.gimodel.servicio.impl.UsuarioTramiteServiceImpl">
+        <property name="dataSource" ref="dataSourceGI" />
+    </bean> 
+   
+    <!--Pool de conexiones base usuario externo -->
+<!--    <bean id="dataSourceGIImagen" class="org.springframework.jndi.JndiObjectFactoryBean">
+        <property name="jndiName" value="jndihidraimagenes"/>
+        <property name="resourceRef" value="true"/>
+    </bean>-->
+    
+    <!--Configuracion Transacciones SPRING Datasource bdhidraimg-->
+    <bean id="dataSourceGIImagen" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="org.postgresql.Driver"/>
+        <property name="url" value="jdbc:postgresql://10.0.139.27:5432/hidraimg"/>
+        <property name="username" value="chano"/>
+        <property name="password" value="r0j4s"/>
+    </bean>
+   
+    <bean id="sigImagenService" class="snp.gob.bo.gimodel.bdimagen.servicio.impl.SigImagenServiceImpl">
+        <property name="dataSource" ref="dataSourceGIImagen" />
+    </bean>
+   
+    <bean id="sigLogoTipoService" class="snp.gob.bo.gimodel.bdimagen.servicio.impl.SigLogoTipoServiceImpl">
+        <property name="dataSource" ref="dataSourceGIImagen" />
+    </bean>
+   
+    <bean id="imagenPojoService" class="snp.gob.bo.gimodel.bdimagen.servicio.impl.ImagenPojoServiceImpl">
+        <property name="dataSource" ref="dataSourceGIImagen" />
+    </bean>
+    <bean id="sigDocumentoService" class="snp.gob.bo.gimodel.bdimagen.servicio.impl.SigDocumentoServiceImpl">
+        <property name="dataSource" ref="dataSourceGIImagen" />
+    </bean>
+    <bean id="sigArchivoDigService" class="snp.gob.bo.gimodel.bdimagen.servicio.impl.SigArchivoDigServiceImpl">
+        <property name="dataSource" ref="dataSourceGIImagen" />
+    </bean>
+    <bean id="modDocumentoService" class="snp.gob.bo.gimodel.bdimagen.servicio.impl.ModDocumentoServiceImpl">
+        <property name="dataSource" ref="dataSourceGIImagen" />
+    </bean>
+    <bean id="modArchivoDigService" class="snp.gob.bo.gimodel.bdimagen.servicio.impl.ModArchivoDigServiceImpl">
+        <property name="dataSource" ref="dataSourceGIImagen" />
+    </bean>
+    <bean id="renDocumentoService" class="snp.gob.bo.gimodel.bdimagen.servicio.impl.RenDocumentoServiceImpl">
+        <property name="dataSource" ref="dataSourceGIImagen" />
+    </bean>
+    <bean id="renArchivoDigService" class="snp.gob.bo.gimodel.bdimagen.servicio.impl.RenArchivoDigServiceImpl">
+        <property name="dataSource" ref="dataSourceGIImagen" />
+    </bean>
+</beans>

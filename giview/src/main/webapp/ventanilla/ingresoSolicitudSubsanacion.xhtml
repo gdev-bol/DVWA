@@ -1,0 +1,1304 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"          
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../WEB-INF/facelets/templates/Template.xhtml">
+
+            <ui:define name="content">
+
+
+
+                <h:form id="frmIngresoTramite">
+                    <p:panelGrid id="panelBusqueda" style="width: 100%;" styleClass="quitarBordes">
+                        <p:row>
+                            <p:column style="width: 100%;" colspan="5">
+                                <p:outputPanel style="padding-bottom: 1px; padding-top: 1px; padding-left:10px; padding-right: 10px;">
+                                    <table>
+                                        <tr valign="middle">
+                                            <td><p:graphicImage library="images" name="flechaTituloAzul.png" width="24" height="24"></p:graphicImage></td>
+                                            <td><p:outputLabel value="Recepción documentos" styleClass="tituloPrincipalFuente"></p:outputLabel></td>
+                                        </tr>
+                                    </table>                    
+                                    <p:separator id="sepTitulo" style="border: 1px #045491 inset;"></p:separator>                    
+                                </p:outputPanel>
+                                
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column colspan="5">
+                                <fieldset>
+                                    <p:panelGrid  style="width: 100%;" >
+                                        <p:row>
+                                            <p:column style="width: 50%; text-align: center;">
+                                                <p:panelGrid columns="1" style="width: 100%;">
+                                                    <p:outputLabel value="Ingreso"/>
+                                                    <p:outputLabel value="Subsanación de trámite"/>
+                                                    <p:outputLabel value="#{ingresoSolicitudTramiteBean.fechaSolicitud}">
+                                                        <f:convertDateTime pattern="#{sessionState.formatoFecha}"/>
+                                                    </p:outputLabel>
+                                                </p:panelGrid>
+                                            </p:column>
+                                            <p:column style="width: 50%; text-align: right;" >
+                                                <p:panelGrid columns="1" style="width: 100%;">
+                                                    <p:outputLabel value=" "/>
+                                                    <p:outputLabel value=" "/>
+                                                </p:panelGrid>
+                                            </p:column>
+                                        </p:row>
+                                    </p:panelGrid>
+                                </fieldset>
+                            </p:column>
+                        </p:row>
+
+                        <p:row>
+
+                            <p:column style="width: 20%; text-align: right" colspan="2">
+                                <p:outputLabel value="Nro. FORM"/>
+                            </p:column>
+
+                            <p:column style="width: 20%; text-align: center">
+                                <fieldset>
+
+                                    <p:panelGrid columns="1" style="width: 100%">
+                                        <p:inputText value="#{ingresoSolicitudTramiteBean.numeroFormulario}" id="txtNumeroFormulario"/>
+                                        <p:outputLabel value="Número de formulario de subsanacion"/>
+                                    </p:panelGrid>
+                                </fieldset>
+                            </p:column>
+                            <p:column style="width: 20%">
+
+
+                                <p:commandButton value="Buscar" actionListener="#{ingresoSolicitudTramiteBean.busquedaFormularioTipoTramite()}"
+                                                 update="todo" icon="ui-icon-search"/>
+                            </p:column>
+                            <p:column style="width: 20%">
+                                <p:panelGrid columns="1">
+                                    <p:outputLabel value=" "/>
+                                    <p:outputLabel value=" "/>
+                                    <p:outputLabel value=" "/>
+                                </p:panelGrid>
+                            </p:column>
+                        </p:row>
+
+                    </p:panelGrid>
+
+                    <h:panelGrid id="todo" style="width: 100%">
+
+                        <p:panelGrid id="panelSignos" style="width: 100%;" rendered="#{ingresoSolicitudTramiteBean.panelPI100}" styleClass="quitarBordes">
+                            <p:row>
+                                <p:column width="25%" style="text-align: center">
+                                    <p:panelGrid columns="1" style="width: 100%">
+
+                                    </p:panelGrid>
+                                </p:column>
+                                <p:column width="25%" style="text-align: center">
+                                    <p:panelGrid columns="1" style="width: 100%">
+                                        <p:outputLabel value="Subsanacion de registro de signo distintivo"/>
+                                        <p:outputLabel value="Nro. FORM PI - 100"/>
+                                        <p:panelGrid columns="2" style="width: 100%">
+                                            <p:outputLabel value="Fecha de solicitud: " />
+                                            <p:calendar pattern="dd-MM-yyyy" mask="true" value="#{ingresoSolicitudTramiteBean.fechaSolicitud}" style="width: 2%"/>
+                                        </p:panelGrid>
+                                    </p:panelGrid>
+
+
+
+                                </p:column>
+                                <p:column width="25%" style="text-align: center">
+                                    <p:panelGrid columns="2" style="width: 100%">
+                                        <p:panelGrid columns="2" style="width: 100%">
+                                            <p:outputLabel value="Oficina:" />
+                                            <p:selectOneMenu id="console" value="hola" >
+                                                <f:selectItem itemLabel="La Paz" itemValue="LPZ" />
+                                                <f:selectItem itemLabel="Cochabamba" itemValue="CBBA" />
+                                                <f:selectItem itemLabel="Chuquisaca" itemValue="CHU" />
+                                                <f:selectItem itemLabel="Sucre" itemValue="SR" />
+                                                <f:selectItem itemLabel="Santa Cruz" itemValue="SCZ" />
+                                                <f:selectItem itemLabel="Tarija" itemValue="TA" />
+                                            </p:selectOneMenu>
+                                        </p:panelGrid>
+
+                                        <p:panelGrid style="width: 60%">
+                                            <fieldset>
+                                                <legend>Observacion </legend>
+                                                <p:inputTextarea value="juan perez: Observacion realizada al tramite por mala operación del usuario. (14/05/2016)"
+                                                                 style="width: 98%; background: #F0F8FF" scrollHeight="5" rows="3">
+                                                </p:inputTextarea>
+                                                <p:commandButton value="Ver observaciones" icon="ui-icon-seek-next" style="height: 60%"
+                                                                 action="#{ingresoSolicitudTramiteBean.abrirObservacionTramite()}"/>
+                                            </fieldset>
+                                        </p:panelGrid>
+
+                                    </p:panelGrid>
+
+
+                                </p:column>
+
+                            </p:row>
+
+                            <p:row>
+                                <p:column width="20%" style="text-align: center">
+
+                                </p:column>
+                                <p:column width="40%" style="text-align: center" colspan="2">
+
+                                    <p:panelGrid style="width: 100%; text-align: center">
+                                        <p:row style="width: 100%; text-align: center">
+                                            <p:column style="width: 50%; text-align: center">
+
+                                                <p:panelGrid columns="2">
+                                                    <p:galleria id="imagenCargadaGaleria2" 
+                                                                value="#{ingresoSolicitudBean.images}"
+                                                                var="image" panelWidth="120" panelHeight="95" 
+                                                                >
+                                                        <p:graphicImage id="graphicImagen2" value="/resources/images/5.jpg" 
+                                                                        title="imagen de la marca" 
+                                                                        width="100%"/>
+                                                    </p:galleria>
+                                                    <p:panelGrid columns="2" style="padding:0">
+                                                        <h:selectBooleanCheckbox id="denominativo" 
+                                                                                 value="true">
+                                                        </h:selectBooleanCheckbox>
+                                                        <p:outputLabel value="Denominativo"/>
+                                                        <h:selectBooleanCheckbox id="figurativa" 
+                                                                                 value="true">
+                                                        </h:selectBooleanCheckbox>
+                                                        <h:outputLabel value="Figurativo"/>
+                                                        <h:selectBooleanCheckbox id="tridimensional" 
+                                                                                 value="false">
+                                                        </h:selectBooleanCheckbox>
+                                                        <h:outputLabel value="Tridimensional"/>
+                                                        <h:selectBooleanCheckbox id="auditivo" 
+                                                                                 value="false">
+                                                        </h:selectBooleanCheckbox>
+                                                        <h:outputLabel value="Auditivo"/>
+                                                        <h:selectBooleanCheckbox id="otro" 
+                                                                                 value="true" >
+                                                        </h:selectBooleanCheckbox>
+
+                                                        <h:panelGrid columns="1" id="otroSigno">
+                                                            <h:outputLabel value="Otro"/><h:inputText id="tipoSignoOtrosDato" value="Otro tipo de dato"/>
+                                                        </h:panelGrid>
+                                                    </p:panelGrid>
+                                                </p:panelGrid>
+
+
+
+
+                                            </p:column>
+                                            <p:column style="width: 50%; text-align: center">
+                                                <p:panelGrid columns="1" style="width: 100%">
+                                                    <p:outputLabel value="Marca:"/> 
+                                                    <p:inputTextarea value="Marca pollo moderno" style="text-align: center; width: 50%"/>
+                                                </p:panelGrid>
+                                            </p:column>
+                                        </p:row>
+
+
+
+                                    </p:panelGrid>
+
+
+
+                                </p:column>
+
+                            </p:row>
+
+                            <p:row>
+                                <p:column width="20%" style="text-align: center">
+
+                                </p:column>
+                                <p:column width="40%" style="text-align: center" colspan="2">
+
+                                    <div align="left">
+                                        <p:outputLabel value="Clase niza"/>
+                                    </div>
+                                    <p:dataTable id="listaClasesNiza" value="Listado"
+                                                 style="width: 98%; text-align: center ">                                                                                     
+                                        <p:column>  
+                                            <f:facet name="header" >N° clase </f:facet>
+                                            <h:outputText value="35" />
+                                        </p:column>
+                                        <p:column>  
+                                            <f:facet name="header">Listado de productos</f:facet>
+                                            <h:outputText value="La clase contiene cafe y sus derivados" />
+                                        </p:column>
+                                    </p:dataTable>
+                                </p:column>
+                            </p:row>
+
+
+                            <p:row>
+                                <p:column width="20%" style="text-align: center">
+
+                                </p:column>
+                                <p:column width="40%" style="text-align: center" colspan="2">
+                                    <div align="left">
+                                        <p:outputLabel value="Solicitantes"/>
+                                    </div>
+                                    <p:dataTable id="listaPersonaEmpresaSolicitante" value="Listado"
+                                                 style="width: 98%; text-align: center ">                                                                                     
+                                        <p:column >  
+                                            <f:facet name="header" >N° Doc. </f:facet>
+                                            <h:outputText value="125633" />
+                                        </p:column>
+                                        <p:column>  
+                                            <f:facet name="header">Nombre</f:facet>
+                                            <h:outputText value="Jorge Perez Peredo" />
+                                        </p:column>
+                                        <p:column>
+                                            <f:facet name="header">Tipo</f:facet>
+                                            <h:outputText value="Natural" />
+                                        </p:column>
+                                        <p:column>
+                                            <f:facet name="header">País</f:facet>
+                                            <h:outputText value="Bolivia" />
+                                        </p:column>
+                                        <p:column>
+                                            <f:facet name="header">Departamento</f:facet>
+                                            <h:outputText value="La Paz" />
+                                        </p:column>
+                                        <p:column>                                  
+                                            <f:facet name="header">Dirección</f:facet>
+                                            <h:outputText value="Calle uno No 125 El Alto Bolivia" />
+                                        </p:column>
+                                    </p:dataTable>
+
+
+
+                                </p:column>
+
+                            </p:row>
+
+
+
+                            <p:row>
+                                <p:column width="20%" style="text-align: center">
+
+                                </p:column>
+                                <p:column width="40%" style="text-align: center" colspan="2">
+                                    <div align="left">
+                                        <p:outputLabel value="Apoderados"/>
+                                    </div>
+                                    <p:dataTable 
+                                        id="listaRepresentante"
+                                        value="listado"
+                                        style="width: 98%">
+                                        <p:column >  
+                                            <f:facet name="header" >Nro. Poder </f:facet>
+                                            <h:outputText value="2014/2016" />
+                                        </p:column>   
+                                        <p:column >  
+                                            <f:facet name="header" >Expiracion</f:facet>
+                                            <h:outputText value="#{ingresoSolicitudBean.fechaSolicitud}">
+                                                <f:convertDateTime pattern="#{sessionState.formatoFecha}"/>
+                                            </h:outputText>
+                                        </p:column> 
+                                        <p:column >  
+                                            <f:facet name="header" >N° Doc.</f:facet>
+                                            <h:outputText value="425632" />
+                                        </p:column>                                       
+                                        <p:column >  
+                                            <f:facet name="header" >Nombres</f:facet>
+                                            <h:outputText value="Kevin Peredo Aguirre" />
+                                        </p:column>     
+                                        <p:column>
+                                            <f:facet name="header">
+                                                Domicilio
+                                            </f:facet>
+                                            <h:outputText value="Calle uno No 12563 " />
+                                        </p:column>
+                                    </p:dataTable>
+
+
+
+                                </p:column>
+
+                            </p:row>
+
+                        </p:panelGrid>
+
+
+                        <p:panelGrid id="panelRotuloComercial" style="width: 100%;" rendered="#{ingresoSolicitudTramiteBean.panelPI101}" styleClass="quitarBordes">
+                            <p:row>
+                                <p:column width="25%" style="text-align: center">
+                                    <p:panelGrid columns="1" style="width: 100%">
+
+                                    </p:panelGrid>
+                                </p:column>
+                                <p:column width="25%" style="text-align: center">
+                                    <p:panelGrid columns="1" style="width: 100%">
+                                        <p:panelGrid columns="1" style="width: 100%">
+                                            <p:outputLabel value="Subsanación de depósito de nombre, rótulo comercial o lema"/>
+                                            <p:outputLabel value="Nro. FORM PI - 101"/>
+                                            <p:panelGrid columns="2" style="width: 100%">
+                                                <p:outputLabel value="Fecha de solicitud: " />
+                                                <p:calendar pattern="dd-MM-yyyy" mask="true" value="#{ingresoSolicitudTramiteBean.fechaSolicitud}" style="width: 2%"/>
+                                            </p:panelGrid>
+                                        </p:panelGrid>
+                                    </p:panelGrid>
+                                </p:column>
+                                <p:column width="25%" style="text-align: center">
+                                    <p:panelGrid columns="2" style="width: 100%">
+                                        <p:panelGrid columns="2" style="width: 100%">
+                                            <p:outputLabel value="Oficina:" />
+                                            <p:selectOneMenu id="dptopnlrotulocomercial" value="departamento" >
+                                                <f:selectItem itemLabel="La Paz" itemValue="LPZ" />
+                                                <f:selectItem itemLabel="Cochabamba" itemValue="CBBA" />
+                                                <f:selectItem itemLabel="Chuquisaca" itemValue="CHU" />
+                                                <f:selectItem itemLabel="Sucre" itemValue="SR" />
+                                                <f:selectItem itemLabel="Santa Cruz" itemValue="SCZ" />
+                                                <f:selectItem itemLabel="Tarija" itemValue="TA" />
+                                            </p:selectOneMenu>
+                                        </p:panelGrid>
+                                        <p:panelGrid style="width: 60%">
+                                            <fieldset>
+                                                <legend>Observacion </legend>
+                                                <p:inputTextarea value="juan perez: Observacion realizada al tramite por mala operación del usuario. (14/05/2016)"
+                                                                 style="width: 98%; background: #F0F8FF" scrollHeight="5" rows="3">
+                                                </p:inputTextarea>
+                                                <p:commandButton value="Detalle" icon="ui-icon-seek-next" style="height: 60%" 
+                                                                 action="#{ingresoSolicitudTramiteBean.abrirObservacionTramite()}"/>
+                                            </fieldset>
+                                        </p:panelGrid>
+
+                                    </p:panelGrid>
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column width="20%" style="text-align: center">
+
+                                </p:column>
+                                <p:column width="40%" style="text-align: center" colspan="2">
+                                    <p:panelGrid style="width: 100%; text-align: center">
+                                        <p:row style="width: 100%; text-align: center">
+                                            <p:column style="width: 50%; text-align: center">
+
+                                                <p:panelGrid columns="2">
+                                                    <p:galleria id="imgpnlrotulocomercial" 
+                                                                value="#{ingresoSolicitudBean.images}"
+                                                                var="image" panelWidth="120" panelHeight="95" 
+                                                                >
+                                                        <p:graphicImage id="gipnlrotulocomercial" value="/resources/images/logotipo1.png" 
+                                                                        title="imagen de la marca" 
+                                                                        width="100%"/>
+                                                    </p:galleria>
+                                                    <p:selectOneRadio id="opcionpnlRotuloComercial" value="valor" layout="grid" columns="1">
+                                                        <f:selectItem itemValue="RC" itemLabel="Rotulo Comercial"/>
+                                                        <f:selectItem itemValue="NC" itemLabel="Nombre Comercial"/>
+                                                        <f:selectItem itemValue="LC" itemLabel="Lema Comercial"/>
+                                                    </p:selectOneRadio>                                                
+                                                </p:panelGrid>
+
+
+
+
+                                            </p:column>
+                                            <p:column style="width: 50%; text-align: center">
+                                                <p:inputTextarea value="Marca Volkswagen" style="text-align: center; width: 50%"/>
+
+                                            </p:column>
+                                        </p:row>
+
+
+
+                                    </p:panelGrid>
+                                </p:column>
+
+                            </p:row>
+                            <p:row>
+                                <p:column width="20%" style="text-align: center">
+
+                                </p:column>
+                                <p:column width="40%" style="text-align: center" colspan="2">
+                                    <fieldset>
+                                        <legend>Clase niza</legend>
+                                        <p:dataTable value="Listado"
+                                                     style="width: 98%; text-align: center ">                                                                                     
+                                            <p:column>  
+                                                <f:facet name="header" >N° clase </f:facet>
+                                                <h:outputText value="0" />
+                                            </p:column>
+                                            <p:column>  
+                                                <f:facet name="header">Listado de productos</f:facet>
+                                                <h:outputText value="Sin clase niza" />
+                                            </p:column>
+                                        </p:dataTable>
+
+                                    </fieldset>
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column width="20%" style="text-align: center">
+
+                                </p:column>
+                                <p:column width="40%" style="text-align: center" colspan="2">
+                                    <fieldset>
+                                        <legend>Listado de solicitantes</legend>
+                                        <p:dataTable value="Listado"
+                                                     style="width: 98%; text-align: center ">                                                                                     
+                                            <p:column >  
+                                                <f:facet name="header" >N° Doc. </f:facet>
+                                                <h:outputText value="100000" />
+                                            </p:column>
+                                            <p:column>  
+                                                <f:facet name="header">Nombre</f:facet>
+                                                <h:outputText value="Importador S.R.L." />
+                                            </p:column>
+                                            <p:column>
+                                                <f:facet name="header">Tipo</f:facet>
+                                                <h:outputText value="Juridico" />
+                                            </p:column>
+                                            <p:column>
+                                                <f:facet name="header">País</f:facet>
+                                                <h:outputText value="Brasil" />
+                                            </p:column>
+                                            <p:column>
+                                                <f:facet name="header">Departamento</f:facet>
+                                                <h:outputText value="" />
+                                            </p:column>
+                                            <p:column>                                  
+                                                <f:facet name="header">Dirección</f:facet>
+                                                <h:outputText value="Calle Joa No 125" />
+                                            </p:column>
+                                        </p:dataTable>
+
+                                    </fieldset>
+
+
+                                </p:column>
+
+                            </p:row>
+                            <p:row>
+                                <p:column width="20%" style="text-align: center">
+
+                                </p:column>
+                                <p:column width="40%" style="text-align: center" colspan="2">
+                                    <fieldset>
+                                        <legend>Listado de apoderados</legend>
+                                        <p:dataTable 
+                                            value="listado"
+                                            style="width: 98%">
+                                            <p:column >  
+                                                <f:facet name="header" >Nro. Poder </f:facet>
+                                                <h:outputText value="2014/2016" />
+                                            </p:column>   
+                                            <p:column >  
+                                                <f:facet name="header" >Expiracion</f:facet>
+                                                <h:outputText value="#{ingresoSolicitudBean.fechaSolicitud}">
+                                                    <f:convertDateTime pattern="#{sessionState.formatoFecha}"/>
+                                                </h:outputText>
+                                            </p:column> 
+                                            <p:column >  
+                                                <f:facet name="header" >N° Doc.</f:facet>
+                                                <h:outputText value="125632" />
+                                            </p:column>                                       
+                                            <p:column >  
+                                                <f:facet name="header" >Nombres</f:facet>
+                                                <h:outputText value="Ramiro Moreno" />
+                                            </p:column>     
+                                            <p:column>
+                                                <f:facet name="header">
+                                                    Domicilio
+                                                </f:facet>
+                                                <h:outputText value="Zona Sur No 125" />
+                                            </p:column>
+                                        </p:dataTable>
+
+                                    </fieldset>
+
+
+                                </p:column>
+
+                            </p:row>
+
+                        </p:panelGrid>
+
+                        <p:panelGrid id="panelLemaComercial" style="width: 100%;" rendered="#{ingresoSolicitudTramiteBean.panelPI102}" styleClass="quitarBordes">
+
+                            <p:row>
+                                <p:column width="25%" style="text-align: center">
+
+                                </p:column>
+                                <p:column width="25%" style="text-align: center">
+                                    <p:panelGrid columns="1" style="width: 100%">
+                                        <p:panelGrid columns="1" style="width: 100%">
+                                            <p:outputLabel value="Subsanacion de lema comercial"/>
+                                            <p:outputLabel value="Nro. FORM PI - 102"/>
+                                            <p:panelGrid columns="2" style="width: 100%">
+                                                <p:outputLabel value="Fecha de Solicitud: " />
+                                                <p:calendar pattern="dd-MM-yyyy" mask="true" value="#{ingresoSolicitudTramiteBean.fechaSolicitud}"
+                                                            style="width: 2%"/>
+                                            </p:panelGrid>
+                                        </p:panelGrid>
+                                    </p:panelGrid>
+                                </p:column>
+                                <p:column width="25%" style="text-align: center">
+                                    <p:panelGrid columns="2" style="width: 100%">
+                                        <p:panelGrid columns="2" style="width: 100%">
+                                            <p:outputLabel value="Oficina:" />
+                                            <p:selectOneMenu value="departamento" >
+                                                <f:selectItem itemLabel="La Paz" itemValue="LPZ" />
+                                                <f:selectItem itemLabel="Cochabamba" itemValue="CBBA" />
+                                                <f:selectItem itemLabel="Chuquisaca" itemValue="CHU" />
+                                                <f:selectItem itemLabel="Sucre" itemValue="SR" />
+                                                <f:selectItem itemLabel="Santa Cruz" itemValue="SCZ" />
+                                                <f:selectItem itemLabel="Tarija" itemValue="TA" />
+                                            </p:selectOneMenu>
+                                        </p:panelGrid>
+                                        <p:panelGrid style="width: 60%">
+                                            <fieldset>
+                                                <legend>Observacion </legend>
+                                                <p:inputTextarea value="juan perez: Observacion realizada al tramite por mala operación del usuario. (14/05/2016)"
+                                                                 style="width: 98%; background: #F0F8FF" scrollHeight="5" rows="3">
+                                                </p:inputTextarea>
+                                                <p:commandButton value="Detalle" icon="ui-icon-seek-next" style="height: 60%" 
+                                                                 action="#{ingresoSolicitudTramiteBean.abrirObservacionTramite()}"/>
+                                            </fieldset>
+                                        </p:panelGrid>
+
+                                    </p:panelGrid>
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:panelGrid style="width: 100%">
+                                    <p:column colspan="3" style="width: 100%; text-align: center">
+                                        <fieldset>
+                                            <legend>Datos del lema comercial</legend>
+                                            <p:panelGrid columns="2" style=" width: 100%; padding: 1em 1em 1em; padding-left: 10%">
+                                                <p:outputLabel value="Frase o lema comercial" />
+
+                                                <p:inputTextarea value="Todos Somos Viva" 
+                                                                 style="width: 70%;height: 70%; overflow:auto; resize: none"
+                                                                 cols="50" rows="6" onkeyup="this.value = this.value.substring(0, 500);">
+                                                </p:inputTextarea>
+
+                                                <p:outputLabel value="Signo solicitado o registrado" />
+                                                <p:inputText value="Volskwagen" />
+
+                                                <p:outputLabel value="SM: " />
+                                                <p:inputText value="SM-0002006-2016" />
+
+                                                <p:outputLabel value="Nro de registro: " />
+                                                <p:panelGrid columns="4" style="width: 50%;">
+                                                    <p:outputLabel value="Nro.: " />
+                                                    <p:inputText value="2000/2016" />
+
+                                                    <p:outputLabel value="Serie: " />
+                                                    <p:inputText value="C" />
+                                                </p:panelGrid>
+
+
+                                                <p:outputLabel value="Vigente hasta: " />
+                                                <p:inputText value="12/04/2016" />
+
+
+
+
+                                            </p:panelGrid>
+
+
+
+                                        </fieldset>
+                                    </p:column>
+
+
+                                </p:panelGrid>
+
+
+
+
+                            </p:row>
+                            <p:row>
+
+                                <p:column width="40%" style="text-align: center" colspan="3">
+                                    <fieldset>
+                                        <legend>Listado de solicitantes</legend>
+                                        <p:dataTable value="Listado"
+                                                     style="width: 98%; text-align: center ">                                                                                     
+                                            <p:column >  
+                                                <f:facet name="header" >N° Doc. </f:facet>
+                                                <h:outputText value="100000" />
+                                            </p:column>
+                                            <p:column>  
+                                                <f:facet name="header">Nombre</f:facet>
+                                                <h:outputText value="Importador S.R.L." />
+                                            </p:column>
+                                            <p:column>
+                                                <f:facet name="header">Tipo</f:facet>
+                                                <h:outputText value="Juridico" />
+                                            </p:column>
+                                            <p:column>
+                                                <f:facet name="header">País</f:facet>
+                                                <h:outputText value="Brasil" />
+                                            </p:column>
+                                            <p:column>
+                                                <f:facet name="header">Departamento</f:facet>
+                                                <h:outputText value="" />
+                                            </p:column>
+                                            <p:column>                                  
+                                                <f:facet name="header">Dirección</f:facet>
+                                                <h:outputText value="Calle Joa No 125" />
+                                            </p:column>
+                                        </p:dataTable>
+
+                                    </fieldset>
+
+
+                                </p:column>
+
+                            </p:row>
+                            <p:row>
+
+                                <p:column width="40%" style="text-align: center" colspan="3">
+                                    <fieldset>
+                                        <legend>Listado de apoderados</legend>
+                                        <p:dataTable 
+                                            value="listado"
+                                            style="width: 98%">
+                                            <p:column >  
+                                                <f:facet name="header" >Nro. poder </f:facet>
+                                                <h:outputText value="2014/2016" />
+                                            </p:column>   
+                                            <p:column >  
+                                                <f:facet name="header" >Expiración</f:facet>
+                                                <h:outputText value="#{ingresoSolicitudBean.fechaSolicitud}">
+                                                    <f:convertDateTime pattern="#{sessionState.formatoFecha}"/>
+                                                </h:outputText>
+                                            </p:column> 
+                                            <p:column >  
+                                                <f:facet name="header" >N° doc.</f:facet>
+                                                <h:outputText value="125632" />
+                                            </p:column>                                       
+                                            <p:column >  
+                                                <f:facet name="header" >Nombres</f:facet>
+                                                <h:outputText value="Ramiro Moreno" />
+                                            </p:column>     
+                                            <p:column>
+                                                <f:facet name="header">
+                                                    Domicilio
+                                                </f:facet>
+                                                <h:outputText value="Zona Sur No 125" />
+                                            </p:column>
+                                        </p:dataTable>
+
+                                    </fieldset>
+
+
+                                </p:column>
+
+                            </p:row>
+
+
+                        </p:panelGrid>
+
+                        <p:panelGrid id="panelModificacion" style="width: 100%;" rendered="#{ingresoSolicitudTramiteBean.panelPI103}" styleClass="quitarBordes">
+                            <p:row>
+                                <p:column width="33%" style="text-align: center" colspan="2">
+                                    <p:panelGrid columns="1" style="width: 100%">
+                                        <p:panelGrid columns="1" style="width: 100%">
+                                            <p:outputLabel value="Subsanación de modificación de registro de signo distintivo"/>
+                                            <p:outputLabel value="Nro. FORM PI - 103"/>
+                                            <p:panelGrid columns="2" style="width: 100%">
+                                                <p:outputLabel value="Fecha de solicitud: " />
+                                                <p:calendar pattern="dd-MM-yyyy" mask="true" value="#{ingresoSolicitudTramiteBean.fechaSolicitud}" style="width: 2%"/>
+                                            </p:panelGrid>
+                                        </p:panelGrid>
+                                    </p:panelGrid>
+                                </p:column>
+                                <p:column width="34%" style="text-align: center">
+                                    <p:panelGrid columns="2" style="width: 100%">
+                                        <p:panelGrid columns="2" style="width: 100%">
+                                            <p:outputLabel value="Oficina:" />
+                                            <p:selectOneMenu value="departamento" >
+                                                <f:selectItem itemLabel="La Paz" itemValue="LPZ" />
+                                                <f:selectItem itemLabel="Cochabamba" itemValue="CBBA" />
+                                                <f:selectItem itemLabel="Chuquisaca" itemValue="CHU" />
+                                                <f:selectItem itemLabel="Sucre" itemValue="SR" />
+                                                <f:selectItem itemLabel="Santa Cruz" itemValue="SCZ" />
+                                                <f:selectItem itemLabel="Tarija" itemValue="TA" />
+                                            </p:selectOneMenu>
+                                        </p:panelGrid>
+                                        <p:panelGrid style="width: 60%">
+                                            <fieldset>
+                                                <legend>Observacion </legend>
+                                                <p:inputTextarea value="juan perez: Observacion realizada al tramite por mala operación del usuario. (14/05/2016)"
+                                                                 style="width: 98%; background: #F0F8FF" scrollHeight="5" rows="3">
+                                                </p:inputTextarea>
+                                                <p:commandButton value="Detalle" icon="ui-icon-seek-next" style="height: 60%" 
+                                                                 action="#{ingresoSolicitudTramiteBean.abrirObservacionTramite()}"/>
+                                            </fieldset>
+                                        </p:panelGrid>
+
+                                    </p:panelGrid>
+                                </p:column>
+                            </p:row>
+
+                            <p:row>
+                                <p:column colspan="3">
+                                    <fieldset>
+                                        <legend>
+                                            <p:outputLabel value="Datos del signo registrado" />
+                                        </legend>
+                                        <p:panelGrid style="width: 100%">
+                                            <p:row>
+                                                <p:column style="width: 70%">        
+                                                    <p:dataGrid var="per" value="#{ingresoSolicitudBean.lstPersonas}" emptyMessage="No existen Titulares" 
+                                                                paginatorPosition="bottom" style="width: 100%;" columns="1" rows="1" layout="grid" paginator="true">                                            
+                                                        <p:panelGrid style="width: 100%;">
+                                                            <p:row>
+                                                                <p:column  style="width: 10%;"><p:outputLabel value="Titular"></p:outputLabel></p:column>
+                                                                <p:column colspan="3" style="width: 90%;">
+                                                                    <p:inputText value="#{per.nombre}" style="width: 98%;">
+                                                                    </p:inputText>
+                                                                </p:column>
+                                                            </p:row>                                                                                        
+                                                            <p:row>
+                                                                <p:column  style="width: 10%;"><p:outputLabel value="Direccion"></p:outputLabel></p:column>
+                                                                <p:column colspan="3" style="width: 90%;"><p:inputText value="#{per.direccion}" style="width: 98%;"></p:inputText></p:column>
+                                                            </p:row>                                    
+                                                        </p:panelGrid>                             
+
+                                                    </p:dataGrid>        
+                                                    <p:spacer height="1"/>
+                                                    <p:panelGrid columns="2" >
+                                                        <p:outputLabel value="Signo distintivo:"  />
+                                                        <h:inputTextarea value="MARCA PATITO"  rows="2" cols="58"
+                                                                         onkeyup="this.value = this.value.substring(0, 500);">
+                                                        </h:inputTextarea>
+                                                        <p:outputLabel value="Clase:" />
+                                                        <p:inputText value="1000" size="10"/>
+                                                    </p:panelGrid>  
+                                                </p:column>
+                                                <p:column style="vertical-align: top; padding-left: 1%">                                            
+                                                    <p:panelGrid columns="2" >
+                                                        <p:outputLabel value="Signo distintivo:" style="display:block;width:90px"/>
+                                                        <p:selectOneMenu  value="#{examenModificacionBean.tipoMarca}" >
+                                                            <f:selectItem itemLabel="MARCA DE PRODUCTO" itemValue="MARCA DE PRODUCTO" />
+                                                            <f:selectItem itemLabel="MARCA DE SERVICIO" itemValue="MARCA DE SERVICIO" />
+                                                            <f:selectItem itemLabel="NOMBRE COMERCIAL" itemValue="NOMBRE COMERCIAL" />
+                                                            <f:selectItem itemLabel="LEMA COMERCIAL" itemValue="LEMA COMERCIAL" />
+                                                            <p:ajax listener="#{examenModificacionBean.activaPanelLema()}"
+                                                                    event="change" ></p:ajax>
+                                                        </p:selectOneMenu>
+                                                    </p:panelGrid>
+                                                    <p:spacer height="1"/>
+                                                    <h:panelGrid>
+                                                        <h:panelGrid  columns="2" cellspacing="1" rendered="#{examenModificacionBean.panelLema}">
+                                                            <p:outputLabel value="Acompaña a la" />
+                                                            <h:inputTextarea value="MARCA PATITO"  rows="3" cols="31"
+                                                                             onkeyup="this.value = this.value.substring(0, 500);"
+                                                                             >
+                                                            </h:inputTextarea>
+                                                        </h:panelGrid>
+                                                        <h:panelGrid  columns="6" cellpadding="1" rendered="#{examenModificacionBean.panelLema}">                                        
+                                                            <p:outputLabel value="N° registro" />
+                                                            <p:inputText value="1000" size="5"/>
+                                                            <p:selectOneMenu  value="VALOR" >
+                                                                <f:selectItem itemLabel="C" itemValue="" />                                        
+                                                            </p:selectOneMenu>
+                                                            <p:spacer height="1"/>
+                                                            <p:outputLabel value="Fecha" />
+                                                            <p:calendar pattern="dd-MM-yyyy" mask="true" size="9"/>
+                                                        </h:panelGrid>
+                                                    </h:panelGrid>
+                                                </p:column>
+                                            </p:row>                                                                                
+                                        </p:panelGrid>
+                                    </fieldset>
+                                </p:column>
+                            </p:row>
+
+
+
+
+                            <p:row>
+
+                                <p:column colspan="3">
+                                    <fieldset>
+                                        <legend>
+                                            <p:outputLabel value="Datos del nuevo titular o licenciatario" />
+                                        </legend>      
+                                        <h:panelGrid id="nombre" >
+                                            <h:panelGrid rendered="#{examenModificacionBean.radioNombre}">
+                                                <p:dataGrid var="per" value="#{ingresoSolicitudBean.lstPersonas}" emptyMessage="No existen nuevos titulares o licenciatarios" 
+                                                            paginatorPosition="bottom" style="width: 100%;" columns="1" rows="1" layout="grid" paginator="true">                                            
+                                                    <p:panelGrid style="width: 100%;">
+                                                        <p:row>
+                                                            <p:column  style="width: 10%;"><p:outputLabel value="Nuevo Titular"></p:outputLabel></p:column>
+                                                            <p:column colspan="3" style="width: 90%;">
+                                                                <p:inputText value="#{per.nombre}" style="width: 98%;">
+                                                                </p:inputText>
+                                                            </p:column>
+                                                        </p:row>                                     
+                                                        <p:row>
+                                                            <p:column style="width: 10%;">
+
+                                                                <p:outputLabel value="Nacionalidad"></p:outputLabel>
+
+                                                            </p:column>
+                                                            <p:column style="width: 50%;">
+                                                                <p:panelGrid columns="4" style="width: 100%;">
+                                                                    <p:inputText value="#{per.nacionalidad}" style="width: 100%;"></p:inputText>
+                                                                    <p:spacer width="1"/>
+                                                                    <p:outputLabel value="Departamento"></p:outputLabel>
+                                                                    <p:inputText value="#{per.departamento}"></p:inputText>
+                                                                </p:panelGrid>
+                                                            </p:column>
+                                                            <p:column style="width: 20%;">
+                                                                <p:panelGrid columns="2">
+                                                                    <p:outputLabel value="Telefono"></p:outputLabel>
+                                                                    <p:inputText value="#{per.telefono}" ></p:inputText>
+                                                                </p:panelGrid>
+                                                            </p:column>
+                                                            <p:column style="width: 20%;">
+                                                                <p:panelGrid columns="2">
+                                                                    <p:outputLabel value="Fax"></p:outputLabel>
+                                                                    <p:inputText value="#{per.fax}"></p:inputText>
+                                                                </p:panelGrid>
+                                                            </p:column>                                                
+                                                        </p:row>
+                                                        <p:row>
+                                                            <p:column  style="width: 10%;"><p:outputLabel value="Direccion"></p:outputLabel></p:column>
+                                                            <p:column colspan="3" style="width: 90%;"><p:inputText value="#{per.direccion}" style="width: 98%;"></p:inputText></p:column>
+                                                        </p:row>
+                                                        <p:row>
+                                                            <p:column style="width: 10%;"><p:outputLabel value="email" ></p:outputLabel></p:column>
+                                                            <p:column colspan="3" style="width: 40%;"><p:inputText value="#{per.email}" style="width: 98%;"></p:inputText></p:column>
+
+                                                        </p:row>
+                                                    </p:panelGrid>                             
+
+                                                </p:dataGrid>        
+
+                                            </h:panelGrid>
+                                            <h:panelGrid rendered="#{examenModificacionBean.radioDomicilio}" >                                            
+                                                <p:panelGrid columns="2"  >
+                                                    <p:outputLabel value="Nuevo domicilio" />
+                                                    <p:inputText value="1000" size="107"/>
+                                                    <p:outputLabel value="Nacionalidad / Pais Constitucion" />
+                                                    <p:selectOneMenu value="pais" style="width:70px;">
+                                                        <f:selectItem itemLabel="Bolivia" itemValue="Bolivia" />
+                                                        <f:selectItem itemLabel="Argentina" itemValue="Xbox One" />
+                                                        <f:selectItem itemLabel="Brasil" itemValue="PS4" />
+                                                        <f:selectItem itemLabel="España" itemValue="Wii U" />
+                                                    </p:selectOneMenu>
+                                                </p:panelGrid>
+                                            </h:panelGrid>
+                                            <h:panelGrid rendered="#{examenModificacionBean.radioFusion}" >
+                                                <p:outputLabel value="En caso de Fusion:" styleClass="labelBold"/>
+                                                <p:dataTable var="item" value="listado" >
+                                                    <p:column headerText="Participantes fusion" colspan="3">
+                                                        <h:outputText value="texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto" />
+                                                    </p:column>                                                                                                                       
+                                                </p:dataTable>
+                                            </h:panelGrid>       
+                                            <h:panelGrid rendered="#{examenModificacionBean.radioLU}" columns="5">
+                                                <p:outputLabel value="Plazo:" styleClass="labelBold"/>
+                                                <p:outputLabel value="Inicio" />
+                                                <p:calendar pattern="dd-MM-yyyy" mask="true" size="9"/>
+                                                <p:outputLabel value="Fin" />
+                                                <p:calendar pattern="dd-MM-yyyy" mask="true" size="9"/>
+                                            </h:panelGrid>
+                                        </h:panelGrid>
+                                    </fieldset>
+
+
+                                </p:column>
+
+                            </p:row>
+                            <p:row>
+
+                                <p:column width="40%" style="text-align: center" colspan="3">
+                                    <fieldset>
+                                        <legend>Listado de solicitantes</legend>
+                                        <p:dataTable value="Listado"
+                                                     style="width: 98%; text-align: center ">                                                                                     
+                                            <p:column >  
+                                                <f:facet name="header" >N° Doc. </f:facet>
+                                                <h:outputText value="100000" />
+                                            </p:column>
+                                            <p:column>  
+                                                <f:facet name="header">Nombre</f:facet>
+                                                <h:outputText value="Importador S.R.L." />
+                                            </p:column>
+                                            <p:column>
+                                                <f:facet name="header">Tipo</f:facet>
+                                                <h:outputText value="Juridico" />
+                                            </p:column>
+                                            <p:column>
+                                                <f:facet name="header">País</f:facet>
+                                                <h:outputText value="Brasil" />
+                                            </p:column>
+                                            <p:column>
+                                                <f:facet name="header">Departamento</f:facet>
+                                                <h:outputText value="" />
+                                            </p:column>
+                                            <p:column>                                  
+                                                <f:facet name="header">Dirección</f:facet>
+                                                <h:outputText value="Calle Joa No 125" />
+                                            </p:column>
+                                        </p:dataTable>
+
+                                    </fieldset>
+
+
+                                </p:column>
+
+                            </p:row>
+                            <p:row>
+
+                                <p:column width="40%" style="text-align: center" colspan="3">
+                                    <fieldset>
+                                        <legend>Listado de apoderados</legend>
+                                        <p:dataTable 
+                                            value="listado"
+                                            style="width: 98%">
+                                            <p:column >  
+                                                <f:facet name="header" >Nro. poder </f:facet>
+                                                <h:outputText value="2014/2016" />
+                                            </p:column>   
+                                            <p:column >  
+                                                <f:facet name="header" >Expiracion</f:facet>
+                                                <h:outputText value="#{ingresoSolicitudBean.fechaSolicitud}">
+                                                    <f:convertDateTime pattern="#{sessionState.formatoFecha}"/>
+                                                </h:outputText>
+                                            </p:column> 
+                                            <p:column >  
+                                                <f:facet name="header" >N° doc.</f:facet>
+                                                <h:outputText value="125632" />
+                                            </p:column>                                       
+                                            <p:column >  
+                                                <f:facet name="header" >Nombres</f:facet>
+                                                <h:outputText value="Ramiro Moreno" />
+                                            </p:column>     
+                                            <p:column>
+                                                <f:facet name="header">
+                                                    Domicilio
+                                                </f:facet>
+                                                <h:outputText value="Zona Sur No 125" />
+                                            </p:column>
+                                        </p:dataTable>
+
+                                    </fieldset>
+
+
+                                </p:column>
+
+                            </p:row>
+                        </p:panelGrid>
+
+                        <p:panelGrid id="panelRenovacion" style="width: 100%;" rendered="#{ingresoSolicitudTramiteBean.panelPI104}" styleClass="quitarBordes">
+                            <p:row>
+                                <p:column width="33%" style="text-align: center" colspan="2">
+                                    <p:panelGrid columns="1" style="width: 100%">
+                                        <p:panelGrid columns="1" style="width: 100%">
+                                            <p:outputLabel value="Subsanación de renovación de registro de signo distintivo"/>
+                                            <p:outputLabel value="Nro. FORM PI - 104"/>
+                                            <p:panelGrid columns="2" style="width: 100%">
+                                                <p:outputLabel value="Fecha de Solicitud: " />
+                                                <p:calendar pattern="dd-MM-yyyy" mask="true" value="#{ingresoSolicitudTramiteBean.fechaSolicitud}" style="width: 2%"/>
+                                            </p:panelGrid>
+                                        </p:panelGrid>
+                                    </p:panelGrid>
+                                </p:column>
+                                <p:column width="34%" style="text-align: center">
+                                    <p:panelGrid columns="2" style="width: 100%">
+                                        <p:panelGrid columns="2" style="width: 100%">
+                                            <p:outputLabel value="Oficina:" />
+                                            <p:selectOneMenu value="departamento" >
+                                                <f:selectItem itemLabel="La Paz" itemValue="LPZ" />
+                                                <f:selectItem itemLabel="Cochabamba" itemValue="CBBA" />
+                                                <f:selectItem itemLabel="Chuquisaca" itemValue="CHU" />
+                                                <f:selectItem itemLabel="Sucre" itemValue="SR" />
+                                                <f:selectItem itemLabel="Santa Cruz" itemValue="SCZ" />
+                                                <f:selectItem itemLabel="Tarija" itemValue="TA" />
+                                            </p:selectOneMenu>
+                                        </p:panelGrid>
+                                        <p:panelGrid style="width: 60%">
+                                            <fieldset>
+                                                <legend>Observacion </legend>
+                                                <p:inputTextarea value="juan perez: Observacion realizada al tramite por mala operación del usuario. (14/05/2016)"
+                                                                 style="width: 98%; background: #F0F8FF" scrollHeight="5" rows="3">
+                                                </p:inputTextarea>
+                                                <p:commandButton value="Ver observaciones" icon="ui-icon-seek-next" style="height: 60%" 
+                                                                 action="#{ingresoSolicitudTramiteBean.abrirObservacionTramite()}"/>
+                                            </fieldset>
+                                        </p:panelGrid>
+
+                                    </p:panelGrid>
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column width="100%" style="text-align: center" colspan="3">
+                                    <fieldset>
+                                        <legend>Datos de la renovación</legend>
+                                        <p:outputLabel value="Lista de titulares" />
+                                        <p:dataTable 
+                                            value="listado"
+                                            style="width: 98%">
+                                            <p:column >  
+                                                <f:facet name="header" >Nombres </f:facet>
+                                                <h:outputText value="Nombre Razon Social o Titular" />
+                                            </p:column>   
+                                            <p:column >  
+                                                <f:facet name="header" >Domicilio</f:facet>
+                                                <h:outputText value="Calle uno Nro 125 El Alto">
+                                                </h:outputText>
+                                            </p:column> 
+                                        </p:dataTable>
+
+                                        <div align="center">
+                                            <p:panelGrid columns="2" style="width: 50%">
+                                                <p:outputLabel value="Tipo de signo" />
+                                                <p:selectOneMenu value="valorcombo">
+                                                    <f:selectItem itemLabel="Marca de Producto" itemValue="MP" />
+                                                    <f:selectItem itemLabel="Marca de Servicio" itemValue="MS" />
+                                                    <f:selectItem itemLabel="Denominacion de Origen" itemValue="DO" />
+                                                </p:selectOneMenu>
+
+                                                <p:outputLabel value="Clasificación internacional NIZA" />
+                                                <p:selectOneMenu value="valorcombo">
+                                                    <f:selectItem itemLabel="0" itemValue="0" />
+                                                    <f:selectItem itemLabel="1" itemValue="1" />
+                                                    <f:selectItem itemLabel="2" itemValue="2" />
+                                                    <f:selectItem itemLabel="3" itemValue="3" />
+                                                    <f:selectItem itemLabel="4" itemValue="4" />
+                                                    <f:selectItem itemLabel="5" itemValue="5" />
+                                                    <f:selectItem itemLabel="6" itemValue="6" />
+                                                    <f:selectItem itemLabel="7" itemValue="7" />
+                                                    <f:selectItem itemLabel="8" itemValue="8" />
+                                                    <f:selectItem itemLabel="9" itemValue="9" />
+                                                </p:selectOneMenu>
+
+                                                <p:panelGrid columns="3">
+                                                    <p:outputLabel value="Numero de registro"/>
+                                                    <p:inputText value="145263"/>
+                                                    <p:inputText value="C"/>
+                                                </p:panelGrid>
+                                                <p:panelGrid columns="2">
+                                                    <p:outputLabel value="Fecha otorgación de la marca: " />
+                                                    <p:calendar pattern="dd-MM-yyyy" mask="true" value="#{ingresoSolicitudTramiteBean.fechaSolicitud}" style="width: 2%"/>
+                                                </p:panelGrid>
+
+                                                <p:outputLabel value="Numero de última renovación"/>
+                                                <p:inputText value="41256"/>
+
+                                                <p:outputLabel value="Numero de penúltima renovación"/>
+                                                <p:inputText value="4585932"/>
+
+                                                <p:outputLabel value="Lista de productos o servicios"/>
+                                                <p:inputTextarea value="Lista de productos y servicios"
+                                                                 style="width: 98%;" scrollHeight="5" rows="3">
+                                                </p:inputTextarea>
+
+                                                <p:outputLabel value="Clase NIZA actual" />
+                                                <p:selectOneMenu value="valorcombo">
+                                                    <f:selectItem itemLabel="Elegir" itemValue="-1" />
+                                                    <f:selectItem itemLabel="0" itemValue="0" />
+                                                    <f:selectItem itemLabel="1" itemValue="1" />
+                                                    <f:selectItem itemLabel="2" itemValue="2" />
+                                                    <f:selectItem itemLabel="3" itemValue="3" />
+                                                    <f:selectItem itemLabel="4" itemValue="4" />
+                                                    <f:selectItem itemLabel="5" itemValue="5" />
+                                                    <f:selectItem itemLabel="6" itemValue="6" />
+                                                    <f:selectItem itemLabel="7" itemValue="7" />
+                                                    <f:selectItem itemLabel="8" itemValue="8" />
+                                                    <f:selectItem itemLabel="9" itemValue="9" />
+                                                </p:selectOneMenu>
+
+
+
+                                            </p:panelGrid>
+
+
+
+
+
+
+
+                                        </div>
+
+
+                                    </fieldset>
+
+                                </p:column>
+
+                            </p:row>
+                            <p:row>
+
+                                <p:column width="40%" style="text-align: center" colspan="3">
+                                    <fieldset>
+                                        <legend>Listado de solicitantes</legend>
+                                        <p:dataTable value="Listado"
+                                                     style="width: 98%; text-align: center ">                                                                                     
+                                            <p:column >  
+                                                <f:facet name="header" >N° doc. </f:facet>
+                                                <h:outputText value="100000" />
+                                            </p:column>
+                                            <p:column>  
+                                                <f:facet name="header">Nombre</f:facet>
+                                                <h:outputText value="Importador S.R.L." />
+                                            </p:column>
+                                            <p:column>
+                                                <f:facet name="header">Tipo</f:facet>
+                                                <h:outputText value="Juridico" />
+                                            </p:column>
+                                            <p:column>
+                                                <f:facet name="header">País</f:facet>
+                                                <h:outputText value="Brasil" />
+                                            </p:column>
+                                            <p:column>
+                                                <f:facet name="header">Departamento</f:facet>
+                                                <h:outputText value="" />
+                                            </p:column>
+                                            <p:column>                                  
+                                                <f:facet name="header">Dirección</f:facet>
+                                                <h:outputText value="Calle Joa No 125" />
+                                            </p:column>
+                                        </p:dataTable>
+
+                                    </fieldset>
+
+
+                                </p:column>
+
+                            </p:row>
+                            <p:row>
+
+                                <p:column width="40%" style="text-align: center" colspan="3">
+                                    <fieldset>
+                                        <legend>Listado de apoderados</legend>
+                                        <p:dataTable 
+                                            value="listado"
+                                            style="width: 98%">
+                                            <p:column >  
+                                                <f:facet name="header" >Nro. poder </f:facet>
+                                                <h:outputText value="2014/2016" />
+                                            </p:column>   
+                                            <p:column >  
+                                                <f:facet name="header" >Expiración</f:facet>
+                                                <h:outputText value="#{ingresoSolicitudBean.fechaSolicitud}">
+                                                    <f:convertDateTime pattern="#{sessionState.formatoFecha}"/>
+                                                </h:outputText>
+                                            </p:column> 
+                                            <p:column >  
+                                                <f:facet name="header" >N° doc.</f:facet>
+                                                <h:outputText value="125632" />
+                                            </p:column>                                       
+                                            <p:column >  
+                                                <f:facet name="header" >Nombres</f:facet>
+                                                <h:outputText value="Ramiro Moreno" />
+                                            </p:column>     
+                                            <p:column>
+                                                <f:facet name="header">
+                                                    Domicilio
+                                                </f:facet>
+                                                <h:outputText value="Zona Sur No 125" />
+                                            </p:column>
+                                        </p:dataTable>
+
+                                    </fieldset>
+
+
+                                </p:column>
+
+                            </p:row>
+                        </p:panelGrid>
+
+                    </h:panelGrid>
+
+
+
+                    <p:panelGrid id="panelRequisitos" style="width: 100%;" styleClass="quitarBordes">
+
+                        <p:row>
+                            <p:column colspan="5" width="100%" style="text-align: center">
+
+                                <p:commandButton value="Verificar requisitos" style="height: 30px; width: 25%"
+                                                 action="#{ingresoSolicitudTramiteBean.irPlantillaIngresoVentanilla()}"
+                                                 icon="ui-icon-circle-zoomin"
+                                                 ajax="false"/>
+                            </p:column>
+                        </p:row>
+
+
+                    </p:panelGrid>
+
+
+
+
+
+
+
+
+
+
+
+                    <!--                <br></br>
+                                    <table id="png2" border="1" width="100%">
+                                        <tr>
+                                            <td colspan="5" width="100%">
+                                                <fieldset>
+                                                    <table width="100%">
+                                                        <tr>
+                                                            <td width="50%">
+                                                                <p:panelGrid columns="1">
+                                                                    <p:outputLabel value="INGRESO"/>
+                                                                    <p:outputLabel value="SOLICITUD DE SIGNO DISTINTIVO"/>
+                                                                </p:panelGrid>
+                    
+                                                            </td>
+                                                            <td width="50%" align="right">
+                                                                <p:panelGrid columns="1">
+                                                                    <p:outputLabel value="NT: 0000/2009"/>
+                                                                    <p:outputLabel value="20000001630007200"/>
+                                                                </p:panelGrid>
+                                                            </td>
+                                                        </tr>
+                                                    </table>                                
+                                                </fieldset>
+                    
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>11</td>
+                                            <td>22</td>
+                                            <td>33</td>                                                 
+                                            <td>44</td>                                                 
+                                            <td>55</td>                                                 
+                                        </tr>
+                                    </table>-->
+
+
+
+
+
+
+
+
+
+                    <!--
+                    <p:panelGrid  style="width: 100%;border: 1px solid;" >
+                                                    <p:row>
+                                                        <p:column style="width: 50%; text-align: center;border: 1px solid;">
+                    -->
+
+
+
+
+                </h:form>
+
+
+
+            </ui:define>
+
+        </ui:composition>        
+    </body>
+</html>

@@ -1,0 +1,243 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:p="http://primefaces.org/ui"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 template="./../WEB-INF/facelets/templates/Template.xhtml"
+                 xmlns:si.componentes="http://java.sun.com/jsf/composite/si.componentes"
+                 xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <ui:define name="content">
+        <f:view contentType="text/html"> 
+            
+             <h:body >
+            <h:form>
+                <ui:remove>****Este panelgrid tiene 2 rows  que dividen la pantalla  general en parte superiror e inferior**</ui:remove>
+                <p:panelGrid style="width:  100%">
+                    <p:row>
+                        <p:column>
+                            <h:panelGrid columns="3" border="0" width="100%">
+                                <h:panelGrid columns="3" >
+                                    <p:fieldset>
+                                        <p:selectOneRadio id="abm" columns="1" layout="pageDirection">
+                                            <f:selectItem itemLabel="Crear" itemValue="" />
+                                            <f:selectItem itemLabel="Modificar" itemValue="" />
+                                            <f:selectItem itemLabel="Consultar" itemValue="" />
+                                        </p:selectOneRadio>
+                                    </p:fieldset> 
+                                    <p:outputLabel  value="Número:" />
+                                    <p:inputText/>
+                                </h:panelGrid>
+                                <h:panelGrid columns="5">
+                                    <p:button value="Buscar" icon="ui-icon-search"/>
+                                    <p:button value="Anterior" icon="ui-icon-arrowthick-1-w"/>
+                                    <p:button value="Siguiente" icon="ui-icon-arrowthick-1-e"/>
+                                    <p:button value="Limpiar" icon="ui-icon-trash"/>
+                                    <p:button value="Imprimir" icon="ui-icon-print"/>
+                                </h:panelGrid>
+                                <h:panelGrid columns="1">
+                                    <h:panelGrid columns="8">
+
+                                        <p:graphicImage value="/images/cuaazul.png" height="20px" width="20px" />  
+                                        <h:outputText value="Devuelto" />
+
+                                        <p:graphicImage value="/images/cuanaranja.jpg" height="20px" width="20px" />
+                                        <h:outputText value="Observado" />
+
+                                        <p:graphicImage value="/images/cuaverdeoscuro.jpg" height="20px" width="20px" /> 
+                                        <h:outputText value="Recibido" />
+
+                                        <p:graphicImage value="/images/cuamarron.jpg" height="20px" width="20px" /> 
+                                        <h:outputText value="Enviado" />
+
+                                        <p:graphicImage value="/images/cuaverde.jpg" height="20px" width="20px" /> 
+                                        <h:outputText value="Notificado" />
+
+                                        <p:graphicImage value="/images/cuaamarillo.jpg" height="20px" width="20px" /> 
+                                        <h:outputText value="En Distrital" />
+
+                                        <p:graphicImage value="/images/cualila.jpg" height="20px" width="20px" /> 
+                                        <h:outputText value="Prestado" />
+                                    </h:panelGrid>
+                                </h:panelGrid>
+
+                            </h:panelGrid>
+
+                        </p:column>
+                    </p:row> 
+                    <p:row>
+                        <p:column >
+                            <ui:remove>****Este panelgrid divide en 2 el row del centro***</ui:remove>
+                            <p:panelGrid  style="width: 100%">
+                                <p:row>
+                                    <p:column style="width: 50%">
+                                        
+                                        <p:fieldset  legend="DATOS DE LA PETICION">
+                                        <ui:remove>****Este panel es padre que agrupo los otros dos , con este panel cubre el reuqerimiento de 1 columna del panelGrid de aariiba  ***</ui:remove>
+                                        
+                                            <ui:remove>****Este panel es el de arriba  ***</ui:remove>
+                                            <p:panel>
+
+
+                                                <h:outputText value="Bloque" />
+                                                <p:spacer/>
+                                                <p:inputText/>
+                                                <p:spacer/>
+                                                <h:outputText value="N°" />
+                                                <p:spacer/>
+                                                <p:inputText/>
+                                                <h:panelGrid columns="5" >
+                                                    <p:outputLabel value="Expediente" />
+                                                    <p:selectOneMenu style="width:125px">
+                                                        <f:selectItem itemLabel="Expediente" itemValue="" />
+                                                        <f:selectItem itemLabel="SM" itemValue="" />
+                                                        <f:selectItem itemLabel="CN" itemValue="" />
+                                                        <f:selectItem itemLabel="CD" itemValue="" />
+                                                        <f:selectItem itemLabel="Cancelacion" itemValue="" />
+                                                        <f:selectItem itemLabel="Oposicion" itemValue="" />
+
+                                                    </p:selectOneMenu>
+                                                    <h:panelGrid columns="1" >
+                                                        <p:inputText/>
+                                                        <h:outputText value="Número" />
+                                                    </h:panelGrid>
+                                                    <h:panelGrid columns="1" >
+                                                        <p:inputText/>
+                                                        <h:outputText value="Gestión" />
+                                                    </h:panelGrid> 
+                                                    <h:panelGrid columns="1" >
+                                                        <p:inputText/>
+                                                        <h:outputText value="Extensión" />
+                                                    </h:panelGrid> 
+                                                    <p:outputLabel value="Fecha de Ingreso" />
+                                                    <p:calendar/>
+                                                    <p:button value="Busca"/>
+                                                </h:panelGrid>
+                                            </p:panel>
+                                            <ui:remove>****Este panel segundo del layout del centro***</ui:remove>
+                                            <p:panel>
+                                                <h:panelGrid columns="1" >
+                                                    <p:outputLabel value="Descripcion" />
+                                                    <h:inputTextarea cols="30" rows="4" style="width: 492pt"/>
+                                                    <p:outputLabel value="Solicitante" />
+                                                    <p:inputText  size="108"/>  
+                                                    <p:outputLabel value="Apoderado" />
+                                                    <p:inputText/>  
+                                                    <p:outputLabel value="Cursante a Fojas" />
+                                                    <p:inputText size="108"/>  
+                                                    <p:outputLabel value="Notificar con" />
+                                                    <p:inputText size="108"/>  
+                                                    <p:outputLabel value="Celular para Notificar" />
+                                                    <p:inputText size="108"/> 
+                                                    <p:outputLabel value="Domicilio para Notificar" />
+                                                    <p:inputText size="108"/> 
+                                                </h:panelGrid>
+                                            </p:panel>
+                                            <ui:remove>****Este panel dela parte ultima del lado izquierdo general***</ui:remove>
+                                            <p:panel>
+
+                                                <h:panelGrid columns="4" >
+                                                    <h:panelGrid columns="1" >
+                                                        <h:outputText value="DATOS DE LA PETICION" escape="false" styleClass="labelImportante"/> 
+
+                                                        <p:inputText/> 
+                                                    </h:panelGrid>
+                                                    <p:button value="Adicionar" icon="ui-icon-folder-collapsed"/>
+                                                    <p:button value="Modificar" icon="ui-icon-arrowrefresh-1-n"/>
+                                                    <p:button value="Eliminar" icon="ui-icon-circle-close"/>
+                                                </h:panelGrid>
+
+                                            </p:panel>
+
+
+                                   
+                                      </p:fieldset>
+                                    </p:column>
+                                    <p:column style="vertical-align: top">
+                                        <p:fieldset legend="TRAMITES">
+                                        <p:panelGrid style="width: 100%">
+                                            <p:row>
+                                                <p:column style="width: 100%">
+                                                    <p:dataTable value="listado" style="margin:0;height: 380px;width: 100%" scrollable="true" >
+                                                        <p:column headerText="N°" >
+                                                            <h:outputText value="1" />
+                                                        </p:column>
+                                                        <p:column headerText="Expediente" >
+                                                            <h:outputText value="" />
+                                                        </p:column>
+                                                        <p:column headerText="Descripcion (Demandante)" >
+                                                            <h:outputText value="" />
+                                                        </p:column>
+                                                        <p:column headerText="Demandado" >
+                                                            <h:outputText value="" />
+                                                        </p:column>                                                                            
+                                                    </p:dataTable>
+                                                </p:column>  
+                                            </p:row>   
+
+
+
+
+                                            <p:row >
+                                                <p:column>
+                                                    <ui:remove>****Este pnalegrides donde esta la parte de datos administrativos, ty tabla de historial, es decir derecho abajo***</ui:remove> 
+                                                    <p:panelGrid  style="width: 100%;" >
+                                                        <p:row>
+                                                            <p:column style="width: 40%;" >
+                                                                <p:panelGrid columns="1" style="width: 100%;" >
+                                                                    <h:outputText value="DATOS ADMINISTRATIVOS" escape="false" styleClass="labelImportante"/> 
+                                                                    <p:outputLabel value="Notificado a" />
+                                                                    <p:inputText  style="width: 80%;"/>  
+                                                                    <p:outputLabel value="Estado" />
+                                                                    <p:inputText style="width: 80%;"/>  
+                                                                    <p:outputLabel value="Operador de Notificaciones" />
+                                                                    <p:inputText style="width: 80%;"/>  
+                                                                </p:panelGrid>
+                                                            </p:column >
+                                                            <p:column style="width: 60%;vertical-align: top;">
+                                                                <p:panelGrid columns="1" style="width: 100%;" >
+
+                                                                    <h:outputText value="HISTORIAL" escape="false" styleClass="labelImportante"/> 
+
+                                                                    <p:dataTable  style="width: 100%;" >
+                                                                        <p:column headerText="" >
+                                                                            <h:outputText value="1" />
+                                                                        </p:column>
+                                                                        <p:column headerText="" >
+                                                                            <h:outputText value="" />
+                                                                        </p:column>
+                                                                        <p:column headerText="" >
+                                                                            <h:outputText value="" />
+                                                                        </p:column>
+                                                                        <p:column headerText="" >
+                                                                            <h:outputText value="" />
+                                                                        </p:column>                                                                            
+                                                                    </p:dataTable>
+
+
+                                                                </p:panelGrid>
+                                                            </p:column>
+                                                        </p:row>
+                                                    </p:panelGrid>
+                                                </p:column>
+                                            </p:row>  
+                                        </p:panelGrid>
+
+                                        </p:fieldset>
+                                    </p:column>
+                                </p:row>
+                            </p:panelGrid>
+
+
+                        </p:column>   
+                    </p:row> 
+                </p:panelGrid>
+            </h:form>
+        </h:body>
+            
+       </f:view>
+        
+        
+   </ui:define>
+</ui:composition>

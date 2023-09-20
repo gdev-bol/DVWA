@@ -1,0 +1,919 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <body>
+        <ui:composition template="#{examenModSubsanacionBean.template}">
+            <ui:define name="content">      
+                <h:form id="formu" >                     
+                    <p:growl id="msg" life="10000"/>
+                    <p:panelGrid style="width: 100%; height: 100%;" > 
+                        <p:panelGrid style="width: 100%;" styleClass="quitarBordes">                            
+                            <p:row>
+                                <p:column style="width: 100%;" colspan="2">                                    
+                                    <table>
+                                        <tr valign="middle">
+                                            <td><p:graphicImage library="images" name="flechaTituloAzul.png" width="24" height="24"></p:graphicImage></td>
+                                            <td><p:outputLabel value="Expediente modificación" styleClass="tituloPrincipalFuente"></p:outputLabel></td>
+                                        </tr>
+                                    </table>                    
+                                    <p:separator id="sepTitulo" style="border: 1px #045491 inset;"></p:separator>                                                        
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>      
+
+                        <!--DE LA PARTE DE ARRIBA-->
+                        <p:panelGrid  style="width: 100%;" >
+                            <p:row>
+
+                                <p:column style="width: 20%; text-align: right" colspan="2">
+                                    <p:outputLabel value="Nro. FORM" style="font-weight: bold" styleClass="textoImportante"/>
+                                </p:column>
+
+                                <p:column style="width: 20%; text-align: center">
+                                    <fieldset>
+
+                                        <p:panelGrid columns="1" style="width: 100%">
+                                            <p:inputText value="#{examenModSubsanacionBean.numeroFormulario}" id="txtNumeroFormulario" 
+                                                         style="height: 20px;background: #add3d8 !important; vertical-align: central; text-align: center; width: 80%; font-weight: bold; font-size: 15px !important"/>
+                                        </p:panelGrid>
+                                    </fieldset>
+                                </p:column>
+                                <p:column style="width: 20%">
+                                    <p:commandButton value="Buscar" actionListener="#{examenModSubsanacionBean.buscarFormularioExterno()}"
+                                                     icon="ui-icon-search"
+                                                     update=":formu"
+                                                     style="height: 40px;"/>
+                                </p:column>
+
+                                <p:column style="width: 20%" >
+                                    <p:outputLabel id="pnlExistente">
+                                        <p:panelGrid columns="1" rendered="#{examenModSubsanacionBean.panelNoEncontrado}">
+                                            <p:outputLabel value="#{examenModSubsanacionBean.mensajeBusqueda}" style="font-weight: bold"/>                                            
+                                        </p:panelGrid>
+                                    </p:outputLabel>
+
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+
+                        <p:panelGrid style="width: 100%" styleClass="quitarBordes" id="panelOficina">
+                            <p:row >
+                                <p:column colspan="1" style="width: 10%">   
+                                    <fieldset>
+                                        <p:selectOneRadio   value="#{examenModSubsanacionBean.valorOpcionesRadio}">
+                                            <f:selectItem itemValue="ADD" itemLabel="Adicionar" />
+                                            <f:selectItem itemValue="MOD" itemLabel="Modificar"/>
+                                            <f:selectItem itemValue="CON" itemLabel="Consultar"/>
+                                            <p:ajax event="change" listener="#{examenModSubsanacionBean.cambiaOpcionesFormulario()}" update="pnlbotonesInferior panelSolicitud nombre"/>
+                                        </p:selectOneRadio>
+                                        <!--                                    layout="grid" columns="1"-->
+                                    </fieldset>
+                                </p:column>
+                                <p:column colspan="1" style="width: 13%; padding-left: 2%">
+                                    <p:panelGrid columns="2" >
+                                        <p:outputLabel value="Oficina:" style="font-weight: bold"/>
+                                        <p:selectOneMenu value="#{examenModSubsanacionBean.regional}"  autoWidth="false"  >
+                                            <f:selectItems value="#{examenModSubsanacionBean.lstOficina}"
+                                                           var="oficina"
+                                                           itemValue="#{oficina.codigo}"
+                                                           itemLabel="#{oficina.nombre}"  />
+                                            <p:ajax listener="#{examenModSubsanacionBean.cambiarSigla()}"
+                                                    event="change" update=":formu:labelSigla :formu:panelSolicitud :formu:panelOficina"></p:ajax>
+                                        </p:selectOneMenu>
+                                    </p:panelGrid>                                         
+                                </p:column >    
+                                <p:column colspan="2" style="padding-left: 2%; width: 77%; text-align: right">
+                                    <fieldset>
+                                        <p:selectOneRadio id="console1" value="#{examenModSubsanacionBean.valorRadio}"  style="display: block; width: 100%">
+                                            <f:selectItem itemValue="CN" itemLabel="Cambio de Nombre &nbsp; "  />
+                                            <f:selectItem itemValue="CD" itemLabel="Cambio de Domicilio &nbsp;"/>
+                                            <f:selectItem itemValue="ST" itemLabel="Transferencia  &nbsp;"/>
+                                            <f:selectItem itemValue="SF" itemLabel="Fusion &nbsp;"/>
+                                            <f:selectItem itemValue="LU" itemLabel="Licencia de Uso"/>
+                                            <p:ajax listener="#{examenModSubsanacionBean.activaCambios()}"
+                                                    event="change" 
+                                                    update=":formu:nombre :formu:labelSigla :formu:datosNuevoTItular :formu:panelOficina :formu:pnlProductos"></p:ajax>
+                                        </p:selectOneRadio>    
+                                    </fieldset>
+
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                        <p:panelGrid>
+                            <p:separator/>
+                        </p:panelGrid>            
+                        <p:panelGrid style="width: 100%" styleClass="quitarBordes">
+                            <p:row>
+                                <p:column colspan="1" style="width: 25%;vertical-align: top;">
+                                    <fieldset>
+                                        <legend>
+                                            <p:outputLabel value="Referencia solicitud" />
+                                        </legend>
+                                        <p:panelGrid columns="1"  id="pnlReferenciaSol" styleClass="quitarBordes">
+                                            <p:panelGrid columns="5">
+                                                <p:outputLabel value="#{examenModSubsanacionBean.textoSM}" style="font-weight: bold"/>
+                                                <p:inputText value="#{examenModSubsanacionBean.numeroSM}" style="width: 90%" maxlength="18"/>
+                                                <p:inputText value="#{examenModSubsanacionBean.gestionSM}" style="width: 90%" maxlength="4"/>
+                                                <p:inputText value="#{examenModSubsanacionBean.extensionSM}" style="width: 50%"/>
+
+                                            </p:panelGrid>                                        
+                                            <p:panelGrid columns="3" >                                    
+                                                <p:outputLabel value="N° Registro:" style="display:block;width:94px"/>
+                                                <p:inputText value="#{examenModSubsanacionBean.modificacion.numero_registro}" style="width: 90%" maxlength="18"
+                                                             onkeyup="return ValNumero(this);"/>
+                                                <p:selectOneMenu id="serie" value="#{examenModSubsanacionBean.modificacion.serie_registro}"  autoWidth="false">
+                                                    <f:selectItem itemLabel="Elegir" itemValue="" /> 
+                                                    <f:selectItems value="#{examenModSubsanacionBean.lstSerieRegistro}" var="r" itemLabel="#{r.nombre}" itemValue="#{r.codigo}"/>                                       
+                                                </p:selectOneMenu>
+                                            </p:panelGrid>
+                                            <p:panelGrid columns="3" >
+                                                <p:outputLabel value="N° Renovacion:" style="display:block;width:95px"/>
+                                                <p:inputText value="#{examenModSubsanacionBean.modificacion.numero_renovacion}" style="width: 90%" maxlength="18"
+                                                             onkeyup="return ValNumero(this);"/>
+                                                <p:selectOneMenu id="serieReno" value="#{examenModSubsanacionBean.modificacion.serie_renovacion}" autoWidth="false" >
+                                                    <f:selectItem itemLabel="Elegir" itemValue="" /> 
+                                                    <f:selectItem itemLabel="A" itemValue="A" />                                        
+                                                </p:selectOneMenu>
+                                            </p:panelGrid>                                        
+                                            <p:panelGrid columns="2"  >
+                                                <p:outputLabel value="N° Publicacion:" style="display:block;width:94px" />
+                                                <p:inputText value="#{examenModSubsanacionBean.modificacion.numero_publicacion}" style="width: 90%" maxlength="18"
+                                                             onkeyup="return ValNumero(this);"/>
+                                            </p:panelGrid>
+                                        </p:panelGrid>
+                                    </fieldset>
+                                </p:column>
+                                <p:column colspan="1" style="width: 38%;vertical-align: top;">
+                                    <fieldset>
+                                        <legend>
+                                            <p:outputLabel value="Buscador" />
+                                        </legend>
+                                        <div align="center">
+                                            <p:panelGrid columns="2"   id="panelSolicitud">
+                                                <p:panelGrid columns="1" > 
+                                                    <p:outputLabel value="N° SOLICITUD:" style="font-weight: bold;text-align: center; display: block; width: 100px"/>
+                                                </p:panelGrid>
+
+                                                <p:panelGrid columns="5" style="width: 100%"  >   <p:focus context="panelSolicitud"/>
+                                                    <p:outputLabel id="labelSigla" value="#{examenModSubsanacionBean.valorSigla} -" style="font-weight: bold; color: #650e0b;display: block; width: 42px"/>                                                    
+                                                    <p:inputText id="valorNumero" value="#{examenModSubsanacionBean.numeroMod}"   maxlength="10"
+                                                                 style="background: #add3d8 !important; vertical-align: central; text-align: center; width: 90%; font-weight: bold"
+                                                                 onkeyup="return ValNumero(this);">
+
+                                                    </p:inputText>
+                                                    <p:inputText id="valorGestion" value="#{examenModSubsanacionBean.gestionMod}" maxlength="10" onkeyup="return ValNumero(this);"
+                                                                 style="background: #add3d8 !important; vertical-align: central; text-align: center; width: 85%; font-weight: bold" />
+
+                                                </p:panelGrid>                                
+                                            </p:panelGrid>
+                                            <!--                                            <p:spacer height="1"/>-->
+                                            <p:panelGrid columns="2"  style="width: 75%"   >
+                                                <p:outputLabel value="N° FORMULARIO:" style="font-weight: bold; text-align: center"/>
+                                                <p:inputText value="#{examenModSubsanacionBean.modificacion.nro_formulario}" style="width: 95%" maxlength="20"/>
+                                            </p:panelGrid>
+                                            <p:panelGrid columns="2"   style="width: 85%"  >
+                                                <p:outputLabel value="FECHA DE SOLICITUD:" style="font-weight: bold"/>                                                
+                                                <p:calendar    value="#{examenModSubsanacionBean.modificacion.fecha_ingreso}"                                                
+                                                               locale="es" 
+                                                               navigator="true" 
+                                                               pattern="dd/MM/yyyy HH:mm:ss" 
+                                                               mask="true"
+                                                               style="width: 70%">
+                                                </p:calendar>
+                                            </p:panelGrid>
+                                            <p:panelGrid columns="3"  style="width: 75%"  >                                                
+                                                <p:outputLabel value="N° RECIBO OFICIAL:" style="font-weight: bold; text-align: center; display: block; width: 140px"/>                                                                                        
+                                                <p:inputText value="#{examenModSubsanacionBean.modificacion.nro_recibo}" style="width: 90%" maxlength="8"
+                                                             onkeyup="return ValNumero(this);"/>                                                                                                
+                                                <p:selectOneMenu id="cmbSerieRecibo" value="#{examenModSubsanacionBean.modificacion.serie_recibo}" autoWidth="false">
+                                                    <f:selectItem itemLabel="Elegir" itemValue=""></f:selectItem>
+                                                    <f:selectItems value="#{examenModSubsanacionBean.lstTipoRecibo}" var="r" itemLabel="#{r.nombre}" itemValue="#{r.codigo}"/>
+                                                </p:selectOneMenu>
+                                            </p:panelGrid>
+
+                                        </div>
+                                    </fieldset>
+                                </p:column>
+                                <p:column colspan="1" style="width: 27%;vertical-align: top;">
+                                    <fieldset >
+                                        <legend>
+                                            <p:outputLabel value="Referencia del expediente" />
+                                        </legend>
+                                        <p:panelGrid columns="1" >
+                                            <p:panelGrid columns="3" >
+                                                <p:outputLabel value="N° Registro:" style="display:block;width: 95px"/>
+                                                <p:inputText value="#{examenModSubsanacionBean.registroExpediente}" style="width: 87%" onkeyup="return ValNumero(this);" id="txtRegistoExpediente">
+                                                    <p:ajax event="change" listener="#{examenModSubsanacionBean.buscarXRegistro()}" 
+                                                            update=":formu:pnlReferenciaSol :formu:panelDatosRegistrados" />
+                                                </p:inputText>
+                                                <p:selectOneMenu id="serie2" value="#{examenModSubsanacionBean.serieRegExpediente}" autoWidth="false">
+                                                    <f:selectItem  itemLabel="Elegir" itemValue=""/> 
+                                                    <f:selectItems value="#{examenModSubsanacionBean.lstSerieRegistro}" var="r" itemLabel="#{r.nombre}" itemValue="#{r.codigo}"/> 
+                                                    <p:ajax event="change" listener="#{examenModSubsanacionBean.buscarXRegistro()}" 
+                                                            update=":formu:pnlReferenciaSol :formu:panelDatosRegistrados :formu:nombre" />
+                                                </p:selectOneMenu>
+                                            </p:panelGrid>                                           
+                                            <p:panelGrid columns="3"  >
+                                                <p:outputLabel value="N° Renovacion:" style="display:block;width: 95px"/>
+                                                <p:inputText value="#{examenModSubsanacionBean.renovacionExpediente}" style="width: 87%" onkeyup="return ValNumero(this);">
+                                                    <p:ajax event="blur" listener="#{examenModSubsanacionBean.buscarXRenovacion()}" 
+                                                            update="@form" />
+                                                </p:inputText>
+                                                <p:selectOneMenu id="serieReno2" value="#{examenModSubsanacionBean.serieRenoExpediente}" autoWidth="false">
+                                                    <f:selectItem itemLabel="Elegir" itemValue="" /> 
+                                                    <f:selectItem itemLabel="A" itemValue="A" />                                        
+                                                </p:selectOneMenu>
+                                            </p:panelGrid>
+                                            <p:panelGrid columns="4"  >
+                                                <p:outputLabel value="Expediente SM:" style="display:block;width: 95px"/>
+                                                <p:inputText value="#{examenModSubsanacionBean.smExpediente}" style="width: 85%" 
+                                                             id="txtsmExpediente" onkeyup="return ValNumero(this);">
+                                                    <p:ajax event="blur" listener="#{examenModSubsanacionBean.buscarXSM()}"  update=":formu:pnlReferenciaSol :formu:panelDatosRegistrados :formu:nombre"/>
+                                                </p:inputText>
+                                                <p:inputText value="#{examenModSubsanacionBean.gestionExpediente}" style="width: 85%"
+                                                             id="txtgestionExpediente" onkeyup="return ValNumero(this);"  >
+                                                    <p:ajax event="blur" listener="#{examenModSubsanacionBean.buscarXSM()}" update=":formu:pnlReferenciaSol :formu:panelDatosRegistrados :formu:nombre" />
+                                                </p:inputText>
+                                                <p:inputText value="#{examenModSubsanacionBean.extensionExpediente}" style="width: 40%"
+                                                             >
+                                                    <p:ajax event="blur" listener="#{examenModSubsanacionBean.buscarXSM()}" update=":formu:pnlReferenciaSol :formu:panelDatosRegistrados :formu:nombre" />
+                                                </p:inputText>                                                
+                                            </p:panelGrid>
+                                            <p:panelGrid columns="2"  >
+                                                <p:outputLabel value="N° Publicacion:" style="display:block;width: 95px"/>
+                                                <p:inputText value="#{examenModSubsanacionBean.nroPublicacionExpediente}" style="width: 87%" onkeyup="return ValNumero(this);">                                                    
+                                                    <p:ajax event="blur" listener="#{examenModSubsanacionBean.buscarXPublicacion()}" update=":formu:pnlReferenciaSol :formu:panelDatosRegistrados :formu:nombre" />
+                                                </p:inputText>
+                                            </p:panelGrid>
+                                        </p:panelGrid>
+                                    </fieldset>
+                                </p:column>
+                            </p:row>
+
+
+                        </p:panelGrid>
+                        <p:panelGrid style="width: 100%; " styleClass="quitarBordes" id="panel">
+                            <p:row >
+                                <p:column colspan="2" style="vertical-align: top; width: 50%;">
+                                    <fieldset >
+                                        <legend>
+                                            <p:outputLabel value="Datos del solicitante" />
+                                        </legend>
+
+                                        <p:dataGrid 
+                                            var="per" value="#{examenModSubsanacionBean.listaModSolicitantesSipi}" 
+                                            emptyMessage="No existen solicitantes" id="datosSolicitante"
+                                            style="width: 100%;" 
+                                            columns="1" rows="1" layout="grid" paginator="true" paginatorPosition="bottom">     
+                                            <p:panelGrid style="width: 100%;">
+                                                <p:row style="background-color: #ecebf3 ">
+                                                    <p:column  style="width: 10%;"><p:outputLabel value="Solicitante" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                    <p:column colspan="3" style="width: 90%;" >
+                                                        <p:outputLabel styleClass="fondoInput" id="texto" value="#{per.nombreRazonSocial}" style="width: 98%;" rendered="#{per.tipoPersona=='JUR'}">
+                                                        </p:outputLabel>
+                                                        <p:outputLabel styleClass="fondoInput" value="#{per.nombreRazonSocial}" style="width: 30%;" rendered="#{per.tipoPersona=='NAT'}">
+                                                        </p:outputLabel><p:spacer width="3"/>
+                                                        <p:outputLabel styleClass="fondoInput" value="#{per.primerApellido}" style="width: 35%;" rendered="#{per.primerApellido!=null}">
+                                                        </p:outputLabel><p:spacer width="3"/>
+                                                        <p:outputLabel styleClass="fondoInput" value="#{per.segundoApellido}" style="width: 28%;" rendered="#{per.segundoApellido!=null}">
+                                                        </p:outputLabel>
+                                                    </p:column>
+                                                </p:row>   
+                                                <p:row style="background-color: #ecebf3 ">
+                                                    <p:column style="width: 10%;"><p:outputLabel value="N° Doc." style="display: block; width: 85px; font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{per.numeroDocumento}"></p:outputLabel></p:column>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Tipo Doc." style="display: block; width: 105px; font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="" style="display: block; width: 160px"></p:outputLabel></p:column>                                                
+                                                </p:row>
+                                                <p:row rendered="#{per.tipoPersona=='NAT'}" style="background-color: #ecebf3 ">
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Genero" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{examenModSubsanacionBean.devuelveGenero(per.genero)}"></p:outputLabel></p:column>   
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Lugar Exp." style="display: block;width: 105px; font-weight: bold;" rendered="#{per.tipoDocumento=='CI'}"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{examenModSubsanacionBean.devuelveLugarExpedicion(per.lugarExpedicion)}" ></p:outputLabel></p:column>                                                                                                 
+                                                </p:row>
+                                                <p:row style="background-color: #ecebf3 ">
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Pais" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{examenModSubsanacionBean.devuelvePais(per.pais)}"></p:outputLabel></p:column>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Departamento" style="font-weight: bold;" rendered="#{per.pais=='BO'}"></p:outputLabel> </p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{examenModSubsanacionBean.devuelveLugarExpedicion(per.departamentoSolicitud)}" ></p:outputLabel></p:column>                                                
+                                                </p:row>
+                                                <p:row style="background-color: #ecebf3 ">
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Telefono" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{per.telefono}" ></p:outputLabel></p:column>
+                                                    <p:column colspan="2">
+
+                                                    </p:column>
+                                                </p:row>
+                                                <p:row style="background-color: #ecebf3 ">
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Celular" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{per.celular}"></p:outputLabel></p:column>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Fax" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="" ></p:outputLabel></p:column>                                                
+                                                </p:row>
+                                                <p:row style="background-color: #ecebf3 ">
+                                                    <p:column  style="width: 10%;"><p:outputLabel value="Direccion" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                    <p:column colspan="3" style="width: 90%;" ><p:outputLabel  styleClass="fondoInput" value="#{per.domicilio}" style="width: 98%;"></p:outputLabel></p:column>
+                                                </p:row>
+
+                                                <p:row style="background-color: #ecebf3 ">
+                                                    <p:column style="width: 10%;"><p:outputLabel value="email" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                    <p:column colspan="3" style="width: 40%;" ><p:outputLabel styleClass="fondoInput" value="#{per.correoElectronico}" style="width: 98%;"></p:outputLabel></p:column>
+                                                </p:row>
+
+                                            </p:panelGrid>  
+                                        </p:dataGrid>
+                                    </fieldset>
+                                </p:column>
+                                <p:column colspan="2" style="vertical-align: top;width: 50% ">
+                                    <fieldset>
+                                        <legend>
+                                            <p:outputLabel value="Datos del apoderado" />
+                                        </legend>
+                                        <p:dataGrid var="per" value="#{examenModSubsanacionBean.listaModApoderadosSipi}" emptyMessage="No existen apoderados" id="datosApoderado"
+                                                    paginatorPosition="bottom" style="width: 100%;" columns="1" rows="1" layout="grid" paginator="true">                                            
+                                            <p:panelGrid style="width: 100%;">
+                                                <p:row style="background-color: #ecebf3">
+                                                    <p:column  style="width: 10%;"><p:outputLabel value="Apoderado" style="font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column colspan="3" style="width: 90%;">
+                                                        <p:outputLabel styleClass="fondoInput" value="#{examenModSubsanacionBean.devuelveNombreJuridicoONatural(per.nombres,per.primerApellido,per.segundoApellido)}" style="width: 30%;" >
+                                                        </p:outputLabel>
+                                                    </p:column>
+                                                </p:row>        
+                                                <p:row style="background-color: #ecebf3">
+                                                    <p:column style="width: 10%;"><p:outputLabel value="N° Doc." style="display: block; width: 85px; font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{per.numeroDocumento}"></p:outputLabel></p:column>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Tipo Doc." style="display: block; width: 100px; font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{examenModSubsanacionBean.devuelveTipoDocumento(per.tipoDocumento)}" style="display: block; width: 160px"></p:outputLabel></p:column>                                                
+                                                </p:row>
+                                                <p:row style="background-color: #ecebf3">
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Genero" style="font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{examenModSubsanacionBean.devuelveGenero(per.genero)}"></p:outputLabel></p:column>       
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Lugar Exp." style="display: block;width: 105px; font-weight: bold" rendered="#{per.tipoDocumento=='CI'}"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{examenModSubsanacionBean.devuelveLugarExpedicion(per.lugarExpedicion)}" rendered="#{per.tipoDocumento=='CI'}"></p:outputLabel></p:column>                                                                                             
+                                                </p:row>
+
+                                                <p:row style="background-color: #ecebf3">
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Telefono" style="font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{per.telefono}" ></p:outputLabel></p:column>
+                                                    <p:column colspan="2">
+
+                                                    </p:column>
+                                                </p:row>
+                                                <p:row style="background-color: #ecebf3">
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Celular" style="font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{per.celular}"></p:outputLabel></p:column>
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Fax" style="font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="" ></p:outputLabel></p:column>                                                
+                                                </p:row>
+                                                <p:row style="background-color: #ecebf3">
+                                                    <p:column  style="width: 10%;"><p:outputLabel value="Direccion" style="font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column colspan="3" style="width: 90%;"><p:outputLabel styleClass="fondoInput" value="#{per.domicilio}" style="width: 98%;"></p:outputLabel></p:column>
+                                                </p:row>
+                                                <p:row style="background-color: #ecebf3">
+                                                    <p:column style="width: 10%;"><p:outputLabel value="email"  style="font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column colspan="3" style="width: 40%;"><p:outputLabel value="#{per.correoElectronico}" styleClass="fondoInput" style="width: 98%;"></p:outputLabel></p:column>
+                                                </p:row>
+                                                <p:row style="background-color: #ecebf3">
+                                                    <p:column style="width: 10%;"><p:outputLabel value="Poder" style="font-weight: bold"></p:outputLabel></p:column>
+                                                    <p:column colspan="3" style="width: 40%;">
+                                                        <h:panelGrid columns="3">                                                           
+                                                            <p:outputLabel value="#{per.numeroPoder}" styleClass="fondoInput"/>
+                                                            <p:spacer width="3"/>
+
+                                                        </h:panelGrid>
+                                                    </p:column>
+                                                </p:row>
+
+                                            </p:panelGrid>                             
+                                        </p:dataGrid>
+                                    </fieldset>
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                        <p:panelGrid style="width: 100%" styleClass="quitarBordes" id="panelNotificacion">
+                            <p:row >
+                                <p:column colspan="4">
+                                    <fieldset >
+                                        <legend>
+                                            <p:outputLabel value="Direccion de notificacion" />
+                                        </legend>
+                                        <p:panelGrid style="width: 100%">
+                                            <p:row>
+                                                <p:column style="width: 10%"> <p:outputLabel value="Ciudad:" style="font-weight: bold;"/> 
+                                                </p:column>                    
+                                                <p:column  style="width: 40%">
+                                                    <p:selectOneMenu id="cmbCiudadNotificacion" style="width: 80px !important" value="#{examenModSubsanacionBean.direccionNotificacionSipi.ciudadNotificacion}" autoWidth="false"
+                                                                     title="OBLIGATORIO. Ciudad para notificacion"  >
+                                                        <f:selectItem itemLabel="Elegir" itemValue=""    /> 
+                                                        <f:selectItems  value="#{examenModSubsanacionBean.lstCiudadNotificacion}" var="ciudadNotificacion" itemLabel="#{ciudadNotificacion.nombre}" itemValue="#{ciudadNotificacion.codigo}"    />                  
+                                                        <f:validateLength minimum="0" />
+                                                    </p:selectOneMenu>  
+                                                </p:column>
+
+                                                <p:column style="width: 10%"> <p:outputLabel value="Barrio/Zona:" style="font-weight: bold;"/></p:column>
+                                                <p:column  style="width: 40%"> <p:inputTextarea id="zonaBarrio" value="#{examenModSubsanacionBean.direccionNotificacionSipi.zonaBarrio}" 
+                                                                                                rows="2" cols="110"  autoResize="false" maxlength="500">
+                                                    </p:inputTextarea></p:column>
+                                            </p:row>
+
+                                        </p:panelGrid>
+                                        <p:panelGrid style="width: 100%">
+                                            <p:row >
+                                                <p:column style="width: 70%">
+                                                    <p:panelGrid columns="2" style="width: 99%">
+                                                        <p:outputLabel value="Av/Calle:" style="font-weight: bold;"/>
+                                                        <p:inputText id="avenida" value="#{examenModSubsanacionBean.direccionNotificacionSipi.avenidaCalle}" 
+                                                                     maxlength="100" style="width: 100%" size="50"></p:inputText> 
+                                                    </p:panelGrid>
+                                                </p:column>                    
+                                                <p:column  style="width: 10%">
+                                                    <p:panelGrid columns="2">
+                                                        <p:outputLabel value="N°:" style="display: block; width: 20px; font-weight: bold"/>
+                                                        <p:inputText id="numeroNoti" style="width: 80%" value="#{examenModSubsanacionBean.direccionNotificacionSipi.numeroDomicilio}" 
+                                                                     maxlength="20">
+                                                        </p:inputText>                  
+                                                    </p:panelGrid>
+                                                </p:column>
+                                                <p:column style="width: 10%"> 
+                                                    <p:panelGrid columns="2">
+                                                        <p:outputLabel value="Celular:" style="font-weight: bold;" />
+                                                        <p:inputText value="#{examenModSubsanacionBean.direccionNotificacionSipi.celular}"  maxlength="100"/> 
+                                                    </p:panelGrid>
+                                                </p:column>
+                                                <p:column  style="width:10%">
+                                                    <p:panelGrid columns="2">
+                                                        <p:outputLabel value="Telefono:" style="font-weight: bold;"/>
+                                                        <p:inputText value="#{examenModSubsanacionBean.direccionNotificacionSipi.telefono}"  maxlength="100"/> 
+                                                    </p:panelGrid>
+                                                </p:column>
+                                            </p:row>
+
+                                        </p:panelGrid>
+
+                                        <p:panelGrid style="width: 100%">
+                                            <p:row>
+                                                <p:column style="width: 6%"><p:outputLabel value="Referencia:" style="font-weight: bold;"/> 
+                                                </p:column>                    
+                                                <p:column  style="width: 90%" colspan="3"> 
+                                                    <p:inputText value="#{examenModSubsanacionBean.direccionNotificacionSipi.referencia}" style="width: 99%"  maxlength="250"/>                   
+                                                </p:column>
+
+                                            </p:row>
+                                        </p:panelGrid>
+                                        <p:panelGrid style="width: 100%">
+                                            <p:row >
+                                                <p:column style="width: 40%">
+                                                    <p:panelGrid columns="2" style="width: 99%">
+                                                        <p:outputLabel  id="lblEdificio" value="Edificio:" style="font-weight: bold;"/>
+                                                        <p:inputText value="#{examenModSubsanacionBean.direccionNotificacionSipi.nombreEdificio}" style="width: 100%" size="33"  maxlength="100"/>
+                                                    </p:panelGrid>
+                                                </p:column>                    
+                                                <p:column  style="width: 10%">
+                                                    <p:panelGrid columns="2">
+                                                        <p:outputLabel value="Piso:" style="font-weight: bold;"/>
+                                                        <p:inputText value="#{examenModSubsanacionBean.direccionNotificacionSipi.piso}" style="width: 80%" maxlength="20"/>       
+                                                    </p:panelGrid>
+                                                </p:column>
+                                                <p:column style="width: 10%"> 
+                                                    <p:panelGrid columns="2">
+                                                        <p:outputLabel value="Departamento:"  style="font-weight: bold;"/>
+                                                        <p:inputText value="#{examenModSubsanacionBean.direccionNotificacionSipi.departamento}" size="13" maxlength="10"/>
+                                                    </p:panelGrid>
+                                                </p:column>
+                                                <p:column  style="width:35%">
+                                                    <p:panelGrid columns="2">
+                                                        <p:outputLabel value="E-mail:"  style="display: block; width: 50px; font-weight: bold"/>
+                                                        <p:inputText id="correoNoti" style="width: 100%" value="#{examenModSubsanacionBean.direccionNotificacionSipi.correoelectronico}" 
+                                                                     maxlength="100" size="39"
+                                                                     >
+                                                        </p:inputText>
+                                                        <p:watermark for="correoNoti" value="correo@dominio.ext" />
+                                                    </p:panelGrid>
+                                                </p:column>
+                                            </p:row>
+
+                                        </p:panelGrid>
+
+                                    </fieldset>
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                        <p:panelGrid style="width: 100%" styleClass="quitarBordes">
+                            <p:row >
+                                <p:column colspan="4">
+                                    <fieldset >
+                                        <legend>
+                                            <p:outputLabel value="Datos del signo registrado" />
+                                        </legend>
+                                        <p:panelGrid style="width: 100%" id="panelDatosRegistrados">
+                                            <p:row >
+                                                <p:column style="width: 65%; vertical-align: top; ">  
+
+                                                    <p:dataGrid var="per" value="#{examenModSubsanacionBean.listaTitularRegistradoSipi}" emptyMessage="No existen Titulares" 
+                                                                paginatorPosition="bottom" style="width: 100%;" columns="1" rows="1" layout="grid" paginator="true">                                            
+                                                        <p:panelGrid style="width: 100%;">
+                                                            <p:row style="background-color: #ecebf3">
+                                                                <p:column  style="width: 10%;"><p:outputLabel value="Titular" style="font-weight: bold"></p:outputLabel></p:column>
+                                                                <p:column colspan="3" style="width: 90%;" styleClass="fondoInput">
+                                                                    <p:outputLabel value="#{per.nombreRazonSocial}" style="width: 98%;">
+                                                                    </p:outputLabel>
+                                                                </p:column>
+                                                            </p:row>                                                                                        
+                                                            <p:row style="background-color: #ecebf3">
+                                                                <p:column  style="width: 10%;"><p:outputLabel value="Direccion" style="font-weight: bold"></p:outputLabel></p:column>
+                                                                <p:column colspan="3" style="width: 90%;" styleClass="fondoInput"><p:outputLabel value="#{per.direccion}" style="width: 98%;"></p:outputLabel></p:column>
+                                                            </p:row>  
+
+                                                        </p:panelGrid>                             
+
+                                                    </p:dataGrid>        
+                                                    <p:spacer height="1"/>
+                                                    <h:panelGrid columns="2" style="width: 100%"> 
+                                                        <p:panelGrid style="width: 100%">
+                                                            <p:row style="width: 100%">
+                                                                <p:column style="width: 10%; text-align: center" colspan="2">
+                                                                    <p:outputLabel value="Signo Distintivo"  style="display: block; width: 110px;font-weight: bold" />
+                                                                </p:column>
+                                                                <p:column style="width: 90%; text-align: center" colspan="2">
+                                                                    <p:inputTextarea value="#{examenModSubsanacionBean.modificacionSipi.signoRegistro}"  rows="2" cols="50" autoResize="false"
+                                                                                     onkeyup="this.value = this.value.substring(0, 1000);" maxlength="1000" id="txtSigno" 
+                                                                                     style="width: 100%" styleClass="tituloMarca">
+                                                                    </p:inputTextarea>  
+                                                                </p:column>
+                                                            </p:row>
+                                                            <p:row>
+                                                                <p:column>
+                                                                    <h:outputLabel value="Version clase niza: " style="display: block; width: 150px;font-weight: bold"/>
+                                                                </p:column>
+                                                                <p:column>
+                                                                    <p:inputText id="versionClase" value="#{examenModSubsanacionBean.versionClaseNiza}" style="display: block; width: 40px;font-weight: bold" disabled="true"/>
+                                                                </p:column>
+                                                                <p:column>
+                                                                    <p:outputLabel value="Clase:" style="font-weight: bold"/>
+                                                                </p:column>
+                                                                <p:column>
+                                                                    <p:inputText id="txtClase" value="#{examenModSubsanacionBean.valorClaseNizaExt}" style="display: block; width: 40px;font-weight: bold" disabled="true"></p:inputText>
+                                                                </p:column>                                                                
+                                                            </p:row>
+                                                        </p:panelGrid>  
+                                                        <p:panelGrid columns="2" id="pnlProductos">
+                                                            <p:row>
+                                                                <p:column>
+                                                                    <p:outputLabel value="Productos:"  rendered="#{examenModSubsanacionBean.productosRendered}" style="font-weight: bold"/>
+                                                                </p:column>
+                                                                <p:column>
+                                                                    <p:inputTextarea value="#{examenModSubsanacionBean.modificacion.lista_producto}"  rows="6" cols="30" autoResize="false"
+                                                                                     onkeyup="this.value = this.value.substring(0, 5000);" rendered="#{examenModSubsanacionBean.productosRendered}">
+                                                                    </p:inputTextarea>
+                                                                </p:column>                                                                
+                                                            </p:row>
+                                                        </p:panelGrid>
+                                                    </h:panelGrid>
+                                                </p:column>
+                                                <p:column style="vertical-align: top;">                                            
+                                                    <p:panelGrid columns="3" >
+                                                        <p:outputLabel value="Tipo genero" style="display:block;width:83px;font-weight: bold" />
+                                                        <p:selectOneMenu  value="#{examenModSubsanacionBean.tipoMarca}" id="cboTipoMarca" >
+                                                            <f:selectItem itemLabel="Elegir" itemValue="" />
+                                                            <f:selectItems value="#{examenModSubsanacionBean.listaTipoGenero}" var="tipoGenero" itemLabel="#{tipoGenero.nombre}" itemValue="#{tipoGenero.codigo}"/>
+                                                            <p:ajax listener="#{examenModSubsanacionBean.activaPanelLema()}"
+                                                                    event="change" update=":formu:panelLema"></p:ajax>
+
+                                                        </p:selectOneMenu>                                                       
+                                                    </p:panelGrid>
+
+                                                    <h:panelGrid id="panelLema" >
+                                                        <h:panelGrid  columns="2" cellspacing="1" rendered="#{examenModSubsanacionBean.panelLema}">
+                                                            <p:outputLabel value="Acompaña a la" />
+                                                            <p:inputTextarea value="#{examenModSubsanacionBean.modificacion.marca_acomp}"  rows="2" cols="31" autoResize="false"
+                                                                             onkeyup="this.value = this.value.substring(0, 1000);" maxlength="1000"
+                                                                             >
+                                                            </p:inputTextarea>
+                                                        </h:panelGrid>
+                                                        <h:panelGrid  columns="6" cellpadding="1" rendered="#{examenModSubsanacionBean.panelLema}">                                        
+                                                            <p:outputLabel value="N° Registro" />
+                                                            <p:inputText value="#{examenModSubsanacionBean.modificacion.reg_lc_registrado}" size="5" maxlength="8" onkeyup="return ValNumero(this);"/>
+
+                                                            <p:selectOneMenu  value="#{examenModSubsanacionBean.modificacion.serie_lc_registrado}" autoWidth="false">
+                                                                <f:selectItems value="#{examenModSubsanacionBean.lstSerieRegistro}" var="r" itemLabel="#{r.nombre}" itemValue="#{r.codigo}"/>
+                                                            </p:selectOneMenu>
+                                                            <p:spacer height="1"/>
+                                                            <p:outputLabel value="Fecha" />
+
+                                                            <p:calendar value="#{examenModSubsanacionBean.modificacion.fecha_lc_registrado}"                                                
+                                                                        locale="es" 
+                                                                        navigator="true" 
+                                                                        pattern="dd/MM/yyyy" mask="true"
+                                                                        size="12" 
+                                                                        >
+                                                            </p:calendar>
+                                                        </h:panelGrid>
+                                                    </h:panelGrid>
+                                                    <p:spacer height="1"/>
+                                                    <p:panelGrid style="width: 100%"> 
+                                                        <p:row>
+                                                            <p:column style="width: 18%">
+                                                                <p:outputLabel for="menu" value="Tipo Signo:" style="font-weight: bold"/>
+                                                            </p:column>
+                                                            <p:column style="width: 70%">
+                                                                <p:selectCheckboxMenu id="menu" value="#{examenModSubsanacionBean.tipoGeneroSeleccionado}" 
+                                                                                      label="#{examenModSubsanacionBean.tipoSignoDescripcion}"  
+                                                                                      filter="true" filterMatchMode="startsWith" panelStyle="width:250px"  >
+                                                                    <f:selectItems value="#{examenModSubsanacionBean.listaTipoSigno}" 
+                                                                                   var="tipoSigno" itemLabel="#{tipoSigno.nombre}" itemValue="#{tipoSigno.codigo}"/>
+                                                                    <p:ajax event="toggleSelect" listener="#{examenModSubsanacionBean.muestraOtro()}" update="display pnlOtro"/>
+                                                                    <p:ajax event="change" listener="#{examenModSubsanacionBean.muestraOtro()}" update="display pnlOtro"/>
+                                                                </p:selectCheckboxMenu>
+                                                            </p:column>
+                                                        </p:row>
+                                                        <p:row>
+                                                            <p:column style="width: 15%">
+                                                                <p:panelGrid id="pnlOtro">
+
+                                                                </p:panelGrid>
+
+                                                            </p:column>
+                                                            <p:column style="width: 70%">
+                                                                <p:outputPanel id="display" style="width:100%;padding-left:0px;margin-top:1px" >
+
+                                                                    <p:outputLabel  value="Otro:" rendered="#{examenModSubsanacionBean.txtOtroRendered}"/>
+                                                                    <p:inputText value="#{examenModSubsanacionBean.textoOtro}" rendered="#{examenModSubsanacionBean.txtOtroRendered}" 
+                                                                                 style="width: 95%" />
+
+                                                                </p:outputPanel>
+                                                            </p:column>
+                                                        </p:row>
+                                                    </p:panelGrid>
+
+                                                </p:column>
+                                            </p:row>                                                                                
+                                        </p:panelGrid>
+                                    </fieldset>
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                        <p:panelGrid style="width: 100%" styleClass="quitarBordes" >
+                            <p:row >
+                                <p:column colspan="4" style="width: 100%;">
+                                    <fieldset >
+                                        <legend>
+                                            <p:outputLabel value="Datos del nuevo titular o licenciatario" />                                
+                                        </legend>                                          
+                                        <h:panelGrid id="nombre" styleClass="quitarBordes" style="width: 100%">  
+                                            <!--CAMBIO DE NOMBRE-->
+                                            <p:panelGrid rendered="#{examenModSubsanacionBean.radioNombre}" style="width: 100%"> 
+                                                <p:row style="width: 100%; ">
+                                                    <p:column style="width: 100%; " colspan="2">
+
+                                                        <p:dataGrid var="per" value="#{examenModSubsanacionBean.listaNuevoTitularSipi}" style="width: 100%"
+                                                                    emptyMessage="No existen nuevos titulares para cambio de nombre" id="datosNuevoNombre"
+                                                                    columns="1" rows="1" layout="grid" paginator="true" paginatorPosition="bottom">
+                                                            <p:panelGrid columns="2" style="width: 100%"  >
+                                                                <p:panelGrid style="width: 70%;"  >
+                                                                    <p:row style="background-color:#ecebf3; ">
+                                                                        <p:column  style="width: 10%;"><p:outputLabel value="Nuevo Titular" style="font-weight: bold; display: block; width: 90px"></p:outputLabel></p:column>
+                                                                        <p:column colspan="3" style="width: 690px; border-color: #045491">
+                                                                            <p:outputLabel styleClass="fondoInput"  value="#{examenModSubsanacionBean.devuelveNombreJuridicoONatural(per.nombreRazonSocial, per.primerApellido, per.segundoApellido)}" style="width: 30%;" >
+                                                                            </p:outputLabel>
+
+                                                                        </p:column>
+                                                                    </p:row>    
+                                                                    <p:row style="background-color:#ecebf3">
+                                                                        <p:column  style="width: 10%"><p:outputLabel value="N° Doc." style="display: block; width: 85px;font-weight: bold"></p:outputLabel></p:column>
+                                                                        <p:column styleClass="fondoInput"><p:outputLabel value="#{per.nroDocumento}" ></p:outputLabel></p:column>                                                             
+                                                                        <p:column style="width: 10%"><p:outputLabel value="Tipo Doc." style="display: block; width: 105px;font-weight: bold"></p:outputLabel></p:column>
+                                                                        <p:column style="width: 40%" styleClass="fondoInput"><p:outputLabel value="#{examenModSubsanacionBean.devuelveTipoDocumento(per.tipoDocumento)}" ></p:outputLabel></p:column>  
+                                                                    </p:row>
+                                                                    <p:row rendered="#{per.tipoTitular=='NAT'}" style="background-color:#ecebf3">
+                                                                        <p:column style="width: 10%;"><p:outputLabel value="Genero" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                                        <p:column styleClass="fondoInput" style="width: 40%;"><p:outputLabel value="#{examenModSubsanacionBean.devuelveGenero(per.genero)}"></p:outputLabel></p:column>   
+                                                                        <p:column style="width: 10%;"><p:outputLabel value="Lugar Expedición" style="display: block;width: 105px; font-weight: bold;" rendered="#{per.tipoDocumento=='CI'}"></p:outputLabel></p:column>
+                                                                        <p:column styleClass="fondoInput" style="width: 40%;"><p:outputLabel value="#{examenModSubsanacionBean.devuelveLugarExpedicion(per.lugarExpedicion)}" ></p:outputLabel></p:column>                                                                                                 
+                                                                    </p:row>
+
+                                                                </p:panelGrid>
+                                                            </p:panelGrid>
+                                                        </p:dataGrid>   
+                                                    </p:column>
+                                                </p:row>
+                                            </p:panelGrid>
+                                            <!--CAMBIO DE DOMICILIO-->
+                                            <h:panelGrid rendered="#{examenModSubsanacionBean.radioDomicilio}" style="width: 100%" >  
+                                                <p:row style="width: 100%">
+                                                    <p:column style="width: 100%" colspan="2">
+
+                                                        <p:dataGrid var="per" value="#{examenModSubsanacionBean.listaNuevoTitularSipi}" emptyMessage="No existen nuevos domicilios" id="datosNuevoDomicilio"
+                                                                    style="width: 100%;" columns="1" rows="1" layout="grid" paginator="true" paginatorPosition="bottom">
+                                                            <p:panelGrid columns="2" style="width: 100%">
+                                                                <p:panelGrid  style="width: 75%" >
+                                                                    <p:row >
+                                                                        <p:column  style="width: 4%">
+                                                                            <p:outputLabel value="Domicilio" style="display: block; width: 83px; font-weight: bold"/> 
+                                                                        </p:column>
+                                                                        <p:column  styleClass="fondoInput" colspan="3">
+                                                                            <p:outputLabel  styleClass="fondoInput" value="#{per.direccion}" id="domicilioD" 
+                                                                                            title="OBLIGATORIO. Dirección domiciliaria nueva."                                                                                                       
+                                                                                            >                                                                        
+                                                                            </p:outputLabel>
+                                                                        </p:column>
+
+                                                                    </p:row>
+                                                                    <p:row style="width: 100%">
+
+                                                                        <p:column style="width: 4%;"><p:outputLabel value="Pais" style="font-weight: bold"></p:outputLabel></p:column>
+                                                                        <p:column style="width: 35%;"  styleClass="fondoInput"><p:outputLabel value="#{examenModSubsanacionBean.devuelvePais(per.pais)}"></p:outputLabel></p:column>
+                                                                        <p:column style="width: 10%;"><p:outputLabel value="Departamento" rendered="#{per.pais=='BO'}" style="font-weight: bold"></p:outputLabel></p:column>
+                                                                        <p:column style="width: 35%;"  styleClass="fondoInput"><p:outputLabel value="#{examenModSubsanacionBean.devuelveLugarExpedicion(per.solicitudDepartamento)}" rendered="#{per.pais=='BO'}"></p:outputLabel></p:column>                                                
+
+                                                                    </p:row>
+                                                                </p:panelGrid>
+                                                                <h:panelGrid>
+                                                                    <p:outputLabel value="Seleccione un domicilio a modificar:" style="font-weight: bold" rendered="#{examenModSubsanacionBean.panelSeleccionarIdReferencia}"/>
+                                                                    <p:selectOneRadio rendered="#{examenModSubsanacionBean.panelSeleccionarIdReferencia}"
+                                                                                      value="#{per.id_referencia}" layout="grid" columns="1"  >
+                                                                        <f:selectItems value="#{examenModSubsanacionBean.lstTitularActual}"
+                                                                                       var="actual" itemLabel="#{actual.direccion}" 
+                                                                                       itemValue="#{actual.idSolicitanteApoderado}" /> 
+                                                                        <f:selectItem  itemLabel="Todos" itemValue="-1"  />                                                                            
+                                                                    </p:selectOneRadio>
+                                                                </h:panelGrid>
+                                                            </p:panelGrid>
+                                                        </p:dataGrid>                                                                                                 
+                                                        <p:commandButton  value="PARA GUARDAR d" icon="ui-icon-circle-plus" rendered="false"
+                                                                          actionListener="#{examenModSubsanacionBean.previa()}">                                                    
+                                                        </p:commandButton> 
+                                                    </p:column>
+                                                </p:row>
+                                            </h:panelGrid>                                            
+                                            <!--TRANSFERENCIA-->
+                                            <h:panelGrid rendered="#{examenModSubsanacionBean.radioTransferencia}" style="width: 100%">
+
+                                                <p:dataGrid var="per" value="#{examenModSubsanacionBean.listaNuevoTitularSipi}" emptyMessage="No existen solicitantes" id="datosNuevoTItular"
+                                                            style="width: 100%;" columns="1" rows="1" layout="grid" paginator="true" paginatorPosition="bottom">     
+                                                    <p:panelGrid style="width: 80%;">
+                                                        <p:row>
+                                                            <p:column  style="width: 10%;"><p:outputLabel value="Nuevo Titular:" style="font-weight: bold; display: block; width: 90px"></p:outputLabel></p:column>
+                                                            <p:column colspan="3" style="width: 90%;">
+                                                                <p:outputLabel styleClass="fondoInput" value="#{examenModSubsanacionBean.devuelveNombreJuridicoONatural(per.nombreRazonSocial, per.primerApellido, per.segundoApellido)}" style="width: 98%;" >
+                                                                </p:outputLabel>
+
+                                                            </p:column>
+                                                        </p:row>   
+                                                        <p:row rendered="#{examenModSubsanacionBean.valorRadio!='CN'}">
+                                                            <p:column  style="width: 10%"><p:outputLabel value="N° Doc.:" style="display: block; width: 87px; font-weight: bold"></p:outputLabel></p:column>
+                                                            <p:column styleClass="fondoInput"><p:outputLabel value="#{per.nroDocumento}" ></p:outputLabel></p:column>                                                             
+                                                            <p:column ><p:outputLabel value="Tipo Doc.:" style="display: block; width: 105px; font-weight: bold"></p:outputLabel></p:column>
+                                                            <p:column styleClass="fondoInput"><p:outputLabel value="#{examenModSubsanacionBean.devuelveTipoDocumento(per.tipoDocumento)}" style="display: block; width: 100%"></p:outputLabel></p:column>  
+                                                        </p:row>
+                                                        <p:row rendered="#{per.tipoTitular=='NAT'}">
+                                                            <p:column  style="width: 10%;"><p:outputLabel value="Genero:" rendered="#{examenModSubsanacionBean.valorRadio!='CN'}" style="font-weight: bold"></p:outputLabel></p:column>
+                                                            <p:column styleClass="fondoInput"><p:outputLabel value="#{examenModSubsanacionBean.devuelveGenero(per.genero)}" rendered="#{examenModSubsanacionBean.valorRadio!='CN'}"></p:outputLabel></p:column>   
+                                                            <p:column ><p:outputLabel value="Lugar Exp.:" style="display: block;width: 105px; font-weight: bold" rendered="#{examenModSubsanacionBean.valorRadio!='CN'}"></p:outputLabel></p:column>
+                                                            <p:column styleClass="fondoInput"><p:outputLabel value="#{examenModSubsanacionBean.devuelveLugarExpedicion(per.lugarExpedicion)}" rendered="#{examenModSubsanacionBean.valorRadio!='CN'}"></p:outputLabel></p:column>  
+
+                                                        </p:row>
+                                                        <p:row rendered="#{examenModSubsanacionBean.valorRadio!='CN'}">
+                                                            <p:column style="width: 10%;"><p:outputLabel value="Pais:" style="font-weight: bold"></p:outputLabel></p:column>
+                                                            <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{examenModSubsanacionBean.devuelvePais(per.pais)}"></p:outputLabel></p:column>
+                                                            <p:column style="width: 10%;"><p:outputLabel value="Departamento:" style="font-weight: bold" rendered="#{per.pais=='BO'}"></p:outputLabel></p:column>
+                                                            <p:column style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{examenModSubsanacionBean.devuelveLugarExpedicion(per.solicitudDepartamento)}"></p:outputLabel></p:column>                                                               
+                                                        </p:row>
+                                                        <p:row rendered="#{examenModSubsanacionBean.valorRadio!='CN'}">
+                                                            <p:column ><p:outputLabel value="Telefono:" style="font-weight: bold"></p:outputLabel>
+
+                                                            </p:column>
+                                                            <p:column colspan="1">
+                                                                <h:panelGrid  columns="5">                                                                    
+                                                                    <p:outputLabel styleClass="fondoInput" value="#{per.telefono}" style="display: block; width: 120px" >
+                                                                    </p:outputLabel>
+                                                                    <p:spacer width="10"/>
+                                                                    <p:outputLabel value="Celular:" style="font-weight: bold; display: block; width: 100px"></p:outputLabel>
+                                                                    <p:spacer width="10"/>
+                                                                    <p:outputLabel styleClass="fondoInput" value="#{per.celular}" ></p:outputLabel>
+                                                                </h:panelGrid>
+                                                            </p:column> 
+                                                            <p:column colspan="2">
+                                                                <h:panelGrid  columns="3">
+                                                                    <p:outputLabel value="Fax:" style="display: block; width: 100px;font-weight: bold"></p:outputLabel>
+                                                                    <p:spacer width="12"/>
+                                                                    <p:outputLabel styleClass="fondoInput" value="" ></p:outputLabel>
+                                                                </h:panelGrid>       
+                                                            </p:column>
+                                                        </p:row>
+                                                        <p:row rendered="#{examenModSubsanacionBean.valorRadio!='CN'}">
+                                                            <p:column  style="width: 10%;"><p:outputLabel value="Direccion:" style="font-weight: bold"></p:outputLabel></p:column>
+                                                            <p:column colspan="3" style="width: 90%;" styleClass="fondoInput"><p:outputLabel value="#{per.direccion}" style="width: 98%;"></p:outputLabel></p:column>
+                                                        </p:row>
+
+                                                        <p:row rendered="#{examenModSubsanacionBean.valorRadio!='CN'}">
+                                                            <p:column style="width: 10%;"><p:outputLabel value="email" style="font-weight: bold"></p:outputLabel></p:column>
+                                                            <p:column colspan="3" style="width: 40%;" styleClass="fondoInput"><p:outputLabel value="#{per.email}" style="width: 98%;"></p:outputLabel></p:column>
+                                                        </p:row>
+                                                    </p:panelGrid>  
+                                                </p:dataGrid>                                                
+
+                                            </h:panelGrid>
+                                            <!--FUSION-->
+                                            <h:panelGrid rendered="#{examenModSubsanacionBean.radioFusion}" style="width: 100%">
+                                                <p:outputLabel value="En caso de Fusion:" style="color: #666666; font-weight: bold"/>
+                                                <p:panelGrid style="width: 100%" id="panelParticipanteFusion">
+                                                    <p:row>
+                                                        <p:column colspan="2" style="vertical-align: top; width: 40%">
+
+                                                        </p:column>
+                                                        <p:column colspan="2" style="vertical-align: top; width: 60%">
+                                                            <h:panelGrid id="pnlListaFusion" style="width: 100%;">
+                                                                <p:dataGrid id="dtgParticipantesFusion" var="per" value="#{examenModSubsanacionBean.listaParticipanteFusion}" emptyMessage="No existen Participantes en la Fusion" 
+                                                                            paginatorPosition="bottom" style="width: 100%;" columns="1" rows="1" layout="grid" paginator="true">
+                                                                    <p:panelGrid style="width: 100%;">
+                                                                        <p:row>
+                                                                            <p:column  style="width: 10%;"><p:outputLabel value="Titular"></p:outputLabel></p:column>
+                                                                            <p:column colspan="2" style="width: 80%;">
+                                                                                <p:inputText value="#{per.nombre_razonsocial}" style="width: 98%;">
+                                                                                </p:inputText>
+                                                                            </p:column>
+                                                                        </p:row> 
+                                                                    </p:panelGrid>
+                                                                </p:dataGrid>     
+                                                            </h:panelGrid>
+                                                        </p:column>
+                                                    </p:row>
+                                                </p:panelGrid>
+
+                                            </h:panelGrid>       
+                                            <!--LICENCIA DE USO-->
+                                            <h:panelGrid rendered="#{examenModSubsanacionBean.radioLU}" columns="5">
+                                                <p:outputLabel value="Plazo:" styleClass="labelBold"/>
+                                                <p:outputLabel value="Inicio" />                                                
+                                                <p:calendar value="#{examenModSubsanacionBean.modificacionSipi.luInicio}"                                                
+                                                            locale="es" 
+                                                            navigator="true" 
+                                                            pattern="dd/MM/yyyy" mask="true"
+                                                            size="9" >
+                                                </p:calendar>
+                                                <p:outputLabel value="Fin" />
+                                                <p:calendar value="#{examenModSubsanacionBean.modificacionSipi.luFin}"                                                
+                                                            locale="es" 
+                                                            navigator="true" 
+                                                            pattern="dd/MM/yyyy" mask="true"
+                                                            size="9" >
+                                                </p:calendar>
+                                            </h:panelGrid>
+                                        </h:panelGrid>
+                                    </fieldset>
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+
+                        <p:panelGrid style="width: 100%" styleClass="quitarBordes">
+                            <p:row>
+                                <p:column colspan="4">
+                                    <fieldset >                                        
+                                        <p:panelGrid style="width: 100%; text-align: center" id="pnlbotonesInferior">
+                                            <p:row style="width: 100%;text-align: center">
+
+                                                <p:column style="width: 10%">
+
+                                                </p:column>
+
+                                                <p:column style="width: 10%">
+                                                    <p:commandButton value="Subsanar Registro" 
+                                                                     icon="ui-icon-pencil" style="height: 40px;width: 100px"
+                                                                     update=":formu:msg"
+                                                                     actionListener="#{examenModSubsanacionBean.subsanarExpedienteModificacion}"
+                                                                     >
+                                                    </p:commandButton>   
+                                                    <p:spacer width="3"/>
+                                                </p:column>
+
+                                                <p:column style="width: 10%">
+                                                    <p:spacer width="3"/>
+                                                </p:column>
+
+                                            </p:row>
+                                        </p:panelGrid>
+                                    </fieldset>
+                                </p:column>
+                            </p:row>                    
+                        </p:panelGrid>
+
+                    </p:panelGrid> 
+                    <p:confirmDialog global="true"  width="40%">                                                    
+                        <div align="center">                      
+                            <h:panelGrid columns="3" style="text-align: left">                                     
+                                <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                <p:separator id="separador20" style="width: 5px ; border: 0px; height: 0px"></p:separator>
+                                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />                                
+                            </h:panelGrid>
+                        </div>
+                    </p:confirmDialog>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

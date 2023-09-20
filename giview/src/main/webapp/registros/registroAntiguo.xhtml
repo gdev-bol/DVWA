@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:p="http://primefaces.org/ui"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 template="./../WEB-INF/facelets/templates/Template.xhtml"
+
+                 >
+    <ui:define name="content">
+
+        <h:form id="form" acceptcharset="UTF-8" enctype="application/form-data">
+            <p:panelGrid columns="5">
+                <p:outputLabel value="N° REGISTRO:" />
+                <p:inputText value="#{registroBean.registroBuscar}" size="10" maxlength="10" onkeyup="return ValNumero(this);"/>
+                <p:inputText   value="#{registroBean.serieBuscar}" size="2"/>
+
+
+                <p:spacer width="2"/>
+                <p:commandButton  icon="ui-icon-search"  value="Buscar" style="width: 105%; height: 115%"
+                                  update="texto"
+                                  actionListener="#{registroBean.buscadorRegistroExistente()}"
+                                  >                                    
+                </p:commandButton>
+            </p:panelGrid>
+
+            <br />
+
+            <p:outputLabel value="OBSERVACIONES:" style="font-weight: bold"/>
+            <p:inputTextarea value="#{registroBean.observaciones}"  rows="2" cols="35" id="texto"
+                             onkeyup="this.value = this.value.substring(0, 500);">
+            </p:inputTextarea>
+
+            <p:separator/>
+            <p:commandButton value="Resolución" icon="ui-icon-print" style="height: 40px;"
+                             actionListener="#{registroBean.imprimirTitulo()}" ajax="false">              
+            </p:commandButton>
+            <h:commandButton value="AWWWWWWWWWW" actionListener="#{registroBean.imprimirTitulo()}" 
+                             >
+                <f:ajax disabled="true"/>
+            </h:commandButton>
+        </h:form> 
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,143 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <body>
+        <ui:composition template="./../WEB-INF/facelets/templates/Template.xhtml">
+            <ui:define name="content">  
+
+                <h:form id="frmBusqueda">
+                    <p:panelGrid style="width: 100%;" styleClass="quitarBordes">
+                        <p:row>
+                            <p:column style="width: 100%;" colspan="2">
+                                <p:outputPanel style="padding-bottom: 1px; padding-top: 1px; padding-left:1px; padding-right: 1px;">
+                                    <table>
+                                        <tr valign="middle">
+                                            <td><p:graphicImage library="images" name="flechaTituloAzul.png" width="24" height="24"></p:graphicImage></td>
+                                            <td><p:outputLabel value="Búsqueda de parecidos" styleClass="tituloPrincipalFuente"></p:outputLabel></td>
+                                        </tr>
+                                    </table>                    
+                                    <p:separator id="sepTitulo" style="border: 1px #045491 inset;"></p:separator>                    
+                                </p:outputPanel>               
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                     <p:commandButton
+                                            id="btnbuscar"
+                                            icon="ui-icon-search"
+                                            actionListener="#{gestionCalidadBean.listaReporte()}"
+                                            update=":frmBusqueda:Recibos"
+                                            value="Generar">
+                                            <f:ajax execute="@this" event="click"/>
+                                        </p:commandButton>
+                    
+                    
+                         <p:dataTable  id="Recibos"
+                                             var="calidad"
+                                             value="#{gestionCalidadBean.listaVentanilla}"
+                                        
+                                                   rowStyleClass="old" 
+                                         scrollRows="20" 
+                                         scrollable="true"  
+                                         liveScroll="true" 
+                                         scrollHeight="250"
+
+                                             
+                                             
+                                             >
+                             
+                             
+                                            
+                             
+                             
+                             
+                             
+                             
+                             
+                             
+                                        <p:column headerText="SM" width="10%" style="text-align:right">
+                                            <h:outputText value=" #{calidad.sm}" />
+                                        </p:column>
+                                        <p:column headerText="Gestion" width="10%" style="text-align:right">
+                                            <h:outputText value=" #{calidad.gestion}" />
+                                        </p:column>
+                                        <p:column headerText="Extension" width="10%" style="text-align:right">
+                                            <h:outputText value=" #{calidad.extension}" />
+                                        </p:column>
+                                       
+                                        <p:column headerText="Dia Sol." width="10%" style="text-align:right">
+                                            <h:outputText value=" #{calidad.diaSol}" />
+                                        </p:column>
+                                       
+                                        <p:column headerText="Mes Sol." width="10%" style="text-align:right">
+                                            <h:outputText value=" #{calidad.mesSol}" />
+                                        </p:column>
+                                       
+                                        <p:column headerText="Gestion Sol." width="10%" style="text-align:right">
+                                            <h:outputText value=" #{calidad.gestionSol}" />
+                                        </p:column>
+                                        <p:column headerText="Etapa." width="10%" style="text-align:right">
+                                            <h:outputText value=" #{calidad.etapa}" />
+                                        </p:column>
+                                        <p:column headerText="Vent.Resp." width="10%" style="text-align:right">
+                                            <h:outputText value=" #{calidad.ventResp}" />
+                                        </p:column>
+                                       
+                                        <p:column headerText="diaRec" width="10%" style="text-align:right">
+                                            <h:outputText value=" #{calidad.diaVentRec}" />
+                                        </p:column>
+                                        <p:column headerText="mesRec" width="10%" style="text-align:right">
+                                            <h:outputText value=" #{calidad.mesVentRec}" />
+                                        </p:column>
+                                        <p:column headerText="gestionRec" width="10%" style="text-align:right">
+                                            <h:outputText value=" #{calidad.gestionVentRec}" />
+                                        </p:column>
+                                        <p:column headerText="diaFin" width="10%" style="text-align:right">
+                                            <h:outputText value=" #{calidad.diaVentFin}" />
+                                        </p:column>
+                                        <p:column headerText="mesFin" width="10%" style="text-align:right">
+                                            <h:outputText value=" #{calidad.mesVentFin}" />
+                                        </p:column>
+                                        <p:column headerText="gestionFin" width="10%" style="text-align:right">
+                                            <h:outputText value=" #{calidad.gestionVentFin}" />
+                                        </p:column>
+                                     
+                                        <p:column headerText="Plazo" width="10%" style="text-align:right">
+                                            <h:outputText value=" #{calidad.plazoReal}" />
+                                        </p:column>
+                                        <p:column headerText="Marca" width="10%" style="text-align:right">
+                                            <h:outputText value=" #{calidad.marca}" />
+                                        </p:column>
+                                        <p:column headerText="Titular" width="10%" style="text-align:right">
+                                            <h:outputText value=" #{calidad.nombreTitular}" />
+                                        </p:column>
+                                     
+                                        <p:column headerText="PaisTit." width="10%" style="text-align:right">
+                                            <h:outputText value=" #{calidad.paisTitular}" />
+                                        </p:column>
+                                        <p:column headerText="Apo." width="10%" style="text-align:right">
+                                            <h:outputText value=" #{calidad.nombreApoderado}" />
+                                        </p:column>
+                                        <p:column headerText="Clase." width="10%" style="text-align:right">
+                                            <h:outputText value=" #{calidad.clase}" />
+                                        </p:column>
+                                     
+                                    </p:dataTable>
+                                    
+              
+                    
+                    <p:ajaxStatus  style="display:block;margin-bottom:2em;height:24px;" onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+                    <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                        <p:graphicImage value="/resources/images/ajaxloadingbar.gif"/>
+                    </p:dialog>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+
+    </body>
+
+</html>

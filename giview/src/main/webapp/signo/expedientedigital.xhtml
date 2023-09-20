@@ -1,0 +1,172 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <body>
+        <ui:composition template="./../WEB-INF/facelets/templates/Template.xhtml">
+            <ui:define name="content">
+                <h:form>
+                    <p:panelGrid style="width: 100%;" styleClass="quitarBordes">
+                        <p:row>
+                            <p:column style="width: 100%;" colspan="2">
+                                <p:outputPanel style="padding-bottom: 1px; padding-top: 1px; padding-left:1px; padding-right: 1px;">
+                                    <table>
+                                        <tr valign="middle">
+                                            <td><p:graphicImage library="images" name="flechaTituloAzul.png" width="24" height="24"></p:graphicImage></td>
+                                            <td><p:outputLabel value="Digitalizar" styleClass="tituloPrincipalFuente"></p:outputLabel></td>
+                                        </tr>
+                                    </table>                    
+                                    <p:separator id="sepTitulo" style="border: 1px #045491 inset;"></p:separator>                    
+                                </p:outputPanel>                                
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+
+                    <fieldset>
+                     
+                        <p:panelGrid styleClass="quitarBordes">
+                            <p:row>
+
+
+
+
+                                <p:column rowspan="3" style="padding-left: 300px">
+                                    <p:panelGrid columns="2" styleClass="quitarBordes">
+                                        <p:selectOneRadio id="valorRadio" value="#{digitalizacionBean.busq}" layout="grid" columns="1" >
+                                            <f:selectItem itemValue="SM" itemLabel="Solicitud de marca" />
+                                            <f:selectItem itemValue="NP" itemLabel="Numero de publicación" />
+                                            <f:selectItem itemValue="NR" itemLabel="Numero de registro" />
+                                            <p:ajax listener="#{digitalizacionBean.activaCambios3()}"
+                                                    event="change" update="cambiook"></p:ajax>
+                                        </p:selectOneRadio>
+
+                                    </p:panelGrid>
+                                </p:column>
+                                <p:column rowspan="2">
+                                    <p:panelGrid id="cambiook">
+                                        <p:row>
+                                            <p:column>
+                                                <p:outputLabel value="Numero"/>
+                                                <p:inputText  value="2277" size="15"/>
+                                                <p:outputLabel value="Gestion" rendered="#{digitalizacionBean.valorSM}"/>
+                                                <p:inputText  value="2011" rendered="#{digitalizacionBean.valorSM}"/>
+                                                <p:outputLabel value="Serie" rendered="#{digitalizacionBean.valorNR}"/>
+                                                <p:inputText  value="C" rendered="#{digitalizacionBean.valorNR}" size="5"/>
+                                            </p:column>
+                                        </p:row>
+                                    </p:panelGrid>
+                                </p:column>
+                                <p:column rowspan="3">
+                                    <p:commandButton value="Buscar"
+                                                     icon="ui-icon-search"
+                                                     actionListener="#{digitalizacionBean.activarPanelBusqueda()}"
+                                                     update="panelAdjuntarDocumentos">
+                                    </p:commandButton>
+                                    <p:commandButton value="Limpiar"
+                                                     icon="ui-icon-document"
+                                                     actionListener="#{digitalizacionBean.limpiarVariables()}"
+                                                     update="panelAdjuntarDocumentos">
+                                    </p:commandButton>
+                                </p:column>
+
+                            </p:row>
+                            <p:row>
+                            </p:row>
+                            <p:row>
+                                <p:column> 
+
+                                </p:column>
+
+                            </p:row>
+                        </p:panelGrid>  
+
+                        <p:spacer height="20px"></p:spacer>
+
+                        <h:panelGrid id="panelAdjuntarDocumentos">
+
+                            <p:panelGrid style="width: 100%" rendered="#{digitalizacionBean.activaPanelAdjuntarDocumentos}" styleClass="quitarBordes">
+
+                                <p:row>
+                                    
+                                    <p:column>
+
+                                        <p:outputLabel value="Documentos existentes"/> 
+
+                                        <p:panelGrid>
+                                            <p:row>
+                                                <p:column>
+                                                    <p:dataTable var="car" value="pert">
+                                                        <p:column headerText="N°">
+                                                            <p:outputLabel value="1"/>
+                                                        </p:column>
+
+                                                        <p:column headerText="Archivo">
+                                                            <p:outputLabel value="PI100"/>
+                                                        </p:column>
+
+                                                        <p:column headerText="Extension">
+                                                            <p:outputLabel value="pdf"/>
+                                                        </p:column>
+
+                                                        <p:column headerText="Descripción">
+                                                            <p:outputLabel value="Ingreso de datos"/>
+                                                        </p:column>
+                                                        <p:column headerText="Numero de folios">
+                                                            <p:outputLabel value="15"/>
+                                                        </p:column>
+                                                        <p:column headerText="Descargar">
+                                                            <p:commandButton type="button"
+                                                                             icon="ui-icon-circle-arrow-s">
+                                                            </p:commandButton>
+                                                        </p:column>
+                                                        <p:column headerText="Eliminar">
+                                                            <p:commandButton type="button"
+                                                                             icon="ui-icon-trash">
+                                                            </p:commandButton>
+                                                        </p:column>
+
+
+                                                    </p:dataTable>                                  
+
+                                                </p:column>
+
+                                            </p:row>
+                                        </p:panelGrid>
+
+
+
+                                    </p:column>
+                                </p:row>
+
+                            </p:panelGrid>
+                            <p:panelGrid style="width: 100%; height: 10%;" rendered="#{digitalizacionBean.activaPanelAdjuntarDocumentos}" styleClass="quitarBordes">
+                                <p:row>
+                                    <p:column style="text-align: left">
+                                        <p:commandButton value="Atras" icon="ui-icon-arrowreturnthick-1-w" action="#{oposicionBean.llevaalpricipal()}"/>
+                                    </p:column>
+                                    <p:column style="text-align: right">
+                                        <p:commandButton value="Cerrar" action="#{digitalizacionBean.finalizarDigitalizacion()}"
+                                                         icon="ui-icon-close">
+                                        </p:commandButton>
+                                    </p:column>
+
+                                </p:row>
+                            </p:panelGrid>
+
+                        </h:panelGrid>
+
+
+                    </fieldset>
+
+                </h:form>
+
+
+            </ui:define>
+        </ui:composition>
+
+    </body>
+</html>

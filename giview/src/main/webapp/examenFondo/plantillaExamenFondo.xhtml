@@ -1,0 +1,458 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:p="http://primefaces.org/ui"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 template="#{sessionState.pathTemplate}"
+                 xmlns:si.componentes="http://java.sun.com/jsf/composite/si.componentes"
+                 xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <ui:define name="content">
+        <h:form>
+            <p:panelGrid style="width: 100%" styleClass="quitarBordes">
+
+                <p:row>
+
+                    <p:column style="width: 100%; border: 1px solid">
+                        <fieldset style="width: 100%; padding: 0px">
+                            <legend>Observaciones especificas</legend>
+
+                            <p:panelGrid style="width: 100%">
+
+                                <p:row>
+                                    <p:column colspan="3" style="width: 100%">
+                                        <p:outputLabel value="1. Verificación de la Solicitud"/>
+                                    </p:column>
+                                </p:row>
+
+
+                                <p:row>
+                                    <p:column style="width: 5%">
+                                        <p:selectBooleanCheckbox value="TRUE" />    
+                                    </p:column>
+                                    <p:column style="width: 40%">
+                                        <p:outputLabel value="¿El expediente contempla faltas, errores u omisiones en el Examen de Forma?" />    
+                                    </p:column>
+                                    <p:column style="width: 55%">
+                                        <p:inputText style="width: 100%; padding: 0px"/>
+                                    </p:column>
+                                </p:row>
+                                
+                                
+                                <p:row>
+                                    <p:column colspan="3" style="width: 100%">
+                                        <p:outputLabel value="2. Requisitos"/>
+                                    </p:column>
+                                </p:row>
+                                
+                                <p:row>
+                                    <p:column colspan="3" style="width: 100%">
+                                        <p:outputLabel value="2.1 Susceptibilidad de Representación gráfica (Art. 134 Decisión 486)"/>
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column style="width: 5%">
+                                        <p:selectBooleanCheckbox value="FALSE" />    
+                                    </p:column>
+                                    <p:column style="width: 40%">
+                                        <p:outputLabel value="las palabras o combinación de palabras" />
+                                    </p:column>
+                                    <p:column style="width: 55%">
+                                        <p:inputText style="width: 100%; padding: 0px"/>
+                                    </p:column>
+                                </p:row>
+                                
+                                <p:row>
+                                    <p:column style="width: 5%">
+                                        <p:selectBooleanCheckbox value="FALSE" />    
+                                    </p:column>
+                                    <p:column style="width: 40%">
+                                        <p:outputLabel value="las imágenes, figuras, símbolos, gráficos, logotipos, monogramas, retratos, etiquetas, emblemas y escudos" />
+                                    </p:column>
+                                    <p:column style="width: 55%">
+                                        <p:inputText style="width: 100%; padding: 0px"/>
+                                    </p:column>
+                                </p:row>
+                                
+                                <p:row>
+                                    <p:column style="width: 5%">
+                                        <p:selectBooleanCheckbox value="FALSE" />    
+                                    </p:column>
+                                    <p:column style="width: 40%">
+                                        <p:outputLabel value="los sonidos y los olores" />
+                                    </p:column>
+                                    <p:column style="width: 55%">
+                                        <p:inputText style="width: 100%; padding: 0px"/>
+                                    </p:column>
+                                </p:row>
+                                
+                                
+                                <p:row>
+                                    <p:column style="width: 5%">
+                                        <p:selectBooleanCheckbox value="FALSE" />    
+                                    </p:column>
+                                    <p:column style="width: 40%">
+                                        <p:outputLabel value="las letras y los números" />
+                                    </p:column>
+                                    <p:column style="width: 55%">
+                                        <p:inputText style="width: 100%; padding: 0px"/>
+                                    </p:column>
+                                </p:row>
+                                
+                                
+                                <p:row>
+                                    <p:column style="width: 5%">
+                                        <p:selectBooleanCheckbox value="FALSE" />    
+                                    </p:column>
+                                    <p:column style="width: 40%">
+                                        <p:outputLabel value="un color delimitado por una forma, o una combinación de colores" />
+                                    </p:column>
+                                    <p:column style="width: 55%">
+                                        <p:inputText style="width: 100%; padding: 0px"/>
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column style="width: 5%">
+                                        <p:selectBooleanCheckbox value="FALSE" />    
+                                    </p:column>
+                                    <p:column style="width: 40%">
+                                        <p:outputLabel value="la forma de los productos, sus envases o envolturas" />
+                                    </p:column>
+                                    <p:column style="width: 55%">
+                                        <p:inputText style="width: 100%; padding: 0px"/>
+                                    </p:column>
+                                </p:row>
+                                
+                                <p:row>
+                                    <p:column colspan="3" style="width: 100%">
+                                        <p:outputLabel value="2.2 Distintividad Intrínseca. Identificar e individualizar productos o servicios sin confundirse con él o con sus propiedades o características Artículo 135 Decisión 486. No podran registrarse como marcas los signos que:"/>
+                                    </p:column>
+                                </p:row>
+                                
+                                <p:row>
+                                    <p:column style="width: 5%">
+                                        <p:selectBooleanCheckbox value="FALSE" />    
+                                    </p:column>
+                                    <p:column style="width: 40%">
+                                        <p:outputLabel value="No pueden constituir marca conforme al primer párrafo del artículo anterior" />
+                                    </p:column>
+                                    <p:column style="width: 55%">
+                                        <p:inputText style="width: 100%; padding: 0px"/>
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column style="width: 5%">
+                                        <p:selectBooleanCheckbox value="FALSE" />    
+                                    </p:column>
+                                    <p:column style="width: 40%">
+                                        <p:outputLabel value="Carezcan de distintividad" />
+                                    </p:column>
+                                    <p:column style="width: 55%">
+                                        <p:inputText style="width: 100%; padding: 0px"/>
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column style="width: 5%">
+                                        <p:selectBooleanCheckbox value="FALSE" />    
+                                    </p:column>
+                                    <p:column style="width: 40%">
+                                        <p:outputLabel value="Consistan exclusivamente en formas usuales de los productos o de sus envases, o en formas o características impuestas por la naturaleza o la función de dicho producto o del servicio de que se trate" />
+                                    </p:column>
+                                    <p:column style="width: 55%">
+                                        <p:inputText style="width: 100%; padding: 0px"/>
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column style="width: 5%">
+                                        <p:selectBooleanCheckbox value="FALSE" />    
+                                    </p:column>
+                                    <p:column style="width: 40%">
+                                        <p:outputLabel value="Consistan exclusivamente en formas u otros elementos que den una ventaja funcional o técnica al producto o al servicio al cual se aplican" />
+                                    </p:column>
+                                    <p:column style="width: 55%">
+                                        <p:inputText style="width: 100%; padding: 0px"/>
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column style="width: 5%">
+                                        <p:selectBooleanCheckbox value="FALSE" />    
+                                    </p:column>
+                                    <p:column style="width: 40%">
+                                        <p:outputLabel value="Consistan exclusivamente en un signo o indicación que pueda servir en el comercio para describir la calidad, la cantidad, el destino, el valor, la procedencia geográfica, la época de producción u otros datos, características o informaciones de los productos o de los servicios para los cuales ha de usarse dicho signo o indicación, incluidas las expresiones laudatorias referidas a esos productos o servicios." />
+                                    </p:column>
+                                    <p:column style="width: 55%">
+                                        <p:inputText style="width: 100%; padding: 0px"/>
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column style="width: 5%">
+                                        <p:selectBooleanCheckbox value="FALSE" />    
+                                    </p:column>
+                                    <p:column style="width: 40%">
+                                        <p:outputLabel value="Consistan exclusivamente en un signo o indicación que sea el nombre genérico o técnico del producto o servicio de que se trate" />
+                                    </p:column>
+                                    <p:column style="width: 55%">
+                                        <p:inputText style="width: 100%; padding: 0px"/>
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column style="width: 5%">
+                                        <p:selectBooleanCheckbox value="FALSE" />    
+                                    </p:column>
+                                    <p:column style="width: 40%">
+                                        <p:outputLabel value="Consistan exclusivamente o se hubieran convertido en una designación común o usual del producto o servicio de que se trate en el lenguaje corriente o en la usanza del país" />
+                                    </p:column>
+                                    <p:column style="width: 55%">
+                                        <p:inputText style="width: 100%; padding: 0px"/>
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column style="width: 5%">
+                                        <p:selectBooleanCheckbox value="FALSE" />    
+                                    </p:column>
+                                    <p:column style="width: 40%">
+                                        <p:outputLabel value="Consistan en un color aisladamente considerado, sin que se encuentre delimitado por una forma específica" />
+                                    </p:column>
+                                    <p:column style="width: 55%">
+                                        <p:inputText style="width: 100%; padding: 0px"/>
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column style="width: 5%">
+                                        <p:selectBooleanCheckbox value="FALSE" />    
+                                    </p:column>
+                                    <p:column style="width: 40%">
+                                        <p:outputLabel value="Puedan engañar a los medios comerciales o al público, en particular sobre la procedencia geográfica, la naturaleza, el modo de fabricación, las características, cualidades o aptitud para el empleo de los productos o servicios de que se trate" />
+                                    </p:column>
+                                    <p:column style="width: 55%">
+                                        <p:inputText style="width: 100%; padding: 0px"/>
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column style="width: 5%">
+                                        <p:selectBooleanCheckbox value="FALSE" />    
+                                    </p:column>
+                                    <p:column style="width: 40%">
+                                        <p:outputLabel value="Reproduzcan, imiten o contengan una denominación de origen protegida para los mismos productos o para productos diferentes, cuando su uso pudiera causar un riesgo de confusión o de asociación con la denominación; o implicase un aprovechamiento injusto de su notoriedad" />
+                                    </p:column>
+                                    <p:column style="width: 55%">
+                                        <p:inputText style="width: 100%; padding: 0px"/>
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column style="width: 5%">
+                                        <p:selectBooleanCheckbox value="FALSE" />    
+                                    </p:column>
+                                    <p:column style="width: 40%">
+                                        <p:outputLabel value="Contengan una denominación de origen protegida para vinos y bebidas" />
+                                    </p:column>
+                                    <p:column style="width: 55%">
+                                        <p:inputText style="width: 100%; padding: 0px"/>
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column style="width: 5%">
+                                        <p:selectBooleanCheckbox value="FALSE" />    
+                                    </p:column>
+                                    <p:column style="width: 40%">
+                                        <p:outputLabel value="Consistan en una indicación geográfica nacional o extranjera susceptible de inducir a confusión respecto a los productos o servicios a los cuales se aplique" />
+                                    </p:column>
+                                    <p:column style="width: 55%">
+                                        <p:inputText style="width: 100%; padding: 0px"/>
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column style="width: 5%">
+                                        <p:selectBooleanCheckbox value="FALSE" />    
+                                    </p:column>
+                                    <p:column style="width: 40%">
+                                        <p:outputLabel value="Reproduzcan o imiten, sin permiso de las autoridades competentes, bien sea como marcas, bien como elementos de las referidas marcas, los escudos de armas, banderas, emblemas, signos y punzones oficiales de control y de garantía de los Estados y toda imitación desde el punto de vista heráldico, así como los escudos de armas, banderas y otros emblema, siglas o denominaciones de cualquier organización internacional" />
+                                    </p:column>
+                                    <p:column style="width: 55%">
+                                        <p:inputText style="width: 100%; padding: 0px"/>
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column style="width: 5%">
+                                        <p:selectBooleanCheckbox value="FALSE" />    
+                                    </p:column>
+                                    <p:column style="width: 40%">
+                                        <p:outputLabel value="Reproduzcan o imiten signos de conformidad con normas técnicas, a menos que su registro sea solicitado por el organismo nacional competente en normas y calidades en los países miembros" />
+                                    </p:column>
+                                    <p:column style="width: 55%">
+                                        <p:inputText style="width: 100%; padding: 0px"/>
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column style="width: 5%">
+                                        <p:selectBooleanCheckbox value="FALSE" />    
+                                    </p:column>
+                                    <p:column style="width: 40%">
+                                        <p:outputLabel value="Reproduzcan, imiten o incluyan la denominación de una variedad vegetal protegida en un País Miembro o en el extranjero, si el signo se destinara a productos o servicios relativos a esa variedad o su uso fuere susceptible de causar confusión o asociación con la variedad" />
+                                    </p:column>
+                                    <p:column style="width: 55%">
+                                        <p:inputText style="width: 100%; padding: 0px"/>
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column style="width: 5%">
+                                        <p:selectBooleanCheckbox value="FALSE" />    
+                                    </p:column>
+                                    <p:column style="width: 40%">
+                                        <p:outputLabel value="Sean contrarios a la ley, a la moral, al orden público o a las buenas costumbres" />
+                                    </p:column>
+                                    <p:column style="width: 55%">
+                                        <p:inputText style="width: 100%; padding: 0px"/>
+                                    </p:column>
+                                </p:row>
+                                
+                                <p:row>
+                                    <p:column colspan="3" style="width: 100%">
+                                        <p:outputLabel value="2.3 Distintividad Extrinseca"/>
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column colspan="3" style="width: 100%">
+                                        <p:outputLabel value="Artículo 136 Desición 486.- No podrán registrarse como marcas aquellos signos cuyo uso en el comercio afectara indebidamente un derecho de tercero, en particular cuando:"/>
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column style="width: 5%">
+                                        <p:selectBooleanCheckbox value="FALSE" />    
+                                    </p:column>
+                                    <p:column style="width: 40%">
+                                        <p:outputLabel value="Sean idénticos o se asemejen, a una marca anteriormente solicitada para registro o registrada por un tercero, para los mismos productos o servicios, o para productos o servicios respecto de los cuales el uso de la marca pueda causar un riesgo de confusión o de asociación" />
+                                    </p:column>
+                                    <p:column style="width: 55%">
+                                        <p:inputText style="width: 100%; padding: 0px"/>
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column style="width: 5%">
+                                        <p:selectBooleanCheckbox value="FALSE" />    
+                                    </p:column>
+                                    <p:column style="width: 40%">
+                                        <p:outputLabel value="Sean idénticos o se asemejen a un lema comercial solicitado o registrado, siempre que dadas las circunstancias, su uso pudiera originar un riesgo de confusión o de asociación" />
+                                    </p:column>
+                                    <p:column style="width: 55%">
+                                        <p:inputText style="width: 100%; padding: 0px"/>
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column style="width: 5%">
+                                        <p:selectBooleanCheckbox value="FALSE" />    
+                                    </p:column>
+                                    <p:column style="width: 40%">
+                                        <p:outputLabel value="Sean idénticos o se asemejen a un signo distintivo de un tercero, siempre que dadas las circunstancias su uso pudiera originar un riesgo de confusión o de asociación, cuando el solicitante sea o haya sido un respresentante, un distribuidor o una persona expresamente autorizado por el titular del signo protegido en el País Miembro o en el extranjero" />
+                                    </p:column>
+                                    <p:column style="width: 55%">
+                                        <p:inputText style="width: 100%; padding: 0px"/>
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column style="width: 5%">
+                                        <p:selectBooleanCheckbox value="FALSE" />    
+                                    </p:column>
+                                    <p:column style="width: 40%">
+                                        <p:outputLabel value="Consistan en un signo que afecte la identidad o prestigio de personas jurídicas con o sin fines de lucro, o personas naturales, en especial, tratándose del nombre, apellido, firma, título, hipocoristico, seudónimo, imagen, retrato o caricatura de una persona distinta del solicitante o identificada por el sector pertinente del público como una persona distinta del solicitante, salvo que se acredite el consentimiento de esa persona o, si hubieses fallecido, el de quienes fueran declarados sus herederos" />
+                                    </p:column>
+                                    <p:column style="width: 55%">
+                                        <p:inputText style="width: 100%; padding: 0px"/>
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column style="width: 5%">
+                                        <p:selectBooleanCheckbox value="FALSE" />    
+                                    </p:column>
+                                    <p:column style="width: 40%">
+                                        <p:outputLabel value="Consistan en un signo que infrinja el derecho de propiedad industrial o el derecho de autor de un tercero, salvo que medie el consentimiento de éste" />
+                                    </p:column>
+                                    <p:column style="width: 55%">
+                                        <p:inputText style="width: 100%; padding: 0px"/>
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column style="width: 5%">
+                                        <p:selectBooleanCheckbox value="FALSE" />    
+                                    </p:column>
+                                    <p:column style="width: 40%">
+                                        <p:outputLabel value="Consistan en el nombre de las comunidades indígenas, afroamericanas o locales, o las denominaciones, las palabras, letras, caracteres o signos utilizados para distinguir sus productos, sus servicios o la forma de procesarlos, o que constituyan la expresión de su cultura o práctica, salvo que la solicitud sea presentada por la propia comunidad o con su consentimiento expreso." />
+                                    </p:column>
+                                    <p:column style="width: 55%">
+                                        <p:inputText style="width: 100%; padding: 0px"/>
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column style="width: 5%">
+                                        <p:selectBooleanCheckbox value="FALSE" />    
+                                    </p:column>
+                                    <p:column style="width: 40%">
+                                        <p:outputLabel value="Constituyan una reproducción, imitación, traducción, transiteración o transcripción, total o parcial, de un signo distintivo notoriamente conocido cuyo titular sea un tercero, cualesquiera que sean los productos o servicios a los que se aplique el signo, cuando su uso fuese susceptible de acusar un riesgo de confusión o de asociación con ese tercero o con sus productos o servicios; u aprovechamiento injusto del prestigio del signo; o la dilución de su fuerza distintiva o de su valor comercial o publicitario" />
+                                    </p:column>
+                                    <p:column style="width: 55%">
+                                        <p:inputText style="width: 100%; padding: 0px"/>
+                                    </p:column>
+                                </p:row>
+                                 <p:row>
+                                    <p:column colspan="3" style="width: 100%">
+                                        <p:outputLabel value="2.4 Mala fé"/>
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column style="width: 5%">
+                                        <p:selectBooleanCheckbox value="FALSE" />    
+                                    </p:column>
+                                    <p:column style="width: 40%">
+                                        <p:outputLabel value="Artículo 137 Desición 486.- Cuando la oficina nacional competente tenga indicios razonables que le permitan inferir que un registro se hubiese solicitado para perpetrar, facilitar o consolidar un acto de competencia desleal, podrá denegar dicho registro." />
+                                    </p:column>
+                                    <p:column style="width: 55%">
+                                        <p:inputText style="width: 100%; padding: 0px"/>
+                                    </p:column>
+                                </p:row>
+                            </p:panelGrid>
+
+                        </fieldset>
+
+
+                    </p:column>
+
+                </p:row>
+
+
+                
+
+
+            </p:panelGrid>
+
+            <p:panelGrid style="width: 100%;" styleClass="quitarBordes">
+                <p:row>
+
+                    <p:column style="width: 100%; border: 1px solid">
+                        <div align="center">
+
+                            <p:panelGrid columns="5">
+                                <p:commandButton value="Guardar" icon="ui-icon-disk"/>
+                                <p:commandButton value="Guardar y siguiente" icon="ui-icon-arrowthickstop-1-e"/>
+                                <p:commandButton value="Imprimir" icon="ui-icon-print"/>
+                                <p:commandButton value="Terminar análisis" icon="ui-icon-check"/>
+                                <p:commandButton value="Retornar" icon="ui-icon-arrowreturnthick-1-w" action="#{plantillaExamenFondoBean.retornarPagina()}"/>
+                            </p:panelGrid>
+                        </div>
+
+                    </p:column>
+
+
+                </p:row>
+            </p:panelGrid>
+
+        </h:form>
+    </ui:define>
+
+
+
+</ui:composition>
+
+
+

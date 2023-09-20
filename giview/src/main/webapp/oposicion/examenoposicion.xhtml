@@ -1,0 +1,1070 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <body>
+        <ui:composition template="./../WEB-INF/facelets/templates/Template.xhtml">
+            <ui:define name="content">
+                <f:metadata>
+                    <f:event type="preRenderView" listener="#{verificaSesion.verifica()}"/>
+                </f:metadata>
+                <h:form id="frmExamenOpo">
+                    <p:growl id="msg" life="10000"/>
+                    <!--                    <p:messages autoUpdate="true"/>-->
+                    <p:outputPanel style="padding-bottom: 1px; padding-top: 1px; padding-left:10px; padding-right: 10px;">
+                        <table>
+                            <tr valign="middle">
+                                <td><p:graphicImage library="images" name="flechaTituloAzul.png" width="24" height="24"></p:graphicImage></td>
+                                <td><p:outputLabel value="Expediente Oposición" styleClass="tituloPrincipalFuente"></p:outputLabel></td>
+                            </tr>
+                        </table>                    
+                        <p:separator id="sepTitulo" style="border: 1px #045491 inset;"></p:separator>                    
+                    </p:outputPanel>   
+                    <p:panelGrid style="width: 100%" styleClass="quitarBordes">
+                        <p:row styleClass="quitarBordes">
+                            <p:column colspan="2">
+                                <p:outputPanel id="cuerpocab">
+                                    <h:form id="radiob">
+                                        <fieldset>
+                                            <p:panelGrid>
+
+                                                <p:row>
+                                                    <p:column rowspan="2">
+
+                                                        <p:selectOneRadio id="valorRadio" value="#{oposicionBean.nomrad}" layout="grid" columns="1">
+                                                            <f:selectItem itemValue="ADI" itemLabel="Adicionar" />
+                                                            <f:selectItem itemValue="MODI" itemLabel="Modificar o eliminar" />
+                                                            <f:selectItem itemValue="CON" itemLabel="Consultar" />
+                                                            <p:ajax listener="#{oposicionBean.habilitabotones()}"
+                                                                    event="change" update=":frmExamenOpo:allbotones :frmExamenOpo"></p:ajax>
+                                                        </p:selectOneRadio>
+
+
+                                                    </p:column>
+                                                    <p:column><p:outputLabel value="Area"></p:outputLabel></p:column>
+
+                                                    <p:column><p:outputLabel value="N° Oposición" style="display: block;width: 90px; font-weight: bold"/></p:column>
+                                                    <p:column>
+                                                        <p:outputPanel id="actuali"><p:inputText value="#{oposicionBean.txtnropublidmdo}" size="5"/></p:outputPanel>
+                                                    </p:column>
+                                                    <p:column>
+                                                        <p:commandButton icon="ui-icon-seek-next" actionListener="#{oposicionBean.buscadorPorNumeroPublicacion()}" style="height: 25px" update=":frmExamenOpo :frmExamenOpo:tablacasosadjuntos :frmExamenOpo:paneldmdo :frmExamenOpo:paneldmte :frmExamenOpo:tablaflujoactividad :frmExamenOpo:radiob:secresolucion :frmExamenOpo:panelcentral"/>
+
+                                                    </p:column>
+
+                                                    <p:column rowspan="2">
+
+                                                    </p:column>
+                                                    <p:column rowspan="2" style="width: 10%">
+                                                        <p:outputPanel>
+                                                            <p:panelGrid id="secresolucion">
+                                                                <p:row><p:column colspan="2" style="font-weight: bold; text-align: center">RESOLUCIÓN</p:column></p:row>
+                                                                <p:row><p:column colspan="2" style="text-align: center"><p:outputLabel value="#{oposicionBean.txtnrogestionres}">
+
+                                                                        </p:outputLabel></p:column></p:row>
+                                                                <p:row><p:column style="font-weight: bold;">Oposición</p:column><p:column><p:outputLabel value="#{oposicionBean.txtopores}"></p:outputLabel></p:column></p:row>
+                                                                <p:row><p:column style="font-weight: bold;">Signo</p:column><p:column><p:outputLabel value="#{oposicionBean.txtsigres}"></p:outputLabel></p:column></p:row>
+                                                                <p:row><p:column style="font-weight: bold;">Cancelación</p:column><p:column><p:outputLabel value="#{oposicionBean.txtcancelares}"></p:outputLabel></p:column></p:row>
+                                                            </p:panelGrid>
+                                                        </p:outputPanel>
+                                                    </p:column>
+                                                    <p:column rowspan="2">
+
+                                                    </p:column>
+                                                    <p:column rowspan="2">
+                                                        <p:outputPanel>
+                                                            <p:panelGrid id="secrecurso">
+                                                                <p:row><p:column  style="font-weight: bold;">RECURSO</p:column></p:row>
+                                                                <p:row><p:column >
+
+                                                                        <p:dataTable var="recusol" value="#{oposicionBean.listarecursos}" emptyMessage="No se encontraron resultados">
+                                                                            <p:column headerText="Numero">
+                                                                                <h:outputText value="#{oposicionBean.convertirdateynrorecurso(recusol.fecha_resolucion, recusol.numero_resolucion)}"/>
+                                                                            </p:column>
+                                                                            <p:column headerText="Tipo">
+                                                                                <h:outputText value="#{oposicionBean.conviertetiporecurso(recusol.tipo)}"/>
+                                                                            </p:column>
+                                                                            <p:column headerText="Resolución">
+                                                                                <h:outputText value="#{recusol.resolucion}"/>
+                                                                            </p:column>
+                                                                        </p:dataTable>
+
+
+                                                                    </p:column></p:row>
+
+
+                                                            </p:panelGrid>
+                                                        </p:outputPanel>
+                                                    </p:column>
+                                                    <p:column rowspan="2">
+
+                                                    </p:column>
+
+                                                </p:row>
+
+                                                <p:row>
+
+                                                    <p:column><p:selectOneMenu id="console" value="Signos Distintivos" autoWidth="false">
+                                                            <f:selectItem itemLabel="SIGNOS DISTINTIVOS" itemValue="uno" />
+                                                            <f:selectItem itemLabel="DERECHOS DE AUTOR" itemValue="dos" />
+                                                            <f:selectItem itemLabel="PATENTES" itemValue="dos" />
+                                                        </p:selectOneMenu></p:column>
+                                                    <p:column><p:outputLabel value="Orden" style="font-size: medium; font-weight: bold"/></p:column>
+                                                    <p:column>       <p:inputText value="#{oposicionBean.txtorden_o}" size="5" disabled="true"/></p:column>
+                                                    <p:column></p:column>
+
+
+                                                </p:row>                                    
+                                            </p:panelGrid>
+                                        </fieldset>
+                                    </h:form>
+                                </p:outputPanel>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column style="width: 49%; vertical-align: top " styleClass="quitarBordesVerde">
+
+                                <fieldset>
+                                    <legend>
+                                        <p:outputLabel value="Demandante" styleClass="labeldemandante" style="color: #538C15"/> 
+                                    </legend>
+                                    <p:panelGrid id="paneldmte" style="width:100%">
+                                        <p:row styleClass="rowrojo">
+                                            <p:column style="width:20%"></p:column>
+                                            <p:column style="width:20%"><p:outputLabel value="Publicación" style="font-weight: bold;"/></p:column>
+                                            <p:column style="width:20%"> 
+                                                <p:inputText value="#{oposicionBean.txtpubldmte}" style="width: 80%">
+                                                    <p:ajax event="blur" listener="#{oposicionBean.buscarXPublicaciondmte()}" update=":frmExamenOpo:paneldmte" />
+                                                </p:inputText></p:column>
+                                            <p:column style="width:30%"></p:column>
+                                            <p:column style="width:10%"><p:commandButton icon="ui-icon-seek-next" onclick="#{oposicionBean.urlInformacionOPO(oposicionBean.txtpubldmte, sessionState.idUsuario)}">                                                     
+                                                </p:commandButton></p:column>
+                                        </p:row>
+                                        <p:row >
+                                            <p:column style="width:20%"></p:column>
+                                            <p:column style="width:20%"><p:outputLabel value="Registro" style="font-weight: bold;"/> </p:column> 
+                                            <p:column style="width:20%"> 
+                                                <p:inputText value="#{oposicionBean.txtregistrodmte}" style="width: 80%">
+                                                    <p:ajax event="blur" listener="#{oposicionBean.buscarXRegistro()}" 
+                                                            update=":frmExamenOpo:paneldmte" />
+                                                </p:inputText>  </p:column> 
+                                            <p:column style="width:30%"><p:selectOneMenu id="serie" value="#{oposicionBean.cmbregistro}" autoWidth="false">
+                                                    <f:selectItem  itemLabel="Elegir"/> 
+                                                    <f:selectItems value="#{oposicionBean.lstSerieRegistro}" var="r" itemLabel="#{r.nombre}" itemValue="#{r.codigo}"/>
+                                                    <p:ajax event="change" listener="#{oposicionBean.buscarXRegistro()}" 
+                                                            update=":frmExamenOpo:paneldmte"/>
+                                                </p:selectOneMenu> </p:column> 
+                                            <p:column style="width:10%">  <p:commandButton icon="ui-icon-seek-next" onclick="#{oposicionBean.urlInformacionREG(oposicionBean.txtregistrodmte,oposicionBean.cmbregistro, sessionState.idUsuario)}">                                    
+                                                </p:commandButton> </p:column> 
+                                        </p:row>
+                                        <p:row>
+                                            <p:column  style="width:20%"></p:column>
+                                            <p:column  style="width:20%"><p:outputLabel value="Expediente SM" style="font-weight: bold;"/></p:column>
+                                            <p:column  style="width:20%"> 
+                                                <p:inputText value="#{oposicionBean.txtexpedientesm}"   id="txtsmExpediente" onkeyup="return ValNumero(this);" 
+                                                             style="width: 80%">
+                                                    <p:ajax event="blur" listener="#{oposicionBean.buscarXSM()}"  update=":frmExamenOpo:paneldmte"/>
+                                                </p:inputText></p:column>
+                                            <p:column  style="width:30%">
+                                                <p:panelGrid columns="4">
+                                                    <p:outputLabel value="Ges" style="font-weight: bold;"/>
+                                                    <p:inputText value="#{oposicionBean.txtgestionexpediente}" style="width: 60%" id="txtgestionExpediente" onkeyup="return ValNumero(this);">
+                                                        <p:ajax event="blur" listener="#{oposicionBean.buscarXSM()}"  update=":frmExamenOpo:paneldmte"/>
+                                                    </p:inputText>
+                                                    <p:outputLabel value="Ext" style="font-weight: bold;"/>
+                                                    <p:inputText value="#{oposicionBean.txtextencionespediente}" style="width: 60%">
+                                                        <p:ajax event="blur" listener="#{oposicionBean.buscarXSM()}"  update=":frmExamenOpo:paneldmte"/>
+                                                    </p:inputText>   
+                                                </p:panelGrid>
+                                            </p:column>
+                                            <p:column  style="width:10%"><p:commandButton icon="ui-icon-seek-next" onclick="#{oposicionBean.urlInformacionSMSOL(oposicionBean.txtexpedientesm,oposicionBean.txtgestionexpediente,oposicionBean.txtextencionespediente, sessionState.idUsuario)}">                                                     
+                                                </p:commandButton></p:column>
+                                        </p:row>
+
+                                        <p:row>
+                                            <p:column style="width:20%"> <p:outputLabel value="Marca" style="font-weight: bold;"/></p:column>
+                                            <p:column colspan="4"> <p:inputTextarea style="width: 95%" styleClass="tituloMarca" value="#{oposicionBean.txamarcadmte}" rows="3" cols="41" /></p:column> 
+
+                                        </p:row>
+                                        <p:row>
+                                            <p:column style="width:50px"><p:outputLabel value="Der. de Uso" style="font-weight: bold;"/></p:column>
+                                            <p:column colspan="4"><p:inputText value="#{oposicionBean.txtusodmte}" style="width: 95%"/></p:column> 
+
+                                        </p:row>
+
+
+                                        <p:row>
+
+                                            <p:column colspan="5">
+                                                <p:outputPanel id="soldmte" style="width: 100%">
+                                                    <p:outputPanel style="text-align: center">  
+
+                                                        <p:commandButton  value="Agregar" icon="ui-icon-circle-plus" actionListener="#{oposicionBean.cargaDialogoSolidmte}" immediate="true" 
+                                                                          rendered="#{oposicionBean.listasolidmte.size()==0}">
+                                                            <p:ajax event="dialogReturn" listener="#{oposicionBean.terminaDialogo}" update=":frmExamenOpo:soldmte"/>
+                                                        </p:commandButton>                                                    
+
+                                                    </p:outputPanel>
+                                                    <p:dataGrid var="per" value="#{oposicionBean.listasolidmte}" emptyMessage="No existen Solicitantes" id="datossolidmte"
+                                                                style="width: 100%;" columns="1" rows="1" layout="grid" paginator="true" paginatorPosition="bottom">                                            
+                                                        <p:panelGrid style="width: 100%;">
+                                                            <p:row>
+                                                                <p:column  style="width: 10%;"><p:outputLabel value="Solicitante" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                                <p:column colspan="3" style="width: 90%;">
+
+                                                                    <p:inputText  value="#{per.nombre_razonsocial}" style="width: 90%;">
+                                                                    </p:inputText>
+                                                                    <p:spacer width="14"/>
+                                                                    <p:inputText  value="#{per.primer_apellido}" style="width: 45%;" rendered="#{per.primer_apellido!=null}">
+                                                                    </p:inputText>
+                                                                    <p:spacer width="8"/>
+                                                                    <p:inputText  value="#{per.segundo_apellido}" style="width: 42%;" rendered="#{per.segundo_apellido!=null}">
+                                                                    </p:inputText>
+                                                                </p:column>
+                                                            </p:row>   
+                                                            <p:row>
+                                                                <p:column style="width: 10%;"><p:outputLabel value="N° Doc." style="font-weight: bold;"></p:outputLabel></p:column>
+                                                                <p:column style="width: 40%;"><p:outputLabel value="#{per.numero_documento}"></p:outputLabel></p:column>
+                                                                <p:column style="width: 10%;"><p:outputLabel value="Tipo Doc." style="font-weight: bold; display: block; width: 60px"></p:outputLabel></p:column>
+                                                                <p:column style="width: 40%;"><p:outputLabel value="#{oposicionBean.devuelveTipoDocumento(per.tipo_documento)}"></p:outputLabel></p:column>                                                
+                                                            </p:row>
+                                                            <p:row rendered="#{per.tipo_titular=='NAT'}">
+                                                                <p:column style="width: 10%;"><p:outputLabel value="Genero" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                                <p:column style="width: 40%;"><p:outputLabel value="#{oposicionBean.devuelveGenero(per.genero)}"></p:outputLabel></p:column>   
+                                                                <p:column style="width: 10%;"><p:outputLabel value="Lugar Expedición" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                                <p:column style="width: 40%;"><p:outputLabel value="#{oposicionBean.devuelveLugarExpedicion(per.lugar_expedicion)}" ></p:outputLabel></p:column>                                                                                                 
+                                                            </p:row>
+                                                            <p:row>
+                                                                <p:column style="width: 10%;"><p:outputLabel value="Pais" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                                <p:column style="width: 40%;"><p:outputLabel value="#{oposicionBean.devuelvePais(per.pais)}"></p:outputLabel></p:column>
+                                                                <p:column style="width: 10%;"><p:outputLabel value="Departamento" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                                <p:column style="width: 40%;"><p:outputLabel value="#{oposicionBean.devuelveDepartamento(per.solicitud_depa)}"></p:outputLabel></p:column>                                                
+                                                            </p:row>
+                                                            <p:row>
+                                                                <p:column style="width: 10%;"><p:outputLabel value="Telefono" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                                <p:column style="width: 40%;"><p:outputLabel value="#{per.telefono}" ></p:outputLabel></p:column>
+                                                                <p:column colspan="2"></p:column>
+                                                                <!--                                                    <p:column style="width: 10%;"><p:outputLabel value="Genero"></p:outputLabel></p:column>
+                                                                                                                    <p:column style="width: 40%;"><p:inputText value="fax"></p:inputText></p:column>                                                -->
+                                                            </p:row>
+                                                            <p:row>
+                                                                <p:column style="width: 10%;"><p:outputLabel value="Celular" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                                <p:column style="width: 40%;"><p:outputLabel value="#{per.celular}"></p:outputLabel></p:column>
+                                                                <p:column style="width: 10%;"><p:outputLabel value="Fax" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                                <p:column style="width: 40%;"><p:outputLabel value="#{per.fax}" ></p:outputLabel></p:column>                                                
+                                                            </p:row>
+                                                            <p:row>
+                                                                <p:column  style="width: 10%;"><p:outputLabel value="Direccion" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                                <p:column colspan="3" style="width: 90%;"><p:outputLabel value="#{per.direccion}" style="width: 98%;"></p:outputLabel></p:column>
+                                                            </p:row>
+
+                                                            <p:row>
+                                                                <p:column style="width: 10%;"><p:outputLabel value="email" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                                <p:column colspan="3" style="width: 40%;"><p:outputLabel value="#{per.email}" style="width: 98%;"></p:outputLabel></p:column>
+                                                            </p:row>
+
+                                                            <p:row>
+                                                                <p:column colspan="6" style="width: 100%;  text-align: center">
+                                                                    <p:commandButton rendered="true" value="Agregar" icon="ui-icon-circle-plus" actionListener="#{oposicionBean.cargaDialogoSolidmte}" 
+                                                                                     update=":frmExamenOpo:datossolidmte" immediate="true">
+                                                                        <p:ajax event="dialogReturn"  listener="#{oposicionBean.terminaDialogo}" update=":frmExamenOpo:datossolidmte"/>
+                                                                    </p:commandButton>
+                                                                    <p:spacer width="10"/>
+                                                                    <p:commandButton value="Modificar" icon="ui-icon-pencil" immediate="true"
+                                                                                     actionListener="#{oposicionBean.modificarPersona(per)}" >
+                                                                        <p:ajax event="dialogReturn"  listener="#{oposicionBean.terminaDialogoModificar}" update=":frmExamenOpo:datossolidmte"/>                                                                        
+                                                                    </p:commandButton>
+
+                                                                    <p:spacer width="10"/>
+                                                                    <p:commandButton value="Eliminar" icon="ui-icon-circle-minus" update=":frmExamenOpo:datossolidmte" immediate="true"
+                                                                                     actionListener="#{oposicionBean.borrarPersona(per)}">
+                                                                     <p:confirm header="Confirmación" message="¿ Esta seguro de eliminar ?" icon="ui-icon-alert"/>
+                                                                    </p:commandButton>
+                                                                </p:column>
+
+                                                            </p:row>
+                                                        </p:panelGrid>                             
+                                                    </p:dataGrid>   
+                                                </p:outputPanel>
+                                            </p:column>
+
+                                        </p:row>
+
+                                        <p:row>
+                                            <p:column colspan="5">
+                                                <p:outputPanel id="apodmte" style="width: 100%">                                                 
+                                                    <p:outputPanel style="text-align: center"> 
+                                                        <p:commandButton  value="Agregar" icon="ui-icon-circle-plus" actionListener="#{oposicionBean.cargaDialogoApodmte()}" 
+                                                                          rendered="#{oposicionBean.listaapodmte.size()==0}" immediate="true">
+                                                            <p:ajax event="dialogReturn"  listener="#{oposicionBean.terminaDialogoApoderado}" update=":frmExamenOpo:apodmte"/>
+                                                        </p:commandButton>
+                                                    </p:outputPanel>
+                                                    <p:dataGrid id="datosapoderadodmte" var="per1" value="#{oposicionBean.listaapodmte}" emptyMessage="No existen apoderados" 
+                                                                paginatorPosition="bottom" style="width: 100%;" columns="1" rows="1" layout="grid" paginator="true">                                            
+                                                        <p:panelGrid style="width: 100%;">
+                                                            <p:row>
+                                                                <p:column  style="width: 10%;"><p:outputLabel value="Apoderado" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                                <p:column colspan="3" style="width: 90%;">
+                                                                    <p:outputLabel  value="#{per1.nombre_razonsocial}" style="width: 32%;" >
+                                                                    </p:outputLabel>
+                                                                    <p:spacer width="8"/>
+                                                                    <p:outputLabel  value="#{per1.primer_apellido}" style="width: 35%;" >
+                                                                    </p:outputLabel>
+                                                                    <p:spacer width="8"/>
+                                                                    <p:outputLabel  value="#{per1.segundo_apellido}" style="width: 32%;">
+                                                                    </p:outputLabel>
+                                                                </p:column>
+                                                            </p:row>        
+                                                            <p:row>
+                                                                <p:column style="width: 10%;"><p:outputLabel value="N° Doc." style="font-weight: bold;"></p:outputLabel></p:column>
+                                                                <p:column style="width: 40%;"><p:outputLabel value="#{per1.numero_documento}"></p:outputLabel></p:column>
+                                                                <p:column style="width: 10%;"><p:outputLabel value="Tipo Doc." style="font-weight: bold;display: block; width: 60px"></p:outputLabel></p:column>
+                                                                <p:column style="width: 40%;"><p:outputLabel value="#{oposicionBean.devuelveTipoDocumento(per1.tipo_documento)}"></p:outputLabel></p:column>                                                
+                                                            </p:row>
+                                                            <p:row >
+                                                                <p:column style="width: 10%;"><p:outputLabel value="Genero" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                                <p:column style="width: 40%;"><p:outputLabel value="#{oposicionBean.devuelveGenero(per1.genero)}"></p:outputLabel></p:column>       
+                                                                <p:column style="width: 10%;"><p:outputLabel value="Lugar Expedición" style="font-weight: bold;" rendered="#{per1.tipo_documento=='CI'}"></p:outputLabel></p:column>
+                                                                <p:column style="width: 40%;"><p:outputLabel value="#{oposicionBean.devuelveLugarExpedicion(per1.lugar_expedicion)}" rendered="#{per1.tipo_documento=='CI'}"></p:outputLabel></p:column>                                                                                             
+                                                            </p:row>
+                                                            <p:row>
+                                                                <p:column style="width: 10%;"><p:outputLabel value="Pais" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                                <p:column style="width: 40%;"><p:outputLabel value="#{oposicionBean.devuelvePais(per1.pais)}"></p:outputLabel></p:column>
+                                                                <p:column style="width: 10%;"><p:outputLabel value="Departamento" style="font-weight: bold;" rendered="#{per1.pais=='BO'}"></p:outputLabel></p:column>
+                                                                <p:column style="width: 40%;"><p:outputLabel value="#{oposicionBean.devuelveDepartamento(per1.solicitud_depa)}" rendered="#{per1.pais=='BO'}"></p:outputLabel></p:column>                                                
+                                                            </p:row>
+                                                            <p:row>
+                                                                <p:column style="width: 10%;"><p:outputLabel value="Telefono" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                                <p:column style="width: 40%;"><p:outputLabel value="#{per1.telefono}" ></p:outputLabel></p:column>
+                                                                <p:column colspan="2"></p:column>
+                                                                <!--                                                    <p:column style="width: 10%;"><p:outputLabel value="Genero"></p:outputLabel></p:column>
+                                                                                                                    <p:column style="width: 40%;"><p:inputText value="fax"></p:inputText></p:column>                                                -->
+                                                            </p:row>
+                                                            <p:row>
+                                                                <p:column style="width: 10%;"><p:outputLabel value="Celular" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                                <p:column style="width: 40%;"><p:outputLabel value="#{per1.celular}"></p:outputLabel></p:column>
+                                                                <p:column style="width: 10%;"><p:outputLabel value="Fax" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                                <p:column style="width: 40%;"><p:outputLabel value="#{per1.fax}" ></p:outputLabel></p:column>                                                
+                                                            </p:row>
+                                                            <p:row>
+                                                                <p:column  style="width: 10%;"><p:outputLabel value="Direccion" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                                <p:column colspan="3" style="width: 90%;"><p:outputLabel value="#{per1.direccion}" style="width: 98%;"></p:outputLabel></p:column>
+                                                            </p:row>
+                                                            <p:row>
+                                                                <p:column style="width: 10%;"><p:outputLabel value="email" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                                <p:column colspan="3" style="width: 40%;"><p:outputLabel value="#{per1.email}" style="width: 98%;"></p:outputLabel></p:column>
+                                                            </p:row>
+                                                            <!--                                                            <p:row>
+                                                                                                                            <p:column style="width: 10%;"><p:outputLabel value="Poder" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                                                                                            <p:column colspan="3" style="width: 40%;">
+                                                                                                                                <h:panelGrid columns="2">                                                           
+                                                                                                                                    <p:outputLabel value="# {per1.poder}"/>
+                                                                                                                                    <p:commandButton value="Libro de Poderes" icon="ui-icon-seek-next" 
+                                                                                                                                                     action="# {examenModificacionBean.abrirPoderDepositado()}"/>
+                                                                                                                                </h:panelGrid>
+                                                                                                                            </p:column>
+                                                                                                                        </p:row>-->
+                                                            <p:row>
+                                                                <p:column colspan="6" style="width: 100%; text-align: center">
+                                                                    <p:commandButton rendered="true" value="Agregar" icon="ui-icon-circle-plus" actionListener="#{oposicionBean.cargaDialogoApodmte()}" 
+                                                                                     immediate="true">
+                                                                        <p:ajax event="dialogReturn"  listener="#{oposicionBean.terminaDialogoApoderado}" update=":frmExamenOpo:datosapoderadodmte"/>
+                                                                    </p:commandButton>
+                                                                    <p:spacer width="10"/>
+                                                                    <p:commandButton value="Modificar" icon="ui-icon-pencil" immediate="true"
+                                                                                     actionListener="#{oposicionBean.modificarPersonaApo(per1)}" >
+                                                                        <p:ajax event="dialogReturn"  listener="#{oposicionBean.terminaDialogoModificarApo}" update=":frmExamenOpo:datosapoderadodmte"/>
+                                                                    </p:commandButton>
+
+                                                                    <p:spacer width="10"/>
+                                                                    <p:commandButton value="Eliminar" icon="ui-icon-circle-minus" update=":frmExamenOpo:datosapoderadodmte"
+                                                                                     actionListener="#{oposicionBean.borrarApoderadodmte(per1)}" immediate="true">
+                                                                    <p:confirm header="Confirmación" message="¿ Esta seguro de eliminar ?" icon="ui-icon-alert"/>
+                                                                    </p:commandButton>
+                                                                </p:column>
+
+                                                            </p:row>
+                                                        </p:panelGrid>                             
+                                                    </p:dataGrid>
+
+                                                </p:outputPanel>
+                                            </p:column>
+
+
+                                        </p:row>
+
+                                        <p:row>
+                                            <p:column colspan="5">
+                                                <fieldset>
+                                                    <legend>
+                                                        <p:outputLabel value="Dirección de notificación" /> 
+                                                    </legend>
+                                                    <p:panelGrid>
+                                                        <p:row>
+                                                            <p:column style="width: 10%"> <p:outputLabel value="Ciudad" style="font-weight: bold;"/></p:column>                    
+                                                            <p:column style="width: 40%">
+                                                                <p:selectOneMenu id="cmbCiudadNotificacion" style="width: 80% !important" value="#{oposicionBean.txtciudaddmte}" autoWidth="false"
+                                                                                 title="OBLIGATORIO. Ciudad para notificacion"  >
+                                                                    <f:selectItem itemLabel="Elegir" itemValue=""    /> 
+                                                                    <f:selectItems  value="#{oposicionBean.lstCiudadNotificacion}" var="ciudadNotificacion" itemLabel="#{ciudadNotificacion.nombre}" itemValue="#{ciudadNotificacion.codigo}"    />                  
+                                                                    <f:validateLength minimum="0" />
+                                                                </p:selectOneMenu> 
+                                                            </p:column>
+
+                                                            <p:column style="width: 10%"> <p:outputLabel value="Barrio/Zona:" style="font-weight: bold;"/></p:column>
+                                                            <p:column style="width: 40%"><p:inputText value="#{oposicionBean.txtzonadmte}" style="width: 95%"/></p:column>
+
+                                                        </p:row>
+                                                        <p:row>
+                                                            <p:column style="width: 10%"><p:outputLabel value="Av/Calle" style="font-weight: bold;"/></p:column>                    
+                                                            <p:column style="width: 40%"><p:inputText value="#{oposicionBean.txtcalledmte}" style="width: 95%"/></p:column>
+
+                                                            <p:column style="width: 10%"><p:outputLabel value="N° " style="font-weight: bold;"/>
+                                                                <p:inputText value="#{oposicionBean.txtnrocasadmte}" style="width: 50%"/></p:column>
+                                                            <p:column style="width: 40%">  <p:outputLabel value="Celular" style="font-weight: bold;"/>
+                                                                <p:inputText value="#{oposicionBean.txtceludmte}" style="width: 69%"/></p:column>
+
+                                                        </p:row>
+                                                        <p:row>
+                                                            <p:column style="width: 10%"><p:outputLabel value="Edificio" style="font-weight: bold;"/></p:column>                    
+                                                            <p:column style="width: 40%">   <p:inputText value="#{oposicionBean.txtedificiodmte}" style="width: 95%"/></p:column>
+
+                                                            <p:column style="width: 10%"><p:outputLabel value="Piso" style="font-weight: bold;"/></p:column>
+                                                            <p:column style="width: 40%"> <p:inputText value="#{oposicionBean.txtpisodmte}"  style="width: 94%"/></p:column>
+
+                                                        </p:row>
+                                                        <p:row>
+                                                            <p:column style="width: 10%"><p:outputLabel value="N° Dpto." style="font-weight: bold;"/></p:column>                    
+
+                                                            <p:column style="width: 40%"> <p:inputText value="#{oposicionBean.txtnrodepadmte}" style="width: 95%"/></p:column>
+                                                            <p:column style="width: 10%"><p:outputLabel value="Telefono" style="font-weight: bold;"/></p:column>
+                                                            <p:column style="width: 40%"> <p:inputText value="#{oposicionBean.txttelefonodmte}" style="width: 94%"/></p:column>
+
+                                                        </p:row>
+                                                        <p:row>
+                                                            <p:column style="width: 10%"><p:outputLabel value="Correo" style="font-weight: bold;"/></p:column>                  
+                                                            <p:column colspan="3" style="width: 90%"> <p:inputText value="#{oposicionBean.txtemaildmte}" style="width: 98%"/></p:column>                                                           
+                                                        </p:row>
+                                                        <p:row>
+                                                            <p:column style="width: 10%"><p:outputLabel value="Referencia" style="font-weight: bold;"/></p:column>                  
+                                                            <p:column colspan="3" style="width: 90%"> <p:inputText value="#{oposicionBean.txtreferenciadmte}" style="width: 98%"/></p:column>                                                           
+                                                        </p:row>
+
+                                                    </p:panelGrid>
+                                                </fieldset>
+                                            </p:column>
+                                        </p:row>
+                                    </p:panelGrid>
+                                </fieldset>
+                            </p:column>
+                            <p:column style="width: 49%;vertical-align: top " styleClass="quitarBordesAzul">
+                                <fieldset>
+                                    <legend>
+                                        <p:outputLabel value="Demandado" styleClass="labeldemandado" style="color: #F5250A"/> 
+                                    </legend>
+                                    <p:panelGrid id="paneldmdo">
+
+
+                                        <p:row>
+                                            <p:column colspan="3" style="width: 10%"></p:column>
+
+                                            <p:column style="width: 10%"><p:outputLabel value="Tipo de caso" style="font-weight: bold;"/> </p:column>
+                                            <p:column  style="width: 10%">
+                                                <p:selectOneMenu id="serie2" value="ope1" autoWidth="false" style="width: 69%">
+                                                    <f:selectItem itemLabel="OPOSICIÓN" itemValue="" />
+                                                    <f:selectItem itemLabel="NULIDAD" itemValue="" />
+                                                </p:selectOneMenu>
+                                            </p:column>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column style="width: 10%"><p:outputLabel value="Publicación" style="font-weight: bold;"/></p:column>
+                                            <p:column style="width: 10%">
+                                                <p:inputText value="#{oposicionBean.txtpublidmdo}" style="width: 80%" onkeyup="return ValNumero(this);">
+                                                    <p:ajax event="blur" listener="#{oposicionBean.buscarXPublicacion()}" update=":frmExamenOpo:paneldmdo :frmExamenOpo:radiob:actuali :frmExamenOpo:allbotones" />
+                                                </p:inputText>
+                                            </p:column>
+                                            <p:column style="width: 10%">
+                                                <p:commandButton icon="ui-icon-seek-next" onclick="#{oposicionBean.urlInformacionOPO(oposicionBean.txtpublidmdo, sessionState.idUsuario)}">                                                     
+                                                </p:commandButton>
+                                            </p:column>
+                                            <p:column style="width: 10%"><p:outputLabel value="Gaceta" style="font-weight: bold;"/></p:column>
+                                            <p:column style="width: 10%"><p:inputText value="#{oposicionBean.txtgacetadmdo}" style="width: 80%"/></p:column>
+
+                                        </p:row>
+                                        <p:row>
+                                            <p:column colspan="3" style="width: 10%"></p:column>
+                                            <p:column style="width: 20%"><p:outputLabel value="Fecha publicación" style="font-weight: bold;"/></p:column>
+                                            <p:column style="width: 10%"><p:calendar id="mask"  locale="es" pattern="dd-MM-yyyy" value= "#{oposicionBean.cldfecahpubdmdo}" 
+                                                                                     mask="true" size="15"/></p:column>
+                                        </p:row>
+
+                                        <p:row>
+                                            <p:column style="width: 10%"><p:outputLabel value="Marca" style="font-weight: bold;"/></p:column>
+                                            <p:column colspan="4" style="width: 10%"> <p:inputTextarea  value="#{oposicionBean.txamarcadmdo}" rows="3" cols="21" style= "width: 93%" styleClass="tituloMarca"/></p:column>
+
+                                        </p:row>
+
+                                        <p:row>
+                                            <p:column colspan="5"> 
+                                                <p:outputPanel id="soldmdo" style="width: 100%">
+                                                    <p:outputPanel style="text-align: center">
+                                                        <p:commandButton  value="Agregar" icon="ui-icon-circle-plus" actionListener="#{oposicionBean.cargaDialogoSolidmdo}" immediate="true"
+                                                                          rendered="#{oposicionBean.listasolidmdo.size()==0}">
+                                                            <p:ajax event="dialogReturn" listener="#{oposicionBean.terminaDialogo}" update=":frmExamenOpo:soldmdo"/>
+
+                                                        </p:commandButton>
+                                                    </p:outputPanel>
+                                                    <p:dataGrid var="sol" value="#{oposicionBean.listasolidmdo}" emptyMessage="No existen solicitantes" id="datossolidmdo" 
+                                                                style="width: 100%;" columns="1" rows="1" layout="grid" paginator="true" paginatorPosition="bottom">                                            
+
+                                                        <p:panelGrid style="width: 100%;">
+                                                            <p:row>
+                                                                <p:column  style="width: 10%;"><p:outputLabel value="Solicitante" style="font-weight: bold;"></p:outputLabel></p:column>
+
+
+                                                                <p:column colspan="3" style="width: 90%;">
+
+                                                                    <p:inputText  value="#{sol.nombre_razonsocial}" style="width: 90%;">
+                                                                    </p:inputText>
+                                                                    <p:spacer width="14"></p:spacer>
+                                                                    <p:inputText  value="#{sol.primer_apellido}" style="width: 45%;" rendered="#{sol.primer_apellido!=null}">
+                                                                    </p:inputText>
+                                                                    <p:spacer width="8"/>
+                                                                    <p:inputText  value="#{sol.segundo_apellido}" style="width: 42%;" rendered="#{sol.segundo_apellido!=null}">
+                                                                    </p:inputText>
+                                                                </p:column>
+
+
+                                                            </p:row>   
+                                                            <p:row>
+                                                                <p:column style="width: 10%;"><p:outputLabel value="N° Doc." style="font-weight: bold;"></p:outputLabel></p:column>
+                                                                <p:column style="width: 40%;"><p:outputLabel value="#{sol.numero_documento}"></p:outputLabel></p:column>
+                                                                <p:column style="width: 10%;"><p:outputLabel value="Tipo Doc." style="font-weight: bold; display: block; width: 60px"></p:outputLabel></p:column>
+                                                                <p:column style="width: 40%;"><p:outputLabel value="#{oposicionBean.devuelveTipoDocumento(sol.tipo_documento)}"></p:outputLabel></p:column>                                                
+                                                            </p:row>
+                                                            <p:row rendered="#{sol.tipo_titular=='NAT'}">
+                                                                <p:column style="width: 10%;"><p:outputLabel value="Genero" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                                <p:column style="width: 40%;"><p:outputLabel value="#{oposicionBean.devuelveGenero(sol.genero)}"></p:outputLabel></p:column>   
+                                                                <p:column style="width: 10%;"><p:outputLabel value="Lugar Expedición" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                                <p:column style="width: 40%;"><p:outputLabel value="#{oposicionBean.devuelveLugarExpedicion(sol.lugar_expedicion)}" ></p:outputLabel></p:column>                                                                                                 
+                                                            </p:row>
+                                                            <p:row>
+                                                                <p:column style="width: 10%;"><p:outputLabel value="Pais" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                                <p:column style="width: 40%;"><p:outputLabel value="#{oposicionBean.devuelvePais(sol.pais)}"></p:outputLabel></p:column>
+                                                                <p:column style="width: 10%;"><p:outputLabel value="Departamento" rendered="#{sol.pais=='BO'}" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                                <p:column style="width: 40%;"><p:outputLabel value="#{oposicionBean.devuelveDepartamento(sol.solicitud_depa)}" rendered="#{sol.pais=='BO'}"></p:outputLabel></p:column>                                                
+                                                            </p:row>
+                                                            <p:row>
+                                                                <p:column style="width: 10%;"><p:outputLabel value="Telefono" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                                <p:column style="width: 40%;"><p:outputLabel value="#{sol.telefono}" ></p:outputLabel></p:column>
+                                                                <p:column colspan="2"></p:column>
+                                                                <!--                                                    <p:column style="width: 10%;"><p:outputLabel value="Genero"></p:outputLabel></p:column>
+                                                                                                                    <p:column style="width: 40%;"><p:inputText value="fax"></p:inputText></p:column>                                                -->
+                                                            </p:row>
+                                                            <p:row>
+                                                                <p:column style="width: 10%;"><p:outputLabel value="Celular" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                                <p:column style="width: 40%;"><p:outputLabel value="#{sol.celular}"></p:outputLabel></p:column>
+                                                                <p:column style="width: 10%;"><p:outputLabel value="Fax" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                                <p:column style="width: 40%;"><p:outputLabel value="#{sol.fax}" ></p:outputLabel></p:column>                                                
+                                                            </p:row>
+                                                            <p:row>
+                                                                <p:column  style="width: 10%;"><p:outputLabel value="Direccion" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                                <p:column colspan="3" style="width: 90%;"><p:outputLabel value="#{sol.direccion}" style="width: 98%;"></p:outputLabel></p:column>
+                                                            </p:row>
+
+                                                            <p:row>
+                                                                <p:column style="width: 10%;"><p:outputLabel value="email" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                                <p:column colspan="3" style="width: 40%;"><p:outputLabel value="#{sol.email}" style="width: 98%;"></p:outputLabel></p:column>
+                                                            </p:row>
+
+                                                            <p:row>
+                                                                <p:column colspan="6" style="width: 100%; text-align: center">
+                                                                    <p:commandButton rendered="true" value="Agregar" icon="ui-icon-circle-plus" actionListener="#{oposicionBean.cargaDialogoSolidmdo}" 
+                                                                                     update=":frmExamenOpo:datossolidmdo" immediate="true">
+                                                                        <p:ajax event="dialogReturn"  listener="#{oposicionBean.terminaDialogo}" update=":frmExamenOpo:datossolidmdo"/>
+                                                                    </p:commandButton>
+                                                                    <p:spacer width="10"/>
+                                                                    <p:commandButton value="Modificar" icon="ui-icon-pencil" immediate="true"
+                                                                                     actionListener="#{oposicionBean.modificarPersona(sol)}" >
+                                                                        <p:ajax event="dialogReturn"  listener="#{oposicionBean.terminaDialogoModificar}" update=":frmExamenOpo:datossolidmdo"/>
+                                                                    </p:commandButton>
+
+                                                                    <p:spacer width="10"/>
+                                                                    <p:commandButton value="Eliminar" icon="ui-icon-circle-minus" update=":frmExamenOpo:datossolidmdo" immediate="true"
+                                                                                     actionListener="#{oposicionBean.borrarPersonadmda(sol)}">
+                                                                    <p:confirm header="Confirmación" message="¿ Esta seguro de eliminar ?" icon="ui-icon-alert"/>
+                                                                    </p:commandButton>
+                                                                </p:column>
+
+                                                            </p:row>
+                                                        </p:panelGrid>  
+                                                    </p:dataGrid>
+                                                </p:outputPanel>
+                                            </p:column>
+                                        </p:row>
+
+                                        <p:row>
+                                            <p:column colspan="5">
+                                                <!--Modulo Para listaaaaaaaaaaaaaa apoderadodmdo-->
+                                                <p:outputPanel id="apodmdo" style="width: 100%">
+                                                    <p:outputPanel style="text-align: center">
+                                                        <p:commandButton  value="Agregar" icon="ui-icon-circle-plus" actionListener="#{oposicionBean.cargaDialogoApodmdo()}" 
+                                                                          rendered="#{oposicionBean.listaapodmdo.size()==0}" immediate="true">
+                                                            <p:ajax event="dialogReturn"  listener="#{oposicionBean.terminaDialogoApoderado}" update=":frmExamenOpo:apodmdo"/>
+                                                        </p:commandButton>
+
+                                                    </p:outputPanel>
+
+                                                    <p:dataGrid id="datosapoderadodmdo" var="apo" value="#{oposicionBean.listaapodmdo}" emptyMessage="No existen apoderados" 
+                                                                paginatorPosition="bottom" style="width: 100%;" columns="1" rows="1" layout="grid" paginator="true">                                            
+                                                        <p:panelGrid style="width: 100%;">
+                                                            <p:row>
+                                                                <p:column  style="width: 10%;"><p:outputLabel value="Apoderado" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                                <p:column colspan="3" style="width: 90%;">
+                                                                    <p:outputLabel  value="#{apo.nombre_razonsocial}" style="width: 32%;" >
+                                                                    </p:outputLabel>
+                                                                    <p:spacer width="8"/>
+                                                                    <p:outputLabel  value="#{apo.primer_apellido}" style="width: 35%;" >
+                                                                    </p:outputLabel>
+                                                                    <p:spacer width="8"/>
+                                                                    <p:outputLabel  value="#{apo.segundo_apellido}" style="width: 32%;">
+                                                                    </p:outputLabel>
+                                                                </p:column>
+                                                            </p:row>        
+                                                            <p:row>
+                                                                <p:column style="width: 10%;"><p:outputLabel value="N° Doc." style="font-weight: bold;"></p:outputLabel></p:column>
+                                                                <p:column style="width: 40%;"><p:outputLabel value="#{apo.numero_documento}"></p:outputLabel></p:column>
+                                                                <p:column style="width: 10%;"><p:outputLabel value="Tipo Doc." style="font-weight: bold;display: block; width: 60px"></p:outputLabel></p:column>
+                                                                <p:column style="width: 40%;"><p:outputLabel value="#{oposicionBean.devuelveTipoDocumento(apo.tipo_documento)}"></p:outputLabel></p:column>                                                
+                                                            </p:row>
+                                                            <p:row >
+                                                                <p:column style="width: 10%;"><p:outputLabel value="Genero" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                                <p:column style="width: 40%;"><p:outputLabel value="#{oposicionBean.devuelveGenero(apo.genero)}"></p:outputLabel></p:column>       
+                                                                <p:column style="width: 10%;"><p:outputLabel value="Lugar Expedición" style="font-weight: bold;" rendered="#{apo.tipo_documento=='CI'}"></p:outputLabel></p:column>
+                                                                <p:column style="width: 40%;"><p:outputLabel value="#{oposicionBean.devuelveLugarExpedicion(apo.lugar_expedicion)}" rendered="#{apo.tipo_documento=='CI'}"></p:outputLabel></p:column>                                                                                             
+                                                            </p:row>
+                                                            <p:row>
+                                                                <p:column style="width: 10%;"><p:outputLabel value="Pais" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                                <p:column style="width: 40%;"><p:outputLabel value="#{oposicionBean.devuelvePais(apo.pais)}"></p:outputLabel></p:column>
+                                                                <p:column style="width: 10%;"><p:outputLabel value="Departamento"  style="font-weight: bold;" rendered="#{apo.pais=='BO'}"></p:outputLabel></p:column>
+                                                                <p:column style="width: 40%;"><p:outputLabel value="#{oposicionBean.devuelveDepartamento(apo.solicitud_depa)}" rendered="#{apo.pais=='BO'}"></p:outputLabel></p:column>                                                
+                                                            </p:row>
+                                                            <p:row>
+                                                                <p:column style="width: 10%;"><p:outputLabel value="Telefono" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                                <p:column style="width: 40%;"><p:outputLabel value="#{apo.telefono}" ></p:outputLabel></p:column>
+                                                                <p:column colspan="2"></p:column>
+                                                                <!--                                                    <p:column style="width: 10%;"><p:outputLabel value="Genero"></p:outputLabel></p:column>
+                                                                                                                    <p:column style="width: 40%;"><p:inputText value="fax"></p:inputText></p:column>                                                -->
+                                                            </p:row>
+                                                            <p:row>
+                                                                <p:column style="width: 10%;"><p:outputLabel value="Celular" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                                <p:column style="width: 40%;"><p:outputLabel value="#{apo.celular}"></p:outputLabel></p:column>
+                                                                <p:column style="width: 10%;"><p:outputLabel value="Fax" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                                <p:column style="width: 40%;"><p:outputLabel value="#{apo.fax}" ></p:outputLabel></p:column>                                                
+                                                            </p:row>
+                                                            <p:row>
+                                                                <p:column  style="width: 10%;"><p:outputLabel value="Direccion" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                                <p:column colspan="3" style="width: 90%;"><p:outputLabel value="#{apo.direccion}" style="width: 98%;"></p:outputLabel></p:column>
+                                                            </p:row>
+                                                            <p:row>
+                                                                <p:column style="width: 10%;"><p:outputLabel value="email" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                                <p:column colspan="3" style="width: 40%;"><p:outputLabel value="#{apo.email}" style="width: 98%;"></p:outputLabel></p:column>
+                                                            </p:row>
+                                                            <!--                                                            <p:row>
+                                                                                                                            <p:column style="width: 10%;"><p:outputLabel value="Poder" style="font-weight: bold;"></p:outputLabel></p:column>
+                                                                                                                            <p:column colspan="3" style="width: 40%;">
+                                                                                                                                <h:panelGrid columns="2">                                                           
+                                                                                                                                    <p:outputLabel value="# {apo.poder}"/>
+                                                                                                                                    <p:commandButton value="Libro de Poderes" icon="ui-icon-seek-next" 
+                                                                                                                                                     action="# {examenModificacionBean.abrirPoderDepositado()}"/>
+                                                                                                                                </h:panelGrid>
+                                                                                                                            </p:column>
+                                                                                                                        </p:row>-->
+                                                            <p:row>
+                                                                <p:column colspan="6" style="width: 100%; text-align: center">
+                                                                    <p:commandButton rendered="true" value="Agregar" icon="ui-icon-circle-plus" actionListener="#{oposicionBean.cargaDialogoApodmdo()}" 
+                                                                                     immediate="true">
+                                                                        <p:ajax event="dialogReturn"  listener="#{oposicionBean.terminaDialogoApoderado}" update=":frmExamenOpo:datosapoderadodmdo"/>
+                                                                    </p:commandButton>
+                                                                    <p:spacer width="10"/>
+                                                                    <p:commandButton value="Modificar" icon="ui-icon-pencil" immediate="true"
+                                                                                     actionListener="#{oposicionBean.modificarPersonaApo(apo)}" >
+                                                                        <p:ajax event="dialogReturn"  listener="#{oposicionBean.terminaDialogoModificarApo}" update=":frmExamenOpo:datosapoderadodmdo"/>
+                                                                    </p:commandButton>
+
+                                                                    <p:spacer width="10"/>
+                                                                    <p:commandButton value="Eliminar" icon="ui-icon-circle-minus" update=":frmExamenOpo:datosapoderadodmdo"
+                                                                                     actionListener="#{oposicionBean.borrarApoderadodmdo(apo)}" immediate="true">
+                                                                    <p:confirm header="Confirmación" message="¿ Esta seguro de eliminar ?" icon="ui-icon-alert"/>
+                                                                    </p:commandButton>
+                                                                </p:column>
+
+                                                            </p:row>
+                                                        </p:panelGrid>                             
+                                                    </p:dataGrid>
+                                                </p:outputPanel>
+                                            </p:column>
+                                        </p:row>
+
+
+                                        <p:row>
+
+                                            <p:column colspan="7">
+                                                <fieldset>
+                                                    <legend>
+                                                        <p:outputLabel value="Dirección de notificación"/> 
+                                                    </legend>
+                                                    <p:panelGrid style="width: 100%">
+                                                        <p:row>
+                                                            <p:column style="width: 10%"> <p:outputLabel value="Ciudad" style="font-weight: bold;"/></p:column>                    
+                                                            <p:column  style="width: 40%">
+                                                                <p:selectOneMenu id="cmbCiudadNotificacionpro" style="width: 80% !important" value="#{oposicionBean.txtciudaddmdo}" autoWidth="false"
+                                                                                 title="OBLIGATORIO. Ciudad para notificacion">
+                                                                    <f:selectItem itemLabel="Elegir" itemValue=""    /> 
+                                                                    <f:selectItems  value="#{oposicionBean.lstCiudadNotificacion}" var="ciudadNotificacion" itemLabel="#{ciudadNotificacion.nombre}" itemValue="#{ciudadNotificacion.codigo}"    />                  
+                                                                    <f:validateLength minimum="0" />
+                                                                </p:selectOneMenu>    
+                                                            </p:column>
+
+                                                            <p:column style="width: 10%"> <p:outputLabel value="Barrio/Zona" style="font-weight: bold;"/></p:column>
+                                                            <p:column  style="width: 40%"><p:inputText value="#{oposicionBean.txtzonadmdo}" style="width: 95%"/></p:column>
+
+                                                        </p:row>
+                                                        <p:row>
+                                                            <p:column style="width: 10%"><p:outputLabel value="Av/Calle" style="font-weight: bold;"/></p:column>                    
+                                                            <p:column style="width: 40%"><p:inputText value="#{oposicionBean.txtcalledmdo}" style="width: 95%"/></p:column>
+
+                                                            <p:column style="width: 10%"><p:outputLabel value="N° " style="font-weight: bold;"/><p:inputText value="#{oposicionBean.txtnrocasadmdo}" 
+                                                                                                                                                             style="width: 50%"/></p:column>
+                                                            <p:column style="width: 40%">  <p:outputLabel value="Celular" style="font-weight: bold;"/>
+                                                                <p:inputText value="#{oposicionBean.txtcelulardmdo}" style="width: 69%"/></p:column>
+
+                                                        </p:row>
+                                                        <p:row>
+                                                            <p:column style="width: 10%"><p:outputLabel value="Edificio" style="font-weight: bold;"/></p:column>                    
+                                                            <p:column style="width: 40%">   <p:inputText value="#{oposicionBean.txtedificiodmdo}" style="width: 95%"/></p:column>
+
+                                                            <p:column style="width: 10%"><p:outputLabel value="Piso" style="font-weight: bold;"/></p:column>
+                                                            <p:column style="width: 40%"> <p:inputText value="#{oposicionBean.txtpisodmdo}" style="width: 94%"/></p:column>
+
+                                                        </p:row>
+                                                        <p:row>
+                                                            <p:column style="width: 10%"><p:outputLabel value="N° Dpto." style="font-weight: bold;"/></p:column>                    
+
+                                                            <p:column style="width: 40%"> <p:inputText value="#{oposicionBean.txtnrodepartamentodmdo}" style="width: 95%"/></p:column>
+                                                            <p:column style="width: 10%"><p:outputLabel value="Telefono" style="font-weight: bold;"/></p:column>
+                                                            <p:column style="width: 40%"> <p:inputText value="#{oposicionBean.txttelefonodmdo}" style="width: 94%"/></p:column>
+
+                                                        </p:row>
+                                                        <p:row>
+                                                            <p:column style="width: 10%"><p:outputLabel value="Correo" style="font-weight: bold;"/></p:column>                  
+                                                            <p:column colspan="3" style="width: 90%"> <p:inputText value="#{oposicionBean.txtemaildmdo}" style="width: 98%"/></p:column>                                                           
+                                                        </p:row>
+                                                        <p:row>
+                                                            <p:column style="width: 10%"><p:outputLabel value="Referencia" style="font-weight: bold;"/></p:column>                  
+                                                            <p:column colspan="3" style="width: 90%"> <p:inputText value="#{oposicionBean.txtreferenciadmdo}" style="width: 98%"/></p:column>                                                           
+                                                        </p:row>
+                                                    </p:panelGrid>
+                                                </fieldset>
+                                            </p:column>
+                                        </p:row>
+                                    </p:panelGrid>
+
+                                </fieldset>
+
+                            </p:column>
+                        </p:row>
+                        <p:row>
+
+                            <p:column colspan="2" style="padding-left: 170px">
+                                <p:panelGrid id="panelcentral" styleClass="quitarBordes">
+                                    <p:row>
+                                        <p:column><p:outputLabel value="Administrativo" style="font-weight: bold;" rendered="true"></p:outputLabel></p:column>
+                                        <p:column><p:inputText value="Situación Actual" size="32" style="color: gold"/> </p:column>
+                                        <p:column rowspan="4"></p:column>
+                                        <p:column rowspan="2"></p:column>
+                                        <p:column rowspan="4"></p:column>
+                                        <p:column colspan="2"><p:outputLabel value="Observación" rendered="true" style="font-weight: bold;"></p:outputLabel></p:column>
+                                    </p:row>
+                                    <p:row>
+                                        <p:column><p:outputLabel value="Estado" style="font-weight: bold;" rendered="true"></p:outputLabel></p:column>
+                                        <p:column><p:inputText value="#{oposicionBean.txtestadotramite}" size="32" style="color: blue"/> </p:column> 
+                                        <p:column rowspan="2" colspan="2"><p:inputTextarea  value="#{oposicionBean.txaobservacion}" rows="3" cols="43" /></p:column>
+                                    </p:row>
+                                    <p:row>
+                                        <p:column> <p:outputLabel value="Ultima Actividad" rendered="true" style="font-weight: bold;"></p:outputLabel></p:column>
+                                        <p:column> <p:inputText value="#{oposicionBean.txtultimactividad}" size="32"/></p:column>                                   
+                                        <p:column><p:calendar id="val2d" pattern="dd-MM-yyyy" mask="true" value= "#{oposicionBean.cldfechaultimaactividad}" size="15"/></p:column>
+                                    </p:row><p:row>
+                                        <p:column><p:outputLabel value="Siguiente Actividad" rendered="true" style="font-weight: bold;"></p:outputLabel></p:column>
+                                        <p:column><p:inputText value="Presenntacion de Pruebas del Opositor" size="32" style="color: red"/></p:column>                                   
+                                        <p:column><p:calendar id="val3d" pattern="dd-MM-yyyy" mask="true" size="15"/></p:column>
+                                        <p:column><p:outputLabel value="Fecha de presentación" style="font-weight: bold;"/></p:column>
+                                        <p:column>
+                                            <p:message for="fechrapres" display="icon" />   
+                                            <p:calendar id="fechrapres"  locale="es" pattern="dd-MM-yyyy HH:mm:ss" mask="true" value="#{oposicionBean.cldfechapresoposicion}" size="19" required="true"/>
+                                            <p:message for="fechrapres" display="icon" />   
+                                        </p:column>
+                                    </p:row>
+                                </p:panelGrid>
+                            </p:column>
+
+                        </p:row>
+
+                        <p:row>
+                            <p:column colspan="2"> 
+                                <p:panelGrid id="allbotones" style="width: 100%" styleClass="quitarBordes">
+                                    <p:row>
+                                        <p:column ><p:spacer width="10"/></p:column>
+                                        <p:column >
+                                            <p:commandButton value="Adicionar" icon="ui-icon-circle-plus" disabled="#{oposicionBean.variadi}"
+                                                             actionListener="#{oposicionBean.guardar_datosoposiciondmtedmdanotisoliapo()}"
+                                                             update=":frmExamenOpo:msg :frmExamenOpo:tablacasosadjuntos" style="height: 40px">                                                                                             
+                                                <p:confirm header="Confirmación" message="Se Agregara un nuevo caso, en el orden # = #{oposicionBean.txtpublidmdoclon}" icon="ui-icon-alert"/>
+                                            </p:commandButton>                                     
+                                            <p:spacer width="10"/>
+                                        </p:column>
+                                        <p:column>
+                                            <p:commandButton value="Modificar" icon="ui-icon-pencil" disabled="#{oposicionBean.varimodi}" style="height: 40px"
+                                                             actionListener="#{oposicionBean.modificar_datosoposiciondmtedmdanotisoliapo()}">
+                                                  <p:confirm header="Confirmación" message="¿ Esta seguro de modificar el tramite de oposición?" icon="ui-icon-alert"/>
+                                            </p:commandButton> 
+                                            <p:spacer width="10"/>
+                                        </p:column>
+                                        <p:column>
+                                            <p:commandButton value="Eliminar" icon="ui-icon-trash" disabled="#{oposicionBean.varieli}" style="height: 40px"
+                                                             actionListener="#{oposicionBean.eliminar_datosoposiciondmtedmdanotisoliapo}">
+                                                <p:confirm header="Confirmación" message="¿ Esta seguro de eliminar el tramite de oposición?" icon="ui-icon-alert"/>
+                                            </p:commandButton>
+
+                                            <p:spacer width="10"/>                                            
+                                        </p:column>
+                                        <p:column>
+                                            <p:commandButton value="Limpiar" icon="ui-icon-clipboard" style="height: 40px">
+                                                <p:ajax listener="#{oposicionBean.limpiar_datosoposiciondmtedmdanotisoliapo()}" update=":frmExamenOpo" event="click"/>
+
+                                            </p:commandButton>
+                                            <p:spacer width="10"/>
+                                        </p:column>
+                                        <p:column>
+
+                                            <p:commandButton style="height: 40px" value="Seguimiento" icon="ui-icon-folder-open" actionListener="#{oposicionBean.cargaDialogoSeguimiento()}" disabled="#{oposicionBean.varisegui}">
+                                                <p:ajax event="dialogReturn"  listener="#{oposicionBean.terminaDialogoSeguimiento}"/>
+                                            </p:commandButton>
+
+                                            <p:spacer width="10"/>
+                                        </p:column>
+                                        <p:column>
+                                            <p:commandButton  style="height: 40px" value="Historial" icon="ui-icon-script" actionListener="#{oposicionBean.cargaDialogoHistorial()}" disabled="#{oposicionBean.varihisto}">
+                                                <p:ajax event="dialogReturn"  listener="#{oposicionBean.terminaDialogoHistorial}"/>
+                                            </p:commandButton>
+                                            <p:spacer width="10"/>
+                                        </p:column>
+                                        <p:column>
+                                            <p:commandButton style="height: 40px" value="Busqueda" icon="ui-icon-folder-open" actionListener="#{oposicionBean.cargaDialogoBusqueda()}">
+                                                <p:ajax event="dialogReturn"  listener="#{oposicionBean.terminaDialogoBusqueda}"/>
+                                            </p:commandButton>
+                                            <p:spacer width="10"/>
+                                        </p:column>
+                                        <p:column>
+                                            <p:commandButton value="Notificar"  styleClass="tituloPequenioBoton" icon="ui-icon-contact"
+                                                             process="@form" style="height: 40px"
+                                                             actionListener="#{oposicionBean.viewNoti}"
+                                                             >
+
+                                            </p:commandButton>
+                                        </p:column>
+                                        <!--                                        <p:column>
+                                                                                    <p:commandButton style="height: 40px" value="Alerta" icon="ui-icon-alert" type="button" onclick="PF('alertaopo').show();">
+                                                                                    </p:commandButton>
+                                                                                    <p:spacer width="10"/>
+                                                                                </p:column>-->
+
+
+                                    </p:row>
+                                </p:panelGrid>
+                            </p:column>
+
+                        </p:row>
+
+
+
+                        <p:row>
+
+                            <p:column style="vertical-align: top">
+                                <p:outputLabel value="CASOS ADJUNTOS"/>
+
+                                <p:dataTable   var="cadj" value="#{oposicionBean.listascasosadj}" id="tablacasosadjuntos"
+                                               selectionMode="single" selection="#{oposicionBean.selectedOpo}" rowKey="#{cadj.idoposicion}"     
+                                               scrollable="true" scrollHeight="100" scrollRows="5" emptyMessage="No se encontraron resultados">
+                                    <p:ajax event="rowSelect" listener="#{oposicionBean.onRowSelectOposicion}" update=":frmExamenOpo:paneldmte :frmExamenOpo:cuerpocab :frmExamenOpo:tablaflujoactividad :frmExamenOpo:paneldmdo :frmExamenOpo:panelcentral :frmExamenOpo:botonfinalizar"/>
+                                    <p:ajax event="rowUnselect" listener="#{oposicionBean.onRowUnselectOposicion}" update=":frmExamenOpo" />
+
+                                    <p:column headerText="Nro.OPO">
+                                        <p:outputLabel value="#{cadj.nro_opo}"/>
+                                    </p:column>
+
+                                    <p:column headerText="Orden">
+                                        <p:outputLabel value="#{cadj.orden_o}"/>
+                                    </p:column>
+
+                                    <p:column headerText="Caso">
+                                        <p:outputLabel value="#{oposicionBean.comvertirnroopo(cadj.idoposicion)}"/>
+                                    </p:column>
+
+                                    <p:column headerText="Estado">
+                                        <p:outputLabel value="#{oposicionBean.obtienestadoxidestado(cadj.id_estado)}"/>
+                                    </p:column>
+                                </p:dataTable>
+
+                            </p:column>
+                            <p:column>                                                               
+                                <p:outputLabel value="FLUJO DE ACTIVIDADES"/>
+
+
+                                <p:dataTable var="flujactivi" id="tablaflujoactividad" value="#{oposicionBean.listaactividades}"
+                                             scrollable="true" scrollHeight="100" scrollRows="5" emptyMessage="No se encontraron resultados">
+                                    <p:column headerText="Actividad">
+                                        <p:outputLabel value="#{oposicionBean.obtieneactividadxidactividad(flujactivi.idactividad)}"/>
+                                    </p:column>
+
+                                    <p:column headerText="Fecha">
+                                        <p:outputLabel value="#{flujactivi.fecha}">
+                                          <f:convertDateTime type="date" pattern="dd-MM-yyyy HH:mm:ss"/>
+                                        </p:outputLabel>
+                                    </p:column><p:spacer width="10"/>
+                                </p:dataTable>
+
+
+                            </p:column>
+
+                        </p:row>
+
+                    </p:panelGrid>
+                    <p:panelGrid id="panelingresar" style="width: 100%" styleClass="quitarBordes" columns="2">
+                        <p:outputPanel style="text-align: left;">
+                            <p:commandButton  id= "botonfinalizar" value="Ingresar oposicion en signos" icon="ui-icon-circle-check" styleClass="botonfinalizaropo" actionListener="#{oposicionBean.iniciarTramiteOpo()}" 
+                                              disabled="#{oposicionBean.btnInicioTramiteRendered}" update=":frmExamenOpo">
+                                <p:confirm header="Confirmación" message="¿ Esta seguro cambiar el estado en signos ?" icon="ui-icon-alert"/>
+                            </p:commandButton>
+                            <p:spacer width="10"/>          
+                        </p:outputPanel>
+                        <p:outputPanel style="text-align: right;">
+                            <p:commandButton  id= "botonfinalizar1" value="Finalizar" icon="ui-icon-circle-check" styleClass="botonfinalizaropo" action="#{oposicionBean.terminaTramiteOpo()}" 
+                                              disabled="false">
+                                              
+                                              
+                                <p:confirm header="Confirmación" message="Finalizara el tramite para seguimietno " icon="ui-icon-alert"/>
+                            </p:commandButton>
+                            <p:spacer width="10"/>          
+                        </p:outputPanel>
+                    </p:panelGrid>
+
+                    <p:dialog widgetVar="alertaopo" modal="true" height="70%" width="63%">                    
+                        <fieldset>
+                            <legend>
+                                <p:outputLabel value="Alerta de oposiciones" styleClass="labelImportante"/> 
+                            </legend>
+                            <p:panel>
+                                <p:panelGrid styleClass="quitarBordes">
+                                    <p:row>
+                                        <p:column colspan="5"><p:outputLabel value="Direccion de notificacion" style="center"/></p:column>
+                                    </p:row>
+                                    <p:row>
+                                        <p:column colspan="5">-</p:column>
+                                    </p:row>
+                                    <p:row>
+                                        <p:column colspan="5"><p:outputLabel value="BOLIVIANITA (generica) V.s. LA BOLIVIANITA" style="text-align: center"/></p:column>
+                                    </p:row>
+                                    <p:row>
+                                        <p:column><p:outputLabel value="Area"/></p:column>
+                                        <p:column colspan="4"><p:inputText value="SIGNOS DISTINTIVOS" size="56"/></p:column>
+                                    </p:row>
+                                    <p:row>
+                                        <p:column><p:outputLabel value="Expediente"/></p:column>
+                                        <p:column><p:inputText value="1124566" size="15"/></p:column>
+                                        <p:column><p:commandButton icon="ui-icon-seek-next">                                    
+                                            </p:commandButton></p:column>
+                                        <p:column><p:outputLabel value="Orden"/></p:column>
+                                        <p:column><p:inputText value="1" size="5"/></p:column>
+                                    </p:row>
+                                    <p:row>
+                                        <p:column><p:outputLabel value="Actividad"/></p:column>
+                                        <p:column colspan="4"><p:inputText value="Presentación de pruevas del opositor" size="56"/></p:column>
+                                    </p:row>
+                                    <p:row>
+                                        <p:column><p:outputLabel value="Fecha limite"/></p:column>
+                                        <p:column colspan="4"><p:calendar pattern="dd-MM-yyyy" mask="true" size="15"/></p:column>
+                                    </p:row>
+                                    <p:row>
+                                        <p:column><p:outputLabel value="Observacion"/></p:column>
+                                        <p:column colspan="6"><p:inputTextarea  value="AvG" rows="3" cols="80" /></p:column>
+                                    </p:row>                               
+                                    <p:row>
+                                        <p:column><p:outputLabel value="Apoderado"/></p:column>
+                                        <p:column colspan="4"><p:inputText value="Lino Farias " size="56"/></p:column>
+                                    </p:row>                               
+                                </p:panelGrid>                            
+                            </p:panel>
+                        </fieldset>
+                        <p:spacer width="1"/>
+                        <fieldset>
+                            <legend>
+                                <p:outputLabel value="Lista de expedientes con mayor prioridad de atención" styleClass="labelImportante"/> 
+                            </legend>
+                            <p:panel>
+
+                                <p:dataTable var="car1" value="pert12">
+                                    <p:column headerText="No.">
+                                        <h:outputText value="17"/>
+                                    </p:column>
+                                    <p:column headerText="Area">
+                                        <h:outputText value="1"/>
+                                    </p:column>
+                                    <p:column headerText="Expediente">
+                                        <h:outputText value="111465"/>
+                                    </p:column>
+                                    <p:column headerText="Orden">
+                                        <h:outputText value="1"/>
+                                    </p:column>
+
+                                    <p:column headerText="Actividad">
+                                        <h:outputText value="Presentacionde pruebas"/>
+                                    </p:column>
+                                    <p:column headerText="Fecha Lim.">
+                                        <h:outputText value="05/08/16"/>
+                                    </p:column>
+                                    <p:column headerText="Observacion">
+                                        <h:outputText value="Autos 2006"/>
+                                    </p:column>
+                                    <p:column headerText="Apoderado">
+                                        <h:outputText value="Lia Perez"/>
+                                    </p:column>
+                                    <p:column headerText="Caso">
+                                        <h:outputText value="15"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:panel>
+                        </fieldset>
+                    </p:dialog> 
+
+
+
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                        <p:outputPanel style="text-align: center">
+                            <p:commandButton value="SI" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                            <p:commandButton value="NO" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                        </p:outputPanel>
+                    </p:confirmDialog>
+
+                </h:form>  
+
+            </ui:define>
+        </ui:composition>
+
+    </body>
+</html>

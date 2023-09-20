@@ -1,0 +1,380 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <body>
+        <ui:composition template="./../WEB-INF/facelets/templates/Template.xhtml">
+            <ui:define name="content"> 
+                <h:form id="form">
+                    <p:growl id="msg" />   
+                    <p:panelGrid style="width: 100%; height: 100%" >     
+                        <p:panelGrid style="width: 100%" styleClass="quitarBordes">
+                            <p:row >
+                                <p:column style="width: 90%;">
+                                    <fieldset>
+                                        <legend>
+                                            <p:outputLabel value="Buscador por registro" />
+                                        </legend>
+                                        <p:spacer width="1"/>
+                                        <p:panelGrid>
+                                            <p:row>
+                                                <p:column style="width: 86%;">
+                                                    <p:panelGrid columns="5">
+                                                        <p:outputLabel value="N° REGISTRO:" />
+                                                        <p:inputText value="#{registroBean.registroBuscar}" size="10" maxlength="10" onkeyup="return ValNumero(this);"/>
+                                                        <p:selectOneMenu  value="#{registroBean.serieBuscar}" >
+                                                            <f:selectItem itemLabel="C" itemValue="C" />                                        
+                                                        </p:selectOneMenu>
+                                                        <p:spacer width="2"/>
+                                                        <p:commandButton  icon="ui-icon-search" value="Buscar" style="width: 105%; height: 115%">                                    
+                                                        </p:commandButton>
+                                                    </p:panelGrid>
+                                                </p:column>    
+                                                <p:column >
+                                                    <p:panelGrid columns="2">
+                                                        <p:outputLabel value="N°" style="display: block; width: 20px" />
+                                                        <p:inputText value="#{registroBean.numero}" size="10" maxlength="10" onkeyup="return ValNumero(this);"/>
+                                                    </p:panelGrid>                                    
+                                                </p:column>
+                                            </p:row>
+                                        </p:panelGrid>
+                                        <p:spacer width="1"/>
+                                    </fieldset>
+                                </p:column>
+                                <p:column style="width: 10%;vertical-align: middle; ">
+                                    <p:panelGrid columns="1" >
+                                        <p:commandButton value="Seguimiento"  style="width: 100%; height: 30px" icon="ui-icon-folder-open"
+                                                         action="#{registroBean.abrirSeguimiento()}">
+                                        </p:commandButton>                                
+                                        <p:commandButton value="Historial"  style="width: 100%; height: 30px" icon="ui-icon-script"
+                                                         action="#{registroBean.abrirPaginaHistorial()}" >
+                                        </p:commandButton>
+                                    </p:panelGrid>
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+
+                        <p:panelGrid styleClass="ui-custompanelgrid" style="width: 100%">
+                            <p:row style="width: 100%; height: 100%;background-image:url(../resources/images/titulo.png);  " >
+                                <p:column colspan="2">
+                                    <fieldset>
+                                        <legend>
+                                            <p:outputLabel value="Datos del signo" />
+                                        </legend>                            
+                                        <div align="center" style="padding-left: 13%">
+                                            <p:panelGrid  >
+                                                <p:row>
+                                                    <p:column colspan="2">
+                                                        <h:panelGrid id="labelEncabezado" >                                                                                        
+                                                            <h:outputLabel value="EL REGISTRO DE SIGNO DISTINTIVO"                                                         
+                                                                           rendered="#{registroBean.encabezado}" />                                                                                     
+                                                        </h:panelGrid>
+                                                    </p:column>
+                                                </p:row>
+                                                <p:row>
+                                                    <p:column style="text-align: center">                                                                                    
+                                                        <p:graphicImage url="/images/imagen.jpg" height="125" width="125"/>
+                                                        <p:panelGrid columns="1" id="panelMarca">
+                                                            <h:inputTextarea value="#{registroBean.marca}"  rows="2" cols="52" style="text-align: center; border-style: none"
+                                                                             onkeyup="this.value = this.value.substring(0, 500);">
+                                                            </h:inputTextarea>
+                                                            <p:outputLabel value="#{registroBean.tipoSigno}"  style="text-align: center"/>
+                                                        </p:panelGrid>                                            
+                                                    </p:column>
+                                                    <p:column style="padding-left: 5%; width: 40%">
+                                                        <p:panelGrid columns="2"> 
+                                                            <p:selectBooleanCheckbox value="#{registroBean.encabezado}" >
+                                                                <p:ajax event="change" update=":form:labelEncabezado" >
+                                                                </p:ajax>                                                    
+                                                            </p:selectBooleanCheckbox>
+                                                            <p:outputLabel value="IMPRMIR ENCABEZADO" style="display:block;width:155px"/>
+                                                        </p:panelGrid>
+                                                        <p:panelGrid columns="1">
+
+                                                            <p:commandButton value="Denegar" icon="ui-icon-closethick" style="width: 100%;height: 40px;">
+                                                                <p:confirm header="CONFIRMACION DENEGAR" message="Se Denegara el N° de Registro: 123456 C. ¿Esta Seguro?" icon="ui-icon-alert" />
+                                                            </p:commandButton>
+                                                            <p:spacer height="1" />
+                                                            <p:commandButton value="Rehacer" icon="ui-icon-refresh" style="width: 100%;height: 40px;">
+                                                                <p:confirm header="CONFIRMACION REHACER" message="Repetir la accion, ¿Esta Seguro?" icon="ui-icon-alert" />
+                                                            </p:commandButton> 
+                                                            <p:spacer height="1" />
+                                                            <p:commandButton value="Borrar"  icon="ui-icon-trash" style="width: 100%;height: 40px;">
+                                                                <p:confirm header="CONFIRMACION BORRAR" message="Se Borrara el N° de Registro: 123456 C. ¿Esta Seguro?" icon="ui-icon-alert" />
+                                                            </p:commandButton> 
+                                                            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                                                <div align="center">
+                                                                    <h:panelGrid columns="3" cellpadding="5" cellspacing="5" >                                                        
+                                                                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                                                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                                                    </h:panelGrid>
+                                                                </div>
+                                                            </p:confirmDialog>
+                                                        </p:panelGrid>
+                                                    </p:column>                                    
+                                                </p:row>
+
+                                                <p:row>  
+                                                    <p:column colspan="2">  
+                                                        <p:panelGrid columns="3" id="panelDatos">
+                                                            <p:outputLabel value="TIPO:" style="font-weight: bold"/>
+                                                            <p:outputLabel value="#{registroBean.tipoMarca}" />
+                                                            <p:spacer height="24" />
+                                                            <p:outputLabel value="CLASE:" style="font-weight: bold"/>
+                                                            <p:outputLabel value="#{registroBean.clase}" />
+                                                            <p:spacer height="20" />
+                                                            <p:outputLabel value="REGISTRO:" style="font-weight: bold"/>
+                                                            <h:panelGrid columns="4" id="panelRegistro">
+                                                                <p:inputText value="#{registroBean.registro}" size="10" maxlength="10" readonly="#{!registroBean.reasignar}"/>
+                                                                <p:selectOneMenu id="serie" value="#{registroBean.serie}">
+                                                                    <f:selectItem itemLabel="C" itemValue="C"  />                                        
+                                                                </p:selectOneMenu>
+                                                                <h:outputLabel value="Reasignar"     />
+                                                                <p:selectBooleanCheckbox value="#{registroBean.reasignar}" >
+                                                                    <p:ajax event="change" update=":form:panelRegistro :form:panelResolucion  :form:msg" listener="#{registroBean.addMessage()}">
+                                                                    </p:ajax>  
+                                                                </p:selectBooleanCheckbox>                                                
+                                                            </h:panelGrid>
+                                                            <p:spacer height="30" />
+                                                            <p:outputLabel value="RESOLUCION:" style="font-weight: bold"/>
+                                                            <h:panelGrid columns="2" id="panelResolucion">
+                                                                <p:inputText value="#{registroBean.resolucion}" size="9" maxlength="10" onkeyup="return ValNumero(this);" readonly="#{!registroBean.reasignar}"/>
+                                                                <p:inputText value="#{registroBean.gestion}" size="7" maxlength="10" onkeyup="return ValNumero(this);" readonly="#{!registroBean.reasignar}"/>
+                                                            </h:panelGrid>
+                                                            <p:spacer height="30" />
+                                                            <p:outputLabel value="TITULAR:" style="font-weight: bold"/>
+                                                            <p:outputLabel value="#{registroBean.titulares}" style="display:block;width:230px">
+                                                            </p:outputLabel>
+                                                            <p:spacer height="30" />
+
+                                                            <p:outputLabel value="FECHA:" style="font-weight: bold"/>
+                                                            <p:calendar id="fecha" pattern="dd-MM-yyyy" mask="true" readonly="#{!registroBean.reasignar}" value="#{registroBean.fechaRegistro}"/>
+                                                            <p:spacer height="30"/>
+
+                                                            <p:outputLabel value="OBSERVACIONES:" style="font-weight: bold"/>
+                                                            <h:inputTextarea value="#{registroBean.observaciones}"  rows="2" cols="35"
+                                                                             onkeyup="this.value = this.value.substring(0, 500);">
+                                                            </h:inputTextarea>
+
+                                                        </p:panelGrid>
+                                                        <p:separator style="border-style: none"/>
+                                                        <p:outputLabel value="El presente Signo Distintivo tiene una duración de diez años contados a partir de la fecha, siendo posible su renovación por periodos iguales. "
+                                                                       style="display:block;width:450px;font-weight: bold"/>                                            
+                                                    </p:column>                                    
+                                                </p:row>
+                                            </p:panelGrid>         
+                                        </div>
+                                    </fieldset>
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+
+                        <p:panelGrid style="width: 100%" styleClass="quitarBordes">
+                            <p:row> 
+                                <p:column colspan="2" >
+                                    <fieldset>
+<!--                                        <legend>
+                                            <p:outputLabel value="OPCIONES" />
+                                        </legend>-->
+                                        <p:panelGrid style="width: 100%; text-align: center; ">
+                                            <p:row>
+                                                <p:column style="width: 30%; ">
+                                                    <h:panelGrid columns="7" style="border-style: solid; padding: 1em 1em 1em 1em; border-color: #E2E7E2">
+                                                        <h:commandButton value="Ver>>" 
+                                                                         onclick="this.form.target = '_blank'"
+                                                                         onblur="this.form.target = '_self'"
+                                                                         action="abrirExpediente" 
+                                                                         style="border-radius: 4px; background: #AED0EA !important;width: 51px; height: 30px">  
+                                                        </h:commandButton>
+                                                        <p:outputLabel value="SM:" styleClass="labelImportante  "/>
+                                                        <p:inputText value="#{registroBean.numeroSM}" size="5" style="background: lightgray !important"/>
+                                                        <p:inputText value="#{registroBean.gestionSM}" size="3" style="background: lightgray !important"/>
+                                                        <p:inputText value="#{registroBean.extension}" size="1" style="background: lightgray !important"/>
+                                                        <p:spacer width="3"/>
+                                                        <p:commandButton  icon="ui-icon-play" value="Nuevo" style="height: 115%" update="panelMarca, panelDatos"
+                                                                          actionListener="#{registroBean.buscarNuevoRegistro()}">                                    
+                                                        </p:commandButton>
+                                                    </h:panelGrid>
+                                                </p:column>
+                                                <p:column style="width: 70%; padding-left: 1% !important">
+                                                    <p:panelGrid style="width: 100%;text-align: center; ">
+                                                        <p:row style="width: 100%;text-align: center;">
+                                                            <p:column >
+                                                                <p:commandButton value="Recepcionar"  icon="ui-icon-circle-triangle-e"  style=" height: 40px;">
+
+                                                                </p:commandButton>                                                
+                                                                <p:spacer width="9"/>
+                                                            </p:column>
+                                                            <p:column style="width: 6%">
+
+                                                                <p:spacer width="9"/>
+                                                            </p:column>
+                                                            <p:column >                                                        
+                                                                <p:commandButton value="Aceptar"  style=" height: 40px;" icon="ui-icon-circle-check"
+                                                                                 onclick="PF('revision').show();" type="button">
+                                                                </p:commandButton> 
+                                                                <p:spacer width="9"/>
+
+                                                            </p:column>
+                                                            <p:column>
+                                                                <p:commandButton value="Resolución" icon="ui-icon-print" style="height: 40px;">
+                                                                </p:commandButton>
+                                                                <p:spacer width="9"/>
+                                                            </p:column>
+                                                            <p:column>
+                                                                <p:commandButton value="Imprimir titulo" icon="ui-icon-print" style=" height: 40px;">
+                                                                </p:commandButton>
+                                                                <p:spacer width="9"/>                                            
+                                                            </p:column>
+                                                            <p:column>
+                                                                <p:commandButton value="Lista"  style=" height: 40px;" icon="ui-icon-script"
+                                                                                 onclick="PF('buscador').show();" >                                                
+                                                                </p:commandButton>
+                                                                <p:spacer width="9"/>
+                                                            </p:column>
+                                                            <p:column>
+                                                                <p:commandButton value="Limpiar" style=" height: 40px;" icon="ui-icon-clipboard">                                                
+                                                                </p:commandButton>  
+                                                                <p:spacer width="9"/>
+                                                            </p:column>
+                                                            <p:column style="width: 6%">
+
+                                                                <p:spacer width="9"/>
+                                                            </p:column>
+                                                            <p:column >
+                                                                <p:commandButton value="Finalizar"  icon="ui-icon-circle-check"  style=" height: 40px;">
+                                                                </p:commandButton>
+                                                                <p:spacer width="10"/>
+                                                            </p:column>
+                                                        </p:row>
+                                                    </p:panelGrid>                                                
+                                                </p:column>
+                                            </p:row>                                       
+                                        </p:panelGrid>
+                                    </fieldset>                                
+                                </p:column>
+                            </p:row>                                        
+                        </p:panelGrid>
+                    </p:panelGrid> 
+
+                    <p:dialog modal="true"  resizable="false" closable="true" widgetVar="revision" 
+                              height="30%" width="35%">
+                        <p:outputPanel style="padding-bottom: 1px; padding-top: 10px; padding-left:10px; padding-right: 10px;">
+                            <table>
+                                <tr valign="middle">
+                                    <td><p:outputLabel value="VERIFICAR DATOS" style="font-weight: bold"></p:outputLabel></td>
+                                </tr>
+                            </table>                    
+                            <p:separator></p:separator>                    
+                        </p:outputPanel>
+                        <div align="center">                           
+                                <p:outputLabel value="NUMERO DE LA SOLICITUD DE MARCA" />
+                                <h:panelGrid columns="4" cellpadding="5">
+                                    <p:outputLabel value="SM:" styleClass="labelBold"/>
+                                    <p:inputText value="100000" size="5"/>
+                                    <p:inputText value="2016" size="3"/>
+                                    <p:inputText value="A" size="1"/>  
+                                    <p:spacer width="1"/>
+                                    <p:outputLabel value="Número" />
+                                    <p:outputLabel value="Gestión" />
+                                    <p:outputLabel value="Extensión" />
+                                </h:panelGrid>  
+                                <h:panelGrid columns="2">
+                                    <p:outputLabel value="FECHA y HORA DE PRESENTACION:" styleClass="labelBold"/>
+                                    <p:calendar pattern="dd-MM-yyyy HH:mm" mask="true" size="15" value="#{registroBean.fechaIngreso}"/> 
+                                </h:panelGrid>
+                                <p:separator />
+                                <h:panelGrid columns="2">
+                                    <p:outputLabel value="N° PUBLICACION:" styleClass="labelBold"/>
+                                    <p:inputText value="100000" size="7"/>
+                                    <p:outputLabel value="N° DE GACETA:" styleClass="labelBold"/>
+                                    <p:inputText value="100000" size="7"/>
+                                    <p:outputLabel value="FECHA PUBLICACION:" styleClass="labelBold"/>
+                                    <p:calendar pattern="dd-MM-yyyy" mask="true" size="15" value="#{registroBean.fechaIngreso}"/> 
+                                </h:panelGrid>
+                                <p:separator />
+                                <p:commandButton icon="ui-icon-check" value="Aceptar" actionListener="#{registroBean.asignarRegistro()}"
+                                                 onclick="PF('revision').hide();" update="panelRegistro, panelResolucion, fecha"/>                          
+                        </div> 
+                    </p:dialog>
+                    <p:dialog modal="true"  resizable="false" closable="true" widgetVar="buscador" 
+                              height="50%" width="60%">   
+                        <p:outputPanel style="padding-bottom: 1px; padding-top: 10px; padding-left:10px; padding-right: 10px;">
+                            <table>
+                                <tr valign="middle">
+                                    <td><p:outputLabel value="LISTA DE NUMEROS DE REGISTRO" style="font-weight: bold"></p:outputLabel></td>
+                                </tr>
+                            </table>                    
+                            <p:separator></p:separator>                    
+                        </p:outputPanel>
+                        <h:panelGrid columns="3" style="text-align: left">
+                            <p:selectOneRadio value="#{registroBean.valorRadio}" layout="grid" columns="1" id="valorRadio">
+                                <f:selectItem itemValue="RD" itemLabel="Registros Denegados" />
+                                <f:selectItem itemValue="FR" itemLabel="Fecha de Registro"/>
+                                <f:selectItem itemValue="TM" itemLabel="Tipo de Marca"/>
+                                <f:selectItem itemValue="TI" itemLabel="Titular"/>
+                                <f:selectItem itemValue="SI" itemLabel="Signo"/>
+                                <p:ajax listener="#{registroBean.activaCambiosLista()}"
+                                        event="change" update=":form:opciones" process="valorRadio"></p:ajax>
+                            </p:selectOneRadio>   
+                            <h:panelGrid id="opciones">
+                                <p:calendar pattern="dd-MM-yyyy" mask="true" rendered="#{registroBean.calendarioDialogoRender}"/>
+                                <p:selectOneMenu  value="#{registroBean.tipoMarcaDialogo}" style="width:60px;" rendered="#{registroBean.tipoMarcaDialogoRender}">
+                                    <f:selectItem itemLabel="MARCA DE PRODUCTO" itemValue="MARCA DE PRODUCTO" />
+                                    <f:selectItem itemLabel="MARCA DE SERVICIO" itemValue="MARCA DE SERVICIO" />
+                                    <f:selectItem itemLabel="MARCA DE CERTIFICACION" itemValue="MARCA DE CERTIFICACION" />
+                                    <f:selectItem itemLabel="MARCA COLECTIVA" itemValue="MARCA COLECTIVA" />                                
+                                </p:selectOneMenu>
+                                <p:inputText value="TITULAR PARA BUSCAR" size="20"    rendered="#{registroBean.titularDialogoRender}"/>
+                                <p:inputText value="SIGNO PARA BUSCAR" size="20"    rendered="#{registroBean.signoDialogoRender}"/>
+                            </h:panelGrid>
+                            <p:commandButton icon="ui-icon-search"  value="Buscar" style=" height: 40px;"/>
+
+                        </h:panelGrid>
+                        <p:spacer height="5" />
+                        <p:dataTable var="item" value="listado" scrollRows="1" style="width: 100%">
+                            <p:column headerText="Signo"  width="5">
+                                <h:outputText value="EMPRENDEDORES DE BOLIVIA" />
+                            </p:column>
+                            <p:column headerText="Titular" width="5">
+                                <h:outputText value="INDUSTRIAS VENADO SRL." />
+                            </p:column>
+                            <p:column headerText="SM" width="3">
+                                <h:outputText value="SM-123456-2016" />
+                            </p:column>
+                            <p:column headerText="Fecha Sol." width="1">
+                                <h:outputText value="28/10/2015" />
+                            </p:column>                                    
+                            <p:column headerText="N° Registro" width="1">
+                                <h:outputText value="124214" />
+                            </p:column>
+                            <p:column headerText="Serie" width="1">
+                                <h:outputText value="C" />
+                            </p:column>
+                            <p:column headerText="Fecha Reg." width="1">
+                                <h:outputText value="28/07/2016" />
+                            </p:column>
+                            <p:column headerText="Tipo Marca" width="5">
+                                <h:outputText value="MARCA COLECTIVA" />
+                            </p:column>
+                            <p:column headerText="Estado Actual" width="5">
+                                <h:outputText value="REGISTRADA" />
+                            </p:column>
+                        </p:dataTable>
+                        <p:spacer height="5" />
+                        <div align="center">
+                            <h:panelGrid>
+                                <p:commandButton icon="ui-icon-print"  value="Imprimir" style=" height: 40px; "/>
+                            </h:panelGrid>
+                        </div>                    
+                    </p:dialog>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+
+    </body>
+</html>

@@ -1,0 +1,266 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <body>
+        <ui:composition template="./../WEB-INF/facelets/templates/DialogTemplate.xhtml">
+            <ui:define name="content">
+                <h:form id="frmHistorialMod" style="width: 98%; padding-left: 1%">
+                    <p:growl id="msg" life="5000"/>
+                    <p:panelGrid style="width: 100%" styleClass="quitarBordes">
+
+                        <p:row>
+                            <p:column style="width: 100%;" colspan="2">                                    
+                                <table>
+                                    <tr valign="middle">
+                                        <td><p:graphicImage library="images" name="flechaTituloAzul.png" width="24" height="24"></p:graphicImage></td>
+                                        <td><p:outputLabel value="Historial de modificaciones" styleClass="tituloPrincipalFuente"></p:outputLabel></td>
+                                    </tr>
+                                </table>                    
+                                <p:separator id="sepTitulo" style="border: 1px #045491 inset;"></p:separator>                                                        
+                            </p:column>
+                        </p:row>
+
+                    </p:panelGrid>
+
+                    <p:panelGrid style="width: 100%;    " styleClass="quitarBordes" id="pnlTitulo">                            
+                        <p:row>
+                            <p:column style="width: 50%">
+                                <p:panelGrid columns="3">
+                                    <p:outputLabel value="Tipo de modificación" styleClass="textoImportante"/>  
+                                    <p:spacer width="1"/>
+                                    <p:outputLabel value="#{historialModificacionBean.tipoModificacionDescripcion}" />
+                                </p:panelGrid>
+                            </p:column>
+                            <p:column style="width: 50%; text-align: right">
+                                <p:panelGrid columns="3">
+                                    <p:outputLabel value="Expediente" styleClass="textoImportante"/>
+                                    <p:spacer width="1"/>
+                                    <p:outputLabel value="#{historialModificacionBean.expediente}" style="color: #650e0b;font-weight: 800; font-size: 12px"/>  
+                                </p:panelGrid>
+                            </p:column>                                
+                        </p:row>
+                    </p:panelGrid >
+                    <p:panelGrid style="width: 100%;" styleClass="quitarBordes" id="pnlDetalle">
+                        <p:row>
+                            <p:column style="width: 8%" >
+                                <p:outputLabel value="Número:" style="font-weight: bold"/>                                                                   
+                            </p:column>
+                            <p:column style="width: 40%" >
+                                <p:inputText value="#{historialModificacionBean.busquedaModificacionResultadoSeleccionada.sigla}-#{historialModificacionBean.busquedaModificacionResultadoSeleccionada.numero}-#{historialModificacionBean.busquedaModificacionResultadoSeleccionada.gestion}" style="width: 90%;font-weight: bold; color: #ffffff;text-align: center; font-size: 16px !important; background: #A8A8A8 !important"/>                                                        
+                            </p:column>
+                            <p:column style="width: 12%" >
+                                <p:outputLabel value="Registro:" style="font-weight: bold"/>                                                             
+                            </p:column>
+                            <p:column style="width: 40%" >
+                                <p:inputText value="#{historialModificacionBean.busquedaModificacionResultadoSeleccionada.numero_registro}-#{historialModificacionBean.busquedaModificacionResultadoSeleccionada.serie_registro}" style="width: 90%"/>                                                                                                         
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column style="width: 8%" >
+                                <p:outputLabel value="Renovación:" style="font-weight: bold"/>                                                                  
+                            </p:column>
+                            <p:column style="width: 40%" >
+                                <p:inputText value="#{historialModificacionBean.busquedaModificacionResultadoSeleccionada.numero_renovacion}-#{historialModificacionBean.busquedaModificacionResultadoSeleccionada.serie_renovacion}" style="width: 90%"/>
+                            </p:column>
+                            <p:column style="width: 12%" >
+                                <p:outputLabel value="Publicación:" style="font-weight: bold"/>
+                            </p:column>
+                            <p:column style="width: 40%" >
+                                <p:inputText value="#{historialModificacionBean.busquedaModificacionResultadoSeleccionada.numero_publicacion}" style="width: 90%"/>
+                            </p:column>
+
+                        </p:row>                            
+                        <p:row>
+                            <p:column style="width: 8%">
+                                <p:outputLabel value="Titular nuevo:" style="font-weight: bold; display: block; width: 90px"/>     
+                            </p:column>
+                            <p:column style="width: 40%" >
+                                <p:inputText value="#{historialModificacionBean.busquedaModificacionResultadoSeleccionada.nuevo_titular}" style="width: 90%"/>
+                            </p:column>
+                            <p:column style="width: 12%">
+                                <p:outputLabel value="Apoderado:" style="font-weight: bold"/> 
+                            </p:column>
+                            <p:column style="width: 40%">
+                                <p:inputText value="#{historialModificacionBean.nombreApoderado}" style="width: 90%"/>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column style="width: 8%">
+                                <p:outputLabel value="País nuevo:" style="font-weight: bold"/>     
+                            </p:column>
+                            <p:column style="width: 40%">
+                                <p:inputText value="#{historialModificacionBean.busquedaModificacionResultadoSeleccionada.pais_nuevo_titular}" style="width: 90%"/>
+                            </p:column>
+                            <p:column style="width: 12%">
+                                <p:outputLabel value="Departamento:" style="font-weight: bold"/> 
+                            </p:column>
+                            <p:column style="width: 40%">
+                                <p:inputText value="#{historialModificacionBean.busquedaModificacionResultadoSeleccionada.descripcion_departamento_titular}" style="width: 90%"/>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column style="width: 8%">
+                                <p:outputLabel value="Domicilio nuevo:" style="font-weight: bold; display: block; width: 105px"/>     
+                            </p:column>
+                            <p:column style="width: 92%" colspan="3">
+                                <p:inputText value="#{historialModificacionBean.busquedaModificacionResultadoSeleccionada.direccion_titular}" style="width: 96%"/>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column style="width: 7%">
+                                <p:outputLabel value="Resolución:" style="font-weight: bold"/>
+                            </p:column>
+                            <p:column style="width: 40%">
+                                <p:inputText value="#{historialModificacionBean.busquedaModificacionResultadoSeleccionada.numero_resolucion}" style="width: 50%"/>
+                                <p:spacer width="10"/>
+                                <p:inputText value="#{historialModificacionBean.busquedaModificacionResultadoSeleccionada.gestion_resolucion}" style="width: 20%"/>
+                            </p:column>
+                            <p:column style="width: 13%">
+                                <p:outputLabel value="Fecha resolución:"  style="font-weight: bold"/>     
+                            </p:column>
+                            <p:column style="width: 40%">
+                                <p:inputText value="#{historialModificacionBean.busquedaModificacionResultadoSeleccionada.fecha_resolucion}" style="width: 90%" >
+                                    <f:convertDateTime pattern="#{sessionState.formatoFecha}"/>    
+                                </p:inputText>
+                            </p:column>
+
+                        </p:row>
+                        <p:row>
+                            <p:column style="width: 8%">
+                                <p:outputLabel value="Obervacion:" style="font-weight: bold"/>     
+                            </p:column>
+                            <p:column style="width: 92%" colspan="3">
+                                <p:inputText value="#{historialModificacionBean.ultimaObervacion}" style="width: 96%"/>
+                            </p:column>                            
+                        </p:row>
+                        <p:row>
+                            <p:column style="width: 7%">
+                                <p:outputLabel value="Usuario:" style="font-weight: bold"/>     
+                            </p:column>
+                            <p:column style="width: 40%" >
+                                <p:inputText value="#{historialModificacionBean.busquedaModificacionResultadoSeleccionada.usuario}" style="width: 96%"/>
+                            </p:column>
+                             <p:column style="width: 13%">
+                                <p:outputLabel value="Fecha ingreso:"  style="font-weight: bold"/>     
+                            </p:column>
+                            <p:column style="width: 40%">
+                                <p:inputText value="#{historialModificacionBean.busquedaModificacionResultadoSeleccionada.fecha_ingreso}" style="width: 90%" >
+                                    <f:convertDateTime pattern="#{sessionState.formatoFecha}"/>    
+                                </p:inputText>
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                    <p:spacer height="1" />  
+                    <br />
+                    <p:panelGrid style="width: 100%;" styleClass="quitarBordes">
+                        <p:row style="width: 50%">
+                            <p:column  >
+                                <p:outputLabel value="Titular:  " style="font-weight: bold"/>
+                                <h:outputText value="#{historialModificacionBean.datosTitularActual[0]}" style="color: #045491"/><br />
+                            </p:column>  
+                            <p:column  >
+                                <p:outputLabel value="Domicilio:  " style="font-weight: bold"/>
+                                <h:outputText value="#{historialModificacionBean.datosTitularActual[1]}" style="color: #045491" />
+                            </p:column>
+                        </p:row>
+                        <p:row style="width: 50%">
+                            <p:column  >
+                                <p:outputLabel value="Pais:  " style="font-weight: bold"/>
+                                <h:outputText value="#{historialModificacionBean.datosTitularActual[2]}" style="color: #045491"/>
+                            </p:column>
+                            <p:column >
+                                <p:outputLabel value="Departamento:  " style="font-weight: bold"/>
+                                <h:outputText value="#{historialModificacionBean.datosTitularActual[3]}" style="color: #045491"/>
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+
+                    <p:spacer height="1" />  
+
+                    <p:dataTable var="item" value="#{historialModificacionBean.listaModificacion}" 
+                                 scrollWidth="1100" 
+                                 selectionMode="single"
+                                 rowKey="#{item.idmodificacion}"
+                                 scrollable="true" scrollHeight="175"
+                                 selection="#{historialModificacionBean.busquedaModificacionResultadoSeleccionada}"
+                                 emptyMessage="No se encontraron registros."
+                                 liveScroll="true" scrollRows="6" rowIndexVar="index" 
+                                 style="width: 100%;">
+                        <p:ajax event="rowSelect" listener="#{historialModificacionBean.onRowSelect}" update=":frmHistorialMod:pnlDetalle :frmHistorialMod:pnlTitulo :frmHistorialMod:msg" />
+                        <p:ajax event="rowUnselect" listener="#{historialModificacionBean.onRowUnselect}"   />
+
+                        <p:column headerText="N°" width="20" style="background: #f4f4f4 !important">
+                            <h:outputText value="#{index+1}" />
+                        </p:column>
+                        <p:column headerText="Tipo" width="35">
+                            <h:outputText value="#{item.sigla}" />
+
+                        </p:column>
+                        <p:column headerText="Número" width="60">
+                            <h:outputText value="#{item.numero}" />
+                        </p:column>
+                        <p:column headerText="Gestión" width="60">
+                            <h:outputText value="#{item.gestion}" />
+                        </p:column>
+                        <p:column headerText="Registro" width="100">
+                            <h:outputText value="#{item.numero_registro}-#{item.serie_registro}" />
+                        </p:column>
+                        <p:column headerText="Renovación" width="100">
+                            <h:outputText value="#{item.numero_renovacion} - #{item.serie_renovacion}" />
+                        </p:column>
+                        <p:column headerText="Publicación" width="100">
+                            <h:outputText value="#{item.numero_publicacion}" />
+                        </p:column>
+                        <p:column headerText="Solicitante" width="200">                             
+                            <h:outputText value="#{item.solicitante}" />
+                        </p:column>  
+                        <p:column headerText="Titular antiguo" width="200">                             
+                            <h:outputText value="#{item.apoderado}" />
+                        </p:column>  
+                        <p:column headerText="Titular/Licenciatario nuevo" width="200">
+                            <!--                            <h:outputText value="# {item.solicitante}" /><br />-->
+                            <h:outputText value="#{item.nuevo_titular}" />
+                        </p:column>  
+                        <p:column headerText="Pais" width="30">
+                            <h:outputText value="#{item.pais_nuevo_titular}" />
+                        </p:column>
+                        <p:column headerText="Departamento" width="85">
+                            <h:outputText value="#{item.descripcion_departamento_titular}" />
+                        </p:column>
+                        <p:column headerText="Domicilio nuevo" width="200">
+                            <h:outputText value="#{item.direccion_titular}" />
+                        </p:column>
+                        <p:column headerText="Resolución" width="70">
+                            <h:outputText value="#{item.numero_resolucion} / #{item.gestion_resolucion}" />
+                        </p:column>                                
+                        <p:column headerText="Fecha resolución" width="125">
+                            <h:outputText value="#{item.fecha_resolucion}" >
+                                <f:convertDateTime pattern="#{sessionState.formatoFecha}"/>    
+                            </h:outputText>
+                        </p:column>
+<!--                        <p:column headerText="Estado" width="120">
+                            <h:outputText value="# {item.estado_modificacion}" />
+                        </p:column>-->
+                        <p:column headerText="Usuario" width="200">
+                            <h:outputText value="#{item.usuario}" />
+                        </p:column>                               
+                    </p:dataTable>
+
+
+
+
+                </h:form>
+            </ui:define>
+        </ui:composition>
+        <!--        <p:ajaxStatus  style="display:block;margin-bottom:2em;height:24px;" 
+                               onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+                <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                    <p:graphicImage value="/resources/images/ajaxloadingbar.gif"/>
+                </p:dialog>-->
+    </body>
+</html>

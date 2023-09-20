@@ -1,0 +1,97 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="#{sessionState.pathTemplate}">
+    <ui:define name="content">
+        <h:form id="form">
+            <p:panelGrid style="width: 100%;" styleClass="quitarBordes">
+                <p:row>
+                    <p:column style="width: 100%;" colspan="2">
+                        <p:outputPanel style="padding-bottom: 1px; padding-top: 1px; padding-left:10px; padding-right: 10px;">
+                            <table>
+                                <tr valign="middle">
+                                    <td><p:graphicImage library="images" name="flechaTituloAzul.png" width="24" height="24"></p:graphicImage></td>
+                                    <td><p:outputLabel value="Eliminar solicitud" styleClass="tituloPrincipalFuente"></p:outputLabel></td>
+                                </tr>
+                            </table>                    
+                            <p:separator id="sepTitulo" style="border: 1px #045491 inset;"></p:separator>                    
+                        </p:outputPanel>                                
+                    </p:column>
+                </p:row>
+            </p:panelGrid>
+            <p:panelGrid  style="width: 100%" styleClass="quitarBordes">
+                <p:panelGrid style="width: 100%;" styleClass="quitarBordes">
+
+
+                    <p:row style="width: 100%">
+
+                        <p:column colspan="4" style="vertical-align: top; width: 100%; border-style: solid" >
+                            
+
+                                <p:outputLabel value="DATOS SOLICITUD" styleClass="labelImportante" style="font-weight: bold"/>
+
+                                <p:panelGrid columns="8">
+                                    <p:outputLabel value="Nro. de Solicitud" style="font-weight: bold"></p:outputLabel>
+                                    <p:outputLabel value=": SM - "/>
+
+
+                                    <p:inputText value="001" size="8" style="background: #dddddd !important; vertical-align: central; text-align: center"></p:inputText>
+                                    <p:inputText value="2015"  size="8" style="background: #dddddd !important; vertical-align: central;; text-align: center"></p:inputText>
+                                    <p:commandButton id="btnBanco"
+                                                     value=">>"
+                                                     icon="ui-icon-search" 
+                                                     >
+                                        <f:ajax execute="@this" event="click"/>
+                                    </p:commandButton>
+                                    <p:spacer width="1"></p:spacer>
+                                    <p:panelGrid columns="1">
+                                        <p:outputLabel value="Lista de Archivos Adjuntos"></p:outputLabel>
+                                        <p:inputTextarea rows="10" cols="80" ></p:inputTextarea>
+                                    </p:panelGrid>
+                                </p:panelGrid>
+                            
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+                <p:row >
+                    <p:column>
+                        <div align="center">
+                            <p:panelGrid>
+                                <p:commandButton
+                                    id="btnmodificar"
+                                    icon="ui-icon-circle-minus"
+                                    value="Eliminar">
+                                    <f:ajax execute="@this" event="click"/>
+                                </p:commandButton>
+                                <p:spacer width="20"></p:spacer>
+<!--                                <p:commandButton
+                                    id="btnlimpiar"
+                                    icon="ui-icon-close"
+                                    value="Atrás">
+                                    <f:ajax execute="@this" event="click"/>
+                                </p:commandButton>-->
+                            </p:panelGrid>
+                        </div>
+                    </p:column>
+                </p:row>
+            </p:panelGrid>
+
+
+
+
+
+
+
+
+        </h:form>
+    </ui:define>
+</ui:composition>
+
+
+
+
+

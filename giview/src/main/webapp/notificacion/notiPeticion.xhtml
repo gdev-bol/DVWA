@@ -1,0 +1,345 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+       xmlns:c="http://java.sun.com/jsp/jstl/core"
+      >
+
+    <body>
+       
+
+        <ui:composition template="./../WEB-INF/facelets/templates/Template.xhtml">
+
+
+
+            <ui:define name="content">
+                <h:form id="formPeti">
+                    
+                     <p:growl id="growl" showDetail="true" sticky="true" />  
+                      <p:panelGrid style="width: 100%;" styleClass="quitarBordes">
+                            <p:row>
+                                <p:column style="width: 100%;" colspan="2">
+                                    <p:outputPanel style="padding-bottom: 1px; padding-top: 1px; padding-left:10px; padding-right: 10px;">
+                                        <table>
+                                            <tr valign="middle">
+                                                <td><p:graphicImage library="images" name="flechaTituloAzul.png" width="24" height="24"></p:graphicImage></td>
+                                                <td><p:outputLabel value="Peticiones" styleClass="tituloPrincipalFuente"></p:outputLabel></td>
+                                            </tr>
+                                        </table>                    
+                                        <p:separator id="sepTitulo" style="border: 1px #045491 inset;"></p:separator>                    
+                                    </p:outputPanel>                                
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                    <p:panelGrid style="width:  100%" styleClass="quitarBordes">
+                        <p:row>
+                            <p:column>
+                                <h:panelGrid columns="3" border="0" width="100%">
+                                    <h:panelGrid columns="3" >
+                                        <p:fieldset>
+                                            <p:selectOneRadio id="cmc" columns="1" layout="pageDirection" value="#{notiPeticionController.creaModifieli}">
+                                                <p:ajax listener="#{notiPeticionController.cambiaRadioButon()}"
+                                                        event="change" update="btnModifica,btnAdiciona,btnElimina"/>
+                                                <f:selectItem itemLabel="Crear" itemValue="1" />
+                                                <f:selectItem itemLabel="Modificar" itemValue="2" />
+                                                <f:selectItem itemLabel="Consultar" itemValue="3" />
+                                            </p:selectOneRadio>
+                                        </p:fieldset> 
+                                        <p:outputLabel  value="Número:" />
+                                        <p:inputText/>
+                                    </h:panelGrid>
+                                    <h:panelGrid columns="5">
+                                        <p:commandButton value="Buscar" 
+                                                         icon="ui-icon-search" 
+                                                         update="tablaTramites" 
+                                                         actionListener="#{notiPeticionController.buscaModi()}"
+                                                         disabled="#{notiPeticionController.habBusca}"/>
+                                        <p:button value="Anterior" icon="ui-icon-arrowthick-1-w"/>
+                                        <p:button value="Siguiente" icon="ui-icon-arrowthick-1-e"/>
+                                        <p:button value="Limpiar" icon="ui-icon-trash"/>
+                                        <p:button value="Imprimir" icon="ui-icon-print"/>
+                                    </h:panelGrid>
+                                    <h:panelGrid columns="1">
+                                        <h:panelGrid columns="8">
+
+                                            <p:graphicImage value="/images/cuaazul.png" height="20px" width="20px" />  
+                                            <h:outputText value="Devuelto" />
+
+                                            <p:graphicImage value="/images/cuanaranja.jpg" height="20px" width="20px" />
+                                            <h:outputText value="Observado" />
+
+                                            <p:graphicImage value="/images/cuaverdeoscuro.jpg" height="20px" width="20px" /> 
+                                            <h:outputText value="Recibido" />
+
+                                            <p:graphicImage value="/images/cuamarron.jpg" height="20px" width="20px" /> 
+                                            <h:outputText value="Enviado" />
+
+                                            <p:graphicImage value="/images/cuaverde.jpg" height="20px" width="20px" /> 
+                                            <h:outputText value="Notificado" />
+
+                                            <p:graphicImage value="/images/cuaamarillo.jpg" height="20px" width="20px" /> 
+                                            <h:outputText value="En Distrital" />
+
+                                            <p:graphicImage value="/images/cualila.jpg" height="20px" width="20px" /> 
+                                            <h:outputText value="Prestado" />
+                                        </h:panelGrid>
+                                    </h:panelGrid>
+
+                                </h:panelGrid>
+
+                            </p:column>
+                        </p:row> 
+                        <p:row>
+                            <p:column >
+
+                                <p:panelGrid  style="width: 100%">
+                                    <p:row>
+                                        <p:column style="width: 50%">
+
+                                            <fieldset>
+                                                <legend>DATOS DE LA PETICION</legend>
+                                                <p:panel>
+
+                                                    <p:panelGrid style="width: 30%" columns="4">
+                                                        <h:outputText value="Bloque:" style="font-weight: bold;"/>
+                                                        <h:outputLabel value="1" style="font-weight: bold;"/>
+
+                                                        <h:outputText value="N°." style="font-weight: bold;"/>
+
+                                                        <h:outputLabel value="#{notiPeticionController.numIntoBloque}" style="font-weight: bold;"
+                                                                       id="numIntoBloque"/>
+                                                    </p:panelGrid>              
+                                                    <p:panelGrid style="width: 80%">
+                                                        <p:row>
+                                                            <p:column>
+                                                                <p:outputLabel value="Expediente" />
+                                                            </p:column>
+                                                            <p:column>
+                                                                <p:selectOneMenu style="width:125px">
+                                                                    <f:selectItem itemLabel="Expediente" itemValue="1" />
+                                                                    <f:selectItem itemLabel="SP" itemValue="2" />
+                                                                    <f:selectItem itemLabel="SR" itemValue="3" />
+                                                                    <f:selectItem itemLabel="TR" itemValue="4" />
+                                                                    <f:selectItem itemLabel="FU" itemValue="5" />
+                                                                    <f:selectItem itemLabel="LU" itemValue="6" />
+                                                                    <f:selectItem itemLabel="CN" itemValue="7" />
+                                                                    <f:selectItem itemLabel="CD" itemValue="8" />
+                                                                    <f:selectItem itemLabel="N° PUB SIGNO" itemValue="9" />
+                                                                    <f:selectItem itemLabel="N° PUB PATENTE" itemValue="10" />
+                                                                    <f:selectItem itemLabel="N°REG" itemValue="11" />
+                                                                    <f:selectItem itemLabel="IA" itemValue="12" />
+                                                                    <f:selectItem itemLabel="OPOSICION PAT" itemValue="12" />
+                                                                    <f:selectItem itemLabel="OPOSICION SIG" itemValue="13" />
+                                                                    <f:selectItem itemLabel="N°OTORG" itemValue="14" />
+                                                                    <f:selectItem itemLabel="RA" itemValue="15" />
+                                                                    <f:selectItem itemLabel="CANCELACION" itemValue="16" />
+                                                                    <f:selectItem itemLabel="NULIDAD SIG" itemValue="17" />
+                                                                    <f:selectItem itemLabel="NULIDAD PAT" itemValue="18" />
+                                                                </p:selectOneMenu>
+                                                            </p:column>  
+
+                                                        </p:row>
+                                                        <p:row>
+                                                            <p:column>
+
+                                                                <h:panelGrid columns="1" >
+                                                                    <p:inputText/>
+                                                                    <h:outputText value="Número" />
+                                                                </h:panelGrid>
+                                                            </p:column>
+
+                                                            <p:column>
+                                                                <h:panelGrid columns="1" >
+                                                                    <p:inputText/>
+                                                                    <h:outputText value="Gestión" />
+                                                                </h:panelGrid>
+                                                            </p:column>
+                                                            <p:column>    
+                                                                <h:panelGrid columns="1" >
+                                                                    <p:inputText/>
+                                                                    <h:outputText value="Extensión" />
+                                                                </h:panelGrid> 
+                                                            </p:column>  
+                                                        </p:row> 
+
+                                                        <p:row>
+                                                            <p:column>
+                                                                <p:outputLabel value="Fecha de ingreso" />
+                                                            </p:column>
+                                                            <p:column>
+                                                                <p:calendar/>
+                                                            </p:column>
+                                                            <p:column>
+                                                                <p:commandButton value="Busca" actionListener="#{notiPeticionController.busca}"
+                                                                                 update="datosInserta"/>
+                                                            </p:column>  
+                                                        </p:row>
+                                                    </p:panelGrid>
+                                                </p:panel>
+
+                                                <p:panel>
+                                                    <h:panelGrid columns="1" border="0" id="datosInserta">
+                                                        <p:outputLabel value="Descripcion" />
+                                                        <h:inputTextarea cols="70" rows="4" value="#{notiPeticionController.descripcion}"/>
+                                                        <p:outputLabel value="Solicitante" />
+                                                        <p:inputText  size="70" value="#{notiPeticionController.demanSolicitante}"/>  
+                                                        <p:outputLabel value="Apoderado" />
+                                                        <p:inputText value="#{notiPeticionController.demanApoderado}"/>  
+                                                        <p:outputLabel value="Cursante a fojas" />
+                                                        <p:inputText size="70" value="#{notiPeticionController.demanFojas}"/>  
+                                                        <p:outputLabel value="Notificar con" />
+                                                        <p:inputText size="70" value="#{notiPeticionController.demanNotificarCon}"/>  
+                                                        <p:outputLabel value="Celular para notificar" />
+                                                        <p:inputText size="70" value="#{notiPeticionController.demanCelular}"/> 
+                                                        <p:outputLabel value="Domicilio para notificar" />habModifica
+                                                        <p:inputText size="70" value="#{notiPeticionController.demanDomicilio}"/> 
+                                                    </h:panelGrid>
+                                                </p:panel>
+
+
+
+                                                <h:panelGrid columns="4" style="width: 70%" border="0" >
+                                                    <h:panelGrid columns="1" >
+                                                         <h:outputText value="Observación" escape="false" styleClass="labelImportante"/> 
+
+                                                        <h:inputTextarea cols="20" rows="2" />
+                                                    </h:panelGrid>
+                                                    <p:commandButton value="Adicionar" icon="ui-icon-folder-collapsed" actionListener="#{notiPeticionController.adicionaTabla()}"
+                                                                     id="btnAdiciona" disabled="#{notiPeticionController.habAdiciona}"
+                                                                     update="tablaTramites,numIntoBloque,datosInserta"/>
+                                                    <p:commandButton value="Modificar" icon="ui-icon-arrowrefresh-1-n" update="datosInserta,tablaTramites,numIntoBloque,growl"
+                                                                     id="btnModifica"
+                                                                     actionListener="#{notiPeticionController.modificaTabla()}" disabled="#{notiPeticionController.habModifica}"/>
+                                                    <p:commandButton value="Eliminar" icon="ui-icon-circle-close" actionListener="#{notiPeticionController.eliminaTabla()}"
+                                                                     id="btnElimina" disabled="#{notiPeticionController.habElimina}"
+                                                                     update="tablaTramites,numIntoBloque"/>
+                                                </h:panelGrid>
+
+
+
+
+
+                                            </fieldset>
+                                        </p:column>
+                                        <p:column style="vertical-align: top">
+                                            <fieldset>
+                                                <legend>TRAMITES</legend>
+                                                <p:panelGrid style="width: 100%">
+                                                    <p:row>
+                                                        <p:column style="width: 100%">
+                                                            <p:dataTable value="#{notiPeticionController.listaAPeticion}" 
+                                                                         selectionMode="multiple" 
+                                                                         selection="#{notiPeticionController.listaEscoge}" 
+                                                                          style="margin:0;height: 410px;width: 100%" scrollable="true" 
+                                                                           var="tra"
+                                                                           rowKey="#{tra.numero}" 
+                                                                           id="tablaTramites"
+                                                                           >
+                                                                <p:ajax  event="rowDblselect" listener="#{notiPeticionController.onRowSelect}" 
+                                                                         process="@form"
+                                                                         update=":formPeti:datosInserta">
+
+
+                                                                </p:ajax>
+                                                                <p:column headerText="N°" >
+                                                                    <h:outputText value="#{tra.numero}" />
+                                                                </p:column>
+                                                                <p:column headerText="Expediente" >
+                                                                    <h:outputText value="#{tra.expediente}" />
+                                                                </p:column>
+                                                                <p:column headerText="Descripcion (Demandante)" >
+                                                                    <h:outputText value="#{tra.demandante}" />
+                                                                </p:column>
+                                                                <p:column headerText="Demandado" >
+                                                                    <h:outputText value="#{tra.demandado}" />
+                                                                </p:column>
+                                                                <p:column headerText="Con" >
+                                                                    <h:outputText value="#{tra.con}" />
+                                                                </p:column>                                                                            
+                                                                <p:column headerText="Fojas" >
+                                                                    <h:outputText value="#{tra.fojas}" />
+                                                                </p:column>                                                                            
+                                                            </p:dataTable>
+                                                        </p:column>  
+                                                    </p:row>   
+
+
+
+
+                                                    <p:row >
+                                                        <p:column>
+
+                                                            <p:panelGrid  style="width: 100%;" >
+                                                                <p:row>
+                                                                    <p:column style="width: 40%;" >
+                                                                        <p:panelGrid columns="1" style="width: 100%;" >
+                                                                            <h:outputText value="DATOS ADMINISTRATIVOS" escape="false" styleClass="labelImportante"/> 
+                                                                            <p:outputLabel value="Notificado a" />
+                                                                            <p:inputText  style="width: 80%;"/>  
+                                                                            <p:outputLabel value="Estado" />
+                                                                            <p:inputText style="width: 80%;"/>  
+                                                                            <p:outputLabel value="Operador de notificaciones" />
+                                                                            <p:inputText style="width: 80%;" />  
+                                                                        </p:panelGrid>
+                                                                    </p:column >
+                                                                    <p:column style="width: 60%;vertical-align: top;">
+                                                                        <p:panelGrid columns="1" style="width: 100%;" >
+
+                                                                            <h:outputText value="HISTORIAL" escape="false" styleClass="labelImportante"/> 
+
+                                                                            <p:dataTable  style="width: 100%;" >
+                                                                                <p:column headerText="" >
+                                                                                    <h:outputText value="1" />
+                                                                                </p:column>
+                                                                                <p:column headerText="" >
+                                                                                    <h:outputText value="" />
+                                                                                </p:column>
+                                                                                <p:column headerText="" >
+                                                                                    <h:outputText value="" />
+                                                                                </p:column>
+                                                                                <p:column headerText="" >
+                                                                                    <h:outputText value="" />
+                                                                                </p:column>                                                                            
+                                                                            </p:dataTable>
+
+
+                                                                        </p:panelGrid>
+                                                                    </p:column>
+                                                                </p:row>
+                                                            </p:panelGrid>
+                                                        </p:column>
+                                                    </p:row>  
+                                                </p:panelGrid>
+
+                                            </fieldset>
+                                        </p:column>
+                                    </p:row>
+                                </p:panelGrid>
+
+
+                            </p:column>   
+                        </p:row> 
+                    </p:panelGrid>
+                     <p:panelGrid style="width: 100%" styleClass="quitarBordes">
+                         
+                         <p:row>
+                            <p:column style="text-align: left"> 
+                                <p:commandButton value="Cancelar" icon="ui-icon-folder-collapsed" action="/login/signosPrincipal.xhtml" />
+                             </p:column>
+                             <p:column style="text-align: right"> 
+                                 <p:commandButton value="Aceptar" icon="ui-icon-folder-collapsed" />
+                             </p:column>
+                         </p:row>
+                         
+                     </p:panelGrid>
+                   
+                </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

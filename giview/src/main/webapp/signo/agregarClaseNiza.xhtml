@@ -1,0 +1,106 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <h:outputStylesheet name="./css/default.css"/>
+        <h:outputStylesheet name="./css/cssLayout.css"/>
+        <h:outputScript library="js" name="spanishLocale.js"/>      
+    </h:head>
+
+    <h:form id="frmClaseNiza" style="border-style: hidden; width: 90%; padding-left: 2%">
+        <p:outputPanel style="padding-bottom: 1px; padding-top: 1px; padding-left:10px; padding-right: 10px;">
+            <table>
+                <tr valign="middle">
+                    <td><p:graphicImage library="images" name="flechaTituloAzul.png" width="24" height="24"></p:graphicImage></td>
+                    <td><p:outputLabel value="#{agregarClaseNizaBean.tituloPagina}" styleClass="tituloPrincipalFuente"></p:outputLabel></td>
+                </tr>
+            </table>                    
+            <p:separator id="sepTitulo" style="border: 1px #045491 inset;"></p:separator>                    
+        </p:outputPanel>
+        <div align="center">
+
+            <p:panelGrid columns="1" id="panelGridClaseNiza" styleClass="quitarBordes">
+                <p:panelGrid style="vertical-align: top" > 
+                    <!--<p:row>
+                        <p:column colspan="2">
+                            <p:panelGrid columns="3">
+
+                                <h:outputLabel value="Clase internacional NIZA 1: " rendered="false"/>
+                                <p:selectOneMenu  style="width: 120px" value="# {agregarClaseNizaBean.numeroClaseNiza}"
+                                                  id="cmbNumeroClaseNiza" rendered="false"
+                                                  title="Ingrese Clase Niza correspondiente, del 1 al 34 para Marca de Producto y de 35 a 45 para Marca de Servicio, en otro caso escriba cero."
+                                                  autoWidth="false">
+                                    <f:selectItem   itemLabel="Elegir" itemValue="# {null}" />
+                                    <f:selectItems value="# {agregarClaseNizaBean.lstClaseNiza}" 
+                                                   var="registro"  itemLabel="# {registro.numeroClaseNiza}" itemValue="# {registro.idClaseNiza}" />
+                                    <p:ajax event="change" listener="# {agregarClaseNizaBean.cambiarClaseNiza()}" 
+                                            update=":frmClaseNiza:txtValidacion :frmClaseNiza:listadoProducto"/>
+                                </p:selectOneMenu>
+                                <h:outputLabel value="# {agregarClaseNizaBean.validacion}" id="txtValidacion"/>
+
+                                <h:outputLabel value="Listado de productos: " rendered="false"/>
+                                <p:inputTextarea id="listadoProducto" rows="1" cols="60" rendered="false"
+                                                 value="# {agregarClaseNizaBean.claseNiza.proteccion}"/>
+                                <h:outputLabel value="" />
+
+                            </p:panelGrid>
+                        </p:column>
+                    </p:row>-->
+                    <p:row>
+                        <p:column colspan="2">
+                            <p:panelGrid columns="4" id="panelNiza">
+                                <h:outputLabel value="Clasificador: " style="display: block; width: 120px"/>
+                                <p:selectOneMenu  style="width: 80px" value="#{agregarClaseNizaBean.version}"
+                                                  id="cmbVersionClaseNiza"
+                                                  title="Seleccione la version"
+                                                  autoWidth="false">
+
+                                    <f:selectItem   itemLabel="Elegir" itemValue="#{null}" />                                 
+                                    <f:selectItems value="#{agregarClaseNizaBean.lstClaseNizaVersion}" 
+                                                   var="datoVersion"  itemLabel="#{datoVersion}" itemValue="#{datoVersion}" />
+                                    <p:ajax event="change" listener="#{agregarClaseNizaBean.cambiaListaClase()}" 
+                                            update=":frmClaseNiza:panelNiza"/>
+                                </p:selectOneMenu>
+                                <h:outputLabel value="Clase niza: " style="display: block; width: 70px" />
+                                <p:selectOneMenu   value="#{agregarClaseNizaBean.idclaseniza}" 
+                                                  id="cmbNumeroClaseNiza2"
+                                                  title="Ingrese Clase Niza correspondiente, del 1 al 34 para Marca de Producto y de 35 a 45 para Marca de Servicio, en otro caso escriba cero."
+                                                  autoWidth="false">
+
+                                    <f:selectItem   itemLabel="Elegir" itemValue="#{null}"/>                       
+                                    <f:selectItems value="#{agregarClaseNizaBean.lstClaseNiza2}"
+                                                   var="datoClase"  itemLabel="#{datoClase.numeroClaseNiza}" itemValue="#{datoClase.idClaseNiza}" />   
+                                    <p:ajax event="change" listener="#{agregarClaseNizaBean.cambiaClase()}" update=":frmClaseNiza:listadoProducto2"/>
+                                </p:selectOneMenu>
+                                <h:outputLabel value="Listado de productos: " style="display: block; width: 130px"/>
+                                <p:inputTextarea id="listadoProducto2" rows="6" cols="40" 
+                                                 value="#{agregarClaseNizaBean.claseNiza2.proteccion}"/>
+                            </p:panelGrid>
+                        </p:column>
+                    </p:row>  
+                    <p:row>
+                        <p:column style="width: 50%; text-align: center" >
+                            <p:commandButton value="Aceptar" icon="ui-icon-circle-check" update="frmClaseNiza"
+                                             actionListener="#{agregarClaseNizaBean.addClaseNiza2()}"/>
+                        </p:column>
+                        <p:column style="width: 50%; text-align: center" >
+                            <p:commandButton value="Cancelar"  icon="ui-icon-circle-close" >
+                                <p:ajax listener="#{agregarClaseNizaBean.cerrarDialogoClaseNiza()}" />
+                            </p:commandButton>
+                        </p:column>
+                    </p:row>
+
+                </p:panelGrid>                
+            </p:panelGrid>
+        </div>
+        <!--<p:messages id="messages" autoUpdate="true" closable="true" />-->
+    </h:form>
+    <h:form>
+        <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+    </h:form>
+</html>
