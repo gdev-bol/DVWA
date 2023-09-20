@@ -1,4 +1,4 @@
-name: njsscan
+name: "NodeJsScan-SAST"
 on:
   push:
     branches: [ develop ]
